@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Android App Template</string>
+    <string name="title_action_bar">Android App Template</string>
+
+    <!-- Home Fragment -->
+    <string name="welcome_message">Welcome to the app template!</string>
+
+    <!-- Attributions -->
+    <string name="title_attributions">Image Attributions</string>
+    <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies.</string>
+    <string name="flaticon_message_short">All icons are taken from Flaticon. Expand for details of their attribution policies.</string>
+    <string name="author_attr_template">Icon made by %s from %s</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
+
+    <!-- Content Descriptions -->
+    <string name="chevron_down_cd">Down chevron</string>
+    <string name="chevron_left_cd">Left chevron</string>
+    <string name="chevron_right_cd">Right chevron</string>
+    <string name="chevron_up_cd">Up chevron</string>
+    <string name="collapse_images_dropdown_cd">Hide icons</string>
+    <string name="close_cd">Close</string>
+    <string name="expand_images_dropdown_cd">Show icons</string>
+    <string name="info_cd">Additional information</string>
+    <string name="settings_cd">Settings</string>
+
+    <!-- Dev Tools -->
+    <string name="dev_tools_button">{ }</string>
+
+</resources>

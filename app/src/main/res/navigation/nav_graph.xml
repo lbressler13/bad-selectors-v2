@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/homeFragment"
+    android:id="@+id/nav_graph">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="xyz.lbres.androidapptemplate.ui.home.HomeFragment"
+        android:label="HomeFragment">
+
+        <action
+            android:id="@+id/navigateHomeToAttributions"
+            app:destination="@id/attributionsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/attributionsFragment"
+        android:name="xyz.lbres.androidapptemplate.ui.attributions.AttributionsFragment"
+        android:label="AttributionsFragment" />
+
+</navigation>

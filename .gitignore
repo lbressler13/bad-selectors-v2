@@ -1,0 +1,19 @@
+# IDE
+*.iml
+.idea
+
+# OS
+.DS_Store
+**/.DS_Store
+
+# Generated Files
+.gradle
+build
+captures
+.externalNativeBuild
+.cxx
+
+# Local Files
+local.properties
+.env
+libs
