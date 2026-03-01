@@ -10,11 +10,11 @@ import xyz.lbres.customview.circlelayout.SingleChildCircleLayout
 import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
 import xyz.lbres.customview.interfaces.singlechildlayout.SingleChildLayoutManager.ChildInitializationState
+import xyz.lbres.customview.testutils.assertFailsWithMessage
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 
 class SingleChildLayoutManagerTest {
@@ -41,20 +41,18 @@ class SingleChildLayoutManagerTest {
     fun testNoChildLayout() {
         val mockContext = createMockContext(0, false)
         val expectedError = "SingleChildLayout requires numChildren and childLayout"
-        val exception = assertFailsWith<IllegalStateException> {
+        assertFailsWithMessage<IllegalStateException>(expectedError) {
             SingleChildLayoutManager({ createMockLayout() }, mockContext, null)
         }
-        assertEquals(expectedError, exception.message)
     }
 
     @Test
     fun testNoNumChildren() {
         val mockContext = createMockContext(null, true)
         val expectedError = "SingleChildLayout requires numChildren and childLayout"
-        val exception = assertFailsWith<IllegalStateException> {
+        assertFailsWithMessage<IllegalStateException>(expectedError) {
             SingleChildLayoutManager({ createMockLayout() }, mockContext, null)
         }
-        assertEquals(expectedError, exception.message)
     }
 
     @Test
@@ -66,8 +64,7 @@ class SingleChildLayoutManagerTest {
         val manager = SingleChildLayoutManager({ layout }, createMockContext(numChildren = 5, true), null)
 
         val expectedError = "SingleChildLayout cannot be created with children"
-        val exception = assertFailsWith<IllegalStateException> { manager.initializeChildren() }
-        assertEquals(expectedError, exception.message)
+        assertFailsWithMessage<IllegalStateException>(expectedError) { manager.initializeChildren() }
     }
 
     @Test
@@ -106,22 +103,19 @@ class SingleChildLayoutManagerTest {
         manager.initializeChildren()
         val expectedError = "Cannot modify children of SingleChildLayout"
 
-        var exception = assertFailsWith<UnsupportedOperationException> {
+        assertFailsWithMessage<UnsupportedOperationException>(expectedError) {
             manager.modifyChildren {}
         }
-        assertEquals(expectedError, exception.message)
 
         // throws correct exception
-        exception = assertFailsWith<UnsupportedOperationException> {
+        assertFailsWithMessage<UnsupportedOperationException>(expectedError) {
             manager.modifyChildren { 1 / 0 }
         }
-        assertEquals(expectedError, exception.message)
 
         var modified = false
-        exception = assertFailsWith<UnsupportedOperationException> {
+        assertFailsWithMessage<UnsupportedOperationException>(expectedError) {
             manager.modifyChildren { modified = true }
         }
-        assertEquals(expectedError, exception.message)
         assertFalse(modified)
     }
 }

@@ -34,7 +34,10 @@ class SingleChildCircleLayout(context: Context, attrs: AttributeSet?, defStyleAt
      * Initialize children, if needed, and request layout
      */
     override fun requestLayout() {
-        if (this::singleChildManager.isInitialized && singleChildManager.childInitializationState == ChildInitializationState.NOT_STARTED) {
+        if (
+            this::singleChildManager.isInitialized &&
+            singleChildManager.childInitializationState == ChildInitializationState.NOT_STARTED
+        ) {
             singleChildManager.initializeChildren()
         }
 

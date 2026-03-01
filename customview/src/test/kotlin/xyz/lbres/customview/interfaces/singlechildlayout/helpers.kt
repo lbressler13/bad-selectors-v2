@@ -42,12 +42,11 @@ fun createMockContext(numChildren: Int?, hasChildLayout: Boolean): Context {
 }
 
 /**
- * Create a mock layout
- *
+ * Create a mock SingleChildLayout
  *
  * @return [ViewGroup] mocked layout
  */
-fun createMockLayout(): ViewGroup {
+internal fun createMockLayout(): ViewGroup {
     val layout = mockk<SingleChildCircleLayout> {
         every { removeAllViews() } returns Unit
         every { addView(any()) } returns Unit
@@ -58,7 +57,7 @@ fun createMockLayout(): ViewGroup {
 }
 
 /**
- * Mock the LayoutInflater class and return mock
+ * Create a mock layout inflater
  *
  * @param layout [ViewGroup]: layout that will be associated with the manager. If none is provided, any will be used as the layout value.
  * Defaults to `null`.

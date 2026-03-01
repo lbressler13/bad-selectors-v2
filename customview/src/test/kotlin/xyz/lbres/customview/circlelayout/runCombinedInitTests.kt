@@ -12,11 +12,16 @@ import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
+private const val distributed = 0
+private const val fit = 0
+private const val fixed = 1 // same ordinal for radius and angle
+private const val percent = 2
+
 fun runPropertiesWithoutModesTest() {
     mockkStatic(TypedArray::getDimensionPixelSizeOrNull)
     mockkStatic(TypedArray::getIntOrNull)
     val attr = setOf(R.styleable.CircleLayout_radiusSize, R.styleable.CircleLayout_separationAngle)
-    val mockArray = createMockTypedArray(0, 0, attr)
+    val mockArray = createMockTypedArray(fit, distributed, attr)
     every { mockArray.getDimensionPixelSizeOrNull(R.styleable.CircleLayout_radiusSize) } returns 50
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_separationAngle) } returns 120
 
@@ -27,7 +32,7 @@ fun runPropertiesWithoutModesTest() {
 fun runRadiusPropertiesWithAngleModeTest() {
     mockkStatic(TypedArray::getFloatOrNull)
     val attr = setOf(R.styleable.CircleLayout_radiusPercent, R.styleable.CircleLayout_angleMode)
-    val mockArray = createMockTypedArray(0, 1, attr)
+    val mockArray = createMockTypedArray(fit, fixed, attr)
     every { mockArray.getFloatOrNull(R.styleable.CircleLayout_radiusPercent) } returns 0.3f
 
     val layout = CircleLayout(createMockContext(mockArray))
@@ -37,7 +42,7 @@ fun runRadiusPropertiesWithAngleModeTest() {
 fun runAnglePropertiesWithRadiusModeTest() {
     mockkStatic(TypedArray::getIntOrNull)
     val attr = setOf(R.styleable.CircleLayout_radiusMode, R.styleable.CircleLayout_separationAngle)
-    val mockArray = createMockTypedArray(2, 0, attr)
+    val mockArray = createMockTypedArray(percent, distributed, attr)
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_separationAngle) } returns 90
 
     val layout = CircleLayout(createMockContext(mockArray))
@@ -53,7 +58,7 @@ fun runPercentRadiusWithSeparationAngleTest() {
             R.styleable.CircleLayout_radiusPercent,
             R.styleable.CircleLayout_separationAngle,
         )
-    val mockArray = createMockTypedArray(2, 0, attr)
+    val mockArray = createMockTypedArray(percent, distributed, attr)
     every { mockArray.getFloatOrNull(R.styleable.CircleLayout_radiusPercent) } returns 0.3f
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_separationAngle) } returns 90
 
@@ -72,7 +77,7 @@ fun runFixedAngleWithRadiusSizeTest() {
             R.styleable.CircleLayout_angleMode,
             R.styleable.CircleLayout_separationAngle,
         )
-    val mockArray = createMockTypedArray(0, 1, attr)
+    val mockArray = createMockTypedArray(fit, fixed, attr)
     every { mockArray.getDimensionPixelSizeOrNull(R.styleable.CircleLayout_radiusSize) } returns 100
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_separationAngle) } returns 90
 
@@ -90,7 +95,7 @@ fun runStartAngleAndSeparationAngleTest() {
             R.styleable.CircleLayout_separationAngle,
             R.styleable.CircleLayout_startAngle,
         )
-    val mockArray = createMockTypedArray(0, 1, attr)
+    val mockArray = createMockTypedArray(fit, fixed, attr)
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_separationAngle) } returns 75
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_startAngle) } returns 290
 
@@ -111,7 +116,7 @@ fun runFixedRadiusAndFixedAngleTest() {
             R.styleable.CircleLayout_angleMode,
             R.styleable.CircleLayout_separationAngle,
         )
-    val mockArray = createMockTypedArray(1, 1, attr)
+    val mockArray = createMockTypedArray(fixed, fixed, attr)
     every { mockArray.getDimensionPixelSizeOrNull(R.styleable.CircleLayout_radiusSize) } returns 100
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_separationAngle) } returns 90
 
@@ -135,7 +140,7 @@ fun runAllPropertiesSetTest() {
             R.styleable.CircleLayout_separationAngle,
             R.styleable.CircleLayout_startAngle,
         )
-    val mockArray = createMockTypedArray(1, 1, attr)
+    val mockArray = createMockTypedArray(fixed, fixed, attr)
     every { mockArray.getDimensionPixelSizeOrNull(R.styleable.CircleLayout_radiusSize) } returns 100
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_separationAngle) } returns 90
     every { mockArray.getIntOrNull(R.styleable.CircleLayout_startAngle) } returns 290

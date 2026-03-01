@@ -8,6 +8,7 @@ import io.mockk.mockk
 import xyz.lbres.customview.R
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import xyz.lbres.customview.testutils.createMockTypedArray as createArrayHelper
 
 const val doubleDelta = 0.000000000001
 
@@ -56,11 +57,7 @@ fun checkMatchesDefaultsExcept(layout: CircleLayout, exceptions: Set<String>) {
  * @return [TypedArray]: mock using the provided values
  */
 fun createMockTypedArray(radiusMode: Int, angleMode: Int, attributes: Set<Int>): TypedArray {
-    val mockArray = mockk<TypedArray>(relaxUnitFun = true)
-    for (attr in attributes) {
-        every { mockArray.hasValue(attr) } returns true
-    }
-    every { mockArray.hasValue(any()) } returns false
+    val mockArray = createArrayHelper(attributes)
     every { mockArray.getInt(R.styleable.CircleLayout_radiusMode, 0) } returns radiusMode
     every { mockArray.getInt(R.styleable.CircleLayout_angleMode, 0) } returns angleMode
 
