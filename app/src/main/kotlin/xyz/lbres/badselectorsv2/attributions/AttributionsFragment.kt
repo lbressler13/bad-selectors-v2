@@ -10,8 +10,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import xyz.lbres.badselectorsv2.abstracts.BaseFragment
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.abstracts.BaseFragment
 import xyz.lbres.badselectorsv2.attributions.authorattribution.AuthorAttributionAdapter
 import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
 import xyz.lbres.badselectorsv2.attributions.constants.flaticonAttrPolicyUrl

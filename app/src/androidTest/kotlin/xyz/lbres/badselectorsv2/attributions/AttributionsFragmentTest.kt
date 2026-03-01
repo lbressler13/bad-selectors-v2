@@ -25,6 +25,7 @@ import org.junit.runner.RunWith
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.ProductFlavor
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
 import xyz.lbres.badselectorsv2.testutils.assertLinkOpened
 import xyz.lbres.badselectorsv2.testutils.hideDevToolsButton
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
@@ -32,7 +33,6 @@ import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 import xyz.lbres.badselectorsv2.testutils.viewactions.clickLinkInText
 import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.testutils.viewassertions.isNotPresented
-import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {

@@ -15,14 +15,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.attributions.checkImagesDisplayed
-import xyz.lbres.badselectorsv2.attributions.checkImagesNotPresented
+import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
 import xyz.lbres.badselectorsv2.testutils.doRefreshUI
 import xyz.lbres.badselectorsv2.testutils.hideDevToolsButton
 import xyz.lbres.badselectorsv2.testutils.matchers.matchesAtPosition
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
-import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
-import xyz.lbres.badselectorsv2.attributions.expandCollapseAttribution
 
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTestDev {

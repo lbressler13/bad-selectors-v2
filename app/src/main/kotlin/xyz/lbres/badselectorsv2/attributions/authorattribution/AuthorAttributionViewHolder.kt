@@ -67,8 +67,10 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
     // initialize text with author's name and add links
     private fun initializeAttributionText(author: AuthorAttribution) {
         // get text template and format with URLs
-        val text = itemView.context.getString(R.string.author_attr_template, author.name,
-            flaticonDisplayUrl
+        val text = itemView.context.getString(
+            R.string.author_attr_template,
+            author.name,
+            flaticonDisplayUrl,
         )
         val spannableString = SpannableString(text)
 
