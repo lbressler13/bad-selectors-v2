@@ -36,6 +36,7 @@ class PhoneTabFragmentTest {
     @Test
     fun initialUi() {
         actionBar.check(matches(withTitle("Bad Phone Selectors")))
+        onView(withText("Under construction!")).check(matches(isDisplayed()))
     }
 
     @Test
