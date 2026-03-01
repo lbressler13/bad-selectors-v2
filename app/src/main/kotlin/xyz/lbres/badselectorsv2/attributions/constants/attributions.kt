@@ -20,7 +20,7 @@ private val freepikImages = listOf(
 
 private val ilhamFitrotulHayatImages = listOf(
     ImageAttribution(R.drawable.ic_close, R.string.close_cd, closeUrl),
-    ImageAttribution(R.drawable.ic_phone, R.string.phone_cd, phoneUrl)
+    ImageAttribution(R.drawable.ic_phone, R.string.phone_cd, phoneUrl),
 )
 
 /**
