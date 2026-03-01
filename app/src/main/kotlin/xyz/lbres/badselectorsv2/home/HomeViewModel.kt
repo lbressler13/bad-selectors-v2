@@ -9,8 +9,9 @@ class HomeViewModel : ViewModel() {
     /**
      * If items are expanded
      */
-    var selectorsExpanded = BooleanArray(0)
-        private set
+    private var _selectorsExpanded = BooleanArray(0)
+    val selectorsExpanded: BooleanArray
+        get() = _selectorsExpanded
 
     /**
      * If [selectorsExpanded] isn't initialized, initialize to all closed
@@ -19,7 +20,7 @@ class HomeViewModel : ViewModel() {
      */
     fun initSelectorsExpanded(numItems: Int) {
         if (selectorsExpanded.size != numItems) {
-            selectorsExpanded = BooleanArray(numItems)
+            _selectorsExpanded = BooleanArray(numItems)
         }
     }
 }
