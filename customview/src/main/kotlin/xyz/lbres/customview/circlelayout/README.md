@@ -67,7 +67,7 @@ Offset of the first child, in degrees. If no value is specified, the first child
 ## Inherited Values and Methods
 
 CircleLayout inherits all values, methods, and attributes from the ViewGroup class.
-See the ViewGroup documentation for details: <https://developer.android.com/reference/android/view/ViewGroup>.
+See the [ViewGroup documentation](https://developer.android.com/reference/android/view/ViewGroup) for details.
 
 # SingleChildCircleLayout
 

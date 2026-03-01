@@ -14,22 +14,3 @@ interface SingleChildLayout {
      */
     val childLayout: Int
 }
-
-internal interface ISingleChildLayout : SingleChildLayout {
-    /**
-     * Child manager for layout
-     */
-    var manager: SingleChildLayoutManager
-
-    /**
-     * Number of children in the layout
-     */
-    override val numChildren: Int
-        get() = manager.numChildren
-
-    /**
-     * Resource ID that is used to generate children
-     */
-    override val childLayout: Int
-        get() = manager.childLayout
-}

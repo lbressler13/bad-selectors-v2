@@ -3,7 +3,6 @@ name: Basic Checks
 on:
   workflow_dispatch:
   workflow_call:
-  pull_request:
   push:
     branches-ignore:
     # runs on main as part of All Checks

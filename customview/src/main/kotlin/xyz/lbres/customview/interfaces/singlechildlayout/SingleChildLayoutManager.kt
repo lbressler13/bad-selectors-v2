@@ -31,6 +31,8 @@ internal class SingleChildLayoutManager(
      */
     var childInitializationState: ChildInitializationState = ChildInitializationState.NOT_STARTED
         private set
+    val childrenInitialized: Boolean
+        get() = childInitializationState == ChildInitializationState.COMPLETE
 
     /**
      * Resource ID of layout to use for children

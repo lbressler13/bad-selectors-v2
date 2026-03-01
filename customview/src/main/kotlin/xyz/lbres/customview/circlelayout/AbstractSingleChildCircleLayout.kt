@@ -3,25 +3,33 @@ package xyz.lbres.customview.circlelayout
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import xyz.lbres.customview.interfaces.singlechildlayout.ISingleChildLayout
+import xyz.lbres.customview.interfaces.singlechildlayout.SingleChildLayout
 import xyz.lbres.customview.interfaces.singlechildlayout.SingleChildLayoutManager
-import xyz.lbres.customview.interfaces.singlechildlayout.SingleChildLayoutManager.ChildInitializationState
 
 /**
- * [CircleLayout] where all children have the same resource ID.
+ * Abstract implementation of CircleLayout where all children have the same resource ID.
  * See README for information about customizing layout.
  */
-internal class AbstractSingleChildCircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-    CircleLayout(context, attrs, defStyleAttr), ISingleChildLayout {
-
-    constructor(context: Context) : this(context, null, 0)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+sealed class AbstractSingleChildCircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+    CircleLayout(context, attrs, defStyleAttr), SingleChildLayout {
 
     /**
      * Manager for children
      */
     // must be lateinit to handle property access in requestLayout
-    override lateinit var manager: SingleChildLayoutManager
+    private lateinit var manager: SingleChildLayoutManager
+
+    /**
+     * Number of children in the layout
+     */
+    override val numChildren: Int
+        get() = manager.numChildren
+
+    /**
+     * Resource ID that is used to generate children
+     */
+    override val childLayout: Int
+        get() = manager.childLayout
 
     init {
         manager = SingleChildLayoutManager({ this }, context, attrs)
@@ -31,10 +39,7 @@ internal class AbstractSingleChildCircleLayout(context: Context, attrs: Attribut
      * Initialize children, if needed, and request layout
      */
     override fun requestLayout() {
-        if (
-            this::manager.isInitialized &&
-            manager.childInitializationState == ChildInitializationState.NOT_STARTED
-        ) {
+        if (this::manager.isInitialized && !manager.childrenInitialized) {
             manager.initializeChildren()
         }
 
