@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.isNotEmpty
-import xyz.lbres.customview.IManager
 import xyz.lbres.customview.R
 import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
@@ -23,7 +22,7 @@ internal class SingleChildLayoutManager(
     private val getLayout: () -> ViewGroup,
     private val context: Context,
     attrs: AttributeSet?,
-) : IManager() {
+) {
 
     enum class ChildInitializationState { NOT_STARTED, IN_PROGRESS, COMPLETE }
 
