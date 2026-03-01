@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -103,8 +105,10 @@ android {
         targetCompatibility = androidJavaVersion
     }
 
-    kotlinOptions {
-        jvmTarget = androidJvmTarget
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.fromTarget(androidJvmTarget)
+        }
     }
 }
 

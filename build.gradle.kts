@@ -13,6 +13,7 @@ val androidxJunitVersion by extra { "1.3.0" }
 val androidxTestRulesVersion by extra { "1.7.0" }
 val androidxTestRunnerVersion by extra { "1.7.0" }
 val espressoVersion by extra { "3.7.0" }
+val mockkVersion by extra { "1.14.9" }
 
 // android configurations
 val androidCompileSdk by extra { 35 }
@@ -31,8 +32,8 @@ buildscript {
         mavenCentral()
     }
 
-    val kotlinVersion by extra { "1.9.20" }
-    val gradleVersion = "8.4.2"
+    val kotlinVersion by extra { "2.2.0" }
+    val gradleVersion = "8.12.3"
 
     // only project-level dependencies, app-specific dependencies should go in application build files
     dependencies {

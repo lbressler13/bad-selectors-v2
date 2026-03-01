@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -33,12 +35,16 @@ android {
         sourceCompatibility = androidJavaVersion
         targetCompatibility = androidJavaVersion
     }
-    kotlinOptions {
-        jvmTarget = androidJvmTarget
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.fromTarget(androidJvmTarget)
+        }
     }
 }
 
 dependencies {
+    val kotlinVersion: String by rootProject.extra
+
     val androidxCoreVersion: String by rootProject.extra
     val appCompatVersion: String by rootProject.extra
     val kotlinUtilsVersion: String by rootProject.extra
@@ -46,13 +52,16 @@ dependencies {
 
     val androidxJunitVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
+    val mockkVersion: String by rootProject.extra
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("com.google.android.material:material:$materialVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     testImplementation(kotlin("test"))
+    testImplementation("io.mockk:mockk:$mockkVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
 }
