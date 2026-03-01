@@ -20,16 +20,16 @@ sealed class AbstractSingleChildCircleLayout(context: Context, attrs: AttributeS
     private lateinit var manager: SingleChildLayoutManager
 
     /**
-     * Number of children in the layout
-     */
-    override val numChildren: Int
-        get() = manager.numChildren
-
-    /**
-     * Resource ID that is used to generate children
+     * Resource ID of layout to use for children
      */
     override val childLayout: Int
         get() = manager.childLayout
+
+    /**
+     * Number of children to create
+     */
+    override val numChildren: Int
+        get() = manager.numChildren
 
     init {
         manager = SingleChildLayoutManager({ this }, context, attrs)

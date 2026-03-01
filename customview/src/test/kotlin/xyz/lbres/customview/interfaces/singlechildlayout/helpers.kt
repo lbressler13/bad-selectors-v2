@@ -35,7 +35,6 @@ fun createMockContext(numChildren: Int?, hasChildLayout: Boolean): Context {
     }
     val mockContext = mockk<Context> {
         every { obtainStyledAttributes(any<AttributeSet>(), R.styleable.SingleChild, 0, 0) } returns mockArray
-        every { obtainStyledAttributes(null, R.styleable.SingleChild, 0, 0) } returns mockArray
     }
 
     return mockContext

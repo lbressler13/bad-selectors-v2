@@ -70,9 +70,6 @@ fun createMockTypedArray(radiusMode: Int, angleMode: Int, attributes: Set<Int>):
  * @param typedArray [TypedArray]: array of attributes for the layout
  * @return [Context]: mock using the provided array
  */
-fun createMockContext(typedArray: TypedArray): Context {
-    return mockk {
-        every { obtainStyledAttributes(any<AttributeSet>(), R.styleable.CircleLayout, any(), any()) } returns typedArray
-        every { obtainStyledAttributes(null, R.styleable.CircleLayout, any(), any()) } returns typedArray
-    }
+fun createMockContext(typedArray: TypedArray): Context = mockk {
+    every { obtainStyledAttributes(any<AttributeSet>(), R.styleable.CircleLayout, any(), any()) } returns typedArray
 }

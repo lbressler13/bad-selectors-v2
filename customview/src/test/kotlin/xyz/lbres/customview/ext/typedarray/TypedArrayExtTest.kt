@@ -15,6 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class TypedArrayExtTest {
+    private val index = 12345
 
     @AfterTest
     fun cleanupMockk() {
@@ -23,8 +24,6 @@ class TypedArrayExtTest {
 
     @Test
     fun testGetIntOrNullWithValue() {
-        val index = 12345
-
         mockkStatic(TypedArray::getIntOrThrow)
         val mockArray = mockk<TypedArray> {
             every { hasValue(index) } returns true
@@ -36,18 +35,11 @@ class TypedArrayExtTest {
 
     @Test
     fun testGetIntOrNullWithoutValue() {
-        val index = 12345
-        val mockArray = mockk<TypedArray> {
-            every { hasValue(any()) } returns false
-        }
-
-        assertNull(mockArray.getIntOrNull(index))
+        assertNull(emptyMockArray().getIntOrNull(index))
     }
 
     @Test
     fun testGetDimensionPixelSizeOrNullWithValue() {
-        val index = 4567890
-
         mockkStatic(TypedArray::getDimensionPixelSizeOrThrow)
         val mockArray = mockk<TypedArray> {
             every { hasValue(index) } returns true
@@ -59,18 +51,11 @@ class TypedArrayExtTest {
 
     @Test
     fun testGetDimensionPixelSizeOrNullWithoutValue() {
-        val index = 4567890
-        val mockArray = mockk<TypedArray> {
-            every { hasValue(any()) } returns false
-        }
-
-        assertNull(mockArray.getDimensionPixelSizeOrNull(index))
+        assertNull(emptyMockArray().getDimensionPixelSizeOrNull(index))
     }
 
     @Test
     fun testGetFloatOrNullWithValue() {
-        val index = 1000
-
         mockkStatic(TypedArray::getFloatOrThrow)
         val mockArray = mockk<TypedArray> {
             every { hasValue(index) } returns true
@@ -82,18 +67,11 @@ class TypedArrayExtTest {
 
     @Test
     fun testGetFloatOrNullWithoutValue() {
-        val index = 1000
-        val mockArray = mockk<TypedArray> {
-            every { hasValue(any()) } returns false
-        }
-
-        assertNull(mockArray.getFloatOrNull(index))
+        assertNull(emptyMockArray().getFloatOrNull(index))
     }
 
     @Test
     fun testGetRadiansOrNullWithValue() {
-        val index = 123456789
-
         mockkStatic(TypedArray::getIntOrThrow)
         val mockArray = mockk<TypedArray> {
             every { hasValue(index) } returns true
@@ -105,18 +83,11 @@ class TypedArrayExtTest {
 
     @Test
     fun testGetRadiansOrNullWithoutValue() {
-        val index = 123456789
-        val mockArray = mockk<TypedArray> {
-            every { hasValue(any()) } returns false
-        }
-
-        assertNull(mockArray.getRadiansOrNull(index))
+        assertNull(emptyMockArray().getRadiansOrNull(index))
     }
 
     @Test
     fun testGetResourceIdOrNullWithValue() {
-        val index = 1
-
         mockkStatic(TypedArray::getResourceIdOrThrow)
         val mockArray = mockk<TypedArray> {
             every { hasValue(index) } returns true
@@ -128,11 +99,10 @@ class TypedArrayExtTest {
 
     @Test
     fun testGetResourceIdOrNullWithoutValue() {
-        val index = 1
-        val mockArray = mockk<TypedArray> {
-            every { hasValue(any()) } returns false
-        }
+        assertNull(emptyMockArray().getResourceIdOrNull(index))
+    }
 
-        assertNull(mockArray.getResourceIdOrNull(index))
+    private fun emptyMockArray() = mockk<TypedArray> {
+        every { hasValue(any()) } returns false
     }
 }

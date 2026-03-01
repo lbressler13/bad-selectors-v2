@@ -21,7 +21,6 @@ open class CircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
      */
     enum class AngleMode { DISTRIBUTED, FIXED }
 
-
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 }
