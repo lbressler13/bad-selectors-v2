@@ -1,4 +1,4 @@
-package xyz.lbres.customview.ext
+package xyz.lbres.customview.ext.typedarray
 
 import android.content.res.TypedArray
 import androidx.annotation.StyleableRes

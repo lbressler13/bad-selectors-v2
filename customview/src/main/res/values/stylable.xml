@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- CircleLayout -->
+    <declare-styleable name="CircleLayout">
+        <attr name="startAngle" format="integer" />
+
+        <attr name="separationAngle" format="integer" />
+        <attr name="angleMode">
+            <enum name="distributed" value="0" />
+            <enum name="fixed" value="1" />
+        </attr>
+
+        <attr name="radiusSize" format="dimension" />
+        <attr name="radiusPercent" format="float" />
+        <attr name="radiusMode">
+            <enum name="fitChildren" value="0" />
+            <enum name="fixed" value="1" />
+            <enum name="percent" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <!-- Single Child Layout -->
+    <declare-styleable name="SingleChild">
+        <attr name="childLayout" format="reference" />
+        <attr name="numChildren" format="integer" />
+    </declare-styleable>
+</resources>

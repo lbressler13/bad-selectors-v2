@@ -42,9 +42,7 @@ buildscript {
     }
 }
 
-allprojects {
-    // TODO maybe move ktlint here?
-
+subprojects {
     repositories {
         // general repositories
         google()
