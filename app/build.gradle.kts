@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId = "xyz.lbres.badselectorsv2"
-        minSdk = androidMinSdk // maximum sdk available in tester used in github actions
+        minSdk = androidMinSdk
         targetSdk = androidCompileSdk
         versionCode = 1
         versionName = "1.0.0"

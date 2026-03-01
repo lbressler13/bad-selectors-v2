@@ -9,7 +9,7 @@ import xyz.lbres.customview.interfaces.singlechildlayout.SingleChildLayoutManage
 import xyz.lbres.customview.interfaces.singlechildlayout.SingleChildLayoutManager.ChildInitializationState
 
 /**
- * [CircleLayout] where all children have the same layout.
+ * [CircleLayout] where all children have the same resource ID.
  * See README for information about customizing layout.
  */
 class SingleChildCircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
@@ -34,13 +34,11 @@ class SingleChildCircleLayout(context: Context, attrs: AttributeSet?, defStyleAt
      * Initialize children, if needed, and request layout
      */
     override fun requestLayout() {
-        if (this::singleChildManager.isInitialized) {
-            if (singleChildManager.childInitializationState == ChildInitializationState.NOT_STARTED) {
-                singleChildManager.initializeChildren()
-            }
-
-            super.requestLayout()
+        if (this::singleChildManager.isInitialized && singleChildManager.childInitializationState == ChildInitializationState.NOT_STARTED) {
+            singleChildManager.initializeChildren()
         }
+
+        super.requestLayout()
     }
 
     /**

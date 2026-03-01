@@ -12,7 +12,7 @@ import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
 
 /**
- * Manager for views in a single child layout
+ * Manager for views in a SingleChildLayout
  *
  * @param getLayout () -> [ViewGroup]: function to retrieve the layout to manage
  * @param context [Context]: activity context
@@ -69,7 +69,7 @@ internal class SingleChildLayoutManager(
      * @return T: return value from [modificationFn]
      */
     fun <T> modifyChildren(modificationFn: () -> T): T {
-        if (childInitializationState == ChildInitializationState.COMPLETE) {
+        if (childInitializationState != ChildInitializationState.IN_PROGRESS) {
             throw UnsupportedOperationException("Cannot modify children of SingleChildLayout")
         }
 

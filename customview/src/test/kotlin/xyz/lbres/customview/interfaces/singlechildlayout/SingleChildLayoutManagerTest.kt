@@ -16,7 +16,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class SingleChildLayoutManagerTest {
 
@@ -96,21 +95,6 @@ class SingleChildLayoutManagerTest {
 
         verify(exactly = 14) { layoutInflater.inflate(childResId, layout, false) }
         verify(exactly = 14) { layout.addView(allAny()) }
-    }
-
-    @Test
-    fun testModifyChildrenBeforeInit() {
-        val manager = SingleChildLayoutManager(mockk(), createMockContext(5, true), null)
-
-        var modified = false
-        manager.modifyChildren { modified = true }
-        assertTrue(modified)
-
-        val result = manager.modifyChildren { "hello world" }
-        assertEquals("hello world", result)
-
-        // throws correct exception
-        assertFailsWith<ArithmeticException> { manager.modifyChildren { 1 / 0 } }
     }
 
     @Test

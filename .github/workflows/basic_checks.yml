@@ -9,14 +9,14 @@ on:
     # runs on main as part of All Checks
     - main
 
+env:
+  USERNAME: ${{ secrets.USERNAME }}
+  TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
 jobs:
   lint:
     name: "Linting"
-
     runs-on: ubuntu-latest
-    env:
-      USERNAME: ${{ secrets.USERNAME }}
-      TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     steps:
       - name: Checkout
@@ -33,11 +33,7 @@ jobs:
 
   app-unit-tests:
     name: "Unit Tests (app module)"
-
     runs-on: ubuntu-latest
-    env:
-      USERNAME: ${{ secrets.USERNAME }}
-      TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     steps:
       - name: Checkout
@@ -54,11 +50,7 @@ jobs:
 
   customview-unit-tests:
     name: "Unit Tests (customview module)"
-
     runs-on: ubuntu-latest
-    env:
-      USERNAME: ${{ secrets.USERNAME }}
-      TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     steps:
       - name: Checkout

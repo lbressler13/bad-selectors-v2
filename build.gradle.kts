@@ -19,7 +19,7 @@ val mockkVersion by extra { "1.14.9" }
 val androidCompileSdk by extra { 35 }
 val androidJavaVersion by extra { JavaVersion.VERSION_11 }
 val androidJvmTarget by extra { "11" }
-val androidMinSdk by extra { 29 }
+val androidMinSdk by extra { 29 } // maximum sdk available in tester used in github actions
 
 // ktlint
 val ktlintVersion by extra { "0.49.1" }

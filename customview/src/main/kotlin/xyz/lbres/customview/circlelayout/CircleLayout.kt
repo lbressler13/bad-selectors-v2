@@ -39,9 +39,7 @@ open class CircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
      * Radius mode, determined based on values in attributes.
      * Defaults to [RadiusMode.FIT_CHILDREN].
      */
-    private lateinit var _radiusMode: RadiusMode // set in init function
     val radiusMode: RadiusMode
-        get() = _radiusMode
 
     /**
      * Fixed radius size, optionally passed in attributes.
@@ -63,9 +61,7 @@ open class CircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
      * Angle mode, determined based on values in attributes.
      * Defaults to [AngleMode.DISTRIBUTED].
      */
-    private lateinit var _angleMode: AngleMode // set in init function
     val angleMode: AngleMode
-        get() = _angleMode
 
     /**
      * Angle between children, optionally passed in attributes.
@@ -86,9 +82,7 @@ open class CircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
      * Angle of first child, optionally passed in attributes.
      * Defaults to 0.
      */
-    private var _startAngle: Double = 0.0 // real value sit in init function
     val startAngle: Double
-        get() = _startAngle
 
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -97,43 +91,49 @@ open class CircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
      * Extract values from attributes
      */
     init {
+        var startAngle = 0.0
+        var radiusMode = RadiusMode.FIXED
+        var angleMode = AngleMode.DISTRIBUTED
+
         context.withStyledAttributes(attrs, R.styleable.CircleLayout) {
-            _startAngle = getRadiansOrNull(R.styleable.CircleLayout_startAngle) ?: 0.0
+            startAngle = getRadiansOrNull(R.styleable.CircleLayout_startAngle) ?: 0.0
 
-            val attrRadiusSize = getDimensionPixelSizeOrNull(R.styleable.CircleLayout_radiusSize)
-            val attrRadiusPercent = getFloatOrNull(R.styleable.CircleLayout_radiusPercent)
-            val attrSeparationAngle = getRadiansOrNull(R.styleable.CircleLayout_separationAngle)
+            val radiusSizeAttr = getDimensionPixelSizeOrNull(R.styleable.CircleLayout_radiusSize)
+            val radiusPercentAttr = getFloatOrNull(R.styleable.CircleLayout_radiusPercent)
+            val separationAngleAttr = getRadiansOrNull(R.styleable.CircleLayout_separationAngle)
 
-            val radiusModeValue =
-                getInt(R.styleable.CircleLayout_radiusMode, RadiusMode.FIT_CHILDREN.ordinal)
+            // read radius attrs
+            val radiusModeValue = getInt(R.styleable.CircleLayout_radiusMode, RadiusMode.FIT_CHILDREN.ordinal)
             when {
-                radiusModeValue == RadiusMode.FIXED.ordinal && attrRadiusSize != null -> {
-                    _radiusMode = RadiusMode.FIXED
-                    _radiusSize = attrRadiusSize
+                radiusModeValue == RadiusMode.FIXED.ordinal && radiusSizeAttr != null -> {
+                    radiusMode = RadiusMode.FIXED
+                    _radiusSize = radiusSizeAttr
                 }
-
-                radiusModeValue == RadiusMode.PERCENT.ordinal && attrRadiusPercent != null -> {
-                    _radiusMode = RadiusMode.PERCENT
-                    _radiusPercent = attrRadiusPercent
+                radiusModeValue == RadiusMode.PERCENT.ordinal && radiusPercentAttr != null -> {
+                    radiusMode = RadiusMode.PERCENT
+                    _radiusPercent = radiusPercentAttr
                 }
-
                 else -> {
-                    _radiusMode = RadiusMode.FIT_CHILDREN
+                    radiusMode = RadiusMode.FIT_CHILDREN
                 }
             }
 
+            // read angle attrs
             val angleModeValue = getInt(R.styleable.CircleLayout_angleMode, AngleMode.DISTRIBUTED.ordinal)
             when {
-                angleModeValue == AngleMode.FIXED.ordinal && attrSeparationAngle != null -> {
-                    _angleMode = AngleMode.FIXED
-                    _separationAngle = attrSeparationAngle
+                angleModeValue == AngleMode.FIXED.ordinal && separationAngleAttr != null -> {
+                    angleMode = AngleMode.FIXED
+                    _separationAngle = separationAngleAttr
                 }
-
                 else -> {
-                    _angleMode = AngleMode.DISTRIBUTED
+                    angleMode = AngleMode.DISTRIBUTED
                 }
             }
         }
+
+        this.startAngle = startAngle
+        this.radiusMode = radiusMode
+        this.angleMode = angleMode
     }
 
     /**
@@ -191,8 +191,10 @@ open class CircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
                 max(acc, childOverflow)
             }
 
-            // cannot use -= due to possibility of _radius being null
-            _radius = _radius!! - overflow - 10
+            if (overflow > 0) {
+                // cannot use -= because _radius is nullable
+                _radius = _radius!! - overflow - 10
+            }
         }
 
         positionChildrenFromMetadata(metadata, cx, cy)
@@ -255,7 +257,7 @@ open class CircleLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         val heightSpec = MeasureSpec.makeMeasureSpec(heightBound, MeasureSpec.AT_MOST)
         child.measure(widthSpec, heightSpec)
 
-        val childLeft: Int = x - child.measuredWidth / 2
+        val childLeft = x - child.measuredWidth / 2
         val childTop = y - child.measuredHeight / 2
         val childRight = x + child.measuredWidth / 2
         val childBottom = y + child.measuredHeight / 2
