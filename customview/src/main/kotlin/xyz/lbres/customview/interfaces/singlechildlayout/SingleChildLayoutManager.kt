@@ -12,7 +12,8 @@ import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
 
 /**
- * Manager for views in a SingleChildLayout
+ * Manager for views in a SingleChildLayout.
+ * Required because interfaces cannot have private properties or methods.
  *
  * @param getLayout () -> [ViewGroup]: function to retrieve the layout to manage
  * @param context [Context]: activity context

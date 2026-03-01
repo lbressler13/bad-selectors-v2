@@ -9,7 +9,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import xyz.lbres.customview.R
-import xyz.lbres.customview.circlelayout.SingleChildCircleLayout
+import xyz.lbres.customview.circlelayout.AbstractSingleChildCircleLayout
 import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
 
@@ -47,7 +47,7 @@ fun createMockContext(numChildren: Int?, hasChildLayout: Boolean): Context {
  * @return [ViewGroup] mocked layout
  */
 internal fun createMockLayout(): ViewGroup {
-    val layout = mockk<SingleChildCircleLayout> {
+    val layout = mockk<AbstractSingleChildCircleLayout> {
         every { removeAllViews() } returns Unit
         every { addView(any()) } returns Unit
         every { childCount } returns 0

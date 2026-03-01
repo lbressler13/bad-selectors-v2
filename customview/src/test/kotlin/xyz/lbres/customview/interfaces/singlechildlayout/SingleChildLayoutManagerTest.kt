@@ -6,7 +6,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import xyz.lbres.customview.circlelayout.SingleChildCircleLayout
+import xyz.lbres.customview.circlelayout.AbstractSingleChildCircleLayout
 import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
 import xyz.lbres.customview.interfaces.singlechildlayout.SingleChildLayoutManager.ChildInitializationState
@@ -57,7 +57,7 @@ class SingleChildLayoutManagerTest {
 
     @Test
     fun testInitializeChildrenWithExistingChildren() {
-        val layout = mockk<SingleChildCircleLayout> {
+        val layout = mockk<AbstractSingleChildCircleLayout> {
             every { addView(any()) } returns Unit
             every { childCount } returns 1
         }
