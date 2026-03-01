@@ -9,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.home.HomeFragment
+import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 
 /**
  * Abstract fragment to handle common functionality involving the BaseActivity
@@ -24,6 +25,7 @@ abstract class BaseFragment : NavHostFragment() {
      * Resource IDs for actions to navigate to other fragments
      */
     protected open var navToHomeResId: Int? = null
+    protected open var navToPhoneResId: Int? = null
 
     /**
      * Re-add action bar settings when fragment is shown.
@@ -40,13 +42,16 @@ abstract class BaseFragment : NavHostFragment() {
         val navbarItems = requireBaseActivity().binding.navbar.getChildAt(0) as BottomNavigationMenuView
 
         val home = navbarItems.getChildAt(0)
+        val phone = navbarItems.getChildAt(1)
 
         requireBaseActivity().binding.navbar.selectedItemId = when (this) {
             is HomeFragment -> home.id
+            is PhoneTabFragment -> phone.id
             else -> home.id
         }
 
         addNavOnClick(home, navToHomeResId, tabFragment = false)
+        addNavOnClick(phone, navToPhoneResId, tabFragment = true)
     }
 
     /**

@@ -12,6 +12,10 @@
         <action
             android:id="@+id/navigateHomeToAttributions"
             app:destination="@id/attributionsFragment" />
+
+        <action
+            android:id="@+id/navigateHomeToPhone"
+            app:destination="@id/phoneFragment" />
     </fragment>
 
     <fragment
@@ -21,6 +25,20 @@
 
         <action
             android:id="@+id/navigateAttributionsToHome"
+            app:destination="@id/homeFragment" />
+
+        <action
+            android:id="@+id/navigateAttributionsToPhone"
+            app:destination="@id/phoneFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/phoneFragment"
+        android:name="xyz.lbres.badselectorsv2.phone.PhoneTabFragment"
+        android:label="PhoneTabFragment">
+
+        <action
+            android:id="@+id/navigatePhoneToHome"
             app:destination="@id/homeFragment" />
     </fragment>
 

@@ -27,8 +27,8 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
     // constant icons and content descriptions
     private val expandIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_right)
     private val collapseIcon = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_chevron_down)
-    private val expandContentDescription = itemView.context.getString(R.string.expand_images_dropdown_cd)
-    private val collapseContentDescription = itemView.context.getString(R.string.collapse_images_dropdown_cd)
+    private val expandContentDescription = itemView.context.getString(R.string.expand_dropdown_cd)
+    private val collapseContentDescription = itemView.context.getString(R.string.collapse_dropdown_cd)
 
     // update UI to show information about current author
     fun update(

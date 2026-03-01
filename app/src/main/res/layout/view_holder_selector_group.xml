@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:id="@+id/expandCollapseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:paddingStart="10dp"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:src="@drawable/ic_chevron_right"
+        app:layout_constraintBottom_toBottomOf="@id/activityTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/activityTitle"
+        android:contentDescription="@string/expand_dropdown_cd"
+        app:tint="?colorOnBackground" />
+
+    <TextView
+        android:id="@+id/activityTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:paddingVertical="20dp"
+        android:paddingEnd="25dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/expandCollapseButton"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="?colorOnBackground"
+        tools:ignore="RtlSymmetry" />
+
+    <!-- Divider and Recycler can't share a layout b/c of different start locations -->
+    <View
+        android:id="@+id/internalDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?colorOnBackground"
+        app:layout_constraintTop_toBottomOf="@id/activityTitle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/selectorRecycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/internalDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/activityTitle" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="?colorOnBackground"
+        app:layout_constraintTop_toBottomOf="@id/selectorRecycler" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
