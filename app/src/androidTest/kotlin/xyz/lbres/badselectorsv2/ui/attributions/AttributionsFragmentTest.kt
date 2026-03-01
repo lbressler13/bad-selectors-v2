@@ -67,7 +67,7 @@ class AttributionsFragmentTest {
 
     @Test
     fun loadActionBarWithTitle() {
-        val expectedTitle = "Image Attributions"
+        val expectedTitle = "Give People Credit"
         onView(withId(R.id.actionBar)).check(matches(withTitle(expectedTitle)))
     }
 

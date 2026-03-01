@@ -130,12 +130,12 @@ dependencies {
 
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
-    implementation("androidx.core:core-ktx:${androidxCoreVersion}")
+    implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
-    implementation("com.google.android.material:material:${materialVersion}")
+    implementation("com.google.android.material:material:$materialVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 

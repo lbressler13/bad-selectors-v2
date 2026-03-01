@@ -15,6 +15,8 @@ abstract class BaseFragment : NavHostFragment() {
      */
     protected open var actionBarTitleResId: Int = R.string.title_action_bar
 
+    // nav to home action
+
     /**
      * Re-add action bar settings when fragment is shown.
      */
