@@ -1,8 +1,8 @@
 package xyz.lbres.badselectorsv2
 
+import xyz.lbres.badselectorsv2.abstracts.BaseFragment
 import xyz.lbres.badselectorsv2.ext.view.visible
-import xyz.lbres.badselectorsv2.ui.BaseFragment
-import xyz.lbres.badselectorsv2.ui.devtools.DeveloperToolsDialog
+import xyz.lbres.badselectorsv2.devtools.DeveloperToolsDialog
 
 /**
  * Configuration for dev build flavor
