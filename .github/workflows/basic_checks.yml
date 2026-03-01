@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       USERNAME: ${{ secrets.USERNAME }}
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     steps:
       - name: Checkout
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       USERNAME: ${{ secrets.USERNAME }}
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     steps:
       - name: Checkout
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       USERNAME: ${{ secrets.USERNAME }}
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     steps:
       - name: Checkout
