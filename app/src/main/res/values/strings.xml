@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Android App Template</string>
-    <string name="title_action_bar">Android App Template</string>
+    <string name="app_name">Bad Selectors v2</string>
+    <string name="title_action_bar">Bad Selectors</string>
 
     <!-- Home Fragment -->
-    <string name="welcome_message">Welcome to the app template!</string>
+    <string name="welcome_message">Under construction!</string>
 
     <!-- Attributions -->
     <string name="title_attributions">Image Attributions</string>

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="xyz.lbres.androidapptemplate.ui.home.HomeFragment"
+        android:name="xyz.lbres.badselectorsv2.ui.home.HomeFragment"
         android:label="HomeFragment">
 
         <action
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/attributionsFragment"
-        android:name="xyz.lbres.androidapptemplate.ui.attributions.AttributionsFragment"
+        android:name="xyz.lbres.badselectorsv2.ui.attributions.AttributionsFragment"
         android:label="AttributionsFragment" />
 
 </navigation>
