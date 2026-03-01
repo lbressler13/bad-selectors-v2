@@ -4,6 +4,7 @@
 
     <!-- Home Fragment -->
     <string name="welcome_message">Under construction!</string>
+    <string name="title_home">Home</string>
 
     <!-- Attributions -->
     <string name="title_attributions">Image Attributions</string>

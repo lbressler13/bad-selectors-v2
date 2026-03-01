@@ -120,6 +120,7 @@ dependencies {
     val constraintLayoutVersion: String by rootProject.extra
     val kotlinUtilsVersion: String by rootProject.extra
     val lifecycleVersion: String by rootProject.extra
+    val materialVersion: String by rootProject.extra
     val navigationVersion: String by rootProject.extra
 
     val androidxJunitVersion: String by rootProject.extra
@@ -127,13 +128,14 @@ dependencies {
     val androidxTestRunnerVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
 
-    implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
+    implementation("androidx.core:core-ktx:${androidxCoreVersion}")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+    implementation("com.google.android.material:material:${materialVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 

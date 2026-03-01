@@ -20,7 +20,7 @@ abstract class BaseFragment : NavHostFragment() {
      */
     override fun onResume() {
         super.onResume()
-        requireBaseActivity().binding.actionBar.title.text = getString(actionBarTitleResId)
+        requireBaseActivity().binding.actionBar.title = getString(actionBarTitleResId)
         dialogFragmentManager = childFragmentManager
     }
 
