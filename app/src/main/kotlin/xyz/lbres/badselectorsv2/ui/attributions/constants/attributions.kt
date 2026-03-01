@@ -13,6 +13,7 @@ private val freepikImages = listOf(
     ImageAttribution(R.drawable.ic_chevron_left, R.string.chevron_left_cd, chevronLeftUrl),
     ImageAttribution(R.drawable.ic_chevron_right, R.string.chevron_right_cd, chevronRightUrl),
     ImageAttribution(R.drawable.ic_chevron_up, R.string.chevron_up_cd, chevronUpUrl),
+    ImageAttribution(R.drawable.ic_home, R.string.chevron_up_cd, homeUrl),
     ImageAttribution(R.drawable.ic_info, R.string.info_cd, infoUrl),
     ImageAttribution(R.drawable.ic_settings, R.string.settings_cd, settingsUrl),
 )

@@ -27,6 +27,7 @@ import xyz.lbres.badselectorsv2.ProductFlavor
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.testutils.assertLinkOpened
 import xyz.lbres.badselectorsv2.testutils.hideDevToolsButton
+import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 import xyz.lbres.badselectorsv2.testutils.viewactions.clickLinkInText
 import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
@@ -66,8 +67,8 @@ class AttributionsFragmentTest {
 
     @Test
     fun loadActionBarWithTitle() {
-        val expectedTitle = "Image Attributions"
-        onView(withId(R.id.title)).check(matches(withText(expectedTitle)))
+        val expectedTitle = "Give People Credit"
+        onView(withId(R.id.actionBar)).check(matches(withTitle(expectedTitle)))
     }
 
     @Test
@@ -103,6 +104,12 @@ class AttributionsFragmentTest {
     @Test
     fun closeButton() {
         onView(withId(R.id.closeButton)).perform(forceClick())
+        onView(withText("Bad Selectors")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navigateHome() {
+        onView(withId(R.id.navigationHome)).perform(click())
         onView(withText("Bad Selectors")).check(matches(isDisplayed()))
     }
 

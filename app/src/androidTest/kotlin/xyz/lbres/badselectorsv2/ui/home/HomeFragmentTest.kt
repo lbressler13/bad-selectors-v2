@@ -13,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 
 @RunWith(AndroidJUnit4::class)
@@ -28,17 +29,19 @@ class HomeFragmentTest {
 
     @Test
     fun actionBarTitle() {
-        onView(withText("Bad Selectors")).check(matches(isDisplayed()))
+        val expectedTitle = "Bad Selectors"
+        onView(withId(R.id.actionBar)).check(matches(withTitle(expectedTitle)))
     }
 
     @Test
     fun initialUi() {
         onView(withText("Under construction!")).check(matches(isDisplayed()))
+        onView(withId(R.id.navigationHome)).check(matches(isDisplayed()))
     }
 
     @Test
     fun attributionsFragment() {
         onView(withId(R.id.infoButton)).perform(click())
-        onView(withText("Image Attributions")).check(matches(isDisplayed()))
+        onView(withText("Give People Credit")).check(matches(isDisplayed()))
     }
 }

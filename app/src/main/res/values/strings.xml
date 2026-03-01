@@ -2,11 +2,14 @@
     <string name="app_name">Bad Selectors v2</string>
     <string name="title_action_bar">Bad Selectors</string>
 
+    <string name="tab_index_key">tabIndex</string>
+
     <!-- Home Fragment -->
     <string name="welcome_message">Under construction!</string>
+    <string name="title_home">Home</string>
 
     <!-- Attributions -->
-    <string name="title_attributions">Image Attributions</string>
+    <string name="title_attributions">Give People Credit</string>
     <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies.</string>
     <string name="flaticon_message_short">All icons are taken from Flaticon. Expand for details of their attribution policies.</string>
     <string name="author_attr_template">Icon made by %s from %s</string>
