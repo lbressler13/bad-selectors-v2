@@ -1,21 +1,21 @@
-name: Unit Tests
+name: Basic Checks
 
 on:
   workflow_dispatch:
   workflow_call:
   push:
     branches-ignore:
-      # runs on main as part of All Checks
-      - main
+    # runs on main as part of All Checks
+    - main
+
+env:
+  USERNAME: ${{ secrets.USERNAME }}
+  TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
 jobs:
-  build:
-    name: "Unit Tests"
-
+  lint:
+    name: "Linting"
     runs-on: ubuntu-latest
-    env:
-      USERNAME: ${{ secrets.USERNAME }}
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
     steps:
       - name: Checkout
@@ -26,10 +26,40 @@ jobs:
         with:
           distribution: corretto
           java-version: 17
-          cache: gradle
 
       - name: Linting
         run: ./gradlew ktlintCheck
 
-      - name: Unit Tests
-        run: ./gradlew test
+  app-unit-tests:
+    name: "Unit Tests (app module)"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Java Version
+        uses: actions/setup-java@v3
+        with:
+          distribution: corretto
+          java-version: 17
+
+      - name: Tests
+        run: ./gradlew :app:test --stacktrace
+
+  customview-unit-tests:
+    name: "Unit Tests (customview module)"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Java Version
+        uses: actions/setup-java@v3
+        with:
+          distribution: corretto
+          java-version: 17
+
+      - name: Tests
+        run: ./gradlew :customview:test --stacktrace

@@ -1,25 +1,9 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.1" // ktlint
-}
-
-val githubUsername: String? = project.findProperty("github.username")?.toString() ?: System.getenv("USERNAME")
-val githubPassword: String? = project.findProperty("github.token")?.toString() ?: System.getenv("ACCESS_TOKEN")
-
-repositories {
-    // general repositories
-    google()
-    mavenCentral()
-
-    // kotlin utils
-    maven {
-        url = uri("https://maven.pkg.github.com/lbressler13/kotlin-utils")
-        credentials {
-            username = githubUsername
-            password = githubPassword
-        }
-    }
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 fun getEspressoRetries(): Int {
@@ -34,13 +18,18 @@ fun getEspressoRetries(): Int {
 }
 
 android {
+    val androidCompileSdk: Int by rootProject.extra
+    val androidJavaVersion: JavaVersion by rootProject.extra
+    val androidJvmTarget: String by rootProject.extra
+    val androidMinSdk: Int by rootProject.extra
+
     namespace = "xyz.lbres.badselectorsv2"
-    compileSdk = 34
+    compileSdk = androidCompileSdk
 
     defaultConfig {
         applicationId = "xyz.lbres.badselectorsv2"
-        minSdk = 29 // maximum sdk available in tester used in github actions
-        targetSdk = 34
+        minSdk = androidMinSdk
+        targetSdk = androidCompileSdk
         versionCode = 1
         versionName = "1.0.0"
 
@@ -112,30 +101,31 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = androidJavaVersion
+        targetCompatibility = androidJavaVersion
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.fromTarget(androidJvmTarget)
+        }
     }
 }
 
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
-    val androidxCoreVersion = "1.13.1"
-    val appCompatVersion = "1.7.0"
-    val constraintLayoutVersion = "2.1.4"
-    val kotlinUtilsVersion = "1.3.4"
-    val lifecycleVersion = "2.8.6"
-    val navigationVersion = "2.8.3"
+    val androidxCoreVersion: String by rootProject.extra
+    val appCompatVersion: String by rootProject.extra
+    val constraintLayoutVersion: String by rootProject.extra
+    val kotlinUtilsVersion: String by rootProject.extra
+    val lifecycleVersion: String by rootProject.extra
+    val navigationVersion: String by rootProject.extra
 
-    // test dependency versions: https://developer.android.com/jetpack/androidx/releases/test
-    val androidxJunitVersion = "1.3.0"
-    val androidxTestRulesVersion = "1.7.0"
-    val androidxTestRunnerVersion = "1.7.0"
-    val espressoVersion = "3.7.0"
+    val androidxJunitVersion: String by rootProject.extra
+    val androidxTestRulesVersion: String by rootProject.extra
+    val androidxTestRunnerVersion: String by rootProject.extra
+    val espressoVersion: String by rootProject.extra
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -146,6 +136,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
+
+    implementation(project(":customview"))
 
     // testing
     testImplementation(kotlin("test"))
@@ -158,6 +150,9 @@ dependencies {
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    version.set("0.49.1")
-    additionalEditorconfig.set(mapOf("max_line_length" to "120"))
+    val ktlintVersion: String by rootProject.extra
+    val maxLineLength: String by rootProject.extra
+
+    version.set(ktlintVersion)
+    additionalEditorconfig.set(mapOf("max_line_length" to maxLineLength))
 }
