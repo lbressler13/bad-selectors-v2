@@ -52,7 +52,7 @@ abstract class BaseFragment : NavHostFragment() {
     /**
      * Set on click action for a single button in the navbar
      *
-     * @param button [android.view.View]: button to set onClick for
+     * @param button [View]: button to set onClick for
      * @param actionResId [Int]?: navigation action to take when button is clicked. `null` for the current fragment.
      * @param tabFragment [Boolean]: `true` if the destination fragment is a tab fragment, `false` otherwise
      */
@@ -74,9 +74,9 @@ abstract class BaseFragment : NavHostFragment() {
     protected fun closeFragment() = requireBaseActivity().popBackStack()
 
     /**
-     * Get current activity as [xyz.lbres.badselectorsv2.BaseActivity].
+     * Get current activity as [BaseActivity].
      *
-     * @return [xyz.lbres.badselectorsv2.BaseActivity]
+     * @return [BaseActivity]
      */
     protected fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
 

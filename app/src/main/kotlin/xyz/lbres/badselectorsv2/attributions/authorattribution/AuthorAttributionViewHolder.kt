@@ -73,9 +73,9 @@ class AuthorAttributionViewHolder(private val binding: ViewHolderAuthorAttributi
         val spannableString = SpannableString(text)
 
         // link to flaticon site
-        URLClickableSpan.Companion.addToFirstWord(spannableString, flaticonDisplayUrl, flaticonUrl)
+        URLClickableSpan.addToFirstWord(spannableString, flaticonDisplayUrl, flaticonUrl)
         // link to creator
-        URLClickableSpan.Companion.addToFirstWord(spannableString, author.name, author.url)
+        URLClickableSpan.addToFirstWord(spannableString, author.name, author.url)
 
         binding.attribution.movementMethod = LinkMovementMethod()
         binding.attribution.text = spannableString
