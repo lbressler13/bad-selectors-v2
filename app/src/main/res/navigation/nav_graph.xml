@@ -17,6 +17,11 @@
     <fragment
         android:id="@+id/attributionsFragment"
         android:name="xyz.lbres.badselectorsv2.ui.attributions.AttributionsFragment"
-        android:label="AttributionsFragment" />
+        android:label="AttributionsFragment">
+
+        <action
+            android:id="@+id/navigateAttributionsToHome"
+            app:destination="@id/homeFragment" />
+    </fragment>
 
 </navigation>

@@ -2,6 +2,8 @@
     <string name="app_name">Bad Selectors v2</string>
     <string name="title_action_bar">Bad Selectors</string>
 
+    <string name="tab_index_key">tabIndex</string>
+
     <!-- Home Fragment -->
     <string name="welcome_message">Under construction!</string>
     <string name="title_home">Home</string>

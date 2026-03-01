@@ -28,6 +28,7 @@ class AttributionsFragment : BaseFragment() {
     private lateinit var viewModel: AttributionsViewModel
 
     override var actionBarTitleResId: Int = R.string.title_attributions
+    override var navToHomeResId: Int? = R.id.navigateAttributionsToHome
 
     /**
      * Initialize fragment

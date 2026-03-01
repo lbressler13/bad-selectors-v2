@@ -36,7 +36,7 @@ class HomeFragmentTest {
     @Test
     fun initialUi() {
         onView(withText("Under construction!")).check(matches(isDisplayed()))
-        onView(withId(R.id.navigation_home)).check(matches(isDisplayed()))
+        onView(withId(R.id.navigationHome)).check(matches(isDisplayed()))
     }
 
     @Test

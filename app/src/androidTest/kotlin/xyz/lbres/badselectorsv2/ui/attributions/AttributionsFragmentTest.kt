@@ -108,6 +108,12 @@ class AttributionsFragmentTest {
     }
 
     @Test
+    fun navigateHome() {
+        onView(withId(R.id.navigationHome)).perform(click())
+        onView(withText("Bad Selectors")).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun expandCollapseAttributions() = testExpandCollapseAttributions()
 
     @Test
