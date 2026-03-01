@@ -49,4 +49,9 @@ class HomeFragmentTest {
         onView(withId(R.id.navigationPhone)).perform(click())
         actionBar.check(matches(withTitle("Bad Phone Selectors")))
     }
+
+    @Test fun navigateWithPhoneSelectors() = testNavigateWithPhoneSelectors()
+
+    @Test fun expandCollapseSelectors() = testExpandCollapseSelectors()
+    @Test fun expansionsPersistedOnLeave() = testExpansionsPersistedOnLeave()
 }
