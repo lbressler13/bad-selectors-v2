@@ -82,7 +82,7 @@ class SingleChildCircleLayout(context: Context, attrs: AttributeSet?, defStyleAt
                 child,
                 index,
                 params,
-                preventRequestLayout
+                preventRequestLayout,
             )
         }
     }

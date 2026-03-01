@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.withStyledAttributes
+import androidx.core.view.isNotEmpty
 import xyz.lbres.customview.IManager
 import xyz.lbres.customview.R
 import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
-import androidx.core.content.withStyledAttributes
-import androidx.core.view.isNotEmpty
 
 /**
  * Manager for views in a single child layout

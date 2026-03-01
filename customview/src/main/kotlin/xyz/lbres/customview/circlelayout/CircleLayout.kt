@@ -3,6 +3,7 @@ package xyz.lbres.customview.circlelayout
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
+import androidx.core.content.withStyledAttributes
 import androidx.core.view.children
 import androidx.core.view.isGone
 import xyz.lbres.customview.R
@@ -15,7 +16,6 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
-import androidx.core.content.withStyledAttributes
 
 /**
  * Custom layout that displays children in a circle. See README for information about customizing layout.
