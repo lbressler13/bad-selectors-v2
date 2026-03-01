@@ -34,11 +34,11 @@ fun getEspressoRetries(): Int {
 }
 
 android {
-    namespace = "xyz.lbres.androidapptemplate"
+    namespace = "xyz.lbres.badselectorsv2"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "xyz.lbres.androidapptemplate"
+        applicationId = "xyz.lbres.badselectorsv2"
         minSdk = 29 // maximum sdk available in tester used in github actions
         targetSdk = 34
         versionCode = 1
@@ -91,18 +91,15 @@ android {
     }
 
     sourceSets.getByName("androidTest") {
-        kotlin.setSrcDirs(listOf("src/espresso/kotlin"))
-        java.setSrcDirs(listOf("src/espresso/kotlin"))
+        java.setSrcDirs(listOf("src/androidTest/kotlin"))
     }
 
     sourceSets.getByName("androidTestDev") {
-        kotlin.setSrcDirs(listOf("src/espressoDev/kotlin"))
-        java.setSrcDirs(listOf("src/espressoDev/kotlin"))
+        java.setSrcDirs(listOf("src/androidTestDev/kotlin"))
     }
 
     sourceSets.getByName("androidTestFinal") {
-        kotlin.setSrcDirs(listOf("src/espressoFinal/kotlin"))
-        java.setSrcDirs(listOf("src/espressoFinal/kotlin"))
+        java.setSrcDirs(listOf("src/androidTestFinal/kotlin"))
     }
 
     buildFeatures {
@@ -134,10 +131,11 @@ dependencies {
     val lifecycleVersion = "2.8.6"
     val navigationVersion = "2.8.3"
 
-    val androidxJunitVersion = "1.2.1"
-    val androidxTestRulesVersion = "1.6.1"
-    val androidxTestRunnerVersion = "1.6.2"
-    val espressoVersion = "3.6.1"
+    // test dependency versions: https://developer.android.com/jetpack/androidx/releases/test
+    val androidxJunitVersion = "1.3.0"
+    val androidxTestRulesVersion = "1.7.0"
+    val androidxTestRunnerVersion = "1.7.0"
+    val espressoVersion = "3.7.0"
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")

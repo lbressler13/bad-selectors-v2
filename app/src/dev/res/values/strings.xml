@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dev App Template</string>
+    <string name="app_name">Bad Selectors Dev</string>
 
     <!-- Developer Tools -->
     <string name="title_dev_tools">Developer Tools</string>

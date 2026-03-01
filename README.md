@@ -1,36 +1,28 @@
-# Android App Template
+# Bad Selectors v2
+    sourceSets.getByName("final") {
+        java.setSrcDirs(listOf("src/final/kotlin"))
+    }
 
-[![All Checks](https://github.com/lbressler13/android-app-template/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/android-app-template/actions/workflows/all_checks.yml)
-
-- [Overview](#overview)
-- [Testing](#testing)
-- [Linting](#linting)
-- [Using the Template](#using-the-template)
-- [Project Structure](#project-structure)
-- [Image Attributions](#image-attributions)
+[![All Checks](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml)
 
 ## Overview
 
-This is a template for creating an Android app with two build flavors.
-It also contains a pre-made fragment to list icons that are used in the app, and a basic developer tools dialog. 
-This dialog can easily be augmented with app-specific functionality, such as erasing data from ViewModels.
-
-The code in this template is inspired by other repos that share functionality, tests, and utils, including the [Trick Calculator](https://github.com/lbressler13/trick-calculator) app.
+This is a rebuild of the [Bad Selectors](https://github.com/lbressler13/bad-selectors) app.
 
 ### Build Flavors
 
-The template is set up with 2 builds flavors: dev and final.
+The app has 2 builds flavors: dev and final.
 The developer tools dialog is only available in the dev variant, and it can be accessed via the icon in the bottom left corner of the screen.
 
 See [here](https://developer.android.com/studio/build/build-variants) for information about configuring build variants in an Android app.
 
 ### Dependencies
 
-The template has a dependency on a [kotlin-utils](https://github.com/lbressler13/kotlin-utils) package, which is hosted in the GitHub Packages registry.
+The app has a dependency on a [kotlin-utils](https://github.com/lbressler13/kotlin-utils) package, which is hosted in the GitHub Packages registry.
 To pull packages from the registry, you need a GitHub access token with the `read:packages` scope.
 **Do not commit your access token.**
 
-In order to build to with the package, you can add the following properties to a gradle.properties file:
+In order to build to with the package, you can add the following properties to a local.properties gradle file:
 ```properties
 github.username=GITHUB_USERNAME
 github.token=GITHUB_PAT
@@ -57,7 +49,6 @@ Unit tests can be run via an IDE, or with the following command:
 
 UI tests are implemented using the Espresso framework.
 Tests can be configured for an individual build flavor, or can be shared across flavors.
-The template has pre-existing tests for the image attributions fragment and developer tools dialog.
 
 Tests can be run via an IDE, or with the following commands:
 * All tests for both flavors: `./gradlew connectedCheck`
@@ -78,54 +69,18 @@ To run linting and fix formatting issues if possible, run the following command 
 To run linting without fixing issues, run the following command in the terminal or via an IDE:
 ```./gradlew ktlintCheck```
 
-## Using the Template
-
-### Package Name
-
-The package name can be updated using Android Studio.
-To change it, right-click on the name of the package under project structure.
-Select Refactor > Rename > In Whole Project, and input the new name.
-This will change the name in all files and tests for the main source set, as well as the current build variant.
-You will need to update the other build variant separately.
-
-The name also needs to be changed in the following places:
-- [ ] App name in the main and dev string resource files. These values will be used in the app manifest.
-- [ ] Action bar title in the main string resource file.
-- [ ] Theme name in the day and night theme resource files. The theme also needs to be updated in the app manifest.
-- [ ] Application name and namespace in the app build.gradle.kts file
-- [ ] Root project name in settings.gradle.kts
-
-### Tests
-
-The UI tests look at package name and action bar title.
-These need to be updated in the following tests:
-- [ ] BaseActivityTest, under useAppContext for both build variants
-- [ ] HomeFragmentTest, under actionBarTitle
-- [ ] AttributionsFragmentTest, under closeButton
-
-### Workflows
-
-The template contains 3 workflows. The first workflow runs basic checks, such as linting and unit tests.
-The second workflow runs Espresso tests, and the third workflow runs both the first and second one.
-The third workflow is triggered automatically on pushes to the main branch. 
-However, Espresso tests use a large number of GitHub actions minutes, due to the amount of time they take and the OS they run on.
-If there are restrictions on the minutes available, you should consider removing the Espresso step or disabling the automatic trigger for that workflow.
-
-All three workflows use gradlew to execute commands.
-You may need to run `git update-index --chmod=+x ./gradlew` to grant executable permissions in GitHub actions.
-
 ## Project Structure
 
 ```project
 ├── .github
-│   ├── workflows           <-- workflow files to run in GitHub actions
+│   ├── workflows   <-- workflow files to run in GitHub actions
 ├── app
 │   ├── src
-│   │   ├── dev             <-- code and resources that are specific to dev product flavor
-│   │   ├── espresso        <-- UI tests
-│   │   ├── espressoDev     <-- UI tests that are specific to dev product flavor
-│   │   ├── espressoFinal   <-- UI tests that are specific to final product flavor
-│   │   ├── final           <-- code and resources that are specific to final product flavor
+│   │   ├── androidTest       <-- UI tests
+│   │   ├── androidTestDev    <-- UI tests that are specific to dev product flavor
+│   │   ├── androidTestFinal  <-- UI tests that are specific to final product flavor
+│   │   ├── dev               <-- code and resources that are specific to dev product flavor
+│   │   ├── final             <-- code and resources that are specific to final product flavor
 │   │   ├── main
 │   │   │   ├── kotlin      <-- main source code
 │   │   │   │   ├── ext     <-- extension functions for existing classes
@@ -144,8 +99,8 @@ You may need to run `git update-index --chmod=+x ./gradlew` to grant executable 
 ## Image Attributions
 
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.
-This is the complete list of Flaticon images included in the template.
-The list is also available within the template under the `ui.attributions` package.
+This is the complete list of Flaticon images included in the app.
+The list is also available within the app under the `ui.attributions` package.
 
 | Icon                                                        | Creator                                                                                                                    | Link                                                                  |
 |:------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------|
