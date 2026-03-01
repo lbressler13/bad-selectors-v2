@@ -44,6 +44,7 @@ private class MatchesAtPositionViewMatcher(
  * [Matcher] for a RecyclerView, to determine if the ViewHolder at a specified position matches a given matcher
  *
  * @param position [Int]: position of ViewHolder in recycler
+ * @param vhMatcher [Int]: matcher for ViewHolder
  */
 fun matchesAtPosition(position: Int, vhMatcher: Matcher<View?>): Matcher<View> =
     MatchesAtPositionViewMatcher(position, vhMatcher)
