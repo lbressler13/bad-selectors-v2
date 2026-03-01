@@ -8,7 +8,7 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import org.hamcrest.Matcher
-import xyz.lbres.badselectorsv2.ui.attributions.URLClickableSpan
+import xyz.lbres.badselectorsv2.attributions.URLClickableSpan
 
 /**
  * Click the first [URLClickableSpan] in a TextView that matches the specified text.
