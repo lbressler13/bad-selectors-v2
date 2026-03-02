@@ -12,15 +12,15 @@ import xyz.lbres.badselectorsv2.R
 
 fun testExpandCollapseSelectors() {
     // start collapsed
-    checkSelectorsNotDisplayed(listOf(0))
+    checkGroupsCollapsed(listOf(0))
 
     // expand
     expandCollapseGroup(0)
-    checkSelectorsDisplayed(listOf(0))
+    checkGroupsExpanded(listOf(0))
 
     // collapse
     expandCollapseGroup(0)
-    checkSelectorsNotDisplayed(listOf(0))
+    checkGroupsCollapsed(listOf(0))
 }
 
 fun testExpansionsPersistedOnLeave() {
@@ -29,13 +29,13 @@ fun testExpansionsPersistedOnLeave() {
     onView(withId(R.id.navigationPhone)).perform(click())
 
     pressBack()
-    checkSelectorsDisplayed(listOf(0))
+    checkGroupsExpanded(listOf(0))
 
     // using buttons
     onView(withId(R.id.navigationPhone)).perform(click())
 
     onView(withId(R.id.navigationHome)).perform(click())
-    checkSelectorsDisplayed(listOf(0))
+    checkGroupsExpanded(listOf(0))
 }
 
 fun testNavigateWithPhoneSelectors() {

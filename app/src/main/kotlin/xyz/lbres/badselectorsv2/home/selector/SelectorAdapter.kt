@@ -35,8 +35,7 @@ class SelectorAdapter(
      */
     override fun onBindViewHolder(holder: SelectorViewHolder, position: Int) {
         val titleId = itemResIds[position]
-        val positionOnClick: () -> Unit = { onClick(position) }
-        holder.updateForSelector(context.getString(titleId), positionOnClick)
+        holder.updateForSelector(context.getString(titleId)) { onClick(position) }
     }
 
     /**

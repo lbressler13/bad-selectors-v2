@@ -14,14 +14,14 @@
         android:scaleX="0.8"
         android:scaleY="0.8"
         android:src="@drawable/ic_chevron_right"
-        app:layout_constraintBottom_toBottomOf="@id/activityTitle"
+        app:layout_constraintBottom_toBottomOf="@id/selectorTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/activityTitle"
+        app:layout_constraintTop_toTopOf="@id/selectorTitle"
         android:contentDescription="@string/expand_dropdown_cd"
         app:tint="?colorOnBackground" />
 
     <TextView
-        android:id="@+id/activityTitle"
+        android:id="@+id/selectorTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?colorOnBackground"
-        app:layout_constraintTop_toBottomOf="@id/activityTitle" />
+        app:layout_constraintTop_toBottomOf="@id/selectorTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/selectorRecycler"
@@ -49,7 +49,7 @@
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/internalDivider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/activityTitle" />
+        app:layout_constraintStart_toStartOf="@id/selectorTitle" />
 
     <View
         android:layout_width="match_parent"

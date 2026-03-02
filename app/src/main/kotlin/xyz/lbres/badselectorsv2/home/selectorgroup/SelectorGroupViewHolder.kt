@@ -34,7 +34,7 @@ class SelectorGroupViewHolder(
      * @param position [Int]: position in list of item being displayed
      */
     fun updateForGroup(metadata: TabFragment.Metadata, position: Int) {
-        binding.activityTitle.text = activity.getString(metadata.titleResId)
+        binding.selectorTitle.text = activity.getString(metadata.titleResId)
 
         initRecyclerView(metadata)
         initDropdown(position)

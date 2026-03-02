@@ -24,6 +24,6 @@ class HomeFragmentTestDev {
     fun refreshUi() {
         expandCollapseGroup(0)
         doRefreshUI()
-        checkSelectorsDisplayed(listOf(0))
+        checkGroupsExpanded(listOf(0))
     }
 }

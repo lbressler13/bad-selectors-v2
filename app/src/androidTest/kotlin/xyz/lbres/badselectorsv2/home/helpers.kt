@@ -69,11 +69,11 @@ fun expandCollapseGroup(position: Int) {
 }
 
 /**
- * Check that selectors for specified dropdowns are not displayed
+ * Check that the specified groups are collapsed
  *
- * @param positions [IntList]: list of positions where selector names should not be displayed
+ * @param positions [IntList]: list of groups which should be collapsed
  */
-fun checkSelectorsNotDisplayed(positions: IntList) {
+fun checkGroupsCollapsed(positions: IntList) {
     for (position in positions) {
         selectorGroupRecycler.perform(scrollToSelectorGroupAtPosition(0))
         for (name in selectorNames[position]) {
@@ -83,11 +83,11 @@ fun checkSelectorsNotDisplayed(positions: IntList) {
 }
 
 /**
- * Check that selectors for specified dropdowns are displayed
+ * Check that the specified groups are expanded
  *
- * @param positions [IntList]: list of positions where selector names should be displayed
+ * @param positions [IntList]: list of groups which should be expanded
  */
-fun checkSelectorsDisplayed(positions: IntList) {
+fun checkGroupsExpanded(positions: IntList) {
     for (position in positions) {
         selectorGroupRecycler.perform(scrollToSelectorGroupAtPosition(position))
 
