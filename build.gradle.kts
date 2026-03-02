@@ -1,5 +1,6 @@
 // main dependencies
 val androidxCoreVersion by extra { "1.13.1" }
+val androidxFragmentVersion by extra { "1.8.9" }
 val appCompatVersion by extra { "1.7.0" }
 val constraintLayoutVersion by extra { "2.1.4" }
 val kotlinUtilsVersion by extra { "1.3.4" }

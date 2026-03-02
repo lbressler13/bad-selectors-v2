@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.Packaging
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -98,6 +99,12 @@ android {
 
     testOptions {
         animationsDisabled = true
+        // resolves mockk issue: https://github.com/mockk/mockk/issues/297
+        packaging {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
     }
 
     compileOptions {
@@ -116,6 +123,7 @@ dependencies {
     val kotlinVersion: String by rootProject.extra
 
     val androidxCoreVersion: String by rootProject.extra
+    val androidxFragmentVersion: String by rootProject.extra
     val appCompatVersion: String by rootProject.extra
     val constraintLayoutVersion: String by rootProject.extra
     val kotlinUtilsVersion: String by rootProject.extra
@@ -132,6 +140,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
+    // implementation("androidx.fragment:fragment:$androidxFragmentVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
@@ -145,6 +154,9 @@ dependencies {
     // testing
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:$mockkVersion")
+    // debugImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion") // https://developer.android.com/guide/fragments/test
+    debugImplementation("androidx.fragment:fragment-testing-manifest:$androidxFragmentVersion")
+    androidTestImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")
     androidTestImplementation("androidx.test:runner:$androidxTestRunnerVersion") // needed to run on emulator
