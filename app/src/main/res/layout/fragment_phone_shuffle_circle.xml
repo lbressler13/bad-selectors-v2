@@ -18,7 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/correctButton"
+        app:layout_constraintBottom_toTopOf="@id/selectButton"
         app:layout_constraintTop_toBottomOf="@id/digitsLayout"
         app:layout_constraintVertical_bias="0">
 
@@ -60,7 +60,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/correctButton"
+        android:id="@+id/selectButton"
         style="@style/SelectButton"
         android:layout_marginBottom="15dp"
         android:text="@string/select"

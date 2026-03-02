@@ -2,8 +2,15 @@ package xyz.lbres.badselectorsv2.testutils
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.intent.Intents.getIntents
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers.allOf
 import org.junit.Assert.assertEquals
 import xyz.lbres.badselectorsv2.BaseActivity
 import java.lang.AssertionError
@@ -38,4 +45,19 @@ fun getContextEspresso(activityRule: ActivityScenarioRule<BaseActivity>): Contex
     }
 
     return context!!
+}
+
+/**
+ * Create a function which generates a ViewInteraction to find a view with a given ID,
+ * within a root with a specified ID.
+ *
+ * @param rootId [Int]: the resource ID for the root
+ * @return (Int) -> [ViewInteraction]
+ */
+fun createGetLocalView(rootId: Int): (Int) -> ViewInteraction {
+    return { viewId ->
+        val parentMatcher = isDescendantOfA(withId(rootId))
+        val matchers: MutableList<Matcher<View>> = mutableListOf(parentMatcher, withId(viewId))
+        onView(allOf(matchers))
+    }
 }

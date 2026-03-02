@@ -42,7 +42,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
         initDigitViews(binding.digitsLayout)
         initButtonCircle()
 
-        binding.correctButton.setOnClickListener { selectDigit() }
+        binding.selectButton.setOnClickListener { selectDigit() }
         binding.restartButton.setOnClickListener { reset() }
         if (viewModel.currentIndex > maxDigit) {
             setRestartUi()
@@ -56,7 +56,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
      */
     private fun reset() {
         viewModel.resetData()
-        binding.correctButton.enable()
+        binding.selectButton.enable()
         displayPhoneNumber()
         binding.circleLayout.children.forEach { it.enable() }
         binding.restartButton.gone()
@@ -66,7 +66,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
      * Update UI when showing restart button
      */
     private fun setRestartUi() {
-        binding.correctButton.disable()
+        binding.selectButton.disable()
         binding.circleLayout.children.forEach { it.disable() }
         binding.restartButton.visible()
     }
