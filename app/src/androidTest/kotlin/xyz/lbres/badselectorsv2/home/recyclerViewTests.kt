@@ -40,7 +40,7 @@ fun testExpansionsPersistedOnLeave() {
 
 fun testNavigateWithPhoneSelectors() {
     expandCollapseGroup(0)
-    runSingleSelectorNavigationTest("Shuffle Circle")
+    runSingleSelectorNavigationTest("Shuffle Circle", "Bad Phone Selectors")
 }
 
 /**
@@ -49,10 +49,11 @@ fun testNavigateWithPhoneSelectors() {
  * Returns to home fragment after check is complete
  *
  * @param selectorName [String]: name of selector to test
+ * @param actionBarTitle [String]: temporary value for validation until tab layout is complete
  */
-private fun runSingleSelectorNavigationTest(selectorName: String) {
+private fun runSingleSelectorNavigationTest(selectorName: String, actionBarTitle: String) {
     onView(withText(selectorName)).perform(scrollTo(), click())
-    onView(withText("Bad Phone Selectors")).check(matches(isDisplayed()))
+    onView(withText(actionBarTitle)).check(matches(isDisplayed()))
     // tabLayout.check(matches(withSelectedTabTitle(selectorName)))
     pressBack()
 }

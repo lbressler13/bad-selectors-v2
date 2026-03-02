@@ -17,7 +17,7 @@ class SelectorViewHolder(private val binding: ViewHolderSelectorBinding) :
      * @param title [String]: value to display
      * @param onClick () -> Unit: action to take when view holder is clicked
      */
-    fun updateForFragment(title: String, onClick: () -> Unit) {
+    fun updateForSelector(title: String, onClick: () -> Unit) {
         binding.itemTitle.text = title
         binding.root.setOnClickListener { onClick() }
     }

@@ -11,12 +11,12 @@ import xyz.lbres.badselectorsv2.home.HomeViewModel
 /**
  * Adapter for groups of selectors for the RecyclerView in the HomeFragment
  *
- * @param fragmentList List<[TabFragment.Metadata]>: list of metadata about groups
+ * @param metadataList List<[TabFragment.Metadata]>: list of metadata about groups
  * @param activity [BaseActivity]
  * @param viewModel [HomeViewModel]: ViewModel with information about expanded/collapsed items
  */
 class SelectorGroupAdapter(
-    private val fragmentList: List<TabFragment.Metadata>,
+    private val metadataList: List<TabFragment.Metadata>,
     private val activity: BaseActivity,
     private val viewModel: HomeViewModel,
 ) : RecyclerView.Adapter<SelectorGroupViewHolder>() {
@@ -35,12 +35,12 @@ class SelectorGroupAdapter(
      * Update a view holder for a specific group
      */
     override fun onBindViewHolder(holder: SelectorGroupViewHolder, position: Int) {
-        val fragment = fragmentList[position]
-        holder.updateForFragment(fragment, position)
+        val metadata = metadataList[position]
+        holder.updateForGroup(metadata, position)
     }
 
     /**
      * Number of items in adapter
      */
-    override fun getItemCount(): Int = fragmentList.size
+    override fun getItemCount(): Int = metadataList.size
 }

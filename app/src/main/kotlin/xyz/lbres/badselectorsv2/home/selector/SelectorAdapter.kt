@@ -10,12 +10,12 @@ import xyz.lbres.kotlinutils.list.IntList
 /**
  * Adapter for list of selectors for the RecyclerView in selector group
  *
- * @param fragmentTitleResIds [IntList]: list of resource IDs for values to be displayed in adapter
+ * @param itemResIds [IntList]: list of resource IDs for values to be displayed in adapter
  * @param onClick (Int) -> Unit: function to take when an element is clicked, based on its position
  * @param context [Context]: application context
  */
 class SelectorAdapter(
-    private val fragmentTitleResIds: IntList,
+    private val itemResIds: IntList,
     private val onClick: (Int) -> Unit,
     private val context: Context,
 ) : RecyclerView.Adapter<SelectorViewHolder>() {
@@ -34,13 +34,13 @@ class SelectorAdapter(
      * Update a view holder for a specific title
      */
     override fun onBindViewHolder(holder: SelectorViewHolder, position: Int) {
-        val titleId = fragmentTitleResIds[position]
-        val fragmentOnClick: () -> Unit = { onClick(position) }
-        holder.updateForFragment(context.getString(titleId), fragmentOnClick)
+        val titleId = itemResIds[position]
+        val positionOnClick: () -> Unit = { onClick(position) }
+        holder.updateForSelector(context.getString(titleId), positionOnClick)
     }
 
     /**
      * Number of items in adapter
      */
-    override fun getItemCount(): Int = fragmentTitleResIds.size
+    override fun getItemCount(): Int = itemResIds.size
 }

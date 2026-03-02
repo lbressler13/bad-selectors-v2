@@ -30,13 +30,13 @@ class SelectorGroupViewHolder(
     /**
      * Update UI to show information about current group of selectors
      *
-     * @param fragmentData [TabFragment.Metadata]: metadata about fragment containing selectors
+     * @param metadata [TabFragment.Metadata]: metadata about fragment containing selectors
      * @param position [Int]: position in list of item being displayed
      */
-    fun updateForFragment(fragmentData: TabFragment.Metadata, position: Int) {
-        binding.activityTitle.text = activity.getString(fragmentData.titleResId)
+    fun updateForGroup(metadata: TabFragment.Metadata, position: Int) {
+        binding.activityTitle.text = activity.getString(metadata.titleResId)
 
-        initRecyclerView(fragmentData)
+        initRecyclerView(metadata)
         initDropdown(position)
 
         if (viewModel.selectorsExpanded[position]) {
@@ -45,11 +45,11 @@ class SelectorGroupViewHolder(
             setCollapsedUi()
         }
 
-        if (fragmentData.tabTitleResIds.isEmpty()) {
+        if (metadata.tabTitleResIds.isEmpty()) {
             binding.selectorRecycler.gone()
             binding.expandCollapseButton.invisible() // prevents title from being shifted to right
             binding.root.setOnClickListener {
-                activity.runNavAction(fragmentData.navActionFromHomeId)
+                activity.runNavAction(metadata.navActionFromHomeId)
             }
         }
     }
@@ -57,16 +57,16 @@ class SelectorGroupViewHolder(
     /**
      * Initialize recycler view to selectors in group
      *
-     * @param fragmentData [TabFragment.Metadata]: metadata about group, including selector names and info for onClick
+     * @param metadata [TabFragment.Metadata]: metadata about group, including selector names and info for onClick
      */
-    private fun initRecyclerView(fragmentData: TabFragment.Metadata) {
+    private fun initRecyclerView(metadata: TabFragment.Metadata) {
         val itemRecycler: RecyclerView = binding.selectorRecycler
         val tabKey = activity.getString(R.string.tab_index_key)
 
         val fragmentOnClick: (Int) -> Unit = { tabIndex ->
-            activity.runNavAction(fragmentData.navActionFromHomeId, bundleOf(tabKey to tabIndex))
+            activity.runNavAction(metadata.navActionFromHomeId, bundleOf(tabKey to tabIndex))
         }
-        val adapter = SelectorAdapter(fragmentData.tabTitleResIds, fragmentOnClick, activity)
+        val adapter = SelectorAdapter(metadata.tabTitleResIds, fragmentOnClick, activity)
         itemRecycler.adapter = adapter
         itemRecycler.layoutManager = LinearLayoutManager(activity)
     }
