@@ -1,8 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General -->
+    <style name="ConstrainHorizontalCenter">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+    </style>
+
+
+    <!-- Layout -->
     <style name="FloatConstraintLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="layout_constraintVertical_bias">0</item>
+    </style>
+
+    <style name="FullWidthLinearLayout">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
+    <!-- Button -->
+    <style name="SelectButton" parent="Widget.AppCompat.Button">
+        <!-- Layout -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
+    <!-- Text -->
+    <style name="GeneratedNumber" parent="@android:style/TextAppearance">
+        <!-- Layout -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <!-- Style -->
+        <item name="android:textSize">70sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SelectedNumber" parent="@android:style/TextAppearance">
+        <!-- Layout -->
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <!-- Style -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">40sp</item>
     </style>
 </resources>

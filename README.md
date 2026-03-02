@@ -112,6 +112,7 @@ The list is also available within the app under the `ui.attributions` package.
 | ![img](app/src/main/res/drawable-hdpi/ic_home.png)          | Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from <https://www.flaticon.com>                           | <https://www.flaticon.com/free-icon/home_1946436>             |
 | ![img](app/src/main/res/drawable-hdpi/ic_info.png)          | Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from <https://www.flaticon.com>                           | <https://www.flaticon.com/free-icon/info-button_64494>        |
 | ![img](app/src/main/res/drawable-hdpi/ic_phone.png)         | Icon made by [Ilham Fitrotul Hayat](https://www.flaticon.com/authors/ilham-fitrotul-hayat) from <https://www.flaticon.com> | <https://www.flaticon.com/premium-icon/phone-call_3059446>    |
+| ![img](src/main/res/drawable-hdpi/ic_restart.png)           | Icon made by [Freepik](https://www.flaticon.com/authors/freepik)  from <https://www.flaticon.com>                          | <https://www.flaticon.com/free-icon/refresh_561210>           |
 | ![img](app/src/main/res/drawable-hdpi/ic_settings.png)      | Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from <https://www.flaticon.com>                           | <https://www.flaticon.com/premium-icon/gear_484613>           |
 
 See [here](https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE) for more information about Flaticon attributions.
