@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import xyz.lbres.badselectorsv2.abstracts.BaseFragment
+import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.databinding.FragmentPhoneShuffleCircleBinding
 
-class ShuffleCircleFragment : BaseFragment() {
+class ShuffleCircleFragment : Fragment() {
     private lateinit var binding: FragmentPhoneShuffleCircleBinding
 
     override fun onCreateView(
