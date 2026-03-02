@@ -127,6 +127,7 @@ dependencies {
     val androidxTestRulesVersion: String by rootProject.extra
     val androidxTestRunnerVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
+    val mockkVersion: String by rootProject.extra
 
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
@@ -143,12 +144,14 @@ dependencies {
 
     // testing
     testImplementation(kotlin("test"))
+    testImplementation("io.mockk:mockk:$mockkVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")
     androidTestImplementation("androidx.test:runner:$androidxTestRunnerVersion") // needed to run on emulator
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
+    androidTestImplementation("io.mockk:mockk-android:$mockkVersion")
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {

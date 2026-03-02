@@ -74,7 +74,7 @@ class ShuffleCircleFragmentTest {
         var threwException = false
         try {
             onView(atIndex(withId(R.id.circleLayout), 10)).check(matches(isDisplayed()))
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             threwException = true
         }
         assertTrue(threwException)
