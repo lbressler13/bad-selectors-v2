@@ -13,6 +13,7 @@ val navigationVersion by extra { "2.8.3" }
 val androidxJunitVersion by extra { "1.3.0" }
 val androidxTestRulesVersion by extra { "1.7.0" }
 val androidxTestRunnerVersion by extra { "1.7.0" }
+val androidxTracingVersion by extra { "1.3.0" }
 val espressoVersion by extra { "3.7.0" }
 val mockkVersion by extra { "1.14.9" }
 

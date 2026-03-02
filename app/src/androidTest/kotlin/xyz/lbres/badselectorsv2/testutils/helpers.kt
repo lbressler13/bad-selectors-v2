@@ -7,10 +7,12 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.intent.Intents.getIntents
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import xyz.lbres.badselectorsv2.BaseActivity
 import java.lang.AssertionError
@@ -31,6 +33,8 @@ fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
     val intent = intents.last()
     assertEquals(url, intent.dataString)
 }
+
+fun isDisabled() = not(isEnabled())
 
 /**
  * Get the current activity context

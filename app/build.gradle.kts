@@ -133,6 +133,7 @@ dependencies {
     val androidxJunitVersion: String by rootProject.extra
     val androidxTestRulesVersion: String by rootProject.extra
     val androidxTestRunnerVersion: String by rootProject.extra
+    val androidxTracingVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
     val mockkVersion: String by rootProject.extra
 
@@ -161,6 +162,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
+    // androidTestImplementation("androidx.tracing:tracing:$androidxTracingVersion")
     androidTestImplementation("io.mockk:mockk-android:$mockkVersion")
 }
 
