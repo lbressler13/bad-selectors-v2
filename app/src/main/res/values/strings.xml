@@ -12,7 +12,7 @@
     <string name="appbar_title_phone">Bad Phone Selectors</string>
     <string name="title_phone">Phone</string>
 
-    <string name="phone_separator">:</string>
+    <string name="phone_separator">-</string>
 
     <!-- Phone Shuffle Circle -->
     <string name="title_shuffle_circle">Shuffle Circle</string>
