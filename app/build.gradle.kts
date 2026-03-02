@@ -1,4 +1,3 @@
-import com.android.build.api.dsl.Packaging
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -140,7 +139,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
-    // implementation("androidx.fragment:fragment:$androidxFragmentVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
@@ -154,7 +152,7 @@ dependencies {
     // testing
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:$mockkVersion")
-    // debugImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion") // https://developer.android.com/guide/fragments/test
+    // https://developer.android.com/guide/fragments/test
     debugImplementation("androidx.fragment:fragment-testing-manifest:$androidxFragmentVersion")
     androidTestImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
