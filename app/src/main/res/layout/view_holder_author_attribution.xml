@@ -18,7 +18,7 @@
             android:id="@+id/expandCollapseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/expand_images_dropdown_cd"
+            android:contentDescription="@string/expand_dropdown_cd"
             android:paddingStart="10dp"
             android:scaleX="0.9"
             android:scaleY="0.9"

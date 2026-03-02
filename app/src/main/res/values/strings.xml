@@ -2,11 +2,19 @@
     <string name="app_name">Bad Selectors v2</string>
     <string name="title_action_bar">Bad Selectors</string>
 
+    <string name="placeholder">Under construction!</string>
+
     <string name="tab_index_key">tabIndex</string>
 
-    <!-- Home Fragment -->
-    <string name="welcome_message">Under construction!</string>
+    <!-- Home -->
     <string name="title_home">Home</string>
+
+    <!-- PHONE -->
+    <string name="appbar_title_phone">Bad Phone Selectors</string>
+    <string name="title_phone">Phone</string>
+
+    <!-- Phone Shuffle Circle -->
+    <string name="title_shuffle_circle">Shuffle Circle</string>
 
     <!-- Attributions -->
     <string name="title_attributions">Give People Credit</string>
@@ -21,10 +29,12 @@
     <string name="chevron_left_cd">Left chevron</string>
     <string name="chevron_right_cd">Right chevron</string>
     <string name="chevron_up_cd">Up chevron</string>
-    <string name="collapse_images_dropdown_cd">Hide icons</string>
+    <string name="collapse_dropdown_cd">Hide additional content</string>
     <string name="close_cd">Close</string>
-    <string name="expand_images_dropdown_cd">Show icons</string>
+    <string name="expand_dropdown_cd">Show additional content</string>
+    <string name="home_cd">Home</string>
     <string name="info_cd">Additional information</string>
+    <string name="phone_cd">Phone</string>
     <string name="settings_cd">Settings</string>
 
     <!-- Dev Tools -->

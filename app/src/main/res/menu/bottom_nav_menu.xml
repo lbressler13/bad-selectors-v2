@@ -4,4 +4,9 @@
         android:id="@+id/navigationHome"
         android:icon="@drawable/ic_home"
         android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigationPhone"
+        android:icon="@drawable/ic_phone"
+        android:title="@string/title_phone" />
 </menu>

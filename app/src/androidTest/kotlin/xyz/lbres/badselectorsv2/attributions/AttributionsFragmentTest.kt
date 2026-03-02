@@ -26,6 +26,7 @@ import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.ProductFlavor
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
+import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.assertLinkOpened
 import xyz.lbres.badselectorsv2.testutils.hideDevToolsButton
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
@@ -48,7 +49,7 @@ class AttributionsFragmentTest {
 
     @Before
     fun setupTest() {
-        // setup intents
+        // setup intents for testing links
         Intents.init()
         intending(not(isInternal())).respondWith(ActivityResult(Activity.RESULT_OK, null))
 
@@ -111,6 +112,12 @@ class AttributionsFragmentTest {
     fun navigateHome() {
         onView(withId(R.id.navigationHome)).perform(click())
         onView(withText("Bad Selectors")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navigateToPhone() {
+        onView(withId(R.id.navigationPhone)).perform(click())
+        actionBar.check(matches(withTitle("Bad Phone Selectors")))
     }
 
     @Test
