@@ -7,7 +7,7 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 
 /**
- * [Matcher] to match against a tab with a given title.
+ * [Matcher] to match a tab with a given title.
  *
  * Adapted from responses to this StackOverflow post:
  * https://stackoverflow.com/questions/70303861/how-do-i-assert-that-a-scrollable-tablayout-is-currently-showing-a-certain-tab
@@ -22,4 +22,7 @@ class WithTabMatcher(private val title: String) : BoundedMatcher<View, TabView>(
     }
 }
 
+/**
+ * [Matcher] to match a tab with a given title.
+ */
 fun withTab(title: String): Matcher<View> = WithTabMatcher(title)

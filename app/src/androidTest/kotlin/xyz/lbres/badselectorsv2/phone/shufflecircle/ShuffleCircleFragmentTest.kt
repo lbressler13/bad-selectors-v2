@@ -51,7 +51,7 @@ class ShuffleCircleFragmentTest {
 
         // check circle buttons
         repeat(10) { circleButton(it).check(matches(allOf(isDisplayed(), isEnabled()))) }
-        // validate only 10 buttons
+        // validate button count
         var threwException = false
         try {
             circleButton(10).check(matches(isDisplayed()))
@@ -69,11 +69,11 @@ class ShuffleCircleFragmentTest {
             listOf(0 to 9, 3 to 9, 1 to 0),
             listOf(2 to 1, 4 to 2),
             listOf(0 to 1, 7 to 3, 8 to 4),
-            listOf(0 to 5),
-            listOf(0 to 8),
-            listOf(0 to 9),
-            listOf(0 to 3),
-            listOf(0 to 2),
+            listOf(5 to 6, 7 to 2, 4 to 3, 0 to 8, 0 to 5),
+            listOf(7 to 8, 6 to 3, 5 to 7),
+            listOf(8 to 9, 7 to 8, 4 to 1, 2 to 2, 6 to 3, 9 to 9),
+            listOf(9 to 6, 7 to 6, 4 to 6, 1 to 3),
+            listOf(6 to 3, 4 to 8, 3 to 9, 1 to 1, 4 to 2, 5 to 2, 9 to 2, 1 to 3),
         )
         val returnValues = turns.flatMap { turn ->
             turn.map { it.second }
@@ -91,6 +91,7 @@ class ShuffleCircleFragmentTest {
                 currentDigit.check(matches(withText(value.toString())))
             }
             selectButton.perform(forceClick())
+            currentDigit.check(matches(withText("")))
             checkPhoneNumber(expectedPhoneNum, (0..index).toList())
         }
 
@@ -122,6 +123,9 @@ class ShuffleCircleFragmentTest {
         repeat(10) { circleButton(it).check(matches(allOf(isDisplayed(), isEnabled()))) }
     }
 
+    // TODO refresh layout tests
+
+    // mock DigitShuffler class
     private fun mockDigitShuffler(returnValue: Int? = null, returnValues: IntList? = null) {
         mockkConstructor(DigitShuffler::class)
         if (returnValue != null) {

@@ -27,11 +27,15 @@ abstract class BaseFragment : NavHostFragment() {
     protected open var navToHomeResId: Int? = null
     protected open var navToPhoneResId: Int? = null
 
-    /**
-     * Re-add action bar settings when fragment is shown.
-     */
     override fun onResume() {
         super.onResume()
+        setupBaseFragment()
+    }
+
+    /**
+     * Configure fragment with setup code from BaseFragment
+     */
+    protected fun setupBaseFragment() {
         requireBaseActivity().binding.actionBar.title = getString(actionBarTitleResId)
         setupNavbar()
         dialogFragmentManager = childFragmentManager
@@ -90,5 +94,6 @@ abstract class BaseFragment : NavHostFragment() {
          * Fragment manager for current fragment, used when displaying the dev tools dialog
          */
         var dialogFragmentManager: FragmentManager? = null
+            private set
     }
 }

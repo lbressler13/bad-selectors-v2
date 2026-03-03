@@ -5,10 +5,12 @@
 
     <string name="select">Select</string>
 
+
     <!-- Home -->
     <string name="title_home">Home</string>
 
-    <!-- PHONE -->
+
+    <!-- Phone -->
     <string name="appbar_title_phone">Bad Phone Selectors</string>
     <string name="title_phone">Phone</string>
 
@@ -16,6 +18,7 @@
 
     <!-- Phone Shuffle Circle -->
     <string name="title_shuffle_circle">Shuffle Circle</string>
+
 
     <!-- Attributions -->
     <string name="title_attributions">Give People Credit</string>
@@ -25,8 +28,10 @@
     <string name="expand">Expand</string>
     <string name="collapse">Collapse</string>
 
+
     <!-- Keys -->
     <string name="tab_index_key">tabIndex</string>
+
 
     <!-- Content Descriptions -->
     <string name="chevron_down_cd">Down chevron</string>
@@ -41,6 +46,7 @@
     <string name="phone_cd">Phone</string>
     <string name="restart_cd">Restart</string>
     <string name="settings_cd">Settings</string>
+
 
     <!-- Dev Tools -->
     <string name="dev_tools_button">{ }</string>

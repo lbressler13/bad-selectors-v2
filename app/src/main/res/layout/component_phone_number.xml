@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/FullWidthLinearLayout"
     app:layout_constraintTop_toTopOf="parent">
-<!--    android:layout_marginTop="@dimen/settings_fragment_top_padding"-->
 
     <TextView
         android:id="@+id/digit0"

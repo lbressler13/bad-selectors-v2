@@ -21,6 +21,12 @@ val digitViews = listOf(
     onView(withId(R.id.digit9)),
 )
 
+/**
+ * Check that correct phone number is displayed in digit views
+ *
+ * @param expectedNumber [List]<Int?>: list with expected digits, where blanks are represented by `null`
+ * @param digitsToCheck [List]<Int>: list of digits to check, defaults to full range of digits
+ */
 fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: List<Int> = (0..9).toList()) {
     repeat(10) {
         val expectedText = expectedNumber[it]?.toString() ?: "_"

@@ -22,8 +22,8 @@ class PhoneTabFragment : TabFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = TabFragmentBinding.inflate(layoutInflater)
+        setupBaseFragment()
         setUpTabs()
-        super.onResume()
         return binding.root
     }
 

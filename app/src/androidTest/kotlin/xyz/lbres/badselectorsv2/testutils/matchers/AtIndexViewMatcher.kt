@@ -6,6 +6,12 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
+/**
+ * [Matcher] to match a child view at a given position
+ *
+ * @param parentMatcher [Matcher]: matcher for parent view
+ * @param index [Int]
+ */
 private class MatchesAtIndexViewMatcher(private val parentMatcher: Matcher<View>, private val index: Int) :
     TypeSafeMatcher<View>() {
     override fun describeTo(description: Description?) {
@@ -18,4 +24,10 @@ private class MatchesAtIndexViewMatcher(private val parentMatcher: Matcher<View>
     }
 }
 
+/**
+ * [Matcher] to match a child view at a given position
+ *
+ * @param parentMatcher [Matcher]: matcher for parent view
+ * @param index [Int]
+ */
 fun atIndex(parentMatcher: Matcher<View>, index: Int): Matcher<View> = MatchesAtIndexViewMatcher(parentMatcher, index)
