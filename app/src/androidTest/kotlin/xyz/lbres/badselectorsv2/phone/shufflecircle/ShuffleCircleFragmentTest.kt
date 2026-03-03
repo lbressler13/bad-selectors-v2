@@ -18,11 +18,15 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.phone.checkPhoneNumber
+import xyz.lbres.badselectorsv2.phone.digitViews
 import xyz.lbres.badselectorsv2.testutils.isDisabled
 import xyz.lbres.badselectorsv2.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.list.listOfNulls
+import xyz.lbres.kotlinutils.list.listOfValue
 
 @RunWith(AndroidJUnit4::class)
 class ShuffleCircleFragmentTest {
@@ -30,18 +34,6 @@ class ShuffleCircleFragmentTest {
     private val restartButton = onView(withId(R.id.restartButton))
     private val currentDigit = onView(withId(R.id.currentDigit))
     private val circleButton = { idx: Int -> onView(atIndex(withId(R.id.circleLayout), idx)) }
-    private val digitViews = listOf(
-        onView(withId(R.id.digit0)),
-        onView(withId(R.id.digit1)),
-        onView(withId(R.id.digit2)),
-        onView(withId(R.id.digit3)),
-        onView(withId(R.id.digit4)),
-        onView(withId(R.id.digit5)),
-        onView(withId(R.id.digit6)),
-        onView(withId(R.id.digit7)),
-        onView(withId(R.id.digit8)),
-        onView(withId(R.id.digit9)),
-    )
 
     @After
     fun cleanupTest() {
@@ -55,7 +47,7 @@ class ShuffleCircleFragmentTest {
         restartButton.check(isNotPresented())
         currentDigit.check(matches(withText("")))
 
-        digitViews.forEach { it.check(matches(allOf(isDisplayed(), withText("_")))) }
+        checkPhoneNumber(listOfNulls(10))
 
         // check circle buttons
         repeat(10) { circleButton(it).check(matches(allOf(isDisplayed(), isEnabled()))) }
@@ -71,13 +63,35 @@ class ShuffleCircleFragmentTest {
 
     @Test
     fun completeNumber() {
-        val returnValues = listOf(1, 4, 0, 2, 4, 5, 8, 9, 3, 2)
+        val turns = listOf(
+            listOf(5 to 1, 3 to 2, 3 to 3, 6 to 1),
+            listOf(7 to 4),
+            listOf(0 to 9, 3 to 9, 1 to 0),
+            listOf(2 to 1, 4 to 2),
+            listOf(0 to 1, 7 to 3, 8 to 4),
+            listOf(0 to 5),
+            listOf(0 to 8),
+            listOf(0 to 9),
+            listOf(0 to 3),
+            listOf(0 to 2),
+        )
+        val returnValues = turns.flatMap { turn ->
+            turn.map { it.second }
+        }
+        val expectedPhoneNum = turns.map { it[it.lastIndex].second }
+
         mockDigitShuffler(returnValues = returnValues)
 
         launchFragmentInContainer<ShuffleCircleFragment>()
-        repeat(10) {
-            circleButton(0).perform(forceClick())
+        turns.forEachIndexed { index, turn ->
+            turn.forEach {
+                val buttonIndex = it.first
+                val value = it.second
+                circleButton(buttonIndex).perform(forceClick())
+                currentDigit.check(matches(withText(value.toString())))
+            }
             selectButton.perform(forceClick())
+            checkPhoneNumber(expectedPhoneNum, (0..index).toList())
         }
 
         restartButton.check(matches(allOf(isDisplayed(), isEnabled())))
@@ -85,10 +99,7 @@ class ShuffleCircleFragmentTest {
         repeat(10) {
             circleButton(it).check(matches(allOf(isDisplayed(), isDisabled())))
         }
-        digitViews.forEachIndexed { index, digit ->
-            val expectedText = returnValues[index].toString()
-            digit.check(matches(withText(expectedText)))
-        }
+        checkPhoneNumber(expectedPhoneNum)
     }
 
     @Test
@@ -99,12 +110,14 @@ class ShuffleCircleFragmentTest {
             circleButton(0).perform(forceClick())
             selectButton.perform(forceClick())
         }
+        checkPhoneNumber(listOfValue(10, 5))
         restartButton.perform(forceClick())
 
         selectButton.check(matches(allOf(isDisplayed(), isEnabled())))
         restartButton.check(isNotPresented())
         currentDigit.check(matches(withText("")))
 
+        checkPhoneNumber(listOfNulls(10))
         digitViews.forEach { it.check(matches(allOf(isDisplayed(), withText("_")))) }
         repeat(10) { circleButton(it).check(matches(allOf(isDisplayed(), isEnabled()))) }
     }
