@@ -1,6 +1,7 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,6 +82,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
         } else {
             initialDigit.toString()
         }
+        Log.e(null, "INIT CURRENT TEXT: ${binding.currentDigit.text}")
 
         // get digit based on index of button, and update ui
         binding.circleLayout.setChildOnClickListener { _, index ->
@@ -94,6 +96,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
                 binding.currentDigit.text = digit.toString()
                 viewModel.digitShuffler.update()
             }
+            Log.e(null, "UPDATE CURRENT TEXT: ${binding.currentDigit.text}")
         }
     }
 

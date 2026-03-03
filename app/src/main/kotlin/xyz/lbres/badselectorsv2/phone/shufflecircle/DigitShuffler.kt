@@ -1,5 +1,6 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
+import android.util.Log
 import xyz.lbres.badselectorsv2.phone.common.digitsRange
 import xyz.lbres.badselectorsv2.utils.random
 import xyz.lbres.badselectorsv2.utils.seededRandom
@@ -32,6 +33,7 @@ class DigitShuffler {
      */
     init {
         this.update()
+        Log.e(null, "INIT DIGIT SHUFFLER")
     }
 
     /**
@@ -52,6 +54,7 @@ class DigitShuffler {
         } else {
             digits[index]
         }
+        Log.e(null, "SET DIGIT: $digit")
 
         return digit
     }

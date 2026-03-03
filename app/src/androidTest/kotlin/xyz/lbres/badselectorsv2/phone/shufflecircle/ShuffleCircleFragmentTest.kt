@@ -48,6 +48,7 @@ class ShuffleCircleFragmentTest {
         currentDigit.check(matches(withText("")))
 
         checkPhoneNumber(listOfNulls(10))
+        onView(withId(R.id.devToolsButton)).check(matches(isDisplayed()))
 
         // check circle buttons
         repeat(10) { circleButton(it).check(matches(allOf(isDisplayed(), isEnabled()))) }
@@ -78,7 +79,7 @@ class ShuffleCircleFragmentTest {
         val returnValues = turns.flatMap { turn ->
             turn.map { it.second }
         }
-        val expectedPhoneNum = turns.map { it[it.lastIndex].second }
+        val phoneNumber = turns.map { it[it.lastIndex].second }
 
         mockDigitShuffler(returnValues = returnValues)
 
@@ -92,7 +93,7 @@ class ShuffleCircleFragmentTest {
             }
             selectButton.perform(forceClick())
             currentDigit.check(matches(withText("")))
-            checkPhoneNumber(expectedPhoneNum, (0..index).toList())
+            checkPhoneNumber(phoneNumber, (0..index).toList())
         }
 
         restartButton.check(matches(allOf(isDisplayed(), isEnabled())))
@@ -100,7 +101,7 @@ class ShuffleCircleFragmentTest {
         repeat(10) {
             circleButton(it).check(matches(allOf(isDisplayed(), isDisabled())))
         }
-        checkPhoneNumber(expectedPhoneNum)
+        checkPhoneNumber(phoneNumber)
     }
 
     @Test
@@ -123,7 +124,81 @@ class ShuffleCircleFragmentTest {
         repeat(10) { circleButton(it).check(matches(allOf(isDisplayed(), isEnabled()))) }
     }
 
-    // TODO refresh layout tests
+    @Test
+    fun recreate() {
+        val phoneNumber = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
+        val digitPropValues = listOf(-1, -1, 0, 3)
+        mockDigitShuffler(returnValues = returnValues)
+        every { constructedWith<DigitShuffler>().digit } returnsMany digitPropValues
+
+        val scenario = launchFragmentInContainer<ShuffleCircleFragment>()
+
+        // set first 2 digits
+        repeat(2) {
+            circleButton(0).perform(forceClick())
+            selectButton.perform(forceClick())
+        }
+        currentDigit.check(matches(withText("")))
+        restartButton.check(isNotPresented())
+        checkPhoneNumber(phoneNumber, 0..1)
+
+        // check that blank digit is persisted
+        scenario.recreate()
+        currentDigit.check(matches(withText("")))
+        restartButton.check(isNotPresented())
+        checkPhoneNumber(phoneNumber, 0..1)
+
+        // set currentDigit
+        circleButton(0).perform(forceClick())
+        currentDigit.check(matches(withText("0")))
+        checkPhoneNumber(phoneNumber, 0..1)
+
+        // check that digit is persisted
+        scenario.recreate()
+        currentDigit.check(matches(withText("0")))
+        checkPhoneNumber(phoneNumber, 0..1)
+
+        // get next digit
+        circleButton(0).perform(forceClick())
+        currentDigit.check(matches(withText("2")))
+        selectButton.perform(forceClick()) // digit 3
+        checkPhoneNumber(phoneNumber, 0..2)
+
+        // use saved digit
+        circleButton(0).perform(forceClick())
+        scenario.recreate()
+        selectButton.perform(forceClick()) // digit 4
+        checkPhoneNumber(phoneNumber, 0..3)
+
+        // finish phone number
+        repeat(6) {
+            circleButton(0).perform(forceClick())
+            selectButton.perform(forceClick())
+        }
+        restartButton.check(matches(allOf(isDisplayed(), isEnabled())))
+        selectButton.check(matches(allOf(isDisplayed(), isDisabled())))
+        repeat(10) {
+            circleButton(it).check(matches(allOf(isDisplayed(), isDisabled())))
+        }
+        checkPhoneNumber(phoneNumber)
+
+        // check restart persisted
+        scenario.recreate()
+        restartButton.check(matches(allOf(isDisplayed(), isEnabled())))
+        selectButton.check(matches(allOf(isDisplayed(), isDisabled())))
+        repeat(10) {
+            circleButton(it).check(matches(allOf(isDisplayed(), isDisabled())))
+        }
+        checkPhoneNumber(phoneNumber)
+
+        // clear restart
+        restartButton.perform(forceClick())
+        scenario.recreate()
+        restartButton.check(isNotPresented())
+        selectButton.check(matches(isEnabled()))
+        checkPhoneNumber(listOfNulls(10))
+    }
 
     // mock DigitShuffler class
     private fun mockDigitShuffler(returnValue: Int? = null, returnValues: IntList? = null) {

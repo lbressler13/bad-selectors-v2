@@ -35,3 +35,7 @@ fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: List<Int> = (0..
         }
     }
 }
+
+fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: IntRange) {
+    checkPhoneNumber(expectedNumber, digitsToCheck.toList())
+}
