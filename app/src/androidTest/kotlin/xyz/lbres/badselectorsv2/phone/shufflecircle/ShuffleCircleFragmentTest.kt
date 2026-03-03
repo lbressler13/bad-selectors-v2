@@ -29,7 +29,7 @@ class ShuffleCircleFragmentTest {
     private val selectButton = onView(withId(R.id.selectButton))
     private val restartButton = onView(withId(R.id.restartButton))
     private val currentDigit = onView(withId(R.id.currentDigit))
-    private val circleButton = { idx: Int -> onView(atIndex(withId(R.id.circleLayout), idx))}
+    private val circleButton = { idx: Int -> onView(atIndex(withId(R.id.circleLayout), idx)) }
     private val digitViews = listOf(
         onView(withId(R.id.digit0)),
         onView(withId(R.id.digit1)),

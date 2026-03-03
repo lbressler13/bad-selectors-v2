@@ -15,7 +15,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.testutils.createGetLocalView
 import xyz.lbres.badselectorsv2.testutils.matchers.withTab
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 
