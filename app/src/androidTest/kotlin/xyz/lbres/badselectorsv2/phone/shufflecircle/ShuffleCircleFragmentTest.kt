@@ -80,9 +80,10 @@ class ShuffleCircleFragmentTest {
             Thread.sleep(2000)
             circleButton(0).perform(click())
             selectButton.check(matches(isClickable()))
-            circleButton(0).perform(click())
+            // circleButton(0).perform(click())
             Thread.sleep(2000)
-            selectButton.perform(click())
+
+            onView(withId(R.id.selectButton)).perform(click())
         }
 
         restartButton.check(matches(allOf(isDisplayed(), isEnabled())))

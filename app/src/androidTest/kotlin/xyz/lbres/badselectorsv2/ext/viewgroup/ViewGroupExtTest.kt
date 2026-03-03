@@ -1,28 +1,24 @@
 package xyz.lbres.badselectorsv2.ext.viewgroup
 
+import android.content.Context
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.forEachIndexed
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import xyz.lbres.badselectorsv2.BaseActivity
-import xyz.lbres.badselectorsv2.testutils.getContextEspresso
 import xyz.lbres.kotlinutils.general.simpleIf
 
 @RunWith(AndroidJUnit4::class)
 class ViewGroupExtTest {
-    @Rule
-    @JvmField
-    val activityRule = ActivityScenarioRule(BaseActivity::class.java)
 
     @Test
     fun setChildOnClickListener() {
-        val viewGroup: ViewGroup = LinearLayout(getContextEspresso(activityRule))
+        val context: Context = ApplicationProvider.getApplicationContext()
+        val viewGroup: ViewGroup = LinearLayout(context)
 
         val clickAt: (Int) -> Unit = { viewGroup.getChildAt(it).callOnClick() }
 
@@ -35,7 +31,7 @@ class ViewGroupExtTest {
         }
 
         repeat(4) {
-            val view = TextView(getContextEspresso(activityRule))
+            val view = TextView(context)
             view.text = "_"
             viewGroup.addView(view)
         }
