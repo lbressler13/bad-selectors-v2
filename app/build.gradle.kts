@@ -116,6 +116,13 @@ android {
             jvmTarget = JvmTarget.fromTarget(androidJvmTarget)
         }
     }
+
+    configurations.all {
+        resolutionStrategy {
+            val androidxTracingVersion: String by rootProject.extra
+            force("androidx.tracing:tracing:$androidxTracingVersion")
+        }
+    }
 }
 
 dependencies {
@@ -162,18 +169,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
-    // androidTestImplementation("androidx.tracing:tracing:$androidxTracingVersion")
     androidTestImplementation("io.mockk:mockk-android:$mockkVersion")
-//    constraints {
-//        androidTestImplementation("androidx.tracing:tracing:$androidxTracingVersion")
-//    }
 }
-
-//configurations.configureEach {
-//    resolutionStrategy.capabilitiesResolution.withCapability("androidx.tracing:tracing") {
-//        selectHighestVersion()
-//    }
-//}
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     val ktlintVersion: String by rootProject.extra

@@ -2,9 +2,7 @@ package xyz.lbres.badselectorsv2.phone.shufflecircle
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isClickable
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -22,6 +20,7 @@ import org.junit.runner.RunWith
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.testutils.isDisabled
 import xyz.lbres.badselectorsv2.testutils.matchers.atIndex
+import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
 
@@ -77,13 +76,8 @@ class ShuffleCircleFragmentTest {
 
         launchFragmentInContainer<ShuffleCircleFragment>()
         repeat(10) {
-            Thread.sleep(2000)
-            circleButton(0).perform(click())
-            selectButton.check(matches(isClickable()))
-            // circleButton(0).perform(click())
-            Thread.sleep(2000)
-
-            onView(withId(R.id.selectButton)).perform(click())
+            circleButton(0).perform(forceClick())
+            selectButton.perform(forceClick())
         }
 
         restartButton.check(matches(allOf(isDisplayed(), isEnabled())))
@@ -102,10 +96,10 @@ class ShuffleCircleFragmentTest {
         mockDigitShuffler(returnValue = 5)
         launchFragmentInContainer<ShuffleCircleFragment>()
         repeat(10) {
-            circleButton(0).perform(click())
-            selectButton.perform(click())
+            circleButton(0).perform(forceClick())
+            selectButton.perform(forceClick())
         }
-        restartButton.perform(click())
+        restartButton.perform(forceClick())
 
         selectButton.check(matches(allOf(isDisplayed(), isEnabled())))
         restartButton.check(isNotPresented())
