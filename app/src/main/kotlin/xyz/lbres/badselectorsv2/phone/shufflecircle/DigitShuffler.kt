@@ -1,6 +1,5 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
-import android.util.Log
 import xyz.lbres.badselectorsv2.phone.common.digitsRange
 import xyz.lbres.badselectorsv2.utils.random
 import xyz.lbres.badselectorsv2.utils.seededRandom
@@ -33,7 +32,6 @@ class DigitShuffler {
      */
     init {
         this.update()
-        Log.e(null, "INIT DIGIT SHUFFLER")
     }
 
     /**
@@ -49,12 +47,11 @@ class DigitShuffler {
         val canUseNull = nullable && digit != null && digit != -1
 
         val probabilityNull = 0.001f // 1 / 1000
-        digit = if (canUseNull && random.nextBoolean(probabilityNull)) {
+        digit = if (canUseNull && random().nextBoolean(probabilityNull)) {
             null
         } else {
             digits[index]
         }
-        Log.e(null, "SET DIGIT: $digit")
 
         return digit
     }
@@ -64,7 +61,7 @@ class DigitShuffler {
      */
     fun update() {
         if (nextShuffle == 0) {
-            digits = digits.seededShuffled()
+            digits = digitsRange.seededShuffled()
 
             // next shuffle is between 0 and 2 updates
             nextShuffle = (0..2).seededRandom()
