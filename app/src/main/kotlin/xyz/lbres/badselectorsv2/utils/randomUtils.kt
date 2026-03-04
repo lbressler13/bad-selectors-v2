@@ -4,7 +4,7 @@ import xyz.lbres.kotlinutils.list.IntList
 import java.util.Date
 import kotlin.random.Random
 
-fun random() = Random(Date().time)
+fun createRandom() = Random(Date().time)
 
 /**
  * Get random value using common app random
@@ -23,5 +23,5 @@ fun IntRange.seededRandom(): Int = seededRandomHelper(this)
 fun IntRange.seededShuffled(): IntList = seededShuffledHelper(this)
 
 // TODO revert this
-fun seededShuffledHelper(range: IntRange): IntList = range.shuffled(random())
-fun seededRandomHelper(range: IntRange) = range.random(random())
+fun seededShuffledHelper(range: IntRange): IntList = range.shuffled(createRandom())
+fun seededRandomHelper(range: IntRange) = range.random(createRandom())

@@ -1,12 +1,16 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import xyz.lbres.badselectorsv2.utils.createRandom
 import xyz.lbres.badselectorsv2.utils.seededRandomHelper
 import xyz.lbres.badselectorsv2.utils.seededShuffledHelper
 import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import kotlin.collections.listOf
+import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -58,8 +62,20 @@ class DigitShufflerTest {
 
     @Test
     fun testGetAtIndexNullable() {
+        mockkStatic(::createRandom)
+        mockkStatic(::seededShuffledHelper)
+        mockkStatic(::seededRandomHelper)
+
         val nextBoolValues = listOf(true, false, true, true, false, false, true)
         val nextFloatValues = nextBoolValues.map { simpleIf(it, 1f, 0f) }
+        // TODO fix issue with nextBoolean
+        every { createRandom() } returns mockk {
+            // every { nextBoolean(any()) } returns false // returnsMany nextBoolValues
+            every { nextFloat() } returnsMany nextFloatValues
+        }
+
+        every { seededShuffledHelper(0..9) } returns shuffledDigits
+        every { seededRandomHelper(0..2) } returns 0
 
         val shuffler = DigitShuffler()
         // initial, true is ignored

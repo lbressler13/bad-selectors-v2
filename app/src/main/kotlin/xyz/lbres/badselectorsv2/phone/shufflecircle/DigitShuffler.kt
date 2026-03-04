@@ -1,7 +1,7 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
 import xyz.lbres.badselectorsv2.phone.common.digitsRange
-import xyz.lbres.badselectorsv2.utils.random
+import xyz.lbres.badselectorsv2.utils.createRandom
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
 import xyz.lbres.kotlinutils.list.IntList
@@ -47,7 +47,7 @@ class DigitShuffler {
         val canUseNull = nullable && digit != null && digit != -1
 
         val probabilityNull = 0.001f // 1 / 1000
-        digit = if (canUseNull && random().nextBoolean(probabilityNull)) {
+        digit = if (canUseNull && createRandom().nextBoolean(probabilityNull)) {
             null
         } else {
             digits[index]
