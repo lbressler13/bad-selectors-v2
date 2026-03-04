@@ -47,7 +47,10 @@ class DigitShuffler {
         val canUseNull = nullable && digit != null && digit != -1
 
         val probabilityNull = 0.001f // 1 / 1000
-        digit = if (canUseNull && createRandom().nextBoolean(probabilityNull)) {
+        // TODO undo this
+        val b = createRandom().nextBoolean(probabilityNull)
+        println(b)
+        digit = if (canUseNull && b) {
             null
         } else {
             digits[index]
