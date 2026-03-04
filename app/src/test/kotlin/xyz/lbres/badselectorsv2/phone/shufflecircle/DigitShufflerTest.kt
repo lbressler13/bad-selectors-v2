@@ -59,9 +59,7 @@ class DigitShufflerTest {
 
     @Test
     fun testGetAtIndexNullable() {
-        mockkStatic(::createRandom)
-        mockkStatic(IntRange::seededShuffled)
-        mockkStatic(IntRange::seededRandom)
+        mockkStatic(::createRandom, IntRange::seededRandom, IntRange::seededShuffled)
 
         val nextBoolValues = listOf(true, false, true, true, false, false, true)
         val nextFloatValues = nextBoolValues.map { simpleIf(it, 1f, 0f) }
@@ -119,8 +117,7 @@ class DigitShufflerTest {
         // mock get next shuffle
         val shuffleValues = listOf(0, 2, 1, 1)
 
-        mockkStatic(IntRange::seededShuffled)
-        mockkStatic(IntRange::seededRandom)
+        mockkStatic(IntRange::seededRandom, IntRange::seededShuffled)
         with(mockk<IntRange>()) {
             every { IntRange(0, 9).seededShuffled() } returnsMany digitsValues
             every { IntRange(0, 2).seededRandom() } returnsMany shuffleValues
@@ -163,8 +160,7 @@ class DigitShufflerTest {
         // mock get next shuffle
         val shuffleValues = listOf(0, 2, 0)
 
-        mockkStatic(IntRange::seededShuffled)
-        mockkStatic(IntRange::seededRandom)
+        mockkStatic(IntRange::seededRandom, IntRange::seededShuffled)
         with(mockk<IntRange>()) {
             every { IntRange(0, 9).seededShuffled() } returnsMany digitsValues
             every { IntRange(0, 2).seededRandom() } returnsMany shuffleValues
