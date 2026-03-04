@@ -7,11 +7,8 @@ import io.mockk.unmockkAll
 import xyz.lbres.badselectorsv2.utils.createRandom
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
-import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import kotlin.collections.listOf
-import kotlin.random.Random
-import kotlin.reflect.KFunction
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
