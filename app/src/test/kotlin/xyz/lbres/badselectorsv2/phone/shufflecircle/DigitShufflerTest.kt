@@ -8,7 +8,6 @@ import xyz.lbres.badselectorsv2.utils.createRandom
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
 import xyz.lbres.kotlinutils.general.simpleIf
-import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import kotlin.collections.listOf
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -187,7 +186,6 @@ class DigitShufflerTest {
     }
 
     private fun checkDigits(shuffler: DigitShuffler, expected: List<Int>) {
-        repeat(10) { assertEquals(expected[it], shuffler.getAtIndex(it))}
+        repeat(10) { assertEquals(expected[it], shuffler.getAtIndex(it)) }
     }
 }
-
