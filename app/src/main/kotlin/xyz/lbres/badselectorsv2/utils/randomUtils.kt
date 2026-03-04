@@ -11,16 +11,16 @@ fun createRandom() = Random(Date().time)
  *
  * @return [Int]: random value from range
  */
-// fun IntRange.seededRandom(): Int = random(random)
-fun IntRange.seededRandom(): Int = seededRandomHelper(this)
+fun IntRange.seededRandom(): Int = random(createRandom())
+// fun IntRange.seededRandom(): Int = seededRandomHelper(this)
 
 /**
  * Shuffle range using common app random
  *
  * @return [IntList]: shuffled values
  */
-// fun IntRange.seededShuffled(): IntList = shuffled(random)
-fun IntRange.seededShuffled(): IntList = seededShuffledHelper(this)
+ fun IntRange.seededShuffled(): IntList = shuffled(createRandom())
+// fun IntRange.seededShuffled(): IntList = seededShuffledHelper(this)
 
 // TODO revert this
 fun seededShuffledHelper(range: IntRange): IntList = range.shuffled(createRandom())
