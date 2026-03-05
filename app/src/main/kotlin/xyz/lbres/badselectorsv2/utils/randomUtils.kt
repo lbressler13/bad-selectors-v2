@@ -4,6 +4,9 @@ import xyz.lbres.kotlinutils.list.IntList
 import java.util.Date
 import kotlin.random.Random
 
+/**
+ * Create a seeded [Random]
+ */
 fun createRandom() = Random(Date().time)
 
 /**
