@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/phoneShuffleCircleRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/tab_activity_top_padding">
+
+<!--    <include-->
+<!--        android:id="@+id/settingsButton"-->
+<!--        layout="@layout/component_settings_button" />-->
+
+    <include
+        android:id="@+id/digitsLayout"
+        layout="@layout/component_phone_number" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/selectButton"
+        app:layout_constraintTop_toBottomOf="@id/digitsLayout"
+        app:layout_constraintVertical_bias="0">
+
+        <xyz.lbres.customview.circlelayout.SingleChildCircleLayout
+            android:id="@+id/circleLayout"
+            style="@style/ConstrainHorizontalCenter"
+            app:childLayout="@layout/component_phone_circle_button"
+            app:numChildren="@integer/phoneCircleNumChildren"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:radiusMode="percent"
+            app:radiusPercent="0.65"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/currentDigit"
+            style="@style/GeneratedNumber"
+            app:layout_constraintBottom_toBottomOf="@id/circleLayout"
+            app:layout_constraintTop_toTopOf="@id/circleLayout"
+            tools:ignore="MissingConstraints" />
+
+        <!-- Can't use component because it needs to be centered -->
+        <ImageButton
+            android:id="@+id/restartButton"
+            style="@style/ConstrainHorizontalCenter"
+            app:layout_constraintTop_toTopOf="@id/circleLayout"
+            app:layout_constraintBottom_toBottomOf="@id/circleLayout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/circle_with_border"
+            android:contentDescription="@string/restart_cd"
+            android:scaleX="3"
+            android:scaleY="3"
+            android:src="@drawable/ic_restart"
+            android:visibility="gone"
+            app:tint="?colorOnBackground"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/selectButton"
+        style="@style/SelectButton"
+        android:layout_marginBottom="15dp"
+        android:text="@string/select"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

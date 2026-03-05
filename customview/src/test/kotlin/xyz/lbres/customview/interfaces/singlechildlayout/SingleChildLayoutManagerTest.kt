@@ -9,13 +9,12 @@ import io.mockk.verify
 import xyz.lbres.customview.circlelayout.AbstractSingleChildCircleLayout
 import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
-import xyz.lbres.customview.interfaces.singlechildlayout.SingleChildLayoutManager.ChildInitializationState
 import xyz.lbres.customview.testutils.assertFailsWithMessage
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class SingleChildLayoutManagerTest {
 
@@ -34,7 +33,7 @@ class SingleChildLayoutManagerTest {
     fun testAllAttributesPassed() {
         val mockContext = createMockContext(0, true)
         val manager = SingleChildLayoutManager({ createMockLayout() }, mockContext, null)
-        assertEquals(ChildInitializationState.NOT_STARTED, manager.childInitializationState)
+        assertFalse(manager.childrenInitialized)
     }
 
     @Test
@@ -74,21 +73,21 @@ class SingleChildLayoutManagerTest {
 
         var manager = SingleChildLayoutManager({ layout }, createMockContext(numChildren = 5, true), null)
         manager.initializeChildren()
-        assertEquals(ChildInitializationState.COMPLETE, manager.childInitializationState)
+        assertTrue(manager.childrenInitialized)
 
         verify(exactly = 5) { layoutInflater.inflate(childResId, layout, false) }
         verify(exactly = 5) { layout.addView(allAny()) }
 
         manager = SingleChildLayoutManager({ layout }, createMockContext(0, true), null)
         manager.initializeChildren()
-        assertEquals(ChildInitializationState.COMPLETE, manager.childInitializationState)
+        assertTrue(manager.childrenInitialized)
 
         verify(exactly = 5) { layoutInflater.inflate(childResId, layout, false) }
         verify(exactly = 5) { layout.addView(allAny()) }
 
         manager = SingleChildLayoutManager({ layout }, createMockContext(9, true), null)
         manager.initializeChildren()
-        assertEquals(ChildInitializationState.COMPLETE, manager.childInitializationState)
+        assertTrue(manager.childrenInitialized)
 
         verify(exactly = 14) { layoutInflater.inflate(childResId, layout, false) }
         verify(exactly = 14) { layout.addView(allAny()) }

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Values based on common app components -->
+    <dimen name="tab_activity_top_padding">80dp</dimen>
+    <dimen name="navbar_activity_bottom_margin">80dp</dimen>
+    <dimen name="settings_fragment_top_padding">15dp</dimen>
     <dimen name="action_bar_height">55dp</dimen>
     <dimen name="corner_icon_padding">10dp</dimen>
 </resources>

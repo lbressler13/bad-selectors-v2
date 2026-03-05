@@ -11,7 +11,7 @@ import org.hamcrest.TypeSafeMatcher
  */
 private class WithTitleMatcher(val title: String) : TypeSafeMatcher<View>() {
     override fun describeTo(description: Description?) {
-        description?.appendText("match view has title: \"$title\"")
+        description?.appendText("match view with title: \"$title\"")
     }
 
     override fun matchesSafely(item: View?): Boolean {

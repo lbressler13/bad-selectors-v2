@@ -24,13 +24,12 @@ internal class SingleChildLayoutManager(
     attrs: AttributeSet?,
 ) {
 
-    enum class ChildInitializationState { NOT_STARTED, IN_PROGRESS, COMPLETE }
+    private enum class ChildInitializationState { NOT_STARTED, IN_PROGRESS, COMPLETE }
 
     /**
      * State of child initialization.
      */
-    var childInitializationState: ChildInitializationState = ChildInitializationState.NOT_STARTED
-        private set
+    private var childInitializationState: ChildInitializationState = ChildInitializationState.NOT_STARTED
     val childrenInitialized: Boolean
         get() = childInitializationState == ChildInitializationState.COMPLETE
 
@@ -82,18 +81,20 @@ internal class SingleChildLayoutManager(
      * Add children to layout using values from attributes
      */
     fun initializeChildren() {
-        if (getLayout().isNotEmpty()) {
-            throw IllegalStateException("SingleChildLayout cannot be created with children")
+        if (childInitializationState == ChildInitializationState.NOT_STARTED) {
+            if (getLayout().isNotEmpty()) {
+                throw IllegalStateException("SingleChildLayout cannot be created with children")
+            }
+
+            childInitializationState = ChildInitializationState.IN_PROGRESS
+
+            val layoutInflater = LayoutInflater.from(context)
+            repeat(numChildren) {
+                val view = layoutInflater.inflate(childLayout, getLayout(), false)
+                getLayout().addView(view)
+            }
+
+            childInitializationState = ChildInitializationState.COMPLETE
         }
-
-        childInitializationState = ChildInitializationState.IN_PROGRESS
-
-        val layoutInflater = LayoutInflater.from(context)
-        repeat(numChildren) {
-            val view = layoutInflater.inflate(childLayout, getLayout(), false)
-            getLayout().addView(view)
-        }
-
-        childInitializationState = ChildInitializationState.COMPLETE
     }
 }

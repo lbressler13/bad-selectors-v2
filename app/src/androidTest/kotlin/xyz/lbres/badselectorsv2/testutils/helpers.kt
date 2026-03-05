@@ -1,11 +1,10 @@
 package xyz.lbres.badselectorsv2.testutils
 
-import android.content.Context
 import android.content.Intent
 import androidx.test.espresso.intent.Intents.getIntents
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
-import xyz.lbres.badselectorsv2.BaseActivity
 import java.lang.AssertionError
 
 /**
@@ -26,16 +25,6 @@ fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
 }
 
 /**
- * Get the current activity context
- *
- * @param activityRule [ActivityScenarioRule]: test rule with the activity
- * @return [Context] context object
+ * Check that a view is disabled
  */
-fun getContextEspresso(activityRule: ActivityScenarioRule<BaseActivity>): Context {
-    var context: Context? = null
-    activityRule.scenario.onActivity {
-        context = it.supportFragmentManager.fragments[0].requireContext()
-    }
-
-    return context!!
-}
+fun isDisabled() = not(isEnabled())

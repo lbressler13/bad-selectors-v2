@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/FullWidthLinearLayout"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/digit0"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/digit1"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/digit2"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/phoneDivider0"
+        style="@style/SelectedNumber"
+        android:text="@string/phone_separator" />
+
+    <TextView
+        android:id="@+id/digit3"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/digit4"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/digit5"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/phoneDivider1"
+        style="@style/SelectedNumber"
+        android:text="@string/phone_separator" />
+
+    <TextView
+        android:id="@+id/digit6"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/digit7"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/digit8"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/digit9"
+        style="@style/SelectedNumber" />
+</LinearLayout>

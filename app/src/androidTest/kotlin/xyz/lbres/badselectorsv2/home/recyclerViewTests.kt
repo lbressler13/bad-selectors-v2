@@ -5,10 +5,11 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.testutils.matchers.withTab
 
 fun testExpandCollapseSelectors() {
     // start collapsed
@@ -40,7 +41,7 @@ fun testExpansionsPersistedOnLeave() {
 
 fun testNavigateWithPhoneSelectors() {
     expandCollapseGroup(0)
-    runSingleSelectorNavigationTest("Shuffle Circle", "Bad Phone Selectors")
+    runSingleSelectorNavigationTest("Shuffle Circle")
 }
 
 /**
@@ -49,11 +50,9 @@ fun testNavigateWithPhoneSelectors() {
  * Returns to home fragment after check is complete
  *
  * @param selectorName [String]: name of selector to test
- * @param actionBarTitle [String]: temporary value for validation until tab layout is complete
  */
-private fun runSingleSelectorNavigationTest(selectorName: String, actionBarTitle: String) {
+private fun runSingleSelectorNavigationTest(selectorName: String) {
     onView(withText(selectorName)).perform(scrollTo(), click())
-    onView(withText(actionBarTitle)).check(matches(isDisplayed()))
-    // tabLayout.check(matches(withSelectedTabTitle(selectorName)))
+    onView(withTab(selectorName)).check(matches(isCompletelyDisplayed()))
     pressBack()
 }
