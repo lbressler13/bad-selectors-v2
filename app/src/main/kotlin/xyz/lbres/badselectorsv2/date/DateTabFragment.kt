@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.phone
+package xyz.lbres.badselectorsv2.date
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,17 +8,14 @@ import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
-import xyz.lbres.badselectorsv2.phone.shufflecircle.ShuffleCircleFragment
 
-class PhoneTabFragment : TabFragment() {
-    override var metadata = PhoneTabFragment.metadata
+class DateTabFragment : TabFragment() {
+    override var metadata = DateTabFragment.metadata
 
-    override var actionBarTitleResId: Int = R.string.appbar_title_phone
-    override var navToHomeResId: Int? = R.id.navigatePhoneToHome
-    override var navToCalcResId: Int? = R.id.navigatePhoneToCalc
-    override var navToDateResId: Int? = R.id.navigatePhoneToDate
-
-    private val shuffleCircleFragment: ShuffleCircleFragment by lazy { ShuffleCircleFragment() }
+    override var actionBarTitleResId: Int = R.string.appbar_title_date
+    override var navToHomeResId: Int? = R.id.navigateDateToHome
+    override var navToPhoneResId: Int? = R.id.navigateDateToPhone
+    override var navToCalcResId: Int? = R.id.navigateDateToCalc
 
     override lateinit var binding: TabFragmentBinding
 
@@ -36,17 +33,14 @@ class PhoneTabFragment : TabFragment() {
      * @return [Fragment]
      */
     override fun getFragmentFromPosition(position: Int): Fragment {
-        return when (position) {
-            0 -> shuffleCircleFragment
-            else -> shuffleCircleFragment
-        }
+        throw NotImplementedError("DateTabFragment has no tabs")
     }
 
     companion object {
         val metadata = Metadata(
-            R.string.title_phone,
-            listOf(R.string.title_shuffle_circle),
-            R.id.navigateHomeToPhone,
+            R.string.title_date,
+            emptyList(),
+            R.id.navigateHomeToDate,
         )
     }
 }

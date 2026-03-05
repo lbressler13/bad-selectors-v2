@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.BaseFragment
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
+import xyz.lbres.badselectorsv2.calculator.CalculatorTabFragment
 import xyz.lbres.badselectorsv2.databinding.FragmentHomeBinding
+import xyz.lbres.badselectorsv2.date.DateTabFragment
 import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupAdapter
 import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 
@@ -19,6 +21,8 @@ import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
  */
 class HomeFragment : BaseFragment() {
     override var navToPhoneResId: Int? = R.id.navigateHomeToPhone
+    override var navToCalcResId: Int? = R.id.navigateHomeToCalc
+    override var navToDateResId: Int? = R.id.navigateHomeToDate
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
@@ -33,6 +37,8 @@ class HomeFragment : BaseFragment() {
         val selectorsRecycler: RecyclerView = binding.selectorGroupRecycler
         val fragmentList: List<TabFragment.Metadata> = listOf(
             PhoneTabFragment.metadata,
+            CalculatorTabFragment.metadata,
+            DateTabFragment.metadata,
         )
 
         // create adapter

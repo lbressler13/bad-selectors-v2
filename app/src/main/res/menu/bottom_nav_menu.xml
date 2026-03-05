@@ -9,4 +9,14 @@
         android:id="@+id/navigationPhone"
         android:icon="@drawable/ic_phone"
         android:title="@string/title_phone" />
+
+    <item
+        android:id="@+id/navigationDate"
+        android:icon="@drawable/ic_phone"
+        android:title="@string/title_date" />
+
+    <item
+        android:id="@+id/navigationCalc"
+        android:icon="@drawable/ic_phone"
+        android:title="@string/title_calc" />
 </menu>

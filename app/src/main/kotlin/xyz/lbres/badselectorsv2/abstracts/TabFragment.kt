@@ -6,6 +6,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
+import xyz.lbres.badselectorsv2.ext.view.gone
+import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.kotlinutils.list.IntList
 
 /**
@@ -34,16 +36,22 @@ abstract class TabFragment : BaseFragment() {
         val tabs = binding.tabs
         val viewPager = binding.viewPager
 
-        viewPager.adapter = getAdapter()
-        TabLayoutMediator(tabs, viewPager) { tab, position ->
-            val titleResId = metadata.tabTitleResIds[position]
-            tab.text = getString(titleResId)
-        }.attach()
+        if (metadata.tabTitleResIds.isEmpty()) {
+            viewPager.gone()
+            tabs.gone()
+            binding.placeholderText.visible()
+        } else {
+            viewPager.adapter = getAdapter()
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
+                val titleResId = metadata.tabTitleResIds[position]
+                tab.text = getString(titleResId)
+            }.attach()
 
-        val tabKey = getString(R.string.tab_index_key)
-        viewPager.currentItem = arguments?.getInt(tabKey) ?: 0
+            val tabKey = getString(R.string.tab_index_key)
+            viewPager.currentItem = arguments?.getInt(tabKey) ?: 0
 
-        tabs.tabMode = TabLayout.MODE_AUTO
+            tabs.tabMode = TabLayout.MODE_AUTO
+        }
     }
 
     /**

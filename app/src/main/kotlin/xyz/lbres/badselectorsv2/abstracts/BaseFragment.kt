@@ -8,6 +8,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.calculator.CalculatorTabFragment
+import xyz.lbres.badselectorsv2.date.DateTabFragment
 import xyz.lbres.badselectorsv2.home.HomeFragment
 import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 
@@ -26,6 +28,8 @@ abstract class BaseFragment : NavHostFragment() {
      */
     protected open var navToHomeResId: Int? = null
     protected open var navToPhoneResId: Int? = null
+    protected open var navToCalcResId: Int? = null
+    protected open var navToDateResId: Int? = null
 
     override fun onResume() {
         super.onResume()
@@ -47,15 +51,21 @@ abstract class BaseFragment : NavHostFragment() {
 
         val home = navbarItems.getChildAt(0)
         val phone = navbarItems.getChildAt(1)
+        val date = navbarItems.getChildAt(2)
+        val calc = navbarItems.getChildAt(3)
 
         requireBaseActivity().binding.navbar.selectedItemId = when (this) {
             is HomeFragment -> home.id
             is PhoneTabFragment -> phone.id
+            is DateTabFragment -> date.id
+            is CalculatorTabFragment -> calc.id
             else -> home.id
         }
 
         addNavOnClick(home, navToHomeResId, tabFragment = false)
         addNavOnClick(phone, navToPhoneResId, tabFragment = true)
+        addNavOnClick(date, navToDateResId, tabFragment = true)
+        addNavOnClick(calc, navToCalcResId, tabFragment = true)
     }
 
     /**

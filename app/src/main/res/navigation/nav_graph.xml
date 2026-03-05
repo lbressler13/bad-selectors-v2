@@ -16,6 +16,14 @@
         <action
             android:id="@+id/navigateHomeToPhone"
             app:destination="@id/phoneFragment" />
+
+        <action
+            android:id="@+id/navigateHomeToCalc"
+            app:destination="@id/calcFragment" />
+
+        <action
+            android:id="@+id/navigateHomeToDate"
+            app:destination="@id/dateFragment" />
     </fragment>
 
     <fragment
@@ -30,6 +38,14 @@
         <action
             android:id="@+id/navigateAttributionsToPhone"
             app:destination="@id/phoneFragment" />
+
+        <action
+            android:id="@+id/navigateAttributionsToCalc"
+            app:destination="@id/calcFragment" />
+
+        <action
+            android:id="@+id/navigateAttributionsToDate"
+            app:destination="@id/dateFragment" />
     </fragment>
 
     <fragment
@@ -40,6 +56,50 @@
         <action
             android:id="@+id/navigatePhoneToHome"
             app:destination="@id/homeFragment" />
+
+        <action
+            android:id="@+id/navigatePhoneToCalc"
+            app:destination="@id/calcFragment" />
+
+        <action
+            android:id="@+id/navigatePhoneToDate"
+            app:destination="@id/dateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/calcFragment"
+        android:name="xyz.lbres.badselectorsv2.calculator.CalculatorTabFragment"
+        android:label="CalculatorTabFragment">
+
+        <action
+            android:id="@+id/navigateCalcToHome"
+            app:destination="@id/homeFragment" />
+
+        <action
+            android:id="@+id/navigateCalcToPhone"
+            app:destination="@id/phoneFragment" />
+
+        <action
+            android:id="@+id/navigateCalcToDate"
+            app:destination="@id/dateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dateFragment"
+        android:name="xyz.lbres.badselectorsv2.date.DateTabFragment"
+        android:label="DateTabFragment">
+
+        <action
+            android:id="@+id/navigateDateToHome"
+            app:destination="@id/homeFragment" />
+
+        <action
+            android:id="@+id/navigateDateToPhone"
+            app:destination="@id/phoneFragment" />
+
+        <action
+            android:id="@+id/navigateDateToCalc"
+            app:destination="@id/calcFragment" />
     </fragment>
 
 </navigation>

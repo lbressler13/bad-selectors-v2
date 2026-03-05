@@ -30,6 +30,8 @@ class AttributionsFragment : BaseFragment() {
     override var actionBarTitleResId: Int = R.string.title_attributions
     override var navToHomeResId: Int? = R.id.navigateAttributionsToHome
     override var navToPhoneResId: Int? = R.id.navigateAttributionsToPhone
+    override var navToCalcResId: Int? = R.id.navigateAttributionsToCalc
+    override var navToDateResId: Int? = R.id.navigateAttributionsToDate
 
     /**
      * Initialize fragment
