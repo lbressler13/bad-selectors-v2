@@ -25,7 +25,6 @@ import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.listOfNulls
-import xyz.lbres.kotlinutils.list.listOfValue
 
 @RunWith(AndroidJUnit4::class)
 class ShuffleCircleFragmentTest {
@@ -73,7 +72,7 @@ class ShuffleCircleFragmentTest {
         }
         val phoneNumber = turns.map { it[it.lastIndex].second }
 
-        mockDigitShuffler(returnValues = returnValues)
+        mockDigitShuffler(returnValues)
 
         launchFragmentInContainer<ShuffleCircleFragment>()
         turns.forEachIndexed { index, turn ->
@@ -93,13 +92,14 @@ class ShuffleCircleFragmentTest {
 
     @Test
     fun restart() {
-        mockDigitShuffler(returnValue = 5)
+        val returnValues = (0..9).toList()
+        mockDigitShuffler(returnValues)
         launchFragmentInContainer<ShuffleCircleFragment>()
         repeat(10) {
             circleButton(0).perform(forceClick())
             selectButton.perform(forceClick())
         }
-        checkPhoneNumber(listOfValue(10, 5))
+        checkPhoneNumber(returnValues)
 
         restartButton.perform(forceClick())
         checkInitialUi()
@@ -107,10 +107,10 @@ class ShuffleCircleFragmentTest {
 
     @Test
     fun recreate() {
-        val phoneNumber = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        val phoneNumber = (0..9).toList()
         val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
         val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
-        mockDigitShuffler(returnValues = returnValues)
+        mockDigitShuffler(returnValues)
         every { constructedWith<DigitShuffler>().digit } returnsMany digitPropValues
 
         val scenario = launchFragmentInContainer<ShuffleCircleFragment>()
@@ -170,13 +170,9 @@ class ShuffleCircleFragmentTest {
     }
 
     // mock DigitShuffler class
-    private fun mockDigitShuffler(returnValue: Int? = null, returnValues: IntList? = null) {
+    private fun mockDigitShuffler(returnValues: IntList) {
         mockkConstructor(DigitShuffler::class)
-        if (returnValue != null) {
-            every { constructedWith<DigitShuffler>().getAtIndex(any(), any()) } returns returnValue
-        } else if (returnValues != null) {
-            every { constructedWith<DigitShuffler>().getAtIndex(any(), any()) } returnsMany returnValues
-        }
+        every { constructedWith<DigitShuffler>().getAtIndex(any(), any()) } returnsMany returnValues
         justRun { constructedWith<DigitShuffler>().update() }
     }
 

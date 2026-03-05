@@ -1,4 +1,4 @@
-name: Basic Checks
+name: Lint and Test
 
 on:
   workflow_dispatch:

@@ -4,6 +4,7 @@ import xyz.lbres.badselectorsv2.phone.common.digitsRange
 import xyz.lbres.badselectorsv2.utils.createRandom
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
+import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 
@@ -40,7 +41,7 @@ class DigitShuffler {
      *
      * @param index [Int]: index to retrieve number for
      * @param nullable [Boolean]: if a null value can be returned, equivalent to the russian roulette setting.
-     * Defaults to `null`.
+     * Defaults to `false`.
      * @return [Int]?: number at [index], with some probability of null if [nullable] is true
      */
     fun getAtIndex(index: Int, nullable: Boolean = false): Int? {
@@ -48,11 +49,7 @@ class DigitShuffler {
 
         val probabilityNull = 0.001f // 1 / 1000
         val nextNull = createRandom().nextBoolean(probabilityNull)
-        digit = if (canUseNull && nextNull) {
-            null
-        } else {
-            digits[index]
-        }
+        digit = simpleIf(canUseNull && nextNull, { null }, { digits[index] })
 
         return digit
     }

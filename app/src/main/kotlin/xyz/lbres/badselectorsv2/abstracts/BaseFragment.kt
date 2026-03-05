@@ -33,7 +33,7 @@ abstract class BaseFragment : NavHostFragment() {
     }
 
     /**
-     * Configure fragment with setup code from BaseFragment
+     * Common setup for all fragments
      */
     protected fun setupBaseFragment() {
         requireBaseActivity().binding.actionBar.title = getString(actionBarTitleResId)

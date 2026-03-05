@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 class StringExtTest {
     @Test
     fun underlined() {
-        // must be tested in espresso tests to avoid compile errors from not mocking SpannableString
+        // must be tested in espresso tests to use unmocked SpannableString
         val string = "Hello world"
         val underlined = string.underlined()
         val spans = underlined.getSpans(0, string.length, UnderlineSpan::class.java)

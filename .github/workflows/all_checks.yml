@@ -7,8 +7,8 @@ on:
       - main
 
 jobs:
-  basic-checks:
-    name: "Basic Checks"
+  lint-test:
+    name: "Lint and Test
     uses: ./.github/workflows/basic_checks.yml
     secrets: inherit
 

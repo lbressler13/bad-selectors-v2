@@ -24,4 +24,7 @@ fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
     assertEquals(url, intent.dataString)
 }
 
+/**
+ * Check that a view is disabled
+ */
 fun isDisabled() = not(isEnabled())

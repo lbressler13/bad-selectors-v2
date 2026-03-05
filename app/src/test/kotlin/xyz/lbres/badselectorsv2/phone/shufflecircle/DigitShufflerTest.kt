@@ -31,7 +31,7 @@ class DigitShufflerTest {
 
     @Test
     fun testGetAtIndex() {
-        mockkStatic(IntRange::seededShuffled) // digits list
+        mockkStatic(IntRange::seededShuffled)
         with(mockk<IntRange>()) {
             every { IntRange(0, 9).seededShuffled() } returns shuffledDigits
 
