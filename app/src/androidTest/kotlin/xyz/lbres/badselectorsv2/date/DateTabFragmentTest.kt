@@ -1,10 +1,11 @@
-package xyz.lbres.badselectorsv2.phone
+package xyz.lbres.badselectorsv2.date
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Before
@@ -14,12 +15,11 @@ import org.junit.runner.RunWith
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.testutils.actionBar
-import xyz.lbres.badselectorsv2.testutils.matchers.withTab
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 
 @RunWith(AndroidJUnit4::class)
-class PhoneTabFragmentTest {
+class DateTabFragmentTest {
     @Rule
     @JvmField
     val rule = ActivityScenarioRule(BaseActivity::class.java)
@@ -30,13 +30,13 @@ class PhoneTabFragmentTest {
 
     @Before
     fun setupTest() {
-        onView(withId(R.id.navigationPhone)).perform(click())
+        onView(withId(R.id.navigationDate)).perform(click())
     }
 
     @Test
     fun initialUi() {
-        actionBar.check(matches(withTitle("Bad Phone Selectors")))
-        onView(withTab("Shuffle Circle")).check(matches(isCompletelyDisplayed()))
+        actionBar.check(matches(withTitle("Bad Date Selectors")))
+        onView(withText("Under construction!")).check(matches(isDisplayed()))
     }
 
     @Test
@@ -46,20 +46,20 @@ class PhoneTabFragmentTest {
     }
 
     @Test
+    fun navigateToPhone() {
+        onView(withId(R.id.navigationPhone)).perform(click())
+        actionBar.check(matches(withTitle("Bad Phone Selectors")))
+    }
+
+    @Test
     fun navigateToCalc() {
         onView(withId(R.id.navigationCalc)).perform(click())
         actionBar.check(matches(withTitle("Bad Calculators")))
     }
 
     @Test
-    fun navigateToDate() {
+    fun navigateToSelf() {
         onView(withId(R.id.navigationDate)).perform(click())
         actionBar.check(matches(withTitle("Bad Date Selectors")))
-    }
-
-    @Test
-    fun navigateToSelf() {
-        onView(withId(R.id.navigationPhone)).perform(click())
-        actionBar.check(matches(withTitle("Bad Phone Selectors")))
     }
 }

@@ -96,7 +96,11 @@ To run linting without fixing issues, run the following command in the terminal 
 └── settings.gradle
 ```
 
-## Image Attributions
+## Boring Stuff
+
+TODO things to change with new selector group
+
+## Legal Stuff
 
 All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.
 This is the complete list of Flaticon images included in the app.

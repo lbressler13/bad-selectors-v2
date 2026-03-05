@@ -121,6 +121,18 @@ class AttributionsFragmentTest {
     }
 
     @Test
+    fun navigateToCalc() {
+        onView(withId(R.id.navigationCalc)).perform(click())
+        actionBar.check(matches(withTitle("Bad Calculators")))
+    }
+
+    @Test
+    fun navigateToDate() {
+        onView(withId(R.id.navigationDate)).perform(click())
+        actionBar.check(matches(withTitle("Bad Date Selectors")))
+    }
+
+    @Test
     fun expandCollapseAttributions() = testExpandCollapseAttributions()
 
     @Test
@@ -134,6 +146,9 @@ class AttributionsFragmentTest {
 
         expandCollapseAttribution(1)
         checkImagesDisplayed(listOf(0, 1))
+
+        expandCollapseAttribution(2)
+        checkImagesDisplayed(listOf(0, 1, 2))
     }
 
     @Test
