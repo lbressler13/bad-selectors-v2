@@ -24,7 +24,7 @@ internal class SingleChildLayoutManager(
     attrs: AttributeSet?,
 ) {
 
-    enum class ChildInitializationState { NOT_STARTED, IN_PROGRESS, COMPLETE }
+    private enum class ChildInitializationState { NOT_STARTED, IN_PROGRESS, COMPLETE }
 
     /**
      * State of child initialization.
