@@ -46,6 +46,8 @@
 
 
     <!-- Content Descriptions -->
+    <string name="calendar_cd">Date</string>
+    <string name="calculator_cd">Calculator</string>
     <string name="chevron_down_cd">Down chevron</string>
     <string name="chevron_left_cd">Left chevron</string>
     <string name="chevron_right_cd">Right chevron</string>

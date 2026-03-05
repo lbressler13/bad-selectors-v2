@@ -37,8 +37,8 @@ class HomeFragment : BaseFragment() {
         val selectorsRecycler: RecyclerView = binding.selectorGroupRecycler
         val fragmentList: List<TabFragment.Metadata> = listOf(
             PhoneTabFragment.metadata,
-            CalculatorTabFragment.metadata,
             DateTabFragment.metadata,
+            CalculatorTabFragment.metadata,
         )
 
         // create adapter
