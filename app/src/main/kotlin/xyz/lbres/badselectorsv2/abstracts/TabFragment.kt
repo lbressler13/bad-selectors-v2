@@ -5,9 +5,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.calculator.CalculatorTabFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
+import xyz.lbres.badselectorsv2.date.DateTabFragment
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
+import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 import xyz.lbres.kotlinutils.list.IntList
 
 /**
@@ -79,4 +82,12 @@ abstract class TabFragment : BaseFragment() {
         val tabTitleResIds: IntList,
         val navActionFromHomeId: Int,
     )
+
+    companion object {
+        val allMetadata: List<Metadata> = listOf(
+            PhoneTabFragment.metadata,
+            DateTabFragment.metadata,
+            CalculatorTabFragment.metadata,
+        )
+    }
 }

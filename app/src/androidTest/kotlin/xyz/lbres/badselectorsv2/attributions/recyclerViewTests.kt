@@ -64,7 +64,6 @@ fun testAttributionLinks() {
     for (pair in authorAttributions.withIndex()) {
         val position = pair.index
         val author = pair.value
-        print(pair)
 
         // flaticon link
         attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, clickFlaticon))

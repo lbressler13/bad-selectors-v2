@@ -26,11 +26,14 @@ import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.ProductFlavor
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
-import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.assertLinkOpened
 import xyz.lbres.badselectorsv2.testutils.hideDevToolsButton
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
+import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
+import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
+import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 import xyz.lbres.badselectorsv2.testutils.viewactions.clickLinkInText
 import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.testutils.viewassertions.isNotPresented
@@ -108,32 +111,12 @@ class AttributionsFragmentTest {
         onView(withText("Bad Selectors")).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun navigateHome() {
-        onView(withId(R.id.navigationHome)).perform(click())
-        onView(withText("Bad Selectors")).check(matches(isDisplayed()))
-    }
+    @Test fun navigateToHome() = testNavigateToHome()
+    @Test fun navigateToPhone() = testNavigateToPhone()
+    @Test fun navigateToCalc() = testNavigateToCalc()
+    @Test fun navigateToDate() = testNavigateToDate()
 
-    @Test
-    fun navigateToPhone() {
-        onView(withId(R.id.navigationPhone)).perform(click())
-        actionBar.check(matches(withTitle("Bad Phone Selectors")))
-    }
-
-    @Test
-    fun navigateToCalc() {
-        onView(withId(R.id.navigationCalc)).perform(click())
-        actionBar.check(matches(withTitle("Bad Calculators")))
-    }
-
-    @Test
-    fun navigateToDate() {
-        onView(withId(R.id.navigationDate)).perform(click())
-        actionBar.check(matches(withTitle("Bad Date Selectors")))
-    }
-
-    @Test
-    fun expandCollapseAttributions() = testExpandCollapseAttributions()
+    @Test fun expandCollapseAttributions() = testExpandCollapseAttributions()
 
     @Test
     fun expandFlaticonMessageAndAttributions() {
@@ -218,6 +201,5 @@ class AttributionsFragmentTest {
         onView(withText("Collapse")).check(doesNotExist())
     }
 
-    @Test
-    fun attributionsLinks() = testAttributionLinks()
+    @Test fun attributionsLinks() = testAttributionLinks()
 }

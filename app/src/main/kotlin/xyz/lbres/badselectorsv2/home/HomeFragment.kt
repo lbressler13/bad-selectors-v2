@@ -10,11 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.BaseFragment
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
-import xyz.lbres.badselectorsv2.calculator.CalculatorTabFragment
 import xyz.lbres.badselectorsv2.databinding.FragmentHomeBinding
-import xyz.lbres.badselectorsv2.date.DateTabFragment
 import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupAdapter
-import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 
 /**
  * Initial fragment in the app
@@ -35,17 +32,13 @@ class HomeFragment : BaseFragment() {
         viewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
         val selectorsRecycler: RecyclerView = binding.selectorGroupRecycler
-        val fragmentList: List<TabFragment.Metadata> = listOf(
-            PhoneTabFragment.metadata,
-            DateTabFragment.metadata,
-            CalculatorTabFragment.metadata,
-        )
+        val metadata = TabFragment.allMetadata
 
         // create adapter
-        val adapter = SelectorGroupAdapter(fragmentList, requireBaseActivity(), viewModel)
+        val adapter = SelectorGroupAdapter(metadata, requireBaseActivity(), viewModel)
         selectorsRecycler.adapter = adapter
         selectorsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.initSelectorsExpanded(fragmentList.size)
+        viewModel.initSelectorsExpanded(metadata.size)
 
         binding.infoButton.root.setOnClickListener {
             requireBaseActivity().runNavAction(R.id.navigateHomeToAttributions)

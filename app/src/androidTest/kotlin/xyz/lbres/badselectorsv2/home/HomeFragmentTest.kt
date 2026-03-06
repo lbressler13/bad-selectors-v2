@@ -17,6 +17,10 @@ import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
 import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
+import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
+import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
+import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
 
 @RunWith(AndroidJUnit4::class)
@@ -47,29 +51,10 @@ class HomeFragmentTest {
         actionBar.check(matches(withTitle("Give People Credit")))
     }
 
-    @Test
-    fun navigateToPhone() {
-        onView(withId(R.id.navigationPhone)).perform(click())
-        actionBar.check(matches(withTitle("Bad Phone Selectors")))
-    }
-
-    @Test
-    fun navigateToCalc() {
-        onView(withId(R.id.navigationCalc)).perform(click())
-        actionBar.check(matches(withTitle("Bad Calculators")))
-    }
-
-    @Test
-    fun navigateToDate() {
-        onView(withId(R.id.navigationDate)).perform(click())
-        actionBar.check(matches(withTitle("Bad Date Selectors")))
-    }
-
-    @Test
-    fun navigateToSelf() {
-        onView(withId(R.id.navigationHome)).perform(click())
-        actionBar.check(matches(withTitle("Bad Selectors")))
-    }
+    @Test fun navigateToSelf() = testNavigateToHome()
+    @Test fun navigateToPhone() = testNavigateToPhone()
+    @Test fun navigateToCalc() = testNavigateToCalc()
+    @Test fun navigateToDate() = testNavigateToDate()
 
     @Test fun navigateWithPhoneSelectors() = testNavigateWithPhoneSelectors()
 

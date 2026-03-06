@@ -17,6 +17,10 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
+import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
+import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
+import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 
 @RunWith(AndroidJUnit4::class)
 class CalculatorTabFragmentTest {
@@ -39,27 +43,8 @@ class CalculatorTabFragmentTest {
         onView(withText("Under construction!")).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun navigateHome() {
-        onView(withId(R.id.navigationHome)).perform(click())
-        actionBar.check(matches(withTitle("Bad Selectors")))
-    }
-
-    @Test
-    fun navigateToPhone() {
-        onView(withId(R.id.navigationPhone)).perform(click())
-        actionBar.check(matches(withTitle("Bad Phone Selectors")))
-    }
-
-    @Test
-    fun navigateToDate() {
-        onView(withId(R.id.navigationDate)).perform(click())
-        actionBar.check(matches(withTitle("Bad Date Selectors")))
-    }
-
-    @Test
-    fun navigateToSelf() {
-        onView(withId(R.id.navigationCalc)).perform(click())
-        onView(withText("Bad Calculators")).check(matches(isDisplayed()))
-    }
+    @Test fun navigateToHome() = testNavigateToHome()
+    @Test fun navigateToPhone() = testNavigateToPhone()
+    @Test fun navigateToSelf() = testNavigateToCalc()
+    @Test fun navigateToDate() = testNavigateToDate()
 }
