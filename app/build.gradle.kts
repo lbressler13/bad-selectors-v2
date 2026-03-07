@@ -98,6 +98,9 @@ android {
 
     testOptions {
         animationsDisabled = true
+        unitTests {
+            isIncludeAndroidResources = true
+        }
         // resolves mockk issue: https://github.com/mockk/mockk/issues/297
         packaging {
             jniLibs {
@@ -136,6 +139,7 @@ dependencies {
     val androidxTracingVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
     val mockkVersion: String by rootProject.extra
+    val robolectricVersion: String by rootProject.extra
 
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
@@ -149,10 +153,15 @@ dependencies {
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     implementation(project(":customview"))
+    implementation("androidx.test.ext:junit-ktx:1.3.0")
 
     // testing
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("org.robolectric:robolectric:$robolectricVersion")
+    testImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+    testImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
+    testImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
     // https://developer.android.com/guide/fragments/test
     debugImplementation("androidx.fragment:fragment-testing-manifest:$androidxFragmentVersion")
     androidTestImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")

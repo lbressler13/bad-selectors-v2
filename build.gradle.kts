@@ -16,6 +16,7 @@ val androidxTestRunnerVersion by extra { "1.7.0" }
 val androidxTracingVersion by extra { "1.3.0" }
 val espressoVersion by extra { "3.7.0" }
 val mockkVersion by extra { "1.14.9" }
+val robolectricVersion by extra { "4.16.1" }
 
 // android configurations
 val androidCompileSdk by extra { 35 }
