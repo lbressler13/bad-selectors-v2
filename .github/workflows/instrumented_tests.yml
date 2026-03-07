@@ -1,0 +1,28 @@
+name: Instrumented Tests
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      ACCESS_TOKEN: ${{ secrets.TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Java Version
+        uses: actions/setup-java@v3
+        with:
+          distribution: corretto
+          java-version: 17
+          cache: gradle
+
+      - name: Tests
+        run: ./gradlew :app:test --stacktrace --tests

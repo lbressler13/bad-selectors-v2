@@ -164,6 +164,7 @@ dependencies {
 
     // testing
     testImplementation(kotlin("test"))
+    testImplementation("androidx.fragment:fragment-testing:${androidxFragmentVersion}")
     testImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     testImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     testImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
@@ -172,7 +173,6 @@ dependencies {
     testImplementation("org.robolectric:robolectric:$robolectricVersion")
     // https://developer.android.com/guide/fragments/test
     debugImplementation("androidx.fragment:fragment-testing-manifest:$androidxFragmentVersion")
-    testImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
     androidTestImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")

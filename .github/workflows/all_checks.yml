@@ -13,7 +13,7 @@ jobs:
     secrets: inherit
 
   # TODO uncomment when repo is public
-  # espresso-tests:
-    # name: "Espresso Tests"
-    # uses: ./.github/workflows/espresso_tests.yml
+  # instrumented-tests:
+    # name: "Instrumented Tests"
+    # uses: ./.github/workflows/instrumented_tests.yml
     # secrets: inherit
