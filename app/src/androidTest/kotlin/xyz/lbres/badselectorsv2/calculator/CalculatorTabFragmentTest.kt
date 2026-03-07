@@ -17,6 +17,7 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavbarUi
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
@@ -42,6 +43,7 @@ class CalculatorTabFragmentTest {
     fun initialUi() {
         actionBar.check(matches(withTitle("Bad Calculators")))
         onView(withText("Under construction!")).check(matches(isDisplayed()))
+        testNavbarUi(R.id.navigationCalc, "Calculator")
     }
 
     @Test fun navigateToHome() = testNavigateToHome()

@@ -17,6 +17,7 @@ import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.matchers.withTab
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavbarUi
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
@@ -44,6 +45,7 @@ class PhoneTabFragmentTest {
     fun initialUi() {
         actionBar.check(matches(withTitle("Bad Phone Selectors")))
         onView(withTab("Shuffle Circle")).check(matches(isCompletelyDisplayed()))
+        testNavbarUi(R.id.navigationPhone, "Phone")
     }
 
     @Test fun navigateToHome() = testNavigateToHome()

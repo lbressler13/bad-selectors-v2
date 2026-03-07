@@ -1,7 +1,6 @@
 package xyz.lbres.badselectorsv2.abstracts
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager

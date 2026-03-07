@@ -30,6 +30,7 @@ import xyz.lbres.badselectorsv2.testutils.assertLinkOpened
 import xyz.lbres.badselectorsv2.testutils.hideDevToolsButton
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavbarUi
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
@@ -74,6 +75,7 @@ class AttributionsFragmentTest {
     fun loadActionBarWithTitle() {
         val expectedTitle = "Give People Credit"
         onView(withId(R.id.actionBar)).check(matches(withTitle(expectedTitle)))
+        testNavbarUi(R.id.navigationHome, "Home")
     }
 
     @Test

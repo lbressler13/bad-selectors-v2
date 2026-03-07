@@ -17,6 +17,7 @@ import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
 import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavbarUi
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
@@ -42,11 +43,9 @@ class HomeFragmentTest {
 
     @Test
     fun initialUi() {
-        // TODO check selector groups
         onView(withId(R.id.navigationHome)).check(matches(isDisplayed()))
         onView(withId(R.id.navigationPhone)).check(matches(isDisplayed()))
-
-        // onView(withId(R.id.navbar)).check(matches)
+        testNavbarUi(R.id.navigationHome, "Home")
     }
 
     @Test

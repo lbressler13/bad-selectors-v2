@@ -46,7 +46,8 @@ private fun testNavbarAction(navbarButtonId: Int, expectedTitle: String) {
     onView(withText(expectedTitle)).check(matches(isDisplayed()))
 }
 
-private class HasSelectedItem(private val selectedViewId: Int):
+// matcher for checking the selected view of a navbar
+private class HasSelectedItem(private val selectedViewId: Int) :
     TypeSafeMatcher<View>() {
     override fun describeTo(description: Description?) {
         description?.appendText("match selected item in navbar")
