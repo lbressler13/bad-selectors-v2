@@ -33,6 +33,7 @@ import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
+import xyz.lbres.badselectorsv2.testutils.testNavigateToOtp
 import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 import xyz.lbres.badselectorsv2.testutils.viewactions.clickLinkInText
 import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
@@ -115,6 +116,7 @@ class AttributionsFragmentTest {
     @Test fun navigateToPhone() = testNavigateToPhone()
     @Test fun navigateToCalc() = testNavigateToCalc()
     @Test fun navigateToDate() = testNavigateToDate()
+    @Test fun navigateToOtp() = testNavigateToOtp()
 
     @Test fun expandCollapseAttributions() = testExpandCollapseAttributions()
 

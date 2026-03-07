@@ -1,6 +1,7 @@
 package xyz.lbres.badselectorsv2.abstracts
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
@@ -11,6 +12,7 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.calculator.CalculatorTabFragment
 import xyz.lbres.badselectorsv2.date.DateTabFragment
 import xyz.lbres.badselectorsv2.home.HomeFragment
+import xyz.lbres.badselectorsv2.otp.OTPTabFragment
 import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 
 /**
@@ -30,6 +32,7 @@ abstract class BaseFragment : NavHostFragment() {
     protected open var navToPhoneResId: Int? = null
     protected open var navToCalcResId: Int? = null
     protected open var navToDateResId: Int? = null
+    protected open var navToOtpResId: Int? = null
 
     override fun onResume() {
         super.onResume()
@@ -53,12 +56,14 @@ abstract class BaseFragment : NavHostFragment() {
         val phone = navbarItems.getChildAt(1)
         val date = navbarItems.getChildAt(2)
         val calc = navbarItems.getChildAt(3)
+        val otp = navbarItems.getChildAt(4)
 
         requireBaseActivity().binding.navbar.selectedItemId = when (this) {
             is HomeFragment -> home.id
             is PhoneTabFragment -> phone.id
             is DateTabFragment -> date.id
             is CalculatorTabFragment -> calc.id
+            is OTPTabFragment -> otp.id
             else -> home.id
         }
 
@@ -66,6 +71,7 @@ abstract class BaseFragment : NavHostFragment() {
         addNavOnClick(phone, navToPhoneResId, tabFragment = true)
         addNavOnClick(date, navToDateResId, tabFragment = true)
         addNavOnClick(calc, navToCalcResId, tabFragment = true)
+        addNavOnClick(otp, navToOtpResId, tabFragment = true)
     }
 
     /**

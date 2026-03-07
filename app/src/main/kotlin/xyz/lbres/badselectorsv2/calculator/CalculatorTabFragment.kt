@@ -16,6 +16,7 @@ class CalculatorTabFragment : TabFragment() {
     override var navToHomeResId: Int? = R.id.navigateCalcToHome
     override var navToPhoneResId: Int? = R.id.navigateCalcToPhone
     override var navToDateResId: Int? = R.id.navigateCalcToDate
+    override var navToOtpResId: Int? = R.id.navigateCalcToOtp
 
     override lateinit var binding: TabFragmentBinding
 

@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.date
+package xyz.lbres.badselectorsv2.otp
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -17,6 +17,7 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavbarUi
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
@@ -24,7 +25,7 @@ import xyz.lbres.badselectorsv2.testutils.testNavigateToOtp
 import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 
 @RunWith(AndroidJUnit4::class)
-class DateTabFragmentTest {
+class OTPFragmentTest {
     @Rule
     @JvmField
     val rule = ActivityScenarioRule(BaseActivity::class.java)
@@ -35,18 +36,19 @@ class DateTabFragmentTest {
 
     @Before
     fun setupTest() {
-        onView(withId(R.id.navigationDate)).perform(click())
+        onView(withId(R.id.navigationOtp)).perform(click())
     }
 
     @Test
     fun initialUi() {
-        actionBar.check(matches(withTitle("Bad Date Selectors")))
+        actionBar.check(matches(withTitle("Bad OTP Receivers")))
         onView(withText("Under construction!")).check(matches(isDisplayed()))
+        testNavbarUi(R.id.navigationOtp, "OTP")
     }
 
     @Test fun navigateToHome() = testNavigateToHome()
     @Test fun navigateToPhone() = testNavigateToPhone()
     @Test fun navigateToCalc() = testNavigateToCalc()
-    @Test fun navigateToSelf() = testNavigateToDate()
-    @Test fun navigateToOtp() = testNavigateToOtp()
+    @Test fun navigateToDate() = testNavigateToDate()
+    @Test fun navigateToSelf() = testNavigateToOtp()
 }

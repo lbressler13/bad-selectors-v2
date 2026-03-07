@@ -32,6 +32,11 @@
     <string name="title_calc">Calculator</string>
 
 
+    <!-- OTP -->
+    <string name="appbar_title_otp">Bad OTP Receivers</string>
+    <string name="title_otp">OTP</string>
+
+
     <!-- Attributions -->
     <string name="title_attributions">Give People Credit</string>
     <string name="flaticon_message">All icons are taken from Flaticon, which allows free use of icons for personal and commercial purposes with attribution. In accordance with their policies, attributions are provided below.\n\nSee here for more information about their policies.</string>
@@ -48,6 +53,7 @@
     <!-- Content Descriptions -->
     <string name="calendar_cd">Date</string>
     <string name="calculator_cd">Calculator</string>
+    <string name="cell_phone_cd">Cell Phone</string>
     <string name="chevron_down_cd">Down chevron</string>
     <string name="chevron_left_cd">Left chevron</string>
     <string name="chevron_right_cd">Right chevron</string>

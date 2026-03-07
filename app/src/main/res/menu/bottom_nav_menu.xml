@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navbarRoot"
+    >
     <item
         android:id="@+id/navigationHome"
         android:icon="@drawable/ic_home"
@@ -19,4 +21,9 @@
         android:id="@+id/navigationCalc"
         android:icon="@drawable/ic_calculator"
         android:title="@string/title_calc" />
+
+    <item
+        android:id="@+id/navigationOtp"
+        android:icon="@drawable/ic_cell_phone"
+        android:title="@string/title_otp" />
 </menu>

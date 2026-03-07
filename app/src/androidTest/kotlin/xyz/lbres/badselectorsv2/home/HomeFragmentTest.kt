@@ -20,6 +20,7 @@ import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
+import xyz.lbres.badselectorsv2.testutils.testNavigateToOtp
 import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
 
@@ -41,8 +42,11 @@ class HomeFragmentTest {
 
     @Test
     fun initialUi() {
+        // TODO check selector groups
         onView(withId(R.id.navigationHome)).check(matches(isDisplayed()))
         onView(withId(R.id.navigationPhone)).check(matches(isDisplayed()))
+
+        // onView(withId(R.id.navbar)).check(matches)
     }
 
     @Test
@@ -55,6 +59,7 @@ class HomeFragmentTest {
     @Test fun navigateToPhone() = testNavigateToPhone()
     @Test fun navigateToCalc() = testNavigateToCalc()
     @Test fun navigateToDate() = testNavigateToDate()
+    @Test fun navigateToOtp() = testNavigateToOtp()
 
     @Test fun navigateWithPhoneSelectors() = testNavigateWithPhoneSelectors()
 
@@ -70,6 +75,13 @@ class HomeFragmentTest {
         val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
         selectorGroupRecycler.perform(actionOnItemAtPosition<SelectorGroupViewHolder>(1, forceClick()))
         actionBar.check(matches(withTitle("Bad Date Selectors")))
+    }
+
+    @Test
+    fun navigateWithOtpLabel() {
+        val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
+        selectorGroupRecycler.perform(actionOnItemAtPosition<SelectorGroupViewHolder>(3, forceClick()))
+        actionBar.check(matches(withTitle("Bad OTP Receivers")))
     }
 
     @Test fun expandCollapseSelectors() = testExpandCollapseSelectors()

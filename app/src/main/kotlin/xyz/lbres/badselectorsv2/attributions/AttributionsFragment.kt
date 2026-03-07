@@ -32,6 +32,7 @@ class AttributionsFragment : BaseFragment() {
     override var navToPhoneResId: Int? = R.id.navigateAttributionsToPhone
     override var navToCalcResId: Int? = R.id.navigateAttributionsToCalc
     override var navToDateResId: Int? = R.id.navigateAttributionsToDate
+    override var navToOtpResId: Int? = R.id.navigateAttributionsToOtp
 
     /**
      * Initialize fragment

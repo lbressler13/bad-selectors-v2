@@ -10,6 +10,7 @@ import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
 import xyz.lbres.badselectorsv2.date.DateTabFragment
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
+import xyz.lbres.badselectorsv2.otp.OTPTabFragment
 import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 import xyz.lbres.kotlinutils.list.IntList
 
@@ -88,6 +89,7 @@ abstract class TabFragment : BaseFragment() {
             PhoneTabFragment.metadata,
             DateTabFragment.metadata,
             CalculatorTabFragment.metadata,
+            OTPTabFragment.metadata,
         )
     }
 }

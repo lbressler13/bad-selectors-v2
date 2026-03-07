@@ -20,7 +20,10 @@ import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
+import xyz.lbres.badselectorsv2.testutils.testNavigateToOtp
 import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
+
+// TODO check selected navbar icon
 
 @RunWith(AndroidJUnit4::class)
 class PhoneTabFragmentTest {
@@ -47,4 +50,5 @@ class PhoneTabFragmentTest {
     @Test fun navigateToSelf() = testNavigateToPhone()
     @Test fun navigateToCalc() = testNavigateToCalc()
     @Test fun navigateToDate() = testNavigateToDate()
+    @Test fun navigateToOtp() = testNavigateToOtp()
 }

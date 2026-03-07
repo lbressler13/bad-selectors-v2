@@ -20,6 +20,7 @@ import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
 import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
 import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
 import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
+import xyz.lbres.badselectorsv2.testutils.testNavigateToOtp
 import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 
 @RunWith(AndroidJUnit4::class)
@@ -47,4 +48,5 @@ class CalculatorTabFragmentTest {
     @Test fun navigateToPhone() = testNavigateToPhone()
     @Test fun navigateToSelf() = testNavigateToCalc()
     @Test fun navigateToDate() = testNavigateToDate()
+    @Test fun navigateToOtp() = testNavigateToOtp()
 }

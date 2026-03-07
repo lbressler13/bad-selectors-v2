@@ -24,6 +24,10 @@
         <action
             android:id="@+id/navigateHomeToDate"
             app:destination="@id/dateFragment" />
+
+        <action
+            android:id="@+id/navigateHomeToOtp"
+            app:destination="@id/otpFragment" />
     </fragment>
 
     <fragment
@@ -46,6 +50,10 @@
         <action
             android:id="@+id/navigateAttributionsToDate"
             app:destination="@id/dateFragment" />
+
+        <action
+            android:id="@+id/navigateAttributionsToOtp"
+            app:destination="@id/otpFragment" />
     </fragment>
 
     <fragment
@@ -64,6 +72,10 @@
         <action
             android:id="@+id/navigatePhoneToDate"
             app:destination="@id/dateFragment" />
+
+        <action
+            android:id="@+id/navigatePhoneToOtp"
+            app:destination="@id/otpFragment" />
     </fragment>
 
     <fragment
@@ -82,6 +94,10 @@
         <action
             android:id="@+id/navigateCalcToDate"
             app:destination="@id/dateFragment" />
+
+        <action
+            android:id="@+id/navigateCalcToOtp"
+            app:destination="@id/otpFragment" />
     </fragment>
 
     <fragment
@@ -100,6 +116,32 @@
         <action
             android:id="@+id/navigateDateToCalc"
             app:destination="@id/calcFragment" />
+
+        <action
+            android:id="@+id/navigateDateToOtp"
+            app:destination="@id/otpFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/otpFragment"
+        android:name="xyz.lbres.badselectorsv2.otp.OTPTabFragment"
+        android:label="OTPTabFragment">
+
+        <action
+            android:id="@+id/navigateOtpToHome"
+            app:destination="@id/homeFragment" />
+
+        <action
+            android:id="@+id/navigateOtpToPhone"
+            app:destination="@id/phoneFragment" />
+
+        <action
+            android:id="@+id/navigateOtpToCalc"
+            app:destination="@id/calcFragment" />
+
+        <action
+            android:id="@+id/navigateOtpToDate"
+            app:destination="@id/dateFragment" />
     </fragment>
 
 </navigation>

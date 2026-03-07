@@ -10,6 +10,7 @@ import xyz.lbres.badselectorsv2.attributions.ImageAttribution
 
 private val freepikImages = listOf(
     ImageAttribution(R.drawable.ic_calculator, R.string.calculator_cd, calculatorUrl),
+    ImageAttribution(R.drawable.ic_cell_phone, R.string.cell_phone_cd, cellPhoneUrl),
     ImageAttribution(R.drawable.ic_chevron_down, R.string.chevron_down_cd, chevronDownUrl),
     ImageAttribution(R.drawable.ic_chevron_left, R.string.chevron_left_cd, chevronLeftUrl),
     ImageAttribution(R.drawable.ic_chevron_right, R.string.chevron_right_cd, chevronRightUrl),

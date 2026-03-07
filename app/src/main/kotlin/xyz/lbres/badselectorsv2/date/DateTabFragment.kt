@@ -16,6 +16,7 @@ class DateTabFragment : TabFragment() {
     override var navToHomeResId: Int? = R.id.navigateDateToHome
     override var navToPhoneResId: Int? = R.id.navigateDateToPhone
     override var navToCalcResId: Int? = R.id.navigateDateToCalc
+    override var navToOtpResId: Int? = R.id.navigateDateToOtp
 
     override lateinit var binding: TabFragmentBinding
 

@@ -20,6 +20,7 @@ class HomeFragment : BaseFragment() {
     override var navToPhoneResId: Int? = R.id.navigateHomeToPhone
     override var navToCalcResId: Int? = R.id.navigateHomeToCalc
     override var navToDateResId: Int? = R.id.navigateHomeToDate
+    override var navToOtpResId: Int? = R.id.navigateHomeToOtp
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
