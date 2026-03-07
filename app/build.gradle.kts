@@ -161,7 +161,6 @@ dependencies {
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     implementation(project(":customview"))
-    implementation("androidx.test.ext:junit-ktx:1.3.0")
 
     // testing
     testImplementation(kotlin("test"))
@@ -170,6 +169,7 @@ dependencies {
     testImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     testImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     testImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
+    testImplementation("androidx.test.ext:junit-ktx:${androidxJunitVersion}")
     // https://developer.android.com/guide/fragments/test
     debugImplementation("androidx.fragment:fragment-testing-manifest:$androidxFragmentVersion")
     testImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
