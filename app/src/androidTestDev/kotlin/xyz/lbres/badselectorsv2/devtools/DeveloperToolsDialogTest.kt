@@ -56,10 +56,14 @@ class DeveloperToolsDialogTest {
 
     @Test fun hideDevTools() = testHideDevTools()
 
-    @Test
-    fun attributionsFragment() {
-        onView(withId(R.id.infoButton)).perform(click())
+    @Test fun attributionsFragment() = testForFragment(R.id.infoButton)
+    @Test fun phoneFragment() = testForFragment(R.id.navigationPhone)
+    @Test fun calcFragment() = testForFragment(R.id.navigationCalc)
+    @Test fun dateFragment() = testForFragment(R.id.navigationDate)
 
+    // test dialog on each fragment
+    private fun testForFragment(openFragmentButtonId: Int) {
+        onView(withId(openFragmentButtonId)).perform(click())
         openDevTools()
         onView(withText("Developer Tools")).check(matches(isDisplayed()))
     }

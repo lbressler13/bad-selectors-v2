@@ -26,11 +26,16 @@ import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.ProductFlavor
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
-import xyz.lbres.badselectorsv2.testutils.actionBar
 import xyz.lbres.badselectorsv2.testutils.assertLinkOpened
 import xyz.lbres.badselectorsv2.testutils.hideDevToolsButton
 import xyz.lbres.badselectorsv2.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.testutils.rules.RetryRule
+import xyz.lbres.badselectorsv2.testutils.testNavbarUi
+import xyz.lbres.badselectorsv2.testutils.testNavigateToCalc
+import xyz.lbres.badselectorsv2.testutils.testNavigateToDate
+import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
+import xyz.lbres.badselectorsv2.testutils.testNavigateToOtp
+import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 import xyz.lbres.badselectorsv2.testutils.viewactions.clickLinkInText
 import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.testutils.viewassertions.isNotPresented
@@ -70,6 +75,7 @@ class AttributionsFragmentTest {
     fun loadActionBarWithTitle() {
         val expectedTitle = "Give People Credit"
         onView(withId(R.id.actionBar)).check(matches(withTitle(expectedTitle)))
+        testNavbarUi(R.id.navigationHome, "Home")
     }
 
     @Test
@@ -108,20 +114,13 @@ class AttributionsFragmentTest {
         onView(withText("Bad Selectors")).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun navigateHome() {
-        onView(withId(R.id.navigationHome)).perform(click())
-        onView(withText("Bad Selectors")).check(matches(isDisplayed()))
-    }
+    @Test fun navigateToHome() = testNavigateToHome()
+    @Test fun navigateToPhone() = testNavigateToPhone()
+    @Test fun navigateToCalc() = testNavigateToCalc()
+    @Test fun navigateToDate() = testNavigateToDate()
+    @Test fun navigateToOtp() = testNavigateToOtp()
 
-    @Test
-    fun navigateToPhone() {
-        onView(withId(R.id.navigationPhone)).perform(click())
-        actionBar.check(matches(withTitle("Bad Phone Selectors")))
-    }
-
-    @Test
-    fun expandCollapseAttributions() = testExpandCollapseAttributions()
+    @Test fun expandCollapseAttributions() = testExpandCollapseAttributions()
 
     @Test
     fun expandFlaticonMessageAndAttributions() {
@@ -134,6 +133,9 @@ class AttributionsFragmentTest {
 
         expandCollapseAttribution(1)
         checkImagesDisplayed(listOf(0, 1))
+
+        expandCollapseAttribution(2)
+        checkImagesDisplayed(listOf(0, 1, 2))
     }
 
     @Test
@@ -203,6 +205,5 @@ class AttributionsFragmentTest {
         onView(withText("Collapse")).check(doesNotExist())
     }
 
-    @Test
-    fun attributionsLinks() = testAttributionLinks()
+    @Test fun attributionsLinks() = testAttributionLinks()
 }

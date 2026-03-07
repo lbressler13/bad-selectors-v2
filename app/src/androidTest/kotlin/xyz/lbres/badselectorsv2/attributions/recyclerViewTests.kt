@@ -34,18 +34,26 @@ fun testExpandCollapseAttributions() {
     // expand all
     expandCollapseAttribution(1)
     checkImagesDisplayed(listOf(1))
-    checkImagesNotPresented(listOf(0))
+    checkImagesNotPresented(listOf(0, 2))
 
     expandCollapseAttribution(0)
     checkImagesDisplayed(listOf(0, 1))
+    checkImagesNotPresented(listOf(2))
+
+    expandCollapseAttribution(2)
+    checkImagesDisplayed(listOf(0, 1, 2))
 
     // collapse
     expandCollapseAttribution(1)
-    checkImagesDisplayed(listOf(0))
+    checkImagesDisplayed(listOf(0, 2))
     checkImagesNotPresented(listOf(1))
 
+    expandCollapseAttribution(2)
+    checkImagesDisplayed(listOf(0))
+    checkImagesNotPresented(listOf(1, 2))
+
     expandCollapseAttribution(0)
-    checkImagesNotPresented(listOf(0, 1))
+    checkImagesNotPresented(listOf(0, 1, 2))
 }
 
 fun testAttributionLinks() {
@@ -70,8 +78,9 @@ fun testAttributionLinks() {
     }
 
     // images
-    expandCollapseAttribution(0)
-    expandCollapseAttribution(1)
+    repeat(authorAttributions.size) {
+        expandCollapseAttribution(it)
+    }
     for (position in imageUrls.indices) {
         attributionsRecycler.perform(scrollToAuthorPosition(position))
         val urls = imageUrls[position]

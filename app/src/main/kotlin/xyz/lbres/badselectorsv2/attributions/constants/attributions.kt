@@ -9,6 +9,8 @@ import xyz.lbres.badselectorsv2.attributions.ImageAttribution
  */
 
 private val freepikImages = listOf(
+    ImageAttribution(R.drawable.ic_calculator, R.string.calculator_cd, calculatorUrl),
+    ImageAttribution(R.drawable.ic_cell_phone, R.string.cell_phone_cd, cellPhoneUrl),
     ImageAttribution(R.drawable.ic_chevron_down, R.string.chevron_down_cd, chevronDownUrl),
     ImageAttribution(R.drawable.ic_chevron_left, R.string.chevron_left_cd, chevronLeftUrl),
     ImageAttribution(R.drawable.ic_chevron_right, R.string.chevron_right_cd, chevronRightUrl),
@@ -24,6 +26,10 @@ private val ilhamFitrotulHayatImages = listOf(
     ImageAttribution(R.drawable.ic_phone, R.string.phone_cd, phoneUrl),
 )
 
+private val prosymbolsPremiumImages = listOf(
+    ImageAttribution(R.drawable.ic_calendar, R.string.calendar_cd, calendarUrl),
+)
+
 /**
  * Constant list of author attributions, including the above image attributions
  */
@@ -31,4 +37,5 @@ private val ilhamFitrotulHayatImages = listOf(
 val authorAttributions = listOf(
     AuthorAttribution("Freepik", freepikUrl, freepikImages),
     AuthorAttribution("Ilham Fitrotul Hayat", ilhamFitrotulHayatUrl, ilhamFitrotulHayatImages),
+    AuthorAttribution("Prosymbols Premium", prosymbolsPremiumUrl, prosymbolsPremiumImages),
 )

@@ -5,6 +5,8 @@
 
     <string name="select">Select</string>
 
+    <string name="placeholder">Under construction!</string>
+
 
     <!-- Home -->
     <string name="title_home">Home</string>
@@ -18,6 +20,21 @@
 
     <!-- Phone Shuffle Circle -->
     <string name="title_shuffle_circle">Shuffle Circle</string>
+
+
+    <!-- Date -->
+    <string name="appbar_title_date">Bad Date Selectors</string>
+    <string name="title_date">Date</string>
+
+
+    <!-- Calculator -->
+    <string name="appbar_title_calc">Bad Calculators</string>
+    <string name="title_calc">Calculator</string>
+
+
+    <!-- OTP -->
+    <string name="appbar_title_otp">Bad OTP Receivers</string>
+    <string name="title_otp">OTP</string>
 
 
     <!-- Attributions -->
@@ -34,6 +51,9 @@
 
 
     <!-- Content Descriptions -->
+    <string name="calendar_cd">Date</string>
+    <string name="calculator_cd">Calculator</string>
+    <string name="cell_phone_cd">Cell Phone</string>
     <string name="chevron_down_cd">Down chevron</string>
     <string name="chevron_left_cd">Left chevron</string>
     <string name="chevron_right_cd">Right chevron</string>

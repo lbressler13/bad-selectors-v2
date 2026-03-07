@@ -14,10 +14,14 @@ const val flaticonAttrPolicyUrl = "https://support.flaticon.com/s/article/Attrib
  */
 const val freepikUrl = "https://www.flaticon.com/authors/freepik"
 const val ilhamFitrotulHayatUrl = "https://www.flaticon.com/authors/ilham-fitrotul-hayat"
+const val prosymbolsPremiumUrl = "https://www.flaticon.com/authors/prosymbols-premium"
 
 /**
  * Image URLs
  */
+const val calendarUrl = "https://www.flaticon.com/premium-icon/calendar_2886665"
+const val calculatorUrl = "https://www.flaticon.com/premium-icon/calculator_1031688"
+const val cellPhoneUrl = "https://www.flaticon.com/free-icon/mobile-phone-with-nine-keys_77184"
 const val chevronDownUrl = "https://www.flaticon.com/premium-icon/down-chevron_1633716"
 const val chevronLeftUrl = "https://www.flaticon.com/premium-icon/left-chevron_1633718"
 const val chevronRightUrl = "https://www.flaticon.com/premium-icon/right-chevron_1633719"
