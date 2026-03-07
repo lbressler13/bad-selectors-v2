@@ -61,8 +61,9 @@ class DeveloperToolsDialogTest {
     @Test fun calcFragment() = testForFragment(R.id.navigationCalc)
     @Test fun dateFragment() = testForFragment(R.id.navigationDate)
 
-    private fun testForFragment(buttonId: Int) {
-        onView(withId(buttonId)).perform(click())
+    // test dialog on each fragment
+    private fun testForFragment(openFragmentButtonId: Int) {
+        onView(withId(openFragmentButtonId)).perform(click())
         openDevTools()
         onView(withText("Developer Tools")).check(matches(isDisplayed()))
     }

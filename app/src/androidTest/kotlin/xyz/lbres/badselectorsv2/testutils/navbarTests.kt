@@ -1,6 +1,5 @@
 package xyz.lbres.badselectorsv2.testutils
 
-import android.util.Log
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -54,9 +53,6 @@ private class HasSelectedItem(private val selectedViewId: Int) :
     }
 
     override fun matchesSafely(item: View?): Boolean {
-        if (item is BottomNavigationView) {
-            Log.e(null, "Expected: $selectedViewId, Actual: ${item.selectedItemId}")
-        }
         return item is BottomNavigationView && item.selectedItemId == selectedViewId
     }
 }

@@ -24,8 +24,6 @@ import xyz.lbres.badselectorsv2.testutils.testNavigateToHome
 import xyz.lbres.badselectorsv2.testutils.testNavigateToOtp
 import xyz.lbres.badselectorsv2.testutils.testNavigateToPhone
 
-// TODO check selected navbar icon
-
 @RunWith(AndroidJUnit4::class)
 class PhoneTabFragmentTest {
     @Rule

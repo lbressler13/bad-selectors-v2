@@ -34,7 +34,7 @@ class OTPTabFragment : TabFragment() {
      * @return [Fragment]
      */
     override fun getFragmentFromPosition(position: Int): Fragment {
-        throw NotImplementedError("CalculatorTabFragment has no tabs")
+        throw NotImplementedError("OTPTabFragment has no tabs")
     }
 
     companion object {
