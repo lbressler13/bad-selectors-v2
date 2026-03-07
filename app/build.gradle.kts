@@ -164,12 +164,12 @@ dependencies {
 
     // testing
     testImplementation(kotlin("test"))
-    testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("org.robolectric:robolectric:$robolectricVersion")
     testImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     testImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     testImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
-    testImplementation("androidx.test.ext:junit-ktx:${androidxJunitVersion}")
+    testImplementation("androidx.test.ext:junit-ktx:$androidxJunitVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("org.robolectric:robolectric:$robolectricVersion")
     // https://developer.android.com/guide/fragments/test
     debugImplementation("androidx.fragment:fragment-testing-manifest:$androidxFragmentVersion")
     testImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")

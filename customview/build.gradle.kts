@@ -53,6 +53,7 @@ dependencies {
     val androidxJunitVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
     val mockkVersion: String by rootProject.extra
+    val robolectricVersion: String by rootProject.extra
 
     implementation("androidx.core:core-ktx:$androidxCoreVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -61,9 +62,10 @@ dependencies {
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
 
     testImplementation(kotlin("test"))
+    testImplementation("androidx.test.ext:junit:$androidxJunitVersion")
+    testImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+    testImplementation("org.robolectric:robolectric:$robolectricVersion")
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
