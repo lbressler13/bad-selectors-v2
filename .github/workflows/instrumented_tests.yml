@@ -25,4 +25,6 @@ jobs:
           cache: gradle
 
       - name: Tests
-        run: ./gradlew :app:test --stacktrace --tests
+        run: |
+          ./gradlew testDevDebugUnitTest --tests xyz.lbres.badselectorsv2.ui.*
+          ./gradlew testDevFinalUnitTest --tests xyz.lbres.badselectorsv2.ui.*
