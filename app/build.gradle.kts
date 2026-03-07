@@ -79,6 +79,14 @@ android {
         java.setSrcDirs(listOf("src/test/kotlin"))
     }
 
+    sourceSets.getByName("testDev") {
+        java.setSrcDirs(listOf("src/testDev/kotlin"))
+    }
+
+    sourceSets.getByName("testFinal") {
+        java.setSrcDirs(listOf("src/testFinal/kotlin"))
+    }
+
     sourceSets.getByName("androidTest") {
         java.setSrcDirs(listOf("src/androidTest/kotlin"))
     }
@@ -164,6 +172,7 @@ dependencies {
     testImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
     // https://developer.android.com/guide/fragments/test
     debugImplementation("androidx.fragment:fragment-testing-manifest:$androidxFragmentVersion")
+    testImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
     androidTestImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")

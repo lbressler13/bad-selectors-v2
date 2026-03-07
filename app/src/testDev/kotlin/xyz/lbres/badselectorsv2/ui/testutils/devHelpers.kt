@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.testutils
+package xyz.lbres.badselectorsv2.ui.testutils
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -11,4 +11,11 @@ import xyz.lbres.badselectorsv2.R
  */
 fun openDevTools() {
     onView(withId(R.id.devToolsButton)).perform(click())
+}
+
+/**
+ * Close dialog
+ */
+fun closeDialog() {
+    onView(withText("Done")).perform(click())
 }
