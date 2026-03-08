@@ -108,7 +108,8 @@ class SingleChildLayoutManagerTest {
 
         // throws correct exception
         assertFailsWithMessage<UnsupportedOperationException>(expectedError) {
-            manager.modifyChildren { 1 / 0 }
+            fun div(x: Int, y: Int) = x / y
+            manager.modifyChildren { div(1, 0) }
         }
 
         var modified = false
