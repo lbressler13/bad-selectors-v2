@@ -18,7 +18,9 @@ import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.phone.shufflecircle.DigitShuffler
 import xyz.lbres.badselectorsv2.phone.shufflecircle.ShuffleCircleFragment
@@ -30,6 +32,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.listOfNulls
 
+@Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class ShuffleCircleFragmentTest {
     private val selectButton = onView(withId(R.id.selectButton))

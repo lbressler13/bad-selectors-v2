@@ -7,14 +7,8 @@ plugins {
 }
 
 fun getEspressoRetries(): Int {
-    val defaultRetries = 0
-
-    return if (project.hasProperty("espressoRetries")) {
-        val espressoRetries: String? by project
-        espressoRetries?.toIntOrNull() ?: defaultRetries
-    } else {
-        defaultRetries
-    }
+    val espressoRetries: String? by project
+    return espressoRetries?.toIntOrNull() ?: 0
 }
 
 android {
@@ -106,13 +100,24 @@ android {
 
     testOptions {
         animationsDisabled = true
-        unitTests {
-            isIncludeAndroidResources = true
-        }
         // resolves mockk issue: https://github.com/mockk/mockk/issues/297
         packaging {
             jniLibs {
                 useLegacyPackaging = true
+            }
+        }
+        unitTests {
+            // needed for robolectric
+            isIncludeAndroidResources = true
+
+            all { test ->
+                test.useJUnit {
+                    val testType: String? by project
+                    when (testType?.lowercase()) {
+                        "unit" -> excludeCategories("org.robolectric.Robolectric")
+                        "robolectric" -> includeCategories("org.robolectric.Robolectric")
+                    }
+                }
             }
         }
     }
@@ -164,7 +169,7 @@ dependencies {
 
     // testing
     testImplementation(kotlin("test"))
-    testImplementation("androidx.fragment:fragment-testing:${androidxFragmentVersion}")
+    testImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
     testImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
     testImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
     testImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")

@@ -11,7 +11,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
@@ -25,6 +27,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.testNavigateToOtp
 import xyz.lbres.badselectorsv2.ui.testutils.testNavigateToPhone
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 
+@Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class HomeFragmentTest {
     var scenario: ActivityScenario<BaseActivity>? = null

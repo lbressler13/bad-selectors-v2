@@ -13,12 +13,15 @@ import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 import xyz.lbres.badselectorsv2.ui.testutils.openDevTools
 
+@Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class DeveloperToolsDialogTest {
     private var scenario: ActivityScenario<BaseActivity>? = null

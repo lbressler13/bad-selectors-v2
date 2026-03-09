@@ -22,7 +22,9 @@ import org.hamcrest.core.AllOf.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.ProductFlavor
 import xyz.lbres.badselectorsv2.R
@@ -41,6 +43,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.viewactions.clickLinkInText
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 
+@Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class AttributionsFragmentTest {
     var scenario: ActivityScenario<BaseActivity>? = null
