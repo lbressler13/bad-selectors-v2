@@ -1,11 +1,8 @@
-package xyz.lbres.badselectorsv2.ui.phone.shufflecircle
+package xyz.lbres.badselectorsv2.phone.shufflecircle
 
-import androidx.test.core.app.ActivityScenario
+import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -15,27 +12,20 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import org.hamcrest.core.AllOf.allOf
+import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
-import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
-import xyz.lbres.badselectorsv2.phone.shufflecircle.DigitShuffler
-import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
-import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
-import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
-import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
-import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
-import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
+import xyz.lbres.badselectorsv2.phone.checkPhoneNumber
+import xyz.lbres.badselectorsv2.testutils.isDisabled
+import xyz.lbres.badselectorsv2.testutils.matchers.atIndex
+import xyz.lbres.badselectorsv2.testutils.viewactions.forceClick
+import xyz.lbres.badselectorsv2.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.listOfNulls
 
-@Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class ShuffleCircleFragmentTest {
     private val selectButton = onView(withId(R.id.selectButton))
@@ -50,7 +40,7 @@ class ShuffleCircleFragmentTest {
 
     @Test
     fun initialUi() {
-        launchFragment()
+        launchFragmentInContainer<ShuffleCircleFragment>()
         checkInitialUi()
 
         // validate circle button count
@@ -83,8 +73,8 @@ class ShuffleCircleFragmentTest {
         val phoneNumber = turns.map { it[it.lastIndex].second }
 
         mockDigitShuffler(returnValues)
-        launchFragment()
 
+        launchFragmentInContainer<ShuffleCircleFragment>()
         turns.forEachIndexed { index, turn ->
             turn.forEach {
                 val buttonIndex = it.first
@@ -104,7 +94,7 @@ class ShuffleCircleFragmentTest {
     fun restart() {
         val returnValues = (0..9).toList()
         mockDigitShuffler(returnValues)
-        launchFragment()
+        launchFragmentInContainer<ShuffleCircleFragment>()
         repeat(10) {
             circleButton(0).perform(forceClick())
             selectButton.perform(forceClick())
@@ -123,7 +113,7 @@ class ShuffleCircleFragmentTest {
         mockDigitShuffler(returnValues)
         every { constructedWith<DigitShuffler>().digit } returnsMany digitPropValues
 
-        val scenario = launchFragment()
+        val scenario = launchFragmentInContainer<ShuffleCircleFragment>()
 
         // set first 2 digits
         repeat(2) {
@@ -184,21 +174,6 @@ class ShuffleCircleFragmentTest {
         mockkConstructor(DigitShuffler::class)
         every { constructedWith<DigitShuffler>().getAtIndex(any(), any()) } returnsMany returnValues
         justRun { constructedWith<DigitShuffler>().update() }
-    }
-
-    // cannot launch scenario in before block due to mocking requirements
-    private fun launchFragment(): ActivityScenario<BaseActivity> {
-        val scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        navToFragment()
-        return scenario
-    }
-
-    // navigate from home screen to fragment
-    private fun navToFragment() {
-        val clickExpandCollapse = actionOnChildWithId(R.id.expandCollapseButton, click())
-        val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
-        selectorGroupRecycler.perform(actionOnItemAtPosition<SelectorGroupViewHolder>(0, clickExpandCollapse))
-        onView(withText("Shuffle Circle")).perform(scrollTo(), click())
     }
 
     private fun checkRestartUi(phoneNumber: List<Int>) {
