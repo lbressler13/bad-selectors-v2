@@ -3,7 +3,7 @@
         java.setSrcDirs(listOf("src/final/kotlin"))
     }
 
-[![All Checks](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml)
+[![All Tests](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml)
 
 ## Overview
 
@@ -37,26 +37,24 @@ See [here](https://docs.github.com/en/packages/working-with-a-github-packages-re
 
 ## Testing
 
-### Unit Tests
-
 Unit tests are implemented using the Kotlin test library. 
 See [here](https://kotlinlang.org/api/latest/kotlin.test/) for information about the library.
 
-Unit tests can be run via an IDE, or with the following command:
-```./gradlew test```
+Integrated tests are implemented using the [Espresso](https://developer.android.com/training/testing/espresso) framework with [Robolectric](https://robolectric.org/).
+This allows integrated tests to run without a physical device or emulator.
 
-### UI Tests
+Tests can be run with the following commands:
+- Unit tests: `./gradlew test -PtestType=unit`
+- Integrated tests: `./gradlew test -PtestType=robolectric`
+- All tests: `./gradlew test`
 
-UI tests are implemented using the Espresso framework.
-Tests can be configured for an individual build flavor, or can be shared across flavors.
+Tests can also be run by build type and variant, such as `./gradlew testDevDebugUnitTest -PtestType=robolectric`
 
-Tests can be run via an IDE, or with the following commands:
-* All tests for both flavors: `./gradlew connectedCheck`
-* Dev build flavor only: `./gradlew connectedDevDebugAndroidTest`
-* Final build flavor only: `./gradlew connectedFinalDebugAndroidTest`
+Note: Tests for hiding the dev tools button have not been moved to Robolectric due to issues with the looper. However, all other tests should be run with Robolectric.
+These tests can be run with the following command:
+```./gradlew connectedCheck```
 
-Espresso tests must be run on a physical device or an emulator.
-See [here](https://developer.android.com/training/testing/espresso) for more information about testing with Espresso.
+See the Android docs for more information on testing with [Espresso](https://developer.android.com/training/testing/espresso) and [Robolectric](https://developer.android.com/training/testing/local-tests/robolectric).
 
 ## Linting
 

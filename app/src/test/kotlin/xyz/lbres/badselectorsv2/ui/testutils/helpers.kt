@@ -32,4 +32,7 @@ fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
  */
 fun isDisabled() = not(isEnabled())
 
+/**
+ * Match a view within a dialog
+ */
 fun onViewInDialog(matcher: Matcher<View>) = onView(matcher).inRoot(isDialog())

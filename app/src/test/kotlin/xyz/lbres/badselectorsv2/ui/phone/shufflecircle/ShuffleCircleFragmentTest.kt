@@ -40,7 +40,6 @@ class ShuffleCircleFragmentTest {
     private val currentDigit = onView(withId(R.id.currentDigit))
     private val circleButton = { idx: Int -> onView(atIndex(withId(R.id.circleLayout), idx)) }
 
-    // TODO convert to activity scenario?
     private var scenario: FragmentScenario<ShuffleCircleFragment>? = null
 
     @Before
