@@ -1,10 +1,12 @@
 package xyz.lbres.badselectorsv2.ui.phone
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.After
 import org.junit.Before
@@ -32,7 +34,7 @@ class PhoneTabFragmentTest {
     @Before
     fun setupTest() {
         scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        Espresso.onView(ViewMatchers.withId(R.id.navigationPhone)).perform(ViewActions.click())
+        onView(withId(R.id.navigationPhone)).perform(click())
     }
 
     @After
@@ -43,19 +45,13 @@ class PhoneTabFragmentTest {
     @Test
     fun initialUi() {
         actionBar.check(ViewAssertions.matches(withTitle("Bad Phone Selectors")))
-        Espresso.onView(withTab("Shuffle Circle"))
-            .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
+        onView(withTab("Shuffle Circle")).check(matches(isCompletelyDisplayed()))
         testNavbarUi(R.id.navigationPhone, "Phone")
     }
 
-    @Test
-    fun navigateToHome() = testNavigateToHome()
-    @Test
-    fun navigateToSelf() = testNavigateToPhone()
-    @Test
-    fun navigateToCalc() = testNavigateToCalc()
-    @Test
-    fun navigateToDate() = testNavigateToDate()
-    @Test
-    fun navigateToOtp() = testNavigateToOtp()
+    @Test fun navigateToHome() = testNavigateToHome()
+    @Test fun navigateToSelf() = testNavigateToPhone()
+    @Test fun navigateToCalc() = testNavigateToCalc()
+    @Test fun navigateToDate() = testNavigateToDate()
+    @Test fun navigateToOtp() = testNavigateToOtp()
 }
