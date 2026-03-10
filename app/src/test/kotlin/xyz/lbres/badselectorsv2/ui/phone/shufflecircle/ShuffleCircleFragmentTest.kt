@@ -189,16 +189,11 @@ class ShuffleCircleFragmentTest {
     // cannot launch scenario in before block due to mocking requirements
     private fun launchFragment(): ActivityScenario<BaseActivity> {
         val scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        navToFragment()
-        return scenario
-    }
-
-    // navigate from home screen to fragment
-    private fun navToFragment() {
         val clickExpandCollapse = actionOnChildWithId(R.id.expandCollapseButton, click())
         val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
         selectorGroupRecycler.perform(actionOnItemAtPosition<SelectorGroupViewHolder>(0, clickExpandCollapse))
         onView(withText("Shuffle Circle")).perform(scrollTo(), click())
+        return scenario
     }
 
     private fun checkRestartUi(phoneNumber: List<Int>) {

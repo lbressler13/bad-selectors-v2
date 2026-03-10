@@ -59,12 +59,8 @@ jobs:
           distribution: corretto
           java-version: 17
 
-      - name: Set Test Types
-        run:
-
-
       - name: Tests
-        run: ./gradlew :app:test -PtestType=${{ inputs.testType }} --stacktrace
+        run: ./gradlew :app:test -PtestType=${{ inputs.testType || unit }} --stacktrace
 
   customview-unit-tests:
     name: "Unit Tests (customview module)"
