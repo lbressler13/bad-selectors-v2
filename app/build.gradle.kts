@@ -7,14 +7,8 @@ plugins {
 }
 
 fun getEspressoRetries(): Int {
-    val defaultRetries = 0
-
-    return if (project.hasProperty("espressoRetries")) {
-        val espressoRetries: String? by project
-        espressoRetries?.toIntOrNull() ?: defaultRetries
-    } else {
-        defaultRetries
-    }
+    val espressoRetries: String? by project
+    return espressoRetries?.toIntOrNull() ?: 0
 }
 
 android {
@@ -79,6 +73,14 @@ android {
         java.setSrcDirs(listOf("src/test/kotlin"))
     }
 
+    sourceSets.getByName("testDev") {
+        java.setSrcDirs(listOf("src/testDev/kotlin"))
+    }
+
+    sourceSets.getByName("testFinal") {
+        java.setSrcDirs(listOf("src/testFinal/kotlin"))
+    }
+
     sourceSets.getByName("androidTest") {
         java.setSrcDirs(listOf("src/androidTest/kotlin"))
     }
@@ -104,6 +106,20 @@ android {
                 useLegacyPackaging = true
             }
         }
+        unitTests {
+            // needed for robolectric
+            isIncludeAndroidResources = true
+
+            all { test ->
+                test.useJUnit {
+                    val testType: String? by project
+                    when (testType?.lowercase()) {
+                        "unit" -> excludeCategories("org.robolectric.Robolectric")
+                        "robolectric" -> includeCategories("org.robolectric.Robolectric")
+                    }
+                }
+            }
+        }
     }
 
     compileOptions {
@@ -122,7 +138,6 @@ dependencies {
     val kotlinVersion: String by rootProject.extra
 
     val androidxCoreVersion: String by rootProject.extra
-    val androidxFragmentVersion: String by rootProject.extra
     val appCompatVersion: String by rootProject.extra
     val constraintLayoutVersion: String by rootProject.extra
     val kotlinUtilsVersion: String by rootProject.extra
@@ -132,10 +147,9 @@ dependencies {
 
     val androidxJunitVersion: String by rootProject.extra
     val androidxTestRulesVersion: String by rootProject.extra
-    val androidxTestRunnerVersion: String by rootProject.extra
-    val androidxTracingVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
     val mockkVersion: String by rootProject.extra
+    val robolectricVersion: String by rootProject.extra
 
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
@@ -152,23 +166,15 @@ dependencies {
 
     // testing
     testImplementation(kotlin("test"))
+    testImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+    testImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
+    testImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
+    testImplementation("androidx.test.ext:junit-ktx:$androidxJunitVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    // https://developer.android.com/guide/fragments/test
-    debugImplementation("androidx.fragment:fragment-testing-manifest:$androidxFragmentVersion")
-    androidTestImplementation("androidx.fragment:fragment-testing:$androidxFragmentVersion")
+    testImplementation("org.robolectric:robolectric:$robolectricVersion")
     androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
     androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")
-    androidTestImplementation("androidx.test:runner:$androidxTestRunnerVersion") // needed to run on emulator
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
-    androidTestImplementation("io.mockk:mockk-android:$mockkVersion")
-
-    configurations.all {
-        resolutionStrategy {
-            force("androidx.tracing:tracing:$androidxTracingVersion")
-        }
-    }
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {

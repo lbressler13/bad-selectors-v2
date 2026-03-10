@@ -1,6 +1,5 @@
 // main dependencies
 val androidxCoreVersion by extra { "1.13.1" }
-val androidxFragmentVersion by extra { "1.8.9" }
 val appCompatVersion by extra { "1.7.0" }
 val constraintLayoutVersion by extra { "2.1.4" }
 val kotlinUtilsVersion by extra { "1.3.4" }
@@ -13,15 +12,15 @@ val navigationVersion by extra { "2.8.3" }
 val androidxJunitVersion by extra { "1.3.0" }
 val androidxTestRulesVersion by extra { "1.7.0" }
 val androidxTestRunnerVersion by extra { "1.7.0" }
-val androidxTracingVersion by extra { "1.3.0" }
 val espressoVersion by extra { "3.7.0" }
 val mockkVersion by extra { "1.14.9" }
+val robolectricVersion by extra { "4.16.1" }
 
 // android configurations
 val androidCompileSdk by extra { 35 }
 val androidJavaVersion by extra { JavaVersion.VERSION_11 }
 val androidJvmTarget by extra { "11" }
-val androidMinSdk by extra { 29 } // maximum sdk available in tester used in github actions
+val androidMinSdk by extra { 35 }
 
 // ktlint
 val ktlintVersion by extra { "0.49.1" }

@@ -1,4 +1,4 @@
-name: All Checks
+name: All Tests
 
 on:
   workflow_dispatch:
@@ -9,11 +9,8 @@ on:
 jobs:
   lint-test:
     name: "Lint and Test"
-    uses: ./.github/workflows/basic_checks.yml
+    uses: ./.github/workflows/lint_test.yml
     secrets: inherit
-
-  # TODO uncomment when repo is public
-  # espresso-tests:
-    # name: "Espresso Tests"
-    # uses: ./.github/workflows/espresso_tests.yml
-    # secrets: inherit
+    with:
+      # testType: all
+      testType: unit
