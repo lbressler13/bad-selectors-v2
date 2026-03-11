@@ -1,7 +1,7 @@
 package xyz.lbres.badselectorsv2.calculator.singleoperation
 
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
-import xyz.lbres.badselectorsv2.calculator.common.CalcData
+import xyz.lbres.badselectorsv2.calculator.utils.CalcData
 
 /**
  * ViewModel containing values that are specific to the single operation calculator.

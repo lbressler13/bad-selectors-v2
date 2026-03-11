@@ -1,7 +1,7 @@
 package xyz.lbres.badselectorsv2.calculator
 
 import androidx.lifecycle.ViewModel
-import xyz.lbres.badselectorsv2.calculator.common.CalcData
+import xyz.lbres.badselectorsv2.calculator.utils.CalcData
 import xyz.lbres.kotlinutils.list.ext.copyWithoutLast
 
 /**
@@ -39,6 +39,14 @@ abstract class BaseCalculatorViewModel : ViewModel() {
      */
     fun setResult(computedValue: Int?, error: String?) {
         calcData = CalcData(calcData.computeText, computedValue, error)
+    }
+
+    /**
+     * Replace compute text list with the computed value
+     */
+    fun useComputedAsComputeText() {
+        val computed = calcData.computedValue!!.toString()
+        calcData = CalcData(listOf(computed), null, null)
     }
 
     /**

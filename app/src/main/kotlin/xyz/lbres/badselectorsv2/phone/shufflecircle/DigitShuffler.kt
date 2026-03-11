@@ -1,6 +1,6 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
-import xyz.lbres.badselectorsv2.phone.common.digitsRange
+import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.utils.createRandom
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled

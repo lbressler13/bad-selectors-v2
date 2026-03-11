@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.calculator.common.UnprotectedScrollingMovementMethod
+import xyz.lbres.badselectorsv2.calculator.utils.UnprotectedScrollingMovementMethod
 import xyz.lbres.badselectorsv2.ext.view.disable
 import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.badselectorsv2.utils.getColorOnPrimary
@@ -16,7 +16,7 @@ import xyz.lbres.badselectorsv2.utils.setImageButtonTint
  */
 abstract class BaseCalculatorFragment : Fragment() {
     protected abstract val calculatorViewModel: BaseCalculatorViewModel
-    protected abstract var rootView: View
+    protected abstract val rootView: View
 
     /**
      * Text size for mainText, depending on the current state
@@ -47,8 +47,8 @@ abstract class BaseCalculatorFragment : Fragment() {
         R.id.minusButton,
         R.id.timesButton,
         R.id.divideButton,
-        // R.id.backspaceButton,
-        // R.id.equalsButton,
+        R.id.backspaceButton,
+        R.id.equalsButton,
         R.id.clearButton,
     )
 
@@ -97,18 +97,18 @@ abstract class BaseCalculatorFragment : Fragment() {
         }
 
         // backspace button
-        // rootView.findViewById<View>(R.id.backspaceButton)?.setOnClickListener {
-        // handleBackspace()
-        // updateMainText()
-        // }
+        rootView.findViewById<View>(R.id.backspaceButton)?.setOnClickListener {
+            handleBackspace()
+            updateMainText()
+        }
 
         // equals button
-        // rootView.findViewById<View>(R.id.equalsButton)?.setOnClickListener {
-        // if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
-        // handleEquals()
-        // updateMainText()
-        // }
-        // }
+        rootView.findViewById<View>(R.id.equalsButton)?.setOnClickListener {
+            if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
+                handleEquals()
+                updateMainText()
+            }
+        }
     }
 
     /**

@@ -15,6 +15,7 @@ private val freepikImages = listOf(
     ImageAttribution(R.drawable.ic_chevron_left, R.string.chevron_left_cd, chevronLeftUrl),
     ImageAttribution(R.drawable.ic_chevron_right, R.string.chevron_right_cd, chevronRightUrl),
     ImageAttribution(R.drawable.ic_chevron_up, R.string.chevron_up_cd, chevronUpUrl),
+    ImageAttribution(R.drawable.ic_equals, R.string.equals_cd, equalsUrl),
     ImageAttribution(R.drawable.ic_home, R.string.home_cd, homeUrl),
     ImageAttribution(R.drawable.ic_info, R.string.info_cd, infoUrl),
     ImageAttribution(R.drawable.ic_minus, R.string.minus_cd, minusUrl),
@@ -24,6 +25,7 @@ private val freepikImages = listOf(
 )
 
 private val iconSmartImages = listOf(
+    ImageAttribution(R.drawable.ic_arrow_left, R.string.backspace_cd, arrowLeftUrl),
     ImageAttribution(R.drawable.ic_divide, R.string.divide_cd, divideUrl),
 )
 

@@ -14,8 +14,8 @@ import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.ext.viewgroup.setChildOnClickListener
 import xyz.lbres.badselectorsv2.phone.BasePhoneFragment
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
-import xyz.lbres.badselectorsv2.phone.common.maxDigit
-import xyz.lbres.badselectorsv2.phone.common.numDigits
+import xyz.lbres.badselectorsv2.phone.utils.maxDigit
+import xyz.lbres.badselectorsv2.phone.utils.numDigits
 
 /**
  * Fragment that displays an unlabelled button circle layout, where values are shuffled when a user selects a value.
