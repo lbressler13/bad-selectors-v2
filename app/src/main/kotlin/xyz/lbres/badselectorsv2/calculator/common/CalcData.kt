@@ -2,8 +2,6 @@ package xyz.lbres.badselectorsv2.calculator.common
 
 import xyz.lbres.kotlinutils.list.StringList
 
-// TODO might delete this?
-
 /**
  * All data about the current state of a calculation.
  *
@@ -13,4 +11,8 @@ import xyz.lbres.kotlinutils.list.StringList
  */
 data class CalcData(val computeText: StringList, val computedValue: Int?, val error: String?) {
     constructor() : this(emptyList(), null, null)
+
+    fun withText(newText: StringList): CalcData {
+        return CalcData(newText, computedValue, error)
+    }
 }

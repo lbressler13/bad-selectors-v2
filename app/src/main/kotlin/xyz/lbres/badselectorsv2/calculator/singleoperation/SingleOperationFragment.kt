@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.common.runComputation
-import xyz.lbres.badselectorsv2.calculator.common.standardOperatorFunction
 import xyz.lbres.badselectorsv2.databinding.FragmentSingleOperationBinding
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
@@ -69,8 +68,8 @@ class SingleOperationFragment : BaseCalculatorFragment() {
         val size = viewModel.calcData.computeText.size
 
         when (size) {
-            0, 2 -> setButtonsClickability(operatorsClickable = false, numbersClickable = true)
-            1 -> setButtonsClickability(operatorsClickable = true, numbersClickable = false)
+            0, 2 -> setButtonsClickable(operatorsClickable = false, numbersClickable = true)
+            1 -> setButtonsClickable(operatorsClickable = true, numbersClickable = false)
             3 -> doComputation()
             else -> {
                 viewModel.setResult(null, "Err: Invalid computation")
@@ -84,12 +83,9 @@ class SingleOperationFragment : BaseCalculatorFragment() {
      */
     private fun doComputation() {
         try {
-            val computedValue: Int = runComputation(
-                viewModel.calcData.computeText,
-                listOf("x", "/"),
-                listOf("+", "-"),
-                standardOperatorFunction(),
-            )
+            val operator = viewModel.calcData.computeText[1]
+            val computedValue: Int =
+                runComputation(viewModel.calcData.computeText, operatorRounds = listOf(listOf(operator)))
 
             viewModel.setResult(computedValue, null)
         } catch (e: Exception) {
@@ -110,7 +106,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
      */
     override fun resetUi() {
         super.resetUi()
-        setButtonsClickability(operatorsClickable = false, numbersClickable = true)
+        setButtonsClickable(operatorsClickable = false, numbersClickable = true)
         binding.clearButton.gone()
     }
 
@@ -121,7 +117,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
         super.showErrorUi()
         binding.clearButton.visible()
         // set all to full opacity to appear consistent when disabled
-        setButtonsClickability(operatorsClickable = false, numbersClickable = false)
+        setButtonsClickable(operatorsClickable = false, numbersClickable = false)
     }
 
     /**
@@ -130,7 +126,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
      * @param operatorsClickable [Boolean]: if operator buttons should be clickable
      * @param numbersClickable [Boolean]: if number buttons should be clickable
      */
-    private fun setButtonsClickability(operatorsClickable: Boolean, numbersClickable: Boolean) {
+    private fun setButtonsClickable(operatorsClickable: Boolean, numbersClickable: Boolean) {
         setSingleButtonClickability(binding.plusButton, operatorsClickable)
         setSingleButtonClickability(binding.minusButton, operatorsClickable)
         setSingleButtonClickability(binding.timesButton, operatorsClickable)

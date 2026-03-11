@@ -99,16 +99,16 @@ abstract class BaseCalculatorFragment : Fragment() {
 
         // backspace button
         // rootView.findViewById<View>(R.id.backspaceButton)?.setOnClickListener {
-            // handleBackspace()
-            // updateMainText()
+        // handleBackspace()
+        // updateMainText()
         // }
 
         // equals button
         // rootView.findViewById<View>(R.id.equalsButton)?.setOnClickListener {
-            // if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
-                // handleEquals()
-                // updateMainText()
-            // }
+        // if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
+        // handleEquals()
+        // updateMainText()
+        // }
         // }
     }
 
@@ -125,6 +125,7 @@ abstract class BaseCalculatorFragment : Fragment() {
                 resetUi()
             }
 
+            // scroll to top after hitting entre
             calcData.computedValue != null -> {
                 mainText.text = calcData.computedValue.toString()
                 getMainTextMovementMethod().goToTop(mainText)
@@ -137,6 +138,7 @@ abstract class BaseCalculatorFragment : Fragment() {
                 showErrorUi()
             }
 
+            // scroll to bottom after typing new value
             else -> {
                 mainText.text = calcData.computeText.joinToString(computeSeparator)
                 getMainTextMovementMethod().goToBottom(getMainText())

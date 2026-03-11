@@ -33,7 +33,7 @@ private val ilhamFitrotulHayatImages = listOf(
 )
 
 private val pixelPerfectImages = listOf(
-    ImageAttribution(R.drawable.ic_times, R.string.times_cd, timesUrl)
+    ImageAttribution(R.drawable.ic_times, R.string.times_cd, timesUrl),
 )
 
 private val prosymbolsPremiumImages = listOf(

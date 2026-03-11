@@ -13,18 +13,18 @@ import kotlin.NumberFormatException
  * Includes list validation, modifying the list based on parameters, and running the computation itself.
  *
  * @param computeText [StringList]: list of string values to parse, consisting of operators and number
- * @param firstRoundOps [StringList]: list of operators to be applied in first round of computation, likely multiplication and division
- * @param secondRoundOps [StringList]: list of operators to be applied in second round of computation, likely addition and subtraction
- * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
+ * @param operatorRounds List<[StringList]>: lists of operators to be applied in a single round of computation.
+ * Defaults to 2 rounds, with multiplication and division in the first round and addition and subtraction in the second round
+ * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers.
+ * Defaults to a function that performs the standard operation for each operator
  * @param numbersOrder [IntList]?: list of numbers, which can be used to reassign the values of digits
  * @param buildMultiDigit [Boolean]: if separate digits should be combined to form multidigit numbers. Defaults to false.
  * @return [Int] result of parsing
  */
 fun runComputation(
     computeText: StringList,
-    firstRoundOps: StringList,
-    secondRoundOps: StringList, // TODO operator rounds
-    performSingleOp: OperatorFunction,
+    operatorRounds: List<StringList> = listOf(listOf("x", "/"), listOf("+", "-")),
+    performSingleOp: OperatorFunction = standardOperatorFunction(),
     numbersOrder: IntList? = null,
     buildMultiDigit: Boolean = false,
 ): Int {
@@ -32,7 +32,7 @@ fun runComputation(
 
     val validatedText = buildAndValidateComputeText(
         computeText,
-        firstRoundOps + secondRoundOps,
+        operatorRounds.flatten(),
         order,
         buildMultiDigit,
     ).ifNull {
@@ -40,7 +40,7 @@ fun runComputation(
     }
 
     return try {
-        parseText(validatedText, firstRoundOps, secondRoundOps, performSingleOp)
+        parseText(validatedText, operatorRounds, performSingleOp)
     } catch (_: ArithmeticException) {
         throw Exception("Err: Divide by 0")
     } catch (_: NumberFormatException) {
@@ -126,8 +126,8 @@ fun buildAndValidateComputeText(
  */
 fun validateNumbersOrder(order: IntList?): Boolean {
     return order != null &&
-            order.joinToString("") != "0123456789" &&
-            order.sorted().joinToString("") == "0123456789"
+        order.joinToString("") != "0123456789" &&
+        order.sorted().joinToString("") == "0123456789"
 }
 
 /**
@@ -157,32 +157,24 @@ fun applyNumbersOrder(number: String, numbersOrder: IntList?): String {
  * Assumes validation has succeeded and numbers order has been applied if necessary.
  *
  * @param computeText [StringList]: list of string values to parse, consisting of operators, numbers, and parens
- * @param firstRoundOps [StringList]: list of operators to be applied in first round of computation, likely multiplication and division
- * @param secondRoundOps [StringList]: list of operators to be applied in second round of computation, likely addition and subtraction
+ * @param operatorRounds List<[StringList]>: lists of operators to be applied in a single round of computation.
  * @param performSingleOp [OperatorFunction]: given an operator and 2 numbers, applies the operator to the numbers
  * @return [Int]: the single computed value
  */
 fun parseText(
     computeText: StringList,
-    firstRoundOps: StringList,
-    secondRoundOps: StringList,
+    operatorRounds: List<StringList>,
     performSingleOp: OperatorFunction,
 ): Int {
     var currentState: StringList = computeText
 
-    // run first round of operators (most likely multiplication and division)
-    currentState = simpleIf(
-        firstRoundOps.isEmpty(),
-        currentState,
-        parseOperatorRound(currentState, firstRoundOps, performSingleOp),
-    )
-
-    // run second round of operators (most likely addition and subtraction)
-    currentState = simpleIf(
-        secondRoundOps.isEmpty(),
-        currentState,
-        parseOperatorRound(currentState, secondRoundOps, performSingleOp),
-    )
+    for (round in operatorRounds) {
+        currentState = simpleIf(
+            round.isEmpty(),
+            { currentState },
+            { parseOperatorRound(currentState, round, performSingleOp) },
+        )
+    }
 
     if (!currentState.isSingleValue()) {
         throw Exception("Parsing error")
