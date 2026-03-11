@@ -1,5 +1,4 @@
 # Bad Selectors v2
-
     sourceSets.getByName("final") {
         java.setSrcDirs(listOf("src/final/kotlin"))
     }
@@ -13,73 +12,56 @@ This is a rebuild of the [Bad Selectors](https://github.com/lbressler13/bad-sele
 ### Build Flavors
 
 The app has 2 builds flavors: dev and final.
-The developer tools dialog is only available in the dev variant, and it can be accessed via the icon
-in the bottom left corner of the screen.
+The developer tools dialog is only available in the dev variant, and it can be accessed via the icon in the bottom left corner of the screen.
 
-See [here](https://developer.android.com/studio/build/build-variants) for information about
-configuring build variants in an Android app.
+See [here](https://developer.android.com/studio/build/build-variants) for information about configuring build variants in an Android app.
 
 ### Dependencies
 
-The app has a dependency on a [kotlin-utils](https://github.com/lbressler13/kotlin-utils) package,
-which is hosted in the GitHub Packages registry.
+The app has a dependency on a [kotlin-utils](https://github.com/lbressler13/kotlin-utils) package, which is hosted in the GitHub Packages registry.
 To pull packages from the registry, you need a GitHub access token with the `read:packages` scope.
 **Do not commit your access token.**
 
-In order to build to with the package, you can add the following properties to a local.properties
-gradle file:
-
+In order to build to with the package, you can add the following properties to a local.properties gradle file:
 ```properties
 github.username=GITHUB_USERNAME
 github.token=GITHUB_PAT
 ```
-
 or as environment variables:
-
 ```shell
 USERNAME=GITHUB_USERNAME
 ACCESS_TOKEN=GITHUB_PAT
 ```
 
-See [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package)
-for more information on importing GitHub packages.
+See [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package) for more information on importing GitHub packages.
 
 ## Testing
 
-Unit tests are implemented using the Kotlin test library.
+Unit tests are implemented using the Kotlin test library. 
 See [here](https://kotlinlang.org/api/latest/kotlin.test/) for information about the library.
 
-Integrated tests are implemented using
-the [Espresso](https://developer.android.com/training/testing/espresso) framework
-with [Robolectric](https://robolectric.org/).
+Integrated tests are implemented using the [Espresso](https://developer.android.com/training/testing/espresso) framework with [Robolectric](https://robolectric.org/).
 This allows integrated tests to run without a physical device or emulator.
 
 Tests can be run with the following commands:
-
 - Unit tests: `./gradlew test -PtestType=unit`
 - Integrated tests: `./gradlew test -PtestType=robolectric`
 - All tests: `./gradlew test`
 
-Tests can also be run by build type and variant, such as
-`./gradlew testDevDebugUnitTest -PtestType=robolectric`
+Tests can also be run by build type and variant, such as `./gradlew testDevDebugUnitTest -PtestType=robolectric`
 
-Note: Tests for hiding the dev tools button have not been moved to Robolectric due to issues with
-the looper. However, all other tests should be run with Robolectric.
+Note: Tests for hiding the dev tools button have not been moved to Robolectric due to issues with the looper. However, all other tests should be run with Robolectric.
 The tests for hiding the button can be run with the following command:
 ```./gradlew connectedCheck```
 
-See the Android docs for more information on testing
-with [Espresso](https://developer.android.com/training/testing/espresso)
-and [Robolectric](https://developer.android.com/training/testing/local-tests/robolectric).
+See the Android docs for more information on testing with [Espresso](https://developer.android.com/training/testing/espresso) and [Robolectric](https://developer.android.com/training/testing/local-tests/robolectric).
 
 ## Linting
 
-Linting is done using [ktlint](https://ktlint.github.io/),
-using [this](https://github.com/jlleitschuh/ktlint-gradle) plugin.
+Linting is done using [ktlint](https://ktlint.github.io/), using [this](https://github.com/jlleitschuh/ktlint-gradle) plugin.
 See [here](https://pinterest.github.io/ktlint/latest/rules/standard) for a list of standard rules.
 
-To run linting and fix formatting issues if possible, run the following command in the terminal or
-via an IDE:
+To run linting and fix formatting issues if possible, run the following command in the terminal or via an IDE:
 ```./gradlew ktlintFormat```
 
 To run linting without fixing issues, run the following command in the terminal or via an IDE:
@@ -114,8 +96,7 @@ To run linting without fixing issues, run the following command in the terminal 
 
 ## Legal Stuff
 
-All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for
-personal and commercial purposes with attribution.
+All images are taken from [Flaticon](https://www.flaticon.com/), which allows free use of icons for personal and commercial purposes with attribution.
 This is the complete list of Flaticon images included in the app.
 The list is also available within the app under the `ui.attributions` package.
 
@@ -139,5 +120,4 @@ The list is also available within the app under the `ui.attributions` package.
 | ![img](app/src/main/res/drawable-hdpi/ic_settings.png)      | Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from <https://www.flaticon.com>                           | <https://www.flaticon.com/premium-icon/gear_484613>                    |
 | ![img](app/src/main/res/drawable-hdpi/ic_times.png)         | Icon made by [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect) from <https://www.flaticon.com>               | <https://www.flaticon.com/free-icon/close_1828778>                     |
 
-See [here](https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE)
-for more information about Flaticon attributions.
+See [here](https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE) for more information about Flaticon attributions.
