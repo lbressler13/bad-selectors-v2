@@ -12,7 +12,17 @@ import xyz.lbres.kotlinutils.list.StringList
 data class CalcData(val computeText: StringList, val computedValue: Int?, val error: String?) {
     constructor() : this(emptyList(), null, null)
 
+    /**
+     * Create a duplicate of this CalcData with different text
+     *
+     * @param newText [StringList]: text to use for new CalcData
+     */
     fun withText(newText: StringList): CalcData {
         return CalcData(newText, computedValue, error)
     }
+
+    /**
+     * If all value are empty or null
+     */
+    fun isEmpty(): Boolean = computeText.isEmpty() && computedValue == null && error == null
 }

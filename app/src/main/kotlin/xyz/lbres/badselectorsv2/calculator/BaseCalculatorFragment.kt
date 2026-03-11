@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.calculator.common.CalcData
 import xyz.lbres.badselectorsv2.calculator.common.UnprotectedScrollingMovementMethod
 import xyz.lbres.badselectorsv2.ext.view.disable
 import xyz.lbres.badselectorsv2.ext.view.enable
@@ -81,10 +80,10 @@ abstract class BaseCalculatorFragment : Fragment() {
             Pair(R.id.minusButton, "-"),
             Pair(R.id.timesButton, "x"),
             Pair(R.id.divideButton, "/"),
-        ).forEach {
-            val button = rootView.findViewById<View>(it.first)
+        ).forEach { (buttonId, text) ->
+            // cannot use viewbinding because views may not exist in all fragments
+            val button = rootView.findViewById<View>(buttonId)
 
-            val text = it.second
             button?.setOnClickListener {
                 handleInputButton(text)
                 updateMainText()
@@ -120,12 +119,12 @@ abstract class BaseCalculatorFragment : Fragment() {
         val mainText = getMainText()
 
         when {
-            calcData == CalcData() -> {
-                mainText.text = calcData.computeText.joinToString(computeSeparator)
+            calcData.isEmpty() -> {
+                mainText.text = ""
                 resetUi()
             }
 
-            // scroll to top after hitting entre
+            // scroll to top after equals
             calcData.computedValue != null -> {
                 mainText.text = calcData.computedValue.toString()
                 getMainTextMovementMethod().goToTop(mainText)

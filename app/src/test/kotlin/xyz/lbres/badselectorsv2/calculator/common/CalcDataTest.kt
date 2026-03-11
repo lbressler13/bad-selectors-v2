@@ -2,6 +2,8 @@ package xyz.lbres.badselectorsv2.calculator.common
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class CalcDataTest {
     @Test
@@ -32,5 +34,23 @@ class CalcDataTest {
         expected = CalcData(text2, 6, "err")
         calcData = calcData.withText(text2)
         assertEquals(expected, calcData)
+    }
+
+    @Test
+    fun testIsEmpty() {
+        var calcData = CalcData(emptyList(), null, null)
+        assertTrue(calcData.isEmpty())
+
+        calcData = CalcData(listOf(""), null, null)
+        assertFalse(calcData.isEmpty())
+
+        calcData = CalcData(listOf("1", "+", "2"), null, null)
+        assertFalse(calcData.isEmpty())
+
+        calcData = CalcData(emptyList(), 12, null)
+        assertFalse(calcData.isEmpty())
+
+        calcData = CalcData(emptyList(), null, "err")
+        assertFalse(calcData.isEmpty())
     }
 }

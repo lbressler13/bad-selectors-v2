@@ -22,8 +22,6 @@ import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.general.simpleIf
 
-// TODO update attr fragment, home fragment
-
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class SingleOperationFragmentTest {

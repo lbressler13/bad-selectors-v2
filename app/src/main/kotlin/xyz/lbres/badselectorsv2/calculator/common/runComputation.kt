@@ -55,8 +55,8 @@ private fun buildAndValidateComputeText(computeText: StringList, buildMultiDigit
     var currentNumber = ""
     val newText: MutableList<String> = mutableListOf()
 
-    val lastWasOperator: () -> Boolean = { newText.isNotEmpty() && isOperator(newText.last()) }
-    val lastWasNumber: () -> Boolean = { newText.isNotEmpty() && newText.last().isInt() }
+    var lastWasOperator = false
+    var lastWasNumber = false
 
     for (element in computeText) {
         when {
@@ -65,13 +65,23 @@ private fun buildAndValidateComputeText(computeText: StringList, buildMultiDigit
                 newText.add(currentNumber)
                 currentNumber = ""
                 newText.add(element)
+                lastWasOperator = true
+                lastWasNumber = false
             }
             // add operator
-            isOperator(element) && !lastWasOperator() -> newText.add(element)
+            isOperator(element) && !lastWasOperator -> {
+                newText.add(element)
+                lastWasOperator = true
+                lastWasNumber = false
+            }
             // add current number to existing number if building multi-digit
             element.isInt() && buildMultiDigit -> currentNumber += element
             // add current number
-            element.isInt() && !lastWasNumber() -> newText.add(element)
+            element.isInt() && !lastWasNumber -> {
+                newText.add(element)
+                lastWasNumber = true
+                lastWasOperator = false
+            }
             // doesn't pass validation
             else -> return null
         }
@@ -87,7 +97,7 @@ private fun buildAndValidateComputeText(computeText: StringList, buildMultiDigit
 /**
  * Run calculation by parsing text and performing operations. Assumes validation has succeeded.
  *
- * @param computeText [StringList]: list of string values to parse, consisting of operators, numbers, and parens
+ * @param computeText [StringList]: list of string values to parse, consisting of operators and number
  * @return [Int]: the single computed value
  */
 private fun parseText(computeText: StringList): Int {
@@ -155,7 +165,7 @@ private fun applyOperator(leftValue: Int, rightValue: Int, operator: String): In
         "-" -> leftValue - rightValue
         "x" -> leftValue * rightValue
         "/" -> leftValue / rightValue
-        else -> throw Exception("Err: Unknown character")
+        else -> throw Exception("Err: Unknown operator")
     }
 }
 

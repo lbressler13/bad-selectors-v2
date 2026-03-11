@@ -23,6 +23,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
     private lateinit var viewModel: SingleOperationViewModel
     override val calculatorViewModel: BaseCalculatorViewModel
         get() = viewModel
+
     private lateinit var binding: FragmentSingleOperationBinding
     override lateinit var rootView: View
 
@@ -41,7 +42,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
         // init UI
         initKeypad()
         initMainText()
-        processComputeText()
+        handleComputeTextUpdate() // sets UI for empty compute text
 
         return binding.root
     }
@@ -58,13 +59,13 @@ class SingleOperationFragment : BaseCalculatorFragment() {
      */
     override fun handleInputButton(text: String) {
         super.handleInputButton(text) // updates compute text
-        processComputeText()
+        handleComputeTextUpdate()
     }
 
     /**
      * Depending on the size of the compute text, update buttons UI or perform computation
      */
-    private fun processComputeText() {
+    private fun handleComputeTextUpdate() {
         val size = viewModel.calcData.computeText.size
 
         when (size) {
@@ -83,11 +84,14 @@ class SingleOperationFragment : BaseCalculatorFragment() {
      */
     private fun doComputation() {
         try {
-            val computedValue: Int = runComputation(viewModel.calcData.computeText)
+            val computedValue: Int = runComputation(
+                viewModel.calcData.computeText,
+                buildMultiDigit = false,
+            )
 
             viewModel.setResult(computedValue, null)
         } catch (e: Exception) {
-            val errorMessage = e.message ?: "Error"
+            val errorMessage = e.message ?: "Err: Computation error"
             viewModel.setResult(null, errorMessage)
         }
 
@@ -95,7 +99,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
 
         if (viewModel.calcData.computedValue != null) {
             viewModel.moveComputedToComputeText()
-            processComputeText()
+            handleComputeTextUpdate()
         }
     }
 
@@ -114,7 +118,6 @@ class SingleOperationFragment : BaseCalculatorFragment() {
     override fun showErrorUi() {
         super.showErrorUi()
         binding.clearButton.visible()
-        // set all to full opacity to appear consistent when disabled
         setButtonsClickable(operatorsClickable = false, numbersClickable = false)
     }
 
@@ -155,8 +158,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
     private fun setSingleButtonClickability(button: View, clickable: Boolean) {
         val fullOpacity = 1f
         val dimmedOpacity = 0.6f
-        val opacity = simpleIf(clickable, fullOpacity, dimmedOpacity)
-        button.alpha = opacity
+        button.alpha = simpleIf(clickable, fullOpacity, dimmedOpacity)
         button.isClickable = clickable
     }
 }
