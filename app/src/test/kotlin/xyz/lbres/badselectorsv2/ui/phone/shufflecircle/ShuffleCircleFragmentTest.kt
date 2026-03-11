@@ -2,10 +2,7 @@ package xyz.lbres.badselectorsv2.ui.phone.shufflecircle
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -24,12 +21,11 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
 import xyz.lbres.badselectorsv2.phone.shufflecircle.DigitShuffler
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
-import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
+import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
@@ -189,10 +185,7 @@ class ShuffleCircleFragmentTest {
     // cannot launch scenario in before block due to mocking requirements
     private fun launchFragment(): ActivityScenario<BaseActivity> {
         val scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        val clickExpandCollapse = actionOnChildWithId(R.id.expandCollapseButton, click())
-        val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
-        selectorGroupRecycler.perform(actionOnItemAtPosition<SelectorGroupViewHolder>(0, clickExpandCollapse))
-        onView(withText("Shuffle Circle")).perform(scrollTo(), click())
+        navigateToSelector(0, "Shuffle Circle")
         return scenario
     }
 

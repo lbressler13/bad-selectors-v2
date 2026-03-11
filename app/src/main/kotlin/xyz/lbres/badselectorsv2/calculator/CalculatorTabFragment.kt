@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
+import xyz.lbres.badselectorsv2.calculator.singleoperation.SingleOperationFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
 
 class CalculatorTabFragment : TabFragment() {
@@ -17,6 +18,8 @@ class CalculatorTabFragment : TabFragment() {
     override var navToPhoneResId: Int? = R.id.navigateCalcToPhone
     override var navToDateResId: Int? = R.id.navigateCalcToDate
     override var navToOtpResId: Int? = R.id.navigateCalcToOtp
+
+    private val singleOperationFragment: SingleOperationFragment by lazy { SingleOperationFragment() }
 
     override lateinit var binding: TabFragmentBinding
 
@@ -34,13 +37,16 @@ class CalculatorTabFragment : TabFragment() {
      * @return [Fragment]
      */
     override fun getFragmentFromPosition(position: Int): Fragment {
-        throw NotImplementedError("CalculatorTabFragment has no tabs")
+        return when (position) {
+            0 -> singleOperationFragment
+            else -> singleOperationFragment
+        }
     }
 
     companion object {
         val metadata = Metadata(
             R.string.title_calc,
-            emptyList(),
+            listOf(R.string.title_single_operation),
             R.id.navigateHomeToCalc,
         )
     }

@@ -44,6 +44,11 @@ fun testNavigateWithPhoneSelectors() {
     runSingleSelectorNavigationTest("Shuffle Circle")
 }
 
+fun testNavigateWithCalcSelectors() {
+    expandCollapseGroup(2)
+    runSingleSelectorNavigationTest("Single Operation")
+}
+
 /**
  * Test navigation to a fragment using a specific selector.
  * Must be called from home fragment, with appropriate selector group expanded.

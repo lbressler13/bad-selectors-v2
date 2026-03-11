@@ -41,6 +41,41 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="CalculatorButton" parent="Widget.AppCompat.Button">
+        <!-- Layout -->
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <!-- Style -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">35sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:background">@drawable/calc_button</item>
+    </style>
+
+    <style name="CalculatorButton.Image" parent="Widget.AppCompat.ImageButton">
+        <!-- Layout -->
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <!-- Style -->
+        <item name="android:background">@drawable/calc_button</item>
+    </style>
+
+    <style name="CalculatorButton.Numpad" parent="CalculatorButton">
+        <item name="android:layout_marginStart">7.5dp</item>
+        <item name="android:layout_marginEnd">7.5dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+    </style>
+
+    <style name="CalculatorButton.Image.Numpad" parent="CalculatorButton.Image">
+        <item name="android:layout_marginStart">7.5dp</item>
+        <item name="android:layout_marginEnd">7.5dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+    </style>
+
 
     <!-- Text -->
     <style name="GeneratedNumber" parent="@android:style/TextAppearance">

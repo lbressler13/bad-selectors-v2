@@ -4,9 +4,8 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.After
 import org.junit.Before
@@ -17,6 +16,7 @@ import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.testutils.actionBar
+import xyz.lbres.badselectorsv2.ui.testutils.matchers.withTab
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.withTitle
 import xyz.lbres.badselectorsv2.ui.testutils.testNavbarUi
 import xyz.lbres.badselectorsv2.ui.testutils.testNavigateToCalc
@@ -44,7 +44,7 @@ class CalculatorTabFragmentTest {
     @Test
     fun initialUi() {
         actionBar.check(matches(withTitle("Bad Calculators")))
-        onView(withText("Under construction!")).check(matches(isDisplayed()))
+        onView(withTab("Single Operation")).check(matches(isCompletelyDisplayed()))
         testNavbarUi(R.id.navigationCalc, "Calculator")
     }
 

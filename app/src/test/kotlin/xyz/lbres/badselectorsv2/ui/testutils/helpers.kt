@@ -3,12 +3,20 @@ package xyz.lbres.badselectorsv2.ui.testutils
 import android.content.Intent
 import android.view.View
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.intent.Intents.getIntents
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
+import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
+import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
 import java.lang.AssertionError
 
 /**
@@ -36,3 +44,16 @@ fun isDisabled() = not(isEnabled())
  * Match a view within a dialog
  */
 fun onViewInDialog(matcher: Matcher<View>) = onView(matcher).inRoot(isDialog())
+
+/**
+ * Navigate to a given selector from the home screen
+ *
+ * @param selectorGroup [Int]: index of selector group
+ * @param selectorName [String]: name of selector
+ */
+fun navigateToSelector(selectorGroup: Int, selectorName: String) {
+    val clickExpandCollapse = actionOnChildWithId(R.id.expandCollapseButton, click())
+    val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
+    selectorGroupRecycler.perform(actionOnItemAtPosition<SelectorGroupViewHolder>(selectorGroup, clickExpandCollapse))
+    onView(withText(selectorName)).perform(scrollTo(), click())
+}
