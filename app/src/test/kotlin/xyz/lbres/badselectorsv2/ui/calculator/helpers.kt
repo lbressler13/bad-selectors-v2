@@ -2,9 +2,7 @@ package xyz.lbres.badselectorsv2.ui.calculator
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.badselectorsv2.R
 
 // all numbers
@@ -29,9 +27,5 @@ val operatorButtons: Map<String, ViewInteraction> = mapOf(
     "/" to onView(withId((R.id.divideButton))),
 )
 
-val clearButton = onView(withId(R.id.clearButton))
-val mainText = onView(withId(R.id.mainText))
-
-fun mainTextMatches(text: String) {
-    mainText.check(matches(withText(text)))
-}
+val clearButton: ViewInteraction = onView(withId(R.id.clearButton))
+val mainText: ViewInteraction = onView(withId(R.id.mainText))

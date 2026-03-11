@@ -15,7 +15,6 @@ import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.ui.calculator.clearButton
 import xyz.lbres.badselectorsv2.ui.calculator.mainText
-import xyz.lbres.badselectorsv2.ui.calculator.mainTextMatches
 import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
 import xyz.lbres.badselectorsv2.ui.calculator.operatorButtons
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
@@ -43,139 +42,72 @@ class SingleOperationFragmentTest {
 
     @Test
     fun initialUi() {
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("")
         clearButton.check(isNotPresented())
-        mainTextMatches("")
         // TODO check equals and backspace when those exist
     }
-
-//    @Test
-//    fun allButtons() {
-//        // number buttons
-//        numberButtons[0].perform(forceClick())
-//        numberButtons.forEachIndexed { index, button ->
-//            operatorButtons["+"]!!.perform(forceClick())
-//            button.perform(forceClick())
-//            mainTextMatches(index.toString())
-//
-//            // revert main text to 0
-//            operatorButtons["x"]!!.perform(forceClick())
-//            numberButtons[0].perform(forceClick())
-//        }
-//
-//        // operator button
-//        operatorButtons.forEach { (operator, button) ->
-//            button.perform(forceClick())
-//            mainTextMatches("0$operator")
-//
-//            // revert main text to 0
-//            val identity = simpleIf(operator == "+" || operator == "-", 0, 1)
-//            numberButtons[identity].perform(forceClick())
-//        }
-//    }
 
     @Test
     fun compute() {
         numberButtons[0].perform(forceClick()) // zero
-        mainTextMatches("0")
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("0")
 
         operatorButtons["+"]!!.perform(forceClick()) // +
-        mainText.check(matches(withText("0+")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("0+")
 
         numberButtons[1].perform(forceClick()) // one
-        mainText.check(matches(withText("1")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("1")
 
         operatorButtons["+"]!!.perform(forceClick())
-        mainText.check(matches(withText("1+")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("1+")
 
         numberButtons[2].perform(forceClick()) // two
-        mainText.check(matches(withText("3")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("3")
 
-        operatorButtons["x"]!!.perform(forceClick()) // times
-        mainText.check(matches(withText("3x")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        operatorButtons["x"]!!.perform(forceClick()) // x
+        checkState("3x")
 
         numberButtons[3].perform(forceClick()) // three
-        mainText.check(matches(withText("9")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("9")
 
-        operatorButtons["-"]!!.perform(forceClick()) // minus
-        mainText.check(matches(withText("9-")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        operatorButtons["-"]!!.perform(forceClick()) // -
+        checkState("9-")
 
         numberButtons[4].perform(forceClick()) // four
-        mainText.check(matches(withText("5")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("5")
 
-        operatorButtons["/"]!!.perform(forceClick()) // divide
-        mainText.check(matches(withText("5/")))
-        checkNumbersClickable(zeroClickable = false)
-        checkOperatorsNotClickable()
+        operatorButtons["/"]!!.perform(forceClick()) // /
+        checkState("5/")
 
         numberButtons[5].perform(forceClick()) // five
-        mainText.check(matches(withText("1")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("1")
 
         operatorButtons["+"]!!.perform(forceClick())
-        mainText.check(matches(withText("1+")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("1+")
 
         numberButtons[6].perform(forceClick()) // six
-        mainText.check(matches(withText("7")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("7")
 
         operatorButtons["x"]!!.perform(forceClick())
-        mainText.check(matches(withText("7x")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("7x")
 
         numberButtons[7].perform(forceClick()) // seven
-        mainText.check(matches(withText("49")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("49")
 
         operatorButtons["-"]!!.perform(forceClick())
-        mainText.check(matches(withText("49-")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("49-")
 
         numberButtons[8].perform(forceClick()) // eight
-        mainText.check(matches(withText("41")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("41")
 
         operatorButtons["x"]!!.perform(forceClick())
-        mainText.check(matches(withText("41x")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("41x")
 
         numberButtons[9].perform(forceClick()) // nine
-        mainText.check(matches(withText("369")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("369")
 
         operatorButtons["x"]!!.perform(forceClick())
-        mainText.check(matches(withText("369x")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("369x")
 
         // negative number
         numberButtons[0].perform(forceClick())
@@ -183,18 +115,12 @@ class SingleOperationFragmentTest {
         numberButtons[7].perform(forceClick())
         operatorButtons["-"]!!.perform(forceClick())
         numberButtons[9].perform(forceClick())
-        mainText.check(matches(withText("-2")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("-2")
 
         operatorButtons["x"]!!.perform(forceClick())
-        mainText.check(matches(withText("-2x")))
-        checkNumbersClickable()
-        checkOperatorsNotClickable()
+        checkState("-2x")
         numberButtons[9].perform(forceClick())
-        mainText.check(matches(withText("-18")))
-        checkNumbersNotClickable()
-        checkOperatorsClickable()
+        checkState("-18")
     }
 
     @Test
@@ -202,66 +128,75 @@ class SingleOperationFragmentTest {
         // initial input
         numberButtons[4].perform(forceClick())
         operatorButtons["/"]!!.perform(forceClick())
-        checkNumbersClickable(zeroClickable = false)
+        checkState("4/")
 
         numberButtons[2].perform(forceClick())
 
         // other zero op
         operatorButtons["+"]!!.perform(forceClick())
-        checkNumbersClickable(zeroClickable = true)
+        checkState("2+")
         numberButtons[0].perform(forceClick())
 
         // other division
         operatorButtons["/"]!!.perform(forceClick())
-        checkNumbersClickable(zeroClickable = false)
+        checkState("2/")
         numberButtons[1].perform(forceClick())
 
         // zero div zero
         operatorButtons["x"]!!.perform(forceClick())
         numberButtons[0].perform(forceClick())
-        mainTextMatches("0")
         operatorButtons["/"]!!.perform(forceClick()) // divide
-        checkNumbersClickable(zeroClickable = false)
+        checkState("0/")
     }
 
     @Test
     fun testRecreate() {
+        // blank
+        checkState("")
+        scenario!!.recreate()
+        checkState("")
 
+        // number
+        numberButtons[3].perform(forceClick())
+        scenario!!.recreate()
+        checkState("3")
+
+        // number and operator
+        operatorButtons["x"]!!.perform(forceClick())
+        scenario!!.recreate()
+        checkState("3x")
+
+        // computed number
+        numberButtons[7].perform(forceClick())
+        scenario!!.recreate()
+        checkState("21")
+
+        // divide by zero
+        operatorButtons["/"]!!.perform(forceClick())
+        scenario!!.recreate()
+        checkState("21/")
     }
 
     /**
-     * Check number buttons 1-9 are clickable, and that the 0 button has the expected clickability
-     *
-     * @param zeroClickable [Boolean]: if the zero button should be clickable. Defaults to `true`
+     * Check current state of fragment based on text.
+     * Checks value of main text, and if all buttons are enabled or disabled based on last character.
      */
-    fun checkNumbersClickable(zeroClickable: Boolean = true) {
+    private fun checkState(text: String) {
+        mainText.check(matches(withText(text)))
+        val numbersClickable = text.isEmpty() || !text.last().isDigit()
+        val zeroDisabled = text.isNotEmpty() && text.last() == '/'
+        val operatorsClickable = !numbersClickable
+
+        val operatorsMatcher = simpleIf(operatorsClickable, isClickable(), isNotClickable())
+        operatorButtons.forEach { it.value.check(matches(operatorsMatcher)) }
+
+        val numbersMatcher = simpleIf(numbersClickable, isClickable(), isNotClickable())
         numberButtons.forEach {
-            if (it == numberButtons[0] && !zeroClickable) {
+            if (numbersClickable && it == numberButtons[0] && zeroDisabled) {
                 it.check(matches(isNotClickable()))
             } else {
-                it.check(matches(isClickable()))
+                it.check(matches(numbersMatcher))
             }
         }
-    }
-
-    /**
-     * Check that no number buttons are clickable
-     */
-    fun checkNumbersNotClickable() {
-        numberButtons.forEach { it.check(matches(isNotClickable())) }
-    }
-
-    /**
-     * Check that all operator buttons are clickable
-     */
-    fun checkOperatorsClickable() {
-        operatorButtons.forEach { it.value.check(matches(isClickable())) }
-    }
-
-    /**
-     * Check that no operator buttons are clickable
-     */
-    fun checkOperatorsNotClickable() {
-        operatorButtons.forEach { it.value.check(matches(isNotClickable())) }
     }
 }
