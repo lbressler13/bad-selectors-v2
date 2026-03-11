@@ -83,9 +83,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
      */
     private fun doComputation() {
         try {
-            val operator = viewModel.calcData.computeText[1]
-            val computedValue: Int =
-                runComputation(viewModel.calcData.computeText, operatorRounds = listOf(listOf(operator)))
+            val computedValue: Int = runComputation(viewModel.calcData.computeText)
 
             viewModel.setResult(computedValue, null)
         } catch (e: Exception) {
