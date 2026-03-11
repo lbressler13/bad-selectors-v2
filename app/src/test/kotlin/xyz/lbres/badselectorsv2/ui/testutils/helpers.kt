@@ -4,10 +4,11 @@ import android.content.Intent
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollTo
 import androidx.test.espresso.intent.Intents.getIntents
 import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -17,7 +18,10 @@ import org.junit.Assert.assertEquals
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
+import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import java.lang.AssertionError
+
+private typealias VH = SelectorGroupViewHolder
 
 /**
  * Assert that the correct number of link clicks have occurred, and that the most recent has the correct url.
@@ -48,12 +52,16 @@ fun onViewInDialog(matcher: Matcher<View>) = onView(matcher).inRoot(isDialog())
 /**
  * Navigate to a given selector from the home screen
  *
- * @param selectorGroup [Int]: index of selector group
+ * @param groupName [String]: name of group
  * @param selectorName [String]: name of selector
  */
-fun navigateToSelector(selectorGroup: Int, selectorName: String) {
+fun navigateToSelector(groupName: String, selectorName: String) {
     val clickExpandCollapse = actionOnChildWithId(R.id.expandCollapseButton, click())
     val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
-    selectorGroupRecycler.perform(actionOnItemAtPosition<SelectorGroupViewHolder>(selectorGroup, clickExpandCollapse))
-    onView(withText(selectorName)).perform(scrollTo(), click())
+    val vhMatcher = hasDescendant(withText(groupName))
+
+    selectorGroupRecycler
+        .perform(scrollTo<VH>(vhMatcher))
+        .perform(actionOnItem<VH>(vhMatcher, clickExpandCollapse))
+    onView(withText(selectorName)).perform(forceClick())
 }

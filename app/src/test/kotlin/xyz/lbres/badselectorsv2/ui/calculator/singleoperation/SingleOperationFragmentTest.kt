@@ -30,7 +30,7 @@ class SingleOperationFragmentTest {
     @Before
     fun setupTest() {
         scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        navigateToSelector(2, "Single Operation")
+        navigateToSelector("Calculator", "Single Operation")
     }
 
     @After
