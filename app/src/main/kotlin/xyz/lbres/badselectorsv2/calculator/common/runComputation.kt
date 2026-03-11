@@ -36,22 +36,19 @@ fun runComputation(computeText: StringList, buildMultiDigit: Boolean = true): In
  * and that there are no adjacent numbers or operators.
  * Builds multi-digit list if indicated by params.
  *
- * @param initialText [StringList]: text to validate and possibly modify
+ * @param computeText [StringList]: text to validate and possibly modify
  * @param buildMultiDigit [Boolean]: if adjacent digits should be combined to form multi-digit numbers.
  * If false, adjacent digits will cause validation to fail
  * @return [StringList]?: list where relative position of numbers and digits is unchanged,
  * but digits have been combined to form multi-digit numbers if [buildMultiDigit] is true.
  */
-fun buildAndValidateComputeText(
-    initialText: StringList,
-    buildMultiDigit: Boolean,
-): StringList? {
-    if (initialText.isEmpty()) {
-        return initialText
+private fun buildAndValidateComputeText(computeText: StringList, buildMultiDigit: Boolean): StringList? {
+    if (computeText.isEmpty()) {
+        return null
     }
 
     // must start and end w/ number
-    if (isOperator(initialText.first()) || isOperator(initialText.last())) {
+    if (isOperator(computeText.first()) || isOperator(computeText.last())) {
         return null
     }
 
@@ -61,7 +58,7 @@ fun buildAndValidateComputeText(
     val lastWasOperator: () -> Boolean = { newText.isNotEmpty() && isOperator(newText.last()) }
     val lastWasNumber: () -> Boolean = { newText.isNotEmpty() && newText.last().isInt() }
 
-    for (element in initialText) {
+    for (element in computeText) {
         when {
             // add current number before adding operator
             isOperator(element) && currentNumber.isNotEmpty() -> {
@@ -93,7 +90,7 @@ fun buildAndValidateComputeText(
  * @param computeText [StringList]: list of string values to parse, consisting of operators, numbers, and parens
  * @return [Int]: the single computed value
  */
-fun parseText(computeText: StringList): Int {
+private fun parseText(computeText: StringList): Int {
     var currentState: StringList = computeText
     val operatorRounds = listOf(listOf("x", "/"), listOf("+", "-"))
 
@@ -115,7 +112,7 @@ fun parseText(computeText: StringList): Int {
  * @param ops [StringList]: list of string operators to be applied in this round
  * @return [StringList]: modified list where each application of a given operator has been reduced to a single int
  */
-fun parseOperatorRound(computeText: StringList, ops: StringList): StringList {
+private fun parseOperatorRound(computeText: StringList, ops: StringList): StringList {
     val simplifiedList: MutableList<String> = mutableListOf()
 
     var index = 0
@@ -152,7 +149,7 @@ fun parseOperatorRound(computeText: StringList, ops: StringList): StringList {
  * @param operator [String]: operator to apply
  * @return [Int]: result of applying operator
  */
-fun applyOperator(leftValue: Int, rightValue: Int, operator: String): Int {
+private fun applyOperator(leftValue: Int, rightValue: Int, operator: String): Int {
     return when (operator) {
         "+" -> leftValue + rightValue
         "-" -> leftValue - rightValue
@@ -168,4 +165,4 @@ fun applyOperator(leftValue: Int, rightValue: Int, operator: String): Int {
  * @param element [String]: value to check
  * @return [Boolean]: true is the element is an operator, false otherwise
  */
-fun isOperator(element: String): Boolean = element in listOf("+", "-", "x", "/")
+private fun isOperator(element: String): Boolean = element in listOf("+", "-", "x", "/")
