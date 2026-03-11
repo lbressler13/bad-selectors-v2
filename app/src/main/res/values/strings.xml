@@ -18,7 +18,7 @@
 
     <string name="phone_separator">-</string>
 
-    <!-- Phone Shuffle Circle -->
+    <!-- Shuffle Circle -->
     <string name="title_shuffle_circle">Shuffle Circle</string>
 
 
@@ -30,6 +30,21 @@
     <!-- Calculator -->
     <string name="appbar_title_calc">Bad Calculators</string>
     <string name="title_calc">Calculator</string>
+
+    <string name="zero">0</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="clear">C</string>
+
+    <!-- Single Operation -->
+    <string name="title_single_operation">Single Operation</string>
 
 
     <!-- OTP -->
@@ -58,14 +73,19 @@
     <string name="chevron_left_cd">Left chevron</string>
     <string name="chevron_right_cd">Right chevron</string>
     <string name="chevron_up_cd">Up chevron</string>
+    <string name="clear_cd">Clear</string>
     <string name="collapse_dropdown_cd">Hide additional content</string>
     <string name="close_cd">Close</string>
+    <string name="divide_cd">Divide</string>
     <string name="expand_dropdown_cd">Show additional content</string>
     <string name="home_cd">Home</string>
     <string name="info_cd">Additional information</string>
+    <string name="minus_cd">Minus</string>
+    <string name="plus_cd">Plus</string>
     <string name="phone_cd">Phone</string>
     <string name="restart_cd">Restart</string>
     <string name="settings_cd">Settings</string>
+    <string name="times_cd">Times</string>
 
 
     <!-- Dev Tools -->
