@@ -26,34 +26,44 @@ fun testExpandCollapseAttributions() {
         matchesAtPosition(it, allOf(isDisplayed(), hasDescendant(withText(authorTitles[it]))))
     }
 
-    attributionsRecycler.check(matches(titleAssertion(0)))
-    attributionsRecycler.check(matches(titleAssertion(1)))
+    repeat(authorTitles.size) {
+        attributionsRecycler
+            .perform(scrollToAuthorPosition(it))
+            .check(matches(titleAssertion(it)))
+    }
 
-    checkImagesNotPresented(listOf(0, 1))
+    val indices = authorTitles.indices.toList()
+    checkImagesNotPresented(indices)
+
+    val expanded = mutableListOf<Int>()
+
+    val expandGroup = { index: Int ->
+        expandCollapseAttribution(index)
+        expanded.add(index)
+        checkImagesDisplayed(expanded)
+        checkImagesNotPresented(indices - expanded)
+    }
+
+    val collapseGroup = { index: Int ->
+        expandCollapseAttribution(index)
+        expanded.remove(index)
+        checkImagesDisplayed(expanded)
+        checkImagesNotPresented(indices - expanded)
+    }
 
     // expand all
-    expandCollapseAttribution(1)
-    checkImagesDisplayed(listOf(1))
-    checkImagesNotPresented(listOf(0, 2))
-
-    expandCollapseAttribution(0)
-    checkImagesDisplayed(listOf(0, 1))
-    checkImagesNotPresented(listOf(2))
-
-    expandCollapseAttribution(2)
-    checkImagesDisplayed(listOf(0, 1, 2))
+    expandGroup(1)
+    expandGroup(0)
+    expandGroup(4)
+    expandGroup(2)
+    expandGroup(3)
 
     // collapse
-    expandCollapseAttribution(1)
-    checkImagesDisplayed(listOf(0, 2))
-    checkImagesNotPresented(listOf(1))
-
-    expandCollapseAttribution(2)
-    checkImagesDisplayed(listOf(0))
-    checkImagesNotPresented(listOf(1, 2))
-
-    expandCollapseAttribution(0)
-    checkImagesNotPresented(listOf(0, 1, 2))
+    collapseGroup(4)
+    collapseGroup(1)
+    collapseGroup(0)
+    collapseGroup(2)
+    collapseGroup(3)
 }
 
 fun testAttributionLinks() {

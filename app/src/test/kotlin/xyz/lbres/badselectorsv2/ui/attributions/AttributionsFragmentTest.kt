@@ -218,6 +218,7 @@ class AttributionsFragmentTest {
         authorTitles.indices.forEach {
             val withAuthorTitle = hasDescendant(withText(authorTitles[it]))
             onView(withId(R.id.attributionsRecycler))
+                .perform(scrollToAuthorPosition(it))
                 .check(matches(matchesAtPosition(it, allOf(isDisplayed(), withAuthorTitle))))
         }
         checkImagesNotPresented(listOf(0, 1))
@@ -228,11 +229,13 @@ class AttributionsFragmentTest {
         }
         onView(withId(R.id.expandCollapseMessage)).perform(click())
         expandCollapseAttribution(0)
+        expandCollapseAttribution(3)
+        val expandedIndices = listOf(0, 3)
 
         scenario!!.recreate()
 
-        checkImagesDisplayed(listOf(0))
-        checkImagesNotPresented(listOf(1))
+        checkImagesDisplayed(expandedIndices)
+        checkImagesNotPresented(authorTitles.indices - expandedIndices)
         onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
     }
 }
