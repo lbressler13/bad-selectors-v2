@@ -44,7 +44,7 @@ class PhoneTabFragmentTest {
 
     @Test
     fun initialUi() {
-        actionBar.check(ViewAssertions.matches(withTitle("Bad Phone Selectors")))
+        actionBar.check(matches(withTitle("Bad Phone Selectors")))
         onView(withTab("Shuffle Circle")).check(matches(isCompletelyDisplayed()))
         testNavbarUi(R.id.navigationPhone, "Phone")
     }
