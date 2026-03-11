@@ -9,13 +9,13 @@ import kotlin.NumberFormatException
  * Parse string list and compute as a mathematical expression, if possible.
  * Includes list validation, modifying the list based on parameters, and running the computation itself.
  *
- * @param computeText [StringList]: list of string values to parse, consisting of operators and number
+ * @param computeText [StringList]: list of string values to parse, consisting of operators and numbers
  * @param buildMultiDigit [Boolean]: if separate digits should be combined to form multidigit numbers. Defaults to true.
  * @return [Int] result of parsing
  */
 fun runComputation(computeText: StringList, buildMultiDigit: Boolean = true): Int {
     val validatedText = buildAndValidateComputeText(computeText, buildMultiDigit)
-    if (validatedText == null) {
+    if (validatedText.isNullOrEmpty()) {
         throw Exception("Err: Syntax Error")
     }
 
@@ -120,7 +120,7 @@ private fun parseText(computeText: StringList): Int {
  *
  * @param computeText [StringList]: list of string values to parse, consisting of operators and numbers
  * @param ops [StringList]: list of string operators to be applied in this round
- * @return [StringList]: modified list where each application of a given operator has been reduced to a single int
+ * @return [StringList]: modified list where each application of the given operators has been reduced to a single int
  */
 private fun parseOperatorRound(computeText: StringList, ops: StringList): StringList {
     val simplifiedList: MutableList<String> = mutableListOf()
