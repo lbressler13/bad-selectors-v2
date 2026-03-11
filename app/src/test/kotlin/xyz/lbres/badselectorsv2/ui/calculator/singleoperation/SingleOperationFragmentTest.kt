@@ -30,7 +30,7 @@ class SingleOperationFragmentTest {
     @Before
     fun setupTest() {
         scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        navigateToSelector(2, "Single Operation")
+        navigateToSelector("Calculator", "Single Operation")
     }
 
     @After
@@ -50,7 +50,7 @@ class SingleOperationFragmentTest {
         numberButtons[0].perform(forceClick()) // zero
         checkState("0")
 
-        operatorButtons["+"]!!.perform(forceClick()) // +
+        operatorButtons["+"]!!.perform(forceClick()) // plus
         checkState("0+")
 
         numberButtons[1].perform(forceClick()) // one
@@ -62,19 +62,19 @@ class SingleOperationFragmentTest {
         numberButtons[2].perform(forceClick()) // two
         checkState("3")
 
-        operatorButtons["x"]!!.perform(forceClick()) // x
+        operatorButtons["x"]!!.perform(forceClick()) // times
         checkState("3x")
 
         numberButtons[3].perform(forceClick()) // three
         checkState("9")
 
-        operatorButtons["-"]!!.perform(forceClick()) // -
+        operatorButtons["-"]!!.perform(forceClick()) // minus
         checkState("9-")
 
         numberButtons[4].perform(forceClick()) // four
         checkState("5")
 
-        operatorButtons["/"]!!.perform(forceClick()) // /
+        operatorButtons["/"]!!.perform(forceClick()) // div
         checkState("5/")
 
         numberButtons[5].perform(forceClick()) // five
@@ -139,6 +139,7 @@ class SingleOperationFragmentTest {
         operatorButtons["/"]!!.perform(forceClick())
         checkState("2/")
         numberButtons[1].perform(forceClick())
+        checkState("2")
 
         // zero div zero
         operatorButtons["x"]!!.perform(forceClick())

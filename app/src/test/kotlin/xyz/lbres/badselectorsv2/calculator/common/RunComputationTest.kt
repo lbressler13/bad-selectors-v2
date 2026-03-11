@@ -26,6 +26,9 @@ class RunComputationTest {
         text = splitText("-1-")
         assertFailsWithMessage<Exception>(expectedError) { runComputation(text) }
 
+        text = splitText("1+5/6x2-")
+        assertFailsWithMessage<Exception>(expectedError) { runComputation(text) }
+
         // invalid character
         text = splitText("1+2-3^4")
         assertFailsWithMessage<Exception>(expectedError) { runComputation(text) }
