@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.calculator.enablerandom
+package xyz.lbres.badselectorsv2.calculator.randomenabled
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,18 +8,18 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.runComputation
-import xyz.lbres.badselectorsv2.databinding.FragmentEnableRandomBinding
+import xyz.lbres.badselectorsv2.databinding.FragmentRandomEnabledBinding
 import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
  * Fragment with a calculator that randomly enables and disables operator and number buttons, when any button is pressed.
  */
-class EnableRandomFragment : BaseCalculatorFragment() {
-    private lateinit var viewModel: EnableRandomViewModel
+class RandomEnabledFragment : BaseCalculatorFragment() {
+    private lateinit var viewModel: RandomEnabledViewModel
     override val calculatorViewModel: BaseCalculatorViewModel
         get() = viewModel
 
-    private lateinit var binding: FragmentEnableRandomBinding
+    private lateinit var binding: FragmentRandomEnabledBinding
     override val rootView: View
         get() = binding.root
 
@@ -31,8 +31,8 @@ class EnableRandomFragment : BaseCalculatorFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        viewModel = ViewModelProvider(requireActivity())[EnableRandomViewModel::class.java]
-        binding = FragmentEnableRandomBinding.inflate(layoutInflater, container, false)
+        viewModel = ViewModelProvider(requireActivity())[RandomEnabledViewModel::class.java]
+        binding = FragmentRandomEnabledBinding.inflate(layoutInflater, container, false)
 
         initKeypad()
         initMainText()

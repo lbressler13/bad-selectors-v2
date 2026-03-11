@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.calculator.enablerandom
+package xyz.lbres.badselectorsv2.calculator.randomenabled
 
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.utils.seededRandom
@@ -8,7 +8,7 @@ import xyz.lbres.kotlinutils.booleanarray.booleanArrayOfValue
 /**
  * ViewModel containing values that are specific to the random enabled calculator.
  */
-class EnableRandomViewModel : BaseCalculatorViewModel() {
+class RandomEnabledViewModel : BaseCalculatorViewModel() {
     private val enabledNumbersRange = 3..7
     private val enabledOperatorsRange = 2..3
     private val operators = listOf("+", "-", "x", "/")

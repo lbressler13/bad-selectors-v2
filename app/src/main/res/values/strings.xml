@@ -47,7 +47,7 @@
     <string name="title_single_operation">Single Operation</string>
 
     <!-- Enable Random -->
-    <string name="title_enable_random">Enable Random</string>
+    <string name="title_random_enabled">Random Enabled</string>
 
 
     <!-- OTP -->
