@@ -13,7 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class CalculatorEnablerTest {
+class RandomEnablerTest {
     private val shuffledNumbers = listOf(1, 4, 7, 3, 2, 6, 0, 8, 9, 5)
     private val shuffledOpsIndices = listOf(0, 2, 3, 1)
     private val operators = listOf("+", "-", "x", "/")
@@ -32,7 +32,7 @@ class CalculatorEnablerTest {
             every { IntRange(0, 9).seededShuffled() } returns shuffledNumbers
             every { IntRange(0, 3).seededShuffled() } returns shuffledOpsIndices
 
-            val enabler = CalculatorEnabler()
+            val enabler = RandomEnabler()
             val enabledNumbers = shuffledNumbers.subList(0, 5)
             val enabledOps = listOf("+", "x")
             checkNumbersEnabled(enabler, enabledNumbers)
@@ -57,7 +57,7 @@ class CalculatorEnablerTest {
             every { IntRange(0, 9).seededShuffled() } returns shuffledNumbers
             every { IntRange(0, 3).seededShuffled() } returns shuffledOpsIndices
 
-            val enabler = CalculatorEnabler()
+            val enabler = RandomEnabler()
             assertFalse(enabler.isEnabled(10))
             assertFalse(enabler.isEnabled(-1))
             assertFalse(enabler.isEnabled(""))
@@ -88,7 +88,7 @@ class CalculatorEnablerTest {
             every { IntRange(0, 9).seededShuffled() } returnsMany numbersValues
             every { IntRange(0, 3).seededShuffled() } returnsMany opIndexValues
 
-            val enabler = CalculatorEnabler()
+            val enabler = RandomEnabler()
             var enabledNumbers = shuffledNumbers.subList(0, 4)
             var enabledOps = listOf("+", "x", "/")
             checkNumbersEnabled(enabler, enabledNumbers)
@@ -132,7 +132,7 @@ class CalculatorEnablerTest {
             every { IntRange(0, 9).seededShuffled() } returnsMany numbersValues
             every { IntRange(0, 3).seededShuffled() } returnsMany opIndexValues
 
-            val enabler = CalculatorEnabler()
+            val enabler = RandomEnabler()
             var enabledNumbers = shuffledNumbers.subList(0, 5)
             var enabledOps = listOf("+", "x")
             checkNumbersEnabled(enabler, enabledNumbers)
@@ -148,7 +148,7 @@ class CalculatorEnablerTest {
         }
     }
 
-    private fun checkOperatorsEnabled(enabler: CalculatorEnabler, enabledOperators: List<String>) {
+    private fun checkOperatorsEnabled(enabler: RandomEnabler, enabledOperators: List<String>) {
         for (op in operators) {
             val result = enabler.isEnabled(op)
             try {
@@ -160,7 +160,7 @@ class CalculatorEnablerTest {
         }
     }
 
-    private fun checkNumbersEnabled(enabler: CalculatorEnabler, enabledNumbers: List<Int>) {
+    private fun checkNumbersEnabled(enabler: RandomEnabler, enabledNumbers: List<Int>) {
         repeat(10) {
             val result = enabler.isEnabled(it)
             try {

@@ -4,9 +4,7 @@ import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
 import xyz.lbres.kotlinutils.booleanarray.booleanArrayOfValue
 
-// TODO fix name, this is a terrible name
-// RandomEnabler works!
-class CalculatorEnabler {
+class RandomEnabler {
     private val enabledNumbersRange = 3..7
     private val enabledOperatorsRange = 2..3
     private val operators = listOf("+", "-", "x", "/")
