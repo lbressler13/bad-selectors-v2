@@ -36,7 +36,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
 
         initKeypad()
         initMainText()
-        updateEnabledButtons()
+        // updateEnabledButtons()
 
         return binding.root
     }
@@ -104,7 +104,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
         )
 
         numberButtons.forEachIndexed { index, button ->
-            if (viewModel.enabler.isEnabled(index)) {
+            if (viewModel.enabler.isDigitEnabled(index)) {
                 enableButton(button)
             } else {
                 disableButton(button)
@@ -118,9 +118,9 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
             Pair(binding.divideButton, "/"),
         )
 
-        operatorPairs.forEach {
-            val enabled = viewModel.enabler.isEnabled(it.second)
-            simpleIf(enabled, { enableButton(it.first) }, { disableButton(it.first) })
+        operatorPairs.forEach { (button, operator) ->
+            val enabled = viewModel.enabler.isOperatorEnabled(operator)
+            simpleIf(enabled, { enableButton(button) }, { disableButton(button) })
         }
     }
 }

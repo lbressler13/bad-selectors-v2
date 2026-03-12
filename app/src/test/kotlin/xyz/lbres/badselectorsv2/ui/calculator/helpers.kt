@@ -27,5 +27,9 @@ val operatorButtons: Map<String, ViewInteraction> = mapOf(
     "/" to onView(withId((R.id.divideButton))),
 )
 
-val clearButton: ViewInteraction = onView(withId(R.id.clearButton))
+val operators = listOf("+", "-", "x", "/")
+
 val mainText: ViewInteraction = onView(withId(R.id.mainText))
+val equalsButton: ViewInteraction = onView(withId(R.id.equalsButton))
+val backspaceButton: ViewInteraction = onView(withId(R.id.backspaceButton))
+val clearButton: ViewInteraction = onView(withId(R.id.clearButton))

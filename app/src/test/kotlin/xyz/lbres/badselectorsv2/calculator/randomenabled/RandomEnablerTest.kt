@@ -35,14 +35,13 @@ class RandomEnablerTest {
             val enabler = RandomEnabler()
             val enabledNumbers = shuffledNumbers.subList(0, 5)
             val enabledOps = listOf("+", "x")
-            checkNumbersEnabled(enabler, enabledNumbers)
-            checkOperatorsEnabled(enabler, enabledOps)
+            checkEnabled(enabler, enabledNumbers, enabledOps)
 
             // duplicate values
-            assertTrue(enabler.isEnabled(4))
-            assertFalse(enabler.isEnabled(6))
-            assertTrue(enabler.isEnabled("+"))
-            assertFalse(enabler.isEnabled("-"))
+            assertTrue(enabler.isDigitEnabled(4))
+            assertFalse(enabler.isDigitEnabled(6))
+            assertTrue(enabler.isOperatorEnabled("+"))
+            assertFalse(enabler.isOperatorEnabled("-"))
 
             verifyCallCount(1)
         }
@@ -58,11 +57,11 @@ class RandomEnablerTest {
             every { IntRange(0, 3).seededShuffled() } returns shuffledOpsIndices
 
             val enabler = RandomEnabler()
-            assertFalse(enabler.isEnabled(10))
-            assertFalse(enabler.isEnabled(-1))
-            assertFalse(enabler.isEnabled(""))
-            assertFalse(enabler.isEnabled("1"))
-            assertFalse(enabler.isEnabled("^"))
+            assertFalse(enabler.isDigitEnabled(10))
+            assertFalse(enabler.isDigitEnabled(-1))
+            assertFalse(enabler.isOperatorEnabled(""))
+            assertFalse(enabler.isOperatorEnabled("1"))
+            assertFalse(enabler.isOperatorEnabled("^"))
         }
     }
 
@@ -91,20 +90,17 @@ class RandomEnablerTest {
             val enabler = RandomEnabler()
             var enabledNumbers = shuffledNumbers.subList(0, 4)
             var enabledOps = listOf("+", "x", "/")
-            checkNumbersEnabled(enabler, enabledNumbers)
-            checkOperatorsEnabled(enabler, enabledOps)
+            checkEnabled(enabler, enabledNumbers, enabledOps)
 
             enabler.update()
             enabledNumbers = (0..6).toList() // first 7 numbers
             enabledOps = listOf("+", "-", "x")
-            checkNumbersEnabled(enabler, enabledNumbers)
-            checkOperatorsEnabled(enabler, enabledOps)
+            checkEnabled(enabler, enabledNumbers, enabledOps)
 
             enabler.update()
             enabledNumbers = (0..2).toList() // first 3 numbers
             enabledOps = listOf("+", "-")
-            checkNumbersEnabled(enabler, enabledNumbers)
-            checkOperatorsEnabled(enabler, enabledOps)
+            checkEnabled(enabler, enabledNumbers, enabledOps)
 
             verifyCallCount(3)
         }
@@ -135,38 +131,34 @@ class RandomEnablerTest {
             val enabler = RandomEnabler()
             var enabledNumbers = shuffledNumbers.subList(0, 5)
             var enabledOps = listOf("+", "x")
-            checkNumbersEnabled(enabler, enabledNumbers)
-            checkOperatorsEnabled(enabler, enabledOps)
+            checkEnabled(enabler, enabledNumbers, enabledOps)
 
             enabler.update()
             enabledNumbers = (0..4).toList()
             enabledOps = listOf("+", "-")
-            checkNumbersEnabled(enabler, enabledNumbers)
-            checkOperatorsEnabled(enabler, enabledOps)
+            checkEnabled(enabler, enabledNumbers, enabledOps)
 
             verifyCallCount(4)
         }
     }
 
-    private fun checkOperatorsEnabled(enabler: RandomEnabler, enabledOperators: List<String>) {
-        for (op in operators) {
-            val result = enabler.isEnabled(op)
-            try {
-                assertEquals(op in enabledOperators, result)
-            } catch (e: AssertionError) {
-                println("Failure checking operator $op")
-                throw e
-            }
-        }
-    }
-
-    private fun checkNumbersEnabled(enabler: RandomEnabler, enabledNumbers: List<Int>) {
+    private fun checkEnabled(enabler: RandomEnabler, enabledNumbers: List<Int>, enabledOperators: List<String>) {
         repeat(10) {
-            val result = enabler.isEnabled(it)
+            val result = enabler.isDigitEnabled(it)
             try {
                 assertEquals(it in enabledNumbers, result)
             } catch (e: AssertionError) {
                 println("Failure checking index $it")
+                throw e
+            }
+        }
+
+        for (op in operators) {
+            val result = enabler.isOperatorEnabled(op)
+            try {
+                assertEquals(op in enabledOperators, result)
+            } catch (e: AssertionError) {
+                println("Failure checking operator $op")
                 throw e
             }
         }
