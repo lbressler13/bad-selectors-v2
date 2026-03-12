@@ -42,7 +42,6 @@ abstract class BaseCalculatorViewModel : ViewModel() {
     }
 
     /**
-<<<<<<< HEAD
      * Replace compute text list with the computed value
      */
     fun useComputedAsComputeText() {
@@ -51,8 +50,6 @@ abstract class BaseCalculatorViewModel : ViewModel() {
     }
 
     /**
-=======
->>>>>>> main
      * Reset data in this view model
      */
     open fun resetComputeData() {
