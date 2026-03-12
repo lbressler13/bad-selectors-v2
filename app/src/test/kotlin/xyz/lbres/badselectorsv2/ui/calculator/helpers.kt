@@ -1,9 +1,14 @@
 package xyz.lbres.badselectorsv2.ui.calculator
 
+import androidx.core.text.isDigitsOnly
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
+import xyz.lbres.kotlinutils.string.ext.isInt
 
 // all numbers
 val numberButtons: List<ViewInteraction> = listOf(
@@ -33,3 +38,22 @@ val mainText: ViewInteraction = onView(withId(R.id.mainText))
 val equalsButton: ViewInteraction = onView(withId(R.id.equalsButton))
 val backspaceButton: ViewInteraction = onView(withId(R.id.backspaceButton))
 val clearButton: ViewInteraction = onView(withId(R.id.clearButton))
+
+fun clickEquals() = equalsButton.perform(forceClick())
+fun clickBackspace() = backspaceButton.perform(forceClick())
+fun clickClear() = clearButton.perform(forceClick())
+
+fun mainTextMatches(text: String) = mainText.check(matches(withText(text)))
+
+fun splitText(text: String): List<String> = text.toList().map(Char::toString)
+
+fun typeText(text: String) {
+    val textList = splitText(text)
+    textList.forEach {
+        if (it.isInt()) {
+            numberButtons[it.toInt()].perform(forceClick())
+        } else {
+            operatorButtons[it]!!.perform(forceClick())
+        }
+    }
+}

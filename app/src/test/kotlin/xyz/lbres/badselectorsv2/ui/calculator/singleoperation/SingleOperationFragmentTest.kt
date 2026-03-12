@@ -1,6 +1,7 @@
 package xyz.lbres.badselectorsv2.ui.calculator.singleoperation
 
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isClickable
 import androidx.test.espresso.matcher.ViewMatchers.isNotClickable
@@ -13,7 +14,9 @@ import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
+import xyz.lbres.badselectorsv2.ui.calculator.backspaceButton
 import xyz.lbres.badselectorsv2.ui.calculator.clearButton
+import xyz.lbres.badselectorsv2.ui.calculator.equalsButton
 import xyz.lbres.badselectorsv2.ui.calculator.mainText
 import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
 import xyz.lbres.badselectorsv2.ui.calculator.operatorButtons
@@ -42,7 +45,8 @@ class SingleOperationFragmentTest {
     fun initialUi() {
         checkState("")
         clearButton.check(isNotPresented())
-        // TODO check equals and backspace when those exist
+        equalsButton.check(doesNotExist())
+        backspaceButton.check(doesNotExist())
     }
 
     @Test
