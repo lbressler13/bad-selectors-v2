@@ -1,7 +1,4 @@
 # Bad Selectors v2
-    sourceSets.getByName("final") {
-        java.setSrcDirs(listOf("src/final/kotlin"))
-    }
 
 [![All Tests](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml)
 
@@ -121,3 +118,4 @@ The list is also available within the app under the `ui.attributions` package.
 | ![img](app/src/main/res/drawable-hdpi/ic_times.png)         | Icon made by [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect) from <https://www.flaticon.com>               | <https://www.flaticon.com/free-icon/close_1828778>                     |
 
 See [here](https://support.flaticon.com/s/article/Attribution-How-when-and-where-FI?language=en_US&Id=ka03V0000004Q5lQAE) for more information about Flaticon attributions.
+
