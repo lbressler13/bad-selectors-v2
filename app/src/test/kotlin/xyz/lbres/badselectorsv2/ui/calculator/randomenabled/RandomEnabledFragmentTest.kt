@@ -53,6 +53,7 @@ class RandomEnabledFragmentTest {
         listOf(false, true, true, false),
         listOf(false, true, true, true),
         listOf(false, true, false, true),
+        listOf(true, true, true, false),
     )
 
     @After
@@ -129,19 +130,50 @@ class RandomEnabledFragmentTest {
     }
 
     @Test
-    fun compute() {
-        val fullNumbersValues = numbersLists
-        val fullOperatorsValues = operatorsLists
-        mockRandomEnabler(listOf(true), listOf(true))
+    fun computeSingleNumber() {
+        val fullNumbersList = numbersLists + numbersLists + numbersLists
+        val fullOperatorsList = operatorsLists + operatorsLists + operatorsLists
+        mockRandomEnabler(fullNumbersList.flatten(), fullOperatorsList.flatten())
+
+        // TODO remove this helper
+        val checkStateWrapper = { text: String, index: Int ->
+            val listIndex = index % numbersLists.size
+            checkState(text, numbersLists[listIndex], operatorsLists[listIndex])
+        }
 
         // call count on each line
         launchFragment() // 0
 
+        // single number
         typeText("4")  // 1  four
+        checkStateWrapper("4", 1)
         clickEquals() // 2
-        checkState("4", fullNumbersValues[2], fullOperatorsValues[2])
+        checkStateWrapper("4", 2)
 
+        typeText("6")  // 3  two
+        checkStateWrapper("46", 3)
+        clickEquals() // 4
+        checkStateWrapper("46", 4)
 
+        clickClear()  // 5
+        typeText("51")  // 7  one, five
+        checkStateWrapper("51", 7)
+        clickEquals() // 8
+        checkStateWrapper("51", 8)
+
+        clickClear()  // 9
+        typeText("03")  // 11  zero, three
+        checkStateWrapper("03", 11)
+        clickEquals() // 12
+        checkStateWrapper("3", 12)
+    }
+
+    @Test
+    fun compute() {
+
+        clickClear()  // 13
+
+        // computation
     }
 
     @Test

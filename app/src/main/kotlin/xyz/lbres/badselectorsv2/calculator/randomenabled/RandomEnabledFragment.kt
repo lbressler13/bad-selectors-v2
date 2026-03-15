@@ -9,7 +9,6 @@ import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.runComputation
 import xyz.lbres.badselectorsv2.databinding.FragmentRandomEnabledBinding
-import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
