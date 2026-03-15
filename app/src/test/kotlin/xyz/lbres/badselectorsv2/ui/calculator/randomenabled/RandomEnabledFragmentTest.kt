@@ -42,13 +42,17 @@ class RandomEnabledFragmentTest {
         listOf(false, true, false, true, false, true, false, true, true, false),
         listOf(false, false, true, true, true, true, true, true, false, true),
         listOf(true, false, true, false, true, true, true, false, false, true),
+        listOf(false, false, true, false, true, true, true, false, false, true),
+        listOf(false, false, false, false, true, false, true, true, false, true),
     )
-    val operatorLists = listOf(
+    val operatorsLists = listOf(
         listOf(false, false, true, true),
         listOf(true, false, true, true),
         listOf(false, true, false, true),
         listOf(true, true, true, false),
         listOf(false, true, true, false),
+        listOf(false, true, true, true),
+        listOf(false, true, false, true),
     )
 
     @After
@@ -61,7 +65,7 @@ class RandomEnabledFragmentTest {
         mockRandomEnabler()
 
         launchFragment()
-        checkState("", numbersLists[0], operatorLists[0])
+        checkState("", numbersLists[0], operatorsLists[0])
     }
 
     @Test
@@ -69,11 +73,16 @@ class RandomEnabledFragmentTest {
         mockRandomEnabler()
         launchFragment()
 
+        // doesn't change on blank
+        checkState("", numbersLists[0], operatorsLists[0])
+        clickEquals()
+        checkState("", numbersLists[0], operatorsLists[0])
+
         typeText("4x7")
-        checkState("4x7", numbersLists[3], operatorLists[3])
+        checkState("4x7", numbersLists[3], operatorsLists[3])
         clickEquals()
         // updated on equals click
-        checkState("28", numbersLists[4], operatorLists[4])
+        checkState("28", numbersLists[4], operatorsLists[4])
     }
 
     @Test
@@ -81,11 +90,25 @@ class RandomEnabledFragmentTest {
         mockRandomEnabler()
         launchFragment()
 
+        // backspace on blank
+        checkState("", numbersLists[0], operatorsLists[0])
+        clickBackspace()
+        checkState("", numbersLists[0], operatorsLists[0])
+
+        // text
         typeText("4x7")
-        checkState("4x7", numbersLists[3], operatorLists[3])
+        checkState("4x7", numbersLists[3], operatorsLists[3])
         clickBackspace()
         // updated on backspace click
-        checkState("4x", numbersLists[4], operatorLists[4])
+        checkState("4x", numbersLists[4], operatorsLists[4])
+
+        // backspace to blank
+        clickBackspace()
+        checkState("4", numbersLists[5], operatorsLists[5])
+        clickBackspace()
+        checkState("", numbersLists[6], operatorsLists[6])
+        clickBackspace()
+        checkState("", numbersLists[6], operatorsLists[6])
     }
 
     @Test
@@ -93,18 +116,31 @@ class RandomEnabledFragmentTest {
         mockRandomEnabler()
         launchFragment()
 
-        typeText("4x7")
-        checkState("4x7", numbersLists[3], operatorLists[3])
+        // on blank
+        checkState("", numbersLists[0], operatorsLists[0])
         clickClear()
-        // updated on backspace click
-        checkState("", numbersLists[4], operatorLists[4])
+        checkState("", numbersLists[0], operatorsLists[0])
+
+        typeText("4x7")
+        checkState("4x7", numbersLists[3], operatorsLists[3])
+        clickClear()
+        // updated on clear click
+        checkState("", numbersLists[4], operatorsLists[4])
     }
 
     @Test
     fun compute() {
-
+        val fullNumbersValues = numbersLists
+        val fullOperatorsValues = operatorsLists
         mockRandomEnabler(listOf(true), listOf(true))
-        launchFragment()
+
+        // call count on each line
+        launchFragment() // 0
+
+        typeText("4")  // 1  four
+        clickEquals() // 2
+        checkState("4", fullNumbersValues[2], fullOperatorsValues[2])
+
 
     }
 
@@ -144,7 +180,7 @@ class RandomEnabledFragmentTest {
 
     private fun mockRandomEnabler(
         numberValues: List<Boolean> = numbersLists.flatten(),
-        operatorValues: List<Boolean> = operatorLists.flatten(),
+        operatorValues: List<Boolean> = operatorsLists.flatten(),
     ) {
         mockkConstructor(RandomEnabler::class)
         every { constructedWith<RandomEnabler>().isDigitEnabled(any()) } returnsMany numberValues
@@ -173,12 +209,22 @@ class RandomEnabledFragmentTest {
         val buttonMatcher = { enabled: Boolean -> simpleIf(enabled, enabledMatcher, disabledMatcher) }
 
         numberButtons.forEachIndexed { index, button ->
-            button.check(matches(buttonMatcher(enabledNumbers[index])))
+            try {
+                button.check(matches(buttonMatcher(enabledNumbers[index])))
+            } catch (e: AssertionError) {
+                println("Error checking number button at $index")
+                throw e
+            }
         }
 
         operators.forEachIndexed { index, operator ->
             val button = operatorButtons[operator]!!
-            button.check(matches(buttonMatcher(enabledOperators[index])))
+            try {
+                button.check(matches(buttonMatcher(enabledOperators[index])))
+            } catch (e: AssertionError) {
+                println("Error checking operator button for '$operator'")
+                throw e
+            }
         }
 
         equalsButton.check(matches(buttonMatcher(equalsEnabled)))

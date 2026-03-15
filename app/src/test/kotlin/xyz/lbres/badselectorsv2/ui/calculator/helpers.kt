@@ -43,8 +43,6 @@ fun clickEquals() = equalsButton.perform(forceClick())
 fun clickBackspace() = backspaceButton.perform(forceClick())
 fun clickClear() = clearButton.perform(forceClick())
 
-fun mainTextMatches(text: String) = mainText.check(matches(withText(text)))
-
 fun splitText(text: String): List<String> = text.toList().map(Char::toString)
 
 fun typeText(text: String) {

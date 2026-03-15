@@ -92,14 +92,18 @@ abstract class BaseCalculatorFragment : Fragment() {
 
         // clear button
         rootView.findViewById<View>(R.id.clearButton)?.setOnClickListener {
-            calculatorViewModel.resetComputeData()
-            updateMainText()
+            if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
+                handleClear()
+                updateMainText()
+            }
         }
 
         // backspace button
         rootView.findViewById<View>(R.id.backspaceButton)?.setOnClickListener {
-            handleBackspace()
-            updateMainText()
+            if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
+                handleBackspace()
+                updateMainText()
+            }
         }
 
         // equals button
@@ -121,7 +125,6 @@ abstract class BaseCalculatorFragment : Fragment() {
         when {
             calcData.isEmpty() -> {
                 mainText.text = ""
-                resetUi()
             }
 
             // scroll to top after equals
@@ -151,10 +154,7 @@ abstract class BaseCalculatorFragment : Fragment() {
     protected open fun resetUi() {
         allButtonIds.forEach {
             val view = rootView.findViewById<View>(it)
-
-            if (it != R.id.clearButton && view != null) {
-                enableButton(view)
-            }
+            enableButton(view)
         }
 
         getMainText().textSize = computeTextSize
@@ -227,6 +227,11 @@ abstract class BaseCalculatorFragment : Fragment() {
      */
     protected open fun handleBackspace() {
         calculatorViewModel.backspaceComputeText()
+    }
+
+    protected open fun handleClear() {
+        calculatorViewModel.resetComputeData()
+        resetUi()
     }
 
     /**

@@ -9,6 +9,7 @@ import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.runComputation
 import xyz.lbres.badselectorsv2.databinding.FragmentRandomEnabledBinding
+import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
@@ -36,7 +37,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
 
         initKeypad()
         initMainText()
-        // updateEnabledButtons()
+        resetUi() // display intitial buttons from viewmodel
 
         return binding.root
     }
@@ -65,6 +66,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
     override fun resetUi() {
         super.resetUi()
         updateEnabledButtons()
+        enableButton(binding.equalsButton)
     }
 
     /**
