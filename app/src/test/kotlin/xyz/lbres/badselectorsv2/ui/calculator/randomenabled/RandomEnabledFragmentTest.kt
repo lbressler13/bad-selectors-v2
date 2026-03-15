@@ -110,6 +110,9 @@ class RandomEnabledFragmentTest {
         checkState("", numbersLists[6], operatorsLists[6])
         clickBackspace()
         checkState("", numbersLists[6], operatorsLists[6])
+
+        // backspace multidigit number
+        // TODO
     }
 
     @Test
@@ -164,15 +167,52 @@ class RandomEnabledFragmentTest {
 
     @Test
     fun compute() {
+        // total: 36
+        val fullNumbersList = List(5) { numbersLists }.flatten()
+        val fullOperatorsList = List(5) { operatorsLists }.flatten()
+        mockRandomEnabler(fullNumbersList.flatten(), fullOperatorsList.flatten())
 
-        clickClear()  // 13
+        // call count on each line
+        launchFragment()  // 0
 
-        // computation
+        typeText("4+6")  // 3  plus
+        checkState("4+6", fullNumbersList[3], fullOperatorsList[3])
+        clickEquals() // 4
+        checkState("10", fullNumbersList[4], fullOperatorsList[4])
+
+        typeText("/6")  // 6  divide
+        checkState("10/6", fullNumbersList[6], fullOperatorsList[6])
+        clickEquals()  // 7
+        checkState("1", fullNumbersList[7], fullOperatorsList[7])
+
+        typeText("-12")  // 10  minus
+        checkState("1-12", fullNumbersList[10], fullOperatorsList[10])
+        clickEquals()  // 11
+        checkState("-11", fullNumbersList[11], fullOperatorsList[11])
+
+        typeText("x78")  // 14  times
+        checkState("-11x78", fullNumbersList[14], fullOperatorsList[14])
+        clickEquals()  // 15
+        checkState("-858", fullNumbersList[15], fullOperatorsList[15])
+
+        // multi operator
+        clickClear()  // 16
+        typeText("15+6/2")  // 22
+        checkState("15+6/2", fullNumbersList[22], fullOperatorsList[22])
+        clickEquals()  // 23
+        checkState("18", fullNumbersList[23], fullOperatorsList[23])
+
+        clickClear()  // 24
+        typeText("2+4x6-93/10")  // 35
+        checkState("2+4x6-93/10", fullNumbersList[35], fullOperatorsList[35])
+        clickEquals()  // 36
+        checkState("17", fullNumbersList[36], fullOperatorsList[36])
     }
 
     @Test
     fun computeError() {
         // enable all buttons for ease of error testing
+        // TODO add randomization to check buttons changing :(
         mockRandomEnabler(listOf(true), listOf(true))
         launchFragment()
 
@@ -202,6 +242,7 @@ class RandomEnabledFragmentTest {
     @Test
     fun recreate() {
         // test 03 text
+        // TODO
     }
 
     private fun mockRandomEnabler(
