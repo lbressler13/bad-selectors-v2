@@ -131,41 +131,35 @@ class RandomEnabledFragmentTest {
 
     @Test
     fun computeSingleNumber() {
-        val fullNumbersList = numbersLists + numbersLists + numbersLists
-        val fullOperatorsList = operatorsLists + operatorsLists + operatorsLists
+        val fullNumbersList = numbersLists + numbersLists
+        val fullOperatorsList = operatorsLists + operatorsLists
         mockRandomEnabler(fullNumbersList.flatten(), fullOperatorsList.flatten())
-
-        // TODO remove this helper
-        val checkStateWrapper = { text: String, index: Int ->
-            val listIndex = index % numbersLists.size
-            checkState(text, numbersLists[listIndex], operatorsLists[listIndex])
-        }
 
         // call count on each line
         launchFragment() // 0
 
         // single number
         typeText("4")  // 1  four
-        checkStateWrapper("4", 1)
+        checkState("4", fullNumbersList[1], fullOperatorsList[1])
         clickEquals() // 2
-        checkStateWrapper("4", 2)
+        checkState("4", fullNumbersList[2], fullOperatorsList[2])
 
         typeText("6")  // 3  two
-        checkStateWrapper("46", 3)
+        checkState("46", fullNumbersList[3], fullOperatorsList[3])
         clickEquals() // 4
-        checkStateWrapper("46", 4)
+        checkState("46", fullNumbersList[4], fullOperatorsList[4])
 
         clickClear()  // 5
         typeText("51")  // 7  one, five
-        checkStateWrapper("51", 7)
+        checkState("51", fullNumbersList[7], fullOperatorsList[7])
         clickEquals() // 8
-        checkStateWrapper("51", 8)
+        checkState("51", fullNumbersList[8], fullOperatorsList[8])
 
         clickClear()  // 9
         typeText("03")  // 11  zero, three
-        checkStateWrapper("03", 11)
+        checkState("03", fullNumbersList[11], fullOperatorsList[11])
         clickEquals() // 12
-        checkStateWrapper("3", 12)
+        checkState("3", fullNumbersList[12], fullOperatorsList[12])
     }
 
     @Test
@@ -207,7 +201,7 @@ class RandomEnabledFragmentTest {
 
     @Test
     fun recreate() {
-
+        // test 03 text
     }
 
     private fun mockRandomEnabler(
