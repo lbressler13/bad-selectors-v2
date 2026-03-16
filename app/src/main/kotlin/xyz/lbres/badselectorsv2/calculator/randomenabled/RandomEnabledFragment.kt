@@ -37,6 +37,9 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
         initKeypad()
         initMainText()
         updateEnabledButtons(newButtons = false) // use existing buttons from viewmodel
+        if (viewModel.calcData.error != null) {
+            showErrorUi()
+        }
 
         return binding.root
     }
