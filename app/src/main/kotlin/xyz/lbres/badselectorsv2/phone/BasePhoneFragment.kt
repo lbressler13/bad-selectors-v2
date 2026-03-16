@@ -4,7 +4,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.databinding.ComponentPhoneNumberBinding
 import xyz.lbres.badselectorsv2.ext.string.underlined
-import xyz.lbres.badselectorsv2.phone.common.digitsRange
+import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.kotlinutils.general.simpleIf
 
 /**

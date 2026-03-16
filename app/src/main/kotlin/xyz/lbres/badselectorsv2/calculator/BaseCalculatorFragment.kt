@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.calculator.common.UnprotectedScrollingMovementMethod
+import xyz.lbres.badselectorsv2.calculator.utils.UnprotectedScrollingMovementMethod
 import xyz.lbres.badselectorsv2.ext.view.disable
 import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.badselectorsv2.utils.getColorOnPrimary
@@ -16,7 +16,7 @@ import xyz.lbres.badselectorsv2.utils.setImageButtonTint
  */
 abstract class BaseCalculatorFragment : Fragment() {
     protected abstract val calculatorViewModel: BaseCalculatorViewModel
-    protected abstract var rootView: View
+    protected abstract val rootView: View
 
     /**
      * Text size for mainText, depending on the current state
@@ -47,8 +47,8 @@ abstract class BaseCalculatorFragment : Fragment() {
         R.id.minusButton,
         R.id.timesButton,
         R.id.divideButton,
-        // R.id.backspaceButton,
-        // R.id.equalsButton,
+        R.id.backspaceButton,
+        R.id.equalsButton,
         R.id.clearButton,
     )
 
@@ -92,23 +92,27 @@ abstract class BaseCalculatorFragment : Fragment() {
 
         // clear button
         rootView.findViewById<View>(R.id.clearButton)?.setOnClickListener {
-            calculatorViewModel.resetComputeData()
-            updateMainText()
+            if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
+                handleClear()
+                updateMainText()
+            }
         }
 
         // backspace button
-        // rootView.findViewById<View>(R.id.backspaceButton)?.setOnClickListener {
-        // handleBackspace()
-        // updateMainText()
-        // }
+        rootView.findViewById<View>(R.id.backspaceButton)?.setOnClickListener {
+            if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
+                handleBackspace()
+                updateMainText()
+            }
+        }
 
         // equals button
-        // rootView.findViewById<View>(R.id.equalsButton)?.setOnClickListener {
-        // if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
-        // handleEquals()
-        // updateMainText()
-        // }
-        // }
+        rootView.findViewById<View>(R.id.equalsButton)?.setOnClickListener {
+            if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
+                handleEquals()
+                updateMainText()
+            }
+        }
     }
 
     /**
@@ -121,7 +125,6 @@ abstract class BaseCalculatorFragment : Fragment() {
         when {
             calcData.isEmpty() -> {
                 mainText.text = ""
-                resetUi()
             }
 
             // scroll to top after equals
@@ -151,10 +154,7 @@ abstract class BaseCalculatorFragment : Fragment() {
     protected open fun resetUi() {
         allButtonIds.forEach {
             val view = rootView.findViewById<View>(it)
-
-            if (it != R.id.clearButton && view != null) {
-                enableButton(view)
-            }
+            enableButton(view)
         }
 
         getMainText().textSize = computeTextSize
@@ -227,6 +227,15 @@ abstract class BaseCalculatorFragment : Fragment() {
      */
     protected open fun handleBackspace() {
         calculatorViewModel.backspaceComputeText()
+    }
+
+    /**
+     * Handle clear button being pressed.
+     * Calls ViewModel reset method and resets UI by default.
+     */
+    protected open fun handleClear() {
+        calculatorViewModel.resetComputeData()
+        resetUi()
     }
 
     /**

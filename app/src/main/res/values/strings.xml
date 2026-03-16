@@ -46,6 +46,9 @@
     <!-- Single Operation -->
     <string name="title_single_operation">Single Operation</string>
 
+    <!-- Enable Random -->
+    <string name="title_random_enabled">Random Enabled</string>
+
 
     <!-- OTP -->
     <string name="appbar_title_otp">Bad OTP Receivers</string>
@@ -66,6 +69,7 @@
 
 
     <!-- Content Descriptions -->
+    <string name="backspace_cd">Backspace</string>
     <string name="calendar_cd">Date</string>
     <string name="calculator_cd">Calculator</string>
     <string name="cell_phone_cd">Cell Phone</string>
@@ -77,6 +81,7 @@
     <string name="collapse_dropdown_cd">Hide additional content</string>
     <string name="close_cd">Close</string>
     <string name="divide_cd">Divide</string>
+    <string name="equals_cd">Equals</string>
     <string name="expand_dropdown_cd">Show additional content</string>
     <string name="home_cd">Home</string>
     <string name="info_cd">Additional information</string>

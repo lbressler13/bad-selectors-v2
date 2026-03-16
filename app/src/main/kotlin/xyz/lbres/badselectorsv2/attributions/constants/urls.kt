@@ -21,6 +21,7 @@ const val prosymbolsPremiumUrl = "https://www.flaticon.com/authors/prosymbols-pr
 /**
  * Image URLs
  */
+const val arrowLeftUrl = "https://www.flaticon.com/premium-icon/left_3416141"
 const val calendarUrl = "https://www.flaticon.com/premium-icon/calendar_2886665"
 const val calculatorUrl = "https://www.flaticon.com/premium-icon/calculator_1031688"
 const val cellPhoneUrl = "https://www.flaticon.com/free-icon/mobile-phone-with-nine-keys_77184"
@@ -30,6 +31,7 @@ const val chevronRightUrl = "https://www.flaticon.com/premium-icon/right-chevron
 const val chevronUpUrl = "https://www.flaticon.com/premium-icon/up-chevron_1633717"
 const val closeUrl = "https://www.flaticon.com/premium-icon/cross_4421536"
 const val divideUrl = "https://www.flaticon.com/free-icon/divide_9345134"
+const val equalsUrl = "https://www.flaticon.com/free-icon/equal_56751"
 const val homeUrl = "https://www.flaticon.com/free-icon/home_1946436"
 const val infoUrl = "https://www.flaticon.com/free-icon/info-button_64494"
 const val minusUrl = "https://www.flaticon.com/free-icon/minus_56889"

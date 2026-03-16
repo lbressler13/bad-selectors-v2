@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
-import xyz.lbres.badselectorsv2.calculator.common.runComputation
+import xyz.lbres.badselectorsv2.calculator.utils.runComputation
 import xyz.lbres.badselectorsv2.databinding.FragmentSingleOperationBinding
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
@@ -25,7 +25,8 @@ class SingleOperationFragment : BaseCalculatorFragment() {
         get() = viewModel
 
     private lateinit var binding: FragmentSingleOperationBinding
-    override lateinit var rootView: View
+    override val rootView: View
+        get() = binding.root
 
     /**
      * Initialize fragment
@@ -37,7 +38,6 @@ class SingleOperationFragment : BaseCalculatorFragment() {
     ): View {
         binding = FragmentSingleOperationBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(requireActivity())[SingleOperationViewModel::class.java]
-        rootView = binding.root
 
         // init UI
         initKeypad()

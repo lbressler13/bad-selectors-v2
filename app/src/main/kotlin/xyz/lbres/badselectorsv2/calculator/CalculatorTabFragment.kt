@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
+import xyz.lbres.badselectorsv2.calculator.randomenabled.RandomEnabledFragment
 import xyz.lbres.badselectorsv2.calculator.singleoperation.SingleOperationFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
 
@@ -20,6 +21,7 @@ class CalculatorTabFragment : TabFragment() {
     override var navToOtpResId: Int? = R.id.navigateCalcToOtp
 
     private val singleOperationFragment: SingleOperationFragment by lazy { SingleOperationFragment() }
+    private val randomEnabledFragment: RandomEnabledFragment by lazy { RandomEnabledFragment() }
 
     override lateinit var binding: TabFragmentBinding
 
@@ -39,6 +41,7 @@ class CalculatorTabFragment : TabFragment() {
     override fun getFragmentFromPosition(position: Int): Fragment {
         return when (position) {
             0 -> singleOperationFragment
+            1 -> randomEnabledFragment
             else -> singleOperationFragment
         }
     }
@@ -46,7 +49,7 @@ class CalculatorTabFragment : TabFragment() {
     companion object {
         val metadata = Metadata(
             R.string.title_calc,
-            listOf(R.string.title_single_operation),
+            listOf(R.string.title_single_operation, R.string.title_random_enabled),
             R.id.navigateHomeToCalc,
         )
     }

@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.calculator.common
+package xyz.lbres.badselectorsv2.calculator.utils
 
 import xyz.lbres.kotlinutils.list.StringList
 

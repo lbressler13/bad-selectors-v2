@@ -4,6 +4,8 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
+import xyz.lbres.kotlinutils.string.ext.isInt
 
 // all numbers
 val numberButtons: List<ViewInteraction> = listOf(
@@ -27,5 +29,26 @@ val operatorButtons: Map<String, ViewInteraction> = mapOf(
     "/" to onView(withId((R.id.divideButton))),
 )
 
-val clearButton: ViewInteraction = onView(withId(R.id.clearButton))
+val operators = listOf("+", "-", "x", "/")
+
 val mainText: ViewInteraction = onView(withId(R.id.mainText))
+val equalsButton: ViewInteraction = onView(withId(R.id.equalsButton))
+val backspaceButton: ViewInteraction = onView(withId(R.id.backspaceButton))
+val clearButton: ViewInteraction = onView(withId(R.id.clearButton))
+
+fun clickEquals() = equalsButton.perform(forceClick())
+fun clickBackspace() = backspaceButton.perform(forceClick())
+fun clickClear() = clearButton.perform(forceClick())
+
+fun splitText(text: String): List<String> = text.toList().map(Char::toString)
+
+fun typeText(text: String) {
+    val textList = splitText(text)
+    textList.forEach {
+        if (it.isInt()) {
+            numberButtons[it.toInt()].perform(forceClick())
+        } else {
+            operatorButtons[it]!!.perform(forceClick())
+        }
+    }
+}
