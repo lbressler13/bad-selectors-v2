@@ -1,9 +1,6 @@
 package xyz.lbres.badselectorsv2.ui.calculator.randomenabled
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.justRun
@@ -17,21 +14,11 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.calculator.randomenabled.RandomEnabler
-import xyz.lbres.badselectorsv2.ui.calculator.backspaceButton
-import xyz.lbres.badselectorsv2.ui.calculator.clearButton
 import xyz.lbres.badselectorsv2.ui.calculator.clickBackspace
 import xyz.lbres.badselectorsv2.ui.calculator.clickClear
 import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
-import xyz.lbres.badselectorsv2.ui.calculator.equalsButton
-import xyz.lbres.badselectorsv2.ui.calculator.mainText
-import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
-import xyz.lbres.badselectorsv2.ui.calculator.operatorButtons
-import xyz.lbres.badselectorsv2.ui.calculator.operators
 import xyz.lbres.badselectorsv2.ui.calculator.typeText
-import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
-import xyz.lbres.kotlinutils.general.simpleIf
-import xyz.lbres.kotlinutils.list.listOfValue
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
@@ -71,7 +58,6 @@ class RandomEnabledFragmentTest {
     @Test
     fun initialUi() {
         mockRandomEnabler()
-
         launchFragment()
         checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
     }
@@ -83,13 +69,12 @@ class RandomEnabledFragmentTest {
 
         // doesn't change on blank
         checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
-        clickEquals()
+        clickEquals() // don't update index on blank
         checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
 
         typeTextWithIndex("4x7")
         checkState("4x7", numbersLists[currentIndex], operatorsLists[currentIndex])
         clickEqualsWithIndex()
-        // updated on equals click
         checkState("28", numbersLists[currentIndex], operatorsLists[currentIndex])
     }
 
@@ -102,14 +87,13 @@ class RandomEnabledFragmentTest {
 
         // backspace on blank
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspace()
+        clickBackspace() // don't update index on blank
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
         // text
         typeTextWithIndex("4x7")
         checkState("4x7", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         clickBackspaceWithIndex()
-        // updated on backspace click
         checkState("4x", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
         // backspace to blank
@@ -121,21 +105,21 @@ class RandomEnabledFragmentTest {
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
         // backspace multidigit number
-        typeTextWithIndex("14")  // 8
-        clickEqualsWithIndex()  // 9
+        typeTextWithIndex("14")
+        clickEqualsWithIndex()
         checkState("14", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()  // 10
+        clickBackspaceWithIndex()
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        typeTextWithIndex("10")  // 12
-        clickEqualsWithIndex()  // 13
-        typeTextWithIndex("+6") // 15
+        typeTextWithIndex("10")
+        clickEqualsWithIndex()
+        typeTextWithIndex("+6")
         checkState("10+6", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()  // 16
+        clickBackspaceWithIndex()
         checkState("10+", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()  // 17
+        clickBackspaceWithIndex()
         checkState("10", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()  // 18
+        clickBackspaceWithIndex()
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
     }
 
@@ -146,13 +130,12 @@ class RandomEnabledFragmentTest {
 
         // on blank
         checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
-        clickClear()
+        clickClear() // don't update index on blank
         checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
 
         typeTextWithIndex("4x7")
         checkState("4x7", numbersLists[currentIndex], operatorsLists[currentIndex])
         clickClearWithIndex()
-        // updated on clear click
         checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
     }
 
@@ -161,75 +144,70 @@ class RandomEnabledFragmentTest {
         val fullNumbersLists = numbersLists + numbersLists
         val fullOperatorsLists = operatorsLists + operatorsLists
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
-
-        // call count on each line
-        launchFragment() // 0
+        launchFragment()
 
         // single number
-        typeTextWithIndex("4")  // 1  four
+        typeTextWithIndex("4")
         checkState("4", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex() // 2
+        clickEqualsWithIndex()
         checkState("4", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        typeTextWithIndex("6")  // 3  two
+        typeTextWithIndex("6")
         checkState("46", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex() // 4
+        clickEqualsWithIndex()
         checkState("46", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        clickClearWithIndex()  // 5
-        typeTextWithIndex("51")  // 7  one, five
+        clickClearWithIndex()
+        typeTextWithIndex("51")
         checkState("51", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex() // 8
+        clickEqualsWithIndex()
         checkState("51", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        clickClearWithIndex()  // 9
-        typeTextWithIndex("03")  // 11  zero, three
+        clickClearWithIndex()
+        typeTextWithIndex("03")
         checkState("03", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex() // 12
+        clickEqualsWithIndex()
         checkState("3", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
     }
 
     @Test
     fun compute() {
-        // total: 36
         val fullNumbersLists = List(5) { numbersLists }.flatten()
         val fullOperatorsLists = List(5) { operatorsLists }.flatten()
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
+        launchFragment()
 
-        // call count on each line
-        launchFragment()  // 0
-
-        typeTextWithIndex("4+6")  // 3  plus
+        typeTextWithIndex("4+6") // four, six, plus
         checkState("4+6", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex() // 4
+        clickEqualsWithIndex()
         checkState("10", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        typeTextWithIndex("/6")  // 6  divide
+        typeTextWithIndex("/6") // div
         checkState("10/6", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()  // 7
+        clickEqualsWithIndex()
         checkState("1", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        typeTextWithIndex("-12")  // 10  minus
+        typeTextWithIndex("-12") // one, two, minus
         checkState("1-12", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()  // 11
+        clickEqualsWithIndex()
         checkState("-11", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        typeTextWithIndex("x78")  // 14  times
+        typeTextWithIndex("x78") // seven, eight, times
         checkState("-11x78", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()  // 15
+        clickEqualsWithIndex()
         checkState("-858", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
         // multi operator
-        clickClearWithIndex()  // 16
-        typeTextWithIndex("15+6/2")  // 22
+        clickClearWithIndex()
+        typeTextWithIndex("15+6/2") // five
         checkState("15+6/2", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()  // 23
+        clickEqualsWithIndex()
         checkState("18", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        clickClearWithIndex()  // 24
-        typeTextWithIndex("2+4x6-93/10")  // 35
+        clickClearWithIndex()
+        typeTextWithIndex("2+4x6-93/10") // zero, three, nine
         checkState("2+4x6-93/10", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()  // 36
+        clickEqualsWithIndex()
         checkState("17", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
     }
 
@@ -242,13 +220,7 @@ class RandomEnabledFragmentTest {
         fun checkErrorWithText(text: String, error: String) {
             typeTextWithIndex(text)
             clickEqualsWithIndex()
-            checkState(
-                error,
-                listOfValue(10, false),
-                listOfValue(4, false),
-                equalsEnabled = false,
-                backspaceEnabled = false,
-            )
+            checkErrorState(error)
             clickClearWithIndex()
             checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         }
@@ -285,57 +257,56 @@ class RandomEnabledFragmentTest {
         }
 
         mockRandomEnabler(mockNumbersLists.flatten(), mockOperatorsLists.flatten())
-
-        // call count on each line
-        val scenario = launchFragment() // 0
+        val scenario = launchFragment()
 
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         scenario.recreate()
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
         // text
-        typeTextWithIndex("03")  // 2
+        typeTextWithIndex("03")
         checkState("03", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         scenario.recreate()
         checkState("03", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        typeTextWithIndex("x5/")  // 5
+        typeTextWithIndex("x5/")
         checkState("03x5/", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         scenario.recreate()
         checkState("03x5/", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
-        clickBackspaceWithIndex()  // 6
+        clickBackspaceWithIndex()
         checkState("03x5", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         scenario.recreate()
         checkState("03x5", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
         // eq value
-        clickEqualsWithIndex()  // 7
+        clickEqualsWithIndex()
         checkState("15", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         scenario.recreate()
         checkState("15", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
         // cleared
-        clickClearWithIndex()  // 8
+        clickClearWithIndex()
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         scenario.recreate()
         checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
         // error
-        typeTextWithIndex("+")  // 9
-        clickEqualsWithIndex()  // 10
-        checkState("Err: Syntax Error", listOfValue(10, false), listOfValue(4, false), false, false)
+        typeTextWithIndex("+")
+        clickEqualsWithIndex()
+        checkErrorState("Err: Syntax Error")
         scenario.recreate()
-        checkState("Err: Syntax Error", listOfValue(10, false), listOfValue(4, false), false, false)
+        checkErrorState("Err: Syntax Error")
     }
 
+    // mock RandomEnabler class
     private fun mockRandomEnabler(
-        numberValues: List<Boolean> = numbersLists.flatten(),
-        operatorValues: List<Boolean> = operatorsLists.flatten(),
+        numbersReturnValues: List<Boolean> = numbersLists.flatten(),
+        operatorsReturnValues: List<Boolean> = operatorsLists.flatten(),
     ) {
         mockkConstructor(RandomEnabler::class)
-        every { constructedWith<RandomEnabler>().isDigitEnabled(any()) } returnsMany numberValues
-        every { constructedWith<RandomEnabler>().isOperatorEnabled(any()) } returnsMany operatorValues
+        every { constructedWith<RandomEnabler>().isDigitEnabled(any()) } returnsMany numbersReturnValues
+        every { constructedWith<RandomEnabler>().isOperatorEnabled(any()) } returnsMany operatorsReturnValues
         justRun { constructedWith<RandomEnabler>().update() }
     }
 
@@ -346,58 +317,25 @@ class RandomEnabledFragmentTest {
         return scenario
     }
 
-    private fun checkState(
-        text: String,
-        enabledNumbers: List<Boolean>,
-        enabledOperators: List<Boolean>,
-        equalsEnabled: Boolean = true,
-        backspaceEnabled: Boolean = true,
-    ) {
-        mainText.check(matches(withText(text)))
-
-        val enabledMatcher = isEnabled()
-        val disabledMatcher = isDisabled()
-        val buttonMatcher = { enabled: Boolean -> simpleIf(enabled, enabledMatcher, disabledMatcher) }
-
-        numberButtons.forEachIndexed { index, button ->
-            try {
-                button.check(matches(buttonMatcher(enabledNumbers[index])))
-            } catch (e: AssertionError) {
-                println("Error checking number button at $index")
-                throw e
-            }
-        }
-
-        operators.forEachIndexed { index, operator ->
-            val button = operatorButtons[operator]!!
-            try {
-                button.check(matches(buttonMatcher(enabledOperators[index])))
-            } catch (e: AssertionError) {
-                println("Error checking operator button for '$operator'")
-                throw e
-            }
-        }
-
-        equalsButton.check(matches(buttonMatcher(equalsEnabled)))
-        backspaceButton.check(matches(buttonMatcher(backspaceEnabled)))
-        clearButton.check(matches(buttonMatcher(true)))
-    }
-
+    // wrapper to update current index when text is typed
     private fun typeTextWithIndex(text: String) {
         typeText(text)
         currentIndex += text.length
     }
 
+    // wrapper to update current index when equals is pressed
     private fun clickEqualsWithIndex() {
         clickEquals()
         currentIndex++
     }
 
+    // wrapper to update current index when clear is pressed
     private fun clickClearWithIndex() {
         clickClear()
         currentIndex++
     }
 
+    // wrapper to update current index when backspace is pressed
     private fun clickBackspaceWithIndex() {
         clickBackspace()
         currentIndex++
