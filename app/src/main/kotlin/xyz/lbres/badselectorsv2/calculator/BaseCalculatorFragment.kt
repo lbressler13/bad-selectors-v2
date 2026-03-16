@@ -229,6 +229,10 @@ abstract class BaseCalculatorFragment : Fragment() {
         calculatorViewModel.backspaceComputeText()
     }
 
+    /**
+     * Handle clear button being pressed.
+     * Calls ViewModel reset method and resets UI by default.
+     */
     protected open fun handleClear() {
         calculatorViewModel.resetComputeData()
         resetUi()

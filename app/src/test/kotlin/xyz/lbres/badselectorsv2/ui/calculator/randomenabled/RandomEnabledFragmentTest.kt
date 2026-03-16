@@ -44,12 +44,12 @@ class RandomEnabledFragmentTest {
         listOf(true, true, true, false),
     )
 
-    // current index of the random mock from numbers and operators lists
-    private var currentIndex: Int = 0
+    // number of times that the digit shuffler update function has been called during the test
+    private var updateCounter: Int = 0
 
     @Before
     fun setupTest() {
-        currentIndex = 0
+        updateCounter = 0
     }
 
     @After
@@ -61,7 +61,7 @@ class RandomEnabledFragmentTest {
     fun initialUi() {
         mockRandomEnabler()
         launchFragment()
-        checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
+        checkState("", numbersLists[updateCounter], operatorsLists[updateCounter])
     }
 
     @Test
@@ -70,14 +70,14 @@ class RandomEnabledFragmentTest {
         launchFragment()
 
         // doesn't change on blank
-        checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
+        checkState("", numbersLists[updateCounter], operatorsLists[updateCounter])
         clickEquals() // don't update index on blank
-        checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
+        checkState("", numbersLists[updateCounter], operatorsLists[updateCounter])
 
-        typeTextWithIndex("4x7")
-        checkState("4x7", numbersLists[currentIndex], operatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("28", numbersLists[currentIndex], operatorsLists[currentIndex])
+        typeTextWithCounter("4x7")
+        checkState("4x7", numbersLists[updateCounter], operatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("28", numbersLists[updateCounter], operatorsLists[updateCounter])
     }
 
     @Test
@@ -88,41 +88,41 @@ class RandomEnabledFragmentTest {
         launchFragment()
 
         // backspace on blank
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         clickBackspace() // don't update index on blank
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // text
-        typeTextWithIndex("4x7")
-        checkState("4x7", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()
-        checkState("4x", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("4x7")
+        checkState("4x7", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickBackspaceWithCounter()
+        checkState("4x", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // backspace to blank
-        clickBackspaceWithIndex()
-        checkState("4", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickBackspaceWithCounter()
+        checkState("4", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickBackspaceWithCounter()
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         clickBackspace()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // backspace multidigit number
-        typeTextWithIndex("14")
-        clickEqualsWithIndex()
-        checkState("14", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("14")
+        clickEqualsWithCounter()
+        checkState("14", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickBackspaceWithCounter()
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        typeTextWithIndex("10")
-        clickEqualsWithIndex()
-        typeTextWithIndex("+6")
-        checkState("10+6", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()
-        checkState("10+", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()
-        checkState("10", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickBackspaceWithIndex()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("10")
+        clickEqualsWithCounter()
+        typeTextWithCounter("+6")
+        checkState("10+6", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickBackspaceWithCounter()
+        checkState("10+", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickBackspaceWithCounter()
+        checkState("10", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickBackspaceWithCounter()
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
     }
 
     @Test
@@ -133,22 +133,22 @@ class RandomEnabledFragmentTest {
         launchFragment()
 
         // on blank
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         clickClear() // don't update index on blank
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // with text
-        typeTextWithIndex("4x7")
-        checkState("4x7", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickClearWithIndex()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("4x7")
+        checkState("4x7", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickClearWithCounter()
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // with computed
-        typeTextWithIndex("4x7")
-        clickEqualsWithIndex()
-        checkState("28", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickClearWithIndex()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("4x7")
+        clickEqualsWithCounter()
+        checkState("28", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickClearWithCounter()
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
     }
 
     @Test
@@ -158,27 +158,27 @@ class RandomEnabledFragmentTest {
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
         launchFragment()
 
-        typeTextWithIndex("4")
-        checkState("4", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("4", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("4")
+        checkState("4", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("4", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        typeTextWithIndex("6")
-        checkState("46", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("46", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("6")
+        checkState("46", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("46", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        clickClearWithIndex()
-        typeTextWithIndex("51")
-        checkState("51", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("51", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickClearWithCounter()
+        typeTextWithCounter("51")
+        checkState("51", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("51", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        clickClearWithIndex()
-        typeTextWithIndex("03")
-        checkState("03", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("3", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickClearWithCounter()
+        typeTextWithCounter("03")
+        checkState("03", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("3", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
     }
 
     @Test
@@ -188,38 +188,38 @@ class RandomEnabledFragmentTest {
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
         launchFragment()
 
-        typeTextWithIndex("4+6") // four, six, plus
-        checkState("4+6", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("10", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("4+6") // four, six, plus
+        checkState("4+6", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("10", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        typeTextWithIndex("/6") // div
-        checkState("10/6", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("1", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("/6") // div
+        checkState("10/6", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("1", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        typeTextWithIndex("-12") // one, two, minus
-        checkState("1-12", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("-11", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("-12") // one, two, minus
+        checkState("1-12", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("-11", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        typeTextWithIndex("x78") // seven, eight, times
-        checkState("-11x78", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("-858", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("x78") // seven, eight, times
+        checkState("-11x78", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("-858", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // multi operator
-        clickClearWithIndex()
-        typeTextWithIndex("15+6/2") // five
-        checkState("15+6/2", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("18", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickClearWithCounter()
+        typeTextWithCounter("15+6/2") // five
+        checkState("15+6/2", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("18", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        clickClearWithIndex()
-        typeTextWithIndex("2+4x6-93/10") // zero, three, nine
-        checkState("2+4x6-93/10", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
-        clickEqualsWithIndex()
-        checkState("17", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickClearWithCounter()
+        typeTextWithCounter("2+4x6-93/10") // zero, three, nine
+        checkState("2+4x6-93/10", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
+        clickEqualsWithCounter()
+        checkState("17", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
     }
 
     @Test
@@ -229,11 +229,11 @@ class RandomEnabledFragmentTest {
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
 
         fun typeAndCheckError(text: String, error: String) {
-            typeTextWithIndex(text)
-            clickEqualsWithIndex()
+            typeTextWithCounter(text)
+            clickEqualsWithCounter()
             checkErrorState(error)
-            clickClearWithIndex()
-            checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+            clickClearWithCounter()
+            checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         }
 
         launchFragment()
@@ -271,41 +271,41 @@ class RandomEnabledFragmentTest {
         mockRandomEnabler(mockNumbersLists.flatten(), mockOperatorsLists.flatten())
         val scenario = launchFragment()
 
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         scenario.recreate()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // text
-        typeTextWithIndex("03")
-        checkState("03", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("03")
+        checkState("03", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         scenario.recreate()
-        checkState("03", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("03", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        typeTextWithIndex("x5/")
-        checkState("03x5/", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        typeTextWithCounter("x5/")
+        checkState("03x5/", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         scenario.recreate()
-        checkState("03x5/", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("03x5/", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
-        clickBackspaceWithIndex()
-        checkState("03x5", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickBackspaceWithCounter()
+        checkState("03x5", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         scenario.recreate()
-        checkState("03x5", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("03x5", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // eq value
-        clickEqualsWithIndex()
-        checkState("15", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickEqualsWithCounter()
+        checkState("15", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         scenario.recreate()
-        checkState("15", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("15", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // cleared
-        clickClearWithIndex()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickClearWithCounter()
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
         scenario.recreate()
-        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        checkState("", fullNumbersLists[updateCounter], fullOperatorsLists[updateCounter])
 
         // error
-        typeTextWithIndex("+")
-        clickEqualsWithIndex()
+        typeTextWithCounter("+")
+        clickEqualsWithCounter()
         checkErrorState("Err: Syntax Error")
         scenario.recreate()
         checkErrorState("Err: Syntax Error")
@@ -329,28 +329,28 @@ class RandomEnabledFragmentTest {
         return scenario
     }
 
-    // wrapper to update current index when text is typed
-    private fun typeTextWithIndex(text: String) {
+    // wrapper to update current counter when text is typed
+    private fun typeTextWithCounter(text: String) {
         typeText(text)
-        currentIndex += text.length
+        updateCounter += text.length
     }
 
-    // wrapper to update current index when equals is pressed
-    private fun clickEqualsWithIndex() {
+    // wrapper to update current counter when equals is pressed
+    private fun clickEqualsWithCounter() {
         clickEquals()
-        currentIndex++
+        updateCounter++
     }
 
-    // wrapper to update current index when clear is pressed
-    private fun clickClearWithIndex() {
+    // wrapper to update current counter when clear is pressed
+    private fun clickClearWithCounter() {
         clickClear()
-        currentIndex++
+        updateCounter++
     }
 
-    // wrapper to update current index when backspace is pressed
-    private fun clickBackspaceWithIndex() {
+    // wrapper to update current counter when backspace is pressed
+    private fun clickBackspaceWithCounter() {
         clickBackspace()
-        currentIndex++
+        updateCounter++
     }
 
     // TODO move to kotlin-utils

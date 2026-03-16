@@ -35,7 +35,7 @@ fun checkState(
         try {
             button.check(matches(buttonMatcher(enabledNumbers[index])))
         } catch (e: AssertionError) {
-            println("Error checking number button at $index")
+            println("Error checking number button for '$index'")
             throw e
         }
     }
