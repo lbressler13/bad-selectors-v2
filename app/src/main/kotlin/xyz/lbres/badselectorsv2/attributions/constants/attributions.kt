@@ -25,11 +25,11 @@ private val freepikImages = listOf(
 )
 
 private val iconSmartImages = listOf(
-    ImageAttribution(R.drawable.ic_arrow_left, R.string.backspace_cd, arrowLeftUrl),
     ImageAttribution(R.drawable.ic_divide, R.string.divide_cd, divideUrl),
 )
 
 private val ilhamFitrotulHayatImages = listOf(
+    ImageAttribution(R.drawable.ic_arrow_left, R.string.backspace_cd, arrowLeftUrl),
     ImageAttribution(R.drawable.ic_close, R.string.close_cd, closeUrl),
     ImageAttribution(R.drawable.ic_phone, R.string.phone_cd, phoneUrl),
 )
