@@ -36,7 +36,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
 
         initKeypad()
         initMainText()
-        resetUi() // display intitial buttons from viewmodel
+        updateEnabledButtons(newButtons = false) // use existing buttons from viewmodel
 
         return binding.root
     }
@@ -87,9 +87,13 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
 
     /**
      * Update enabled values in ViewModel, and set enabled buttons based on new values
+     *
+     * @param newButtons [Boolean]: if the buttons should be updated in the random enabled. Defaults to true
      */
-    private fun updateEnabledButtons() {
-        viewModel.enabler.update()
+    private fun updateEnabledButtons(newButtons: Boolean = true) {
+        if (newButtons) {
+            viewModel.enabler.update()
+        }
 
         val numberButtons = listOf(
             binding.zeroButton,
