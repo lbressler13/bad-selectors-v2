@@ -33,7 +33,7 @@ class RandomEnabledFragmentTest {
         listOf(false, false, true, false, true, true, true, false, false, true),
         listOf(false, false, false, false, true, false, true, true, false, true),
     )
-    val operatorsLists = listOf(
+    private val operatorsLists = listOf(
         listOf(false, false, true, true),
         listOf(true, false, true, true),
         listOf(false, true, false, true),
@@ -43,6 +43,8 @@ class RandomEnabledFragmentTest {
         listOf(false, true, false, true),
         listOf(true, true, true, false),
     )
+
+    // current index of the random mock from numbers and operators lists
     private var currentIndex: Int = 0
 
     @Before
@@ -80,8 +82,8 @@ class RandomEnabledFragmentTest {
 
     @Test
     fun backspace() {
-        val fullNumbersLists = numbersLists + numbersLists + numbersLists
-        val fullOperatorsLists = operatorsLists + operatorsLists + operatorsLists
+        val fullNumbersLists = numbersLists * 3
+        val fullOperatorsLists = operatorsLists * 3
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
         launchFragment()
 
@@ -125,28 +127,37 @@ class RandomEnabledFragmentTest {
 
     @Test
     fun clear() {
-        mockRandomEnabler()
+        val fullNumbersLists = numbersLists * 2
+        val fullOperatorsLists = operatorsLists * 2
+        mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
         launchFragment()
 
         // on blank
-        checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
+        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         clickClear() // don't update index on blank
-        checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
+        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
 
+        // with text
         typeTextWithIndex("4x7")
-        checkState("4x7", numbersLists[currentIndex], operatorsLists[currentIndex])
+        checkState("4x7", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         clickClearWithIndex()
-        checkState("", numbersLists[currentIndex], operatorsLists[currentIndex])
+        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+
+        // with computed
+        typeTextWithIndex("4x7")
+        clickEqualsWithIndex()
+        checkState("28", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
+        clickClearWithIndex()
+        checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
     }
 
     @Test
     fun computeSingleNumber() {
-        val fullNumbersLists = numbersLists + numbersLists
-        val fullOperatorsLists = operatorsLists + operatorsLists
+        val fullNumbersLists = numbersLists * 2
+        val fullOperatorsLists = operatorsLists * 2
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
         launchFragment()
 
-        // single number
         typeTextWithIndex("4")
         checkState("4", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         clickEqualsWithIndex()
@@ -172,8 +183,8 @@ class RandomEnabledFragmentTest {
 
     @Test
     fun compute() {
-        val fullNumbersLists = List(5) { numbersLists }.flatten()
-        val fullOperatorsLists = List(5) { operatorsLists }.flatten()
+        val fullNumbersLists = numbersLists * 5
+        val fullOperatorsLists = operatorsLists * 5
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
         launchFragment()
 
@@ -213,11 +224,11 @@ class RandomEnabledFragmentTest {
 
     @Test
     fun computeError() {
-        val fullNumbersLists = List(6) { numbersLists }.flatten()
-        val fullOperatorsLists = List(6) { operatorsLists }.flatten()
+        val fullNumbersLists = numbersLists * 6
+        val fullOperatorsLists = operatorsLists * 6
         mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
 
-        fun checkErrorWithText(text: String, error: String) {
+        fun typeAndCheckError(text: String, error: String) {
             typeTextWithIndex(text)
             clickEqualsWithIndex()
             checkErrorState(error)
@@ -229,25 +240,26 @@ class RandomEnabledFragmentTest {
 
         // syntax error
         var expectedError = "Err: Syntax Error"
-        checkErrorWithText("+", expectedError)
-        checkErrorWithText("12+6//2", expectedError)
-        checkErrorWithText("-5", expectedError)
+        typeAndCheckError("+", expectedError)
+        typeAndCheckError("12+6//2", expectedError)
+        typeAndCheckError("-5", expectedError)
 
         // divide by zero
         expectedError = "Err: Divide by 0"
-        checkErrorWithText("6/0", expectedError)
-        checkErrorWithText("6+3/0-2", expectedError)
+        typeAndCheckError("6/0", expectedError)
+        typeAndCheckError("6+3/0-2", expectedError)
 
         // overflow
         expectedError = "Err: Overflow value"
-        checkErrorWithText(Int.MAX_VALUE.toString() + "000", expectedError)
+        typeAndCheckError(Int.MAX_VALUE.toString() + "000", expectedError)
     }
 
     @Test
     fun recreate() {
-        val fullNumbersLists = numbersLists + numbersLists
-        val fullOperatorsLists = operatorsLists + operatorsLists
+        val fullNumbersLists = numbersLists * 2
+        val fullOperatorsLists = operatorsLists * 2
 
+        // insert duplicate values to be used when the fragment is recreated
         val mockNumbersLists = fullNumbersLists.toMutableList()
         val mockOperatorsLists = fullOperatorsLists.toMutableList()
         val recreateIndices = listOf(0, 2, 5, 6, 7, 8, 10).sortedDescending()
@@ -340,4 +352,7 @@ class RandomEnabledFragmentTest {
         clickBackspace()
         currentIndex++
     }
+
+    // TODO move to kotlin-utils
+    private operator fun <T> List<T>.times(other: Int) = List(other) { this }.flatten()
 }

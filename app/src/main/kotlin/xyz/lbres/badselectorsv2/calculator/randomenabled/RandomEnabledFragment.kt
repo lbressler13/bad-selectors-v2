@@ -12,7 +12,7 @@ import xyz.lbres.badselectorsv2.databinding.FragmentRandomEnabledBinding
 import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
- * Fragment with a calculator that randomly enables and disables operator and number buttons, when any button is pressed.
+ * Fragment with a calculator that randomly enables and disables operator and number buttons when any button is pressed.
  */
 class RandomEnabledFragment : BaseCalculatorFragment() {
     private lateinit var viewModel: RandomEnabledViewModel
@@ -68,7 +68,6 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
     override fun resetUi() {
         super.resetUi()
         updateEnabledButtons()
-        enableButton(binding.equalsButton)
     }
 
     /**

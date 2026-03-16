@@ -29,7 +29,9 @@ class RandomEnabler {
      * @param digit [Int]: digit to check
      * @return [Boolean]: `true` if the digit should be enabled, `false` otherwise
      */
-    fun isDigitEnabled(digit: Int): Boolean = digit in enabledNumbers.indices && enabledNumbers[digit]
+    fun isDigitEnabled(digit: Int): Boolean {
+        return digit in enabledNumbers.indices && enabledNumbers[digit]
+    }
 
     /**
      * Determine if a given operator should be enabled

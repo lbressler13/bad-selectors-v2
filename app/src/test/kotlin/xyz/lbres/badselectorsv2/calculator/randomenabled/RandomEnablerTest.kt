@@ -43,7 +43,7 @@ class RandomEnablerTest {
             assertTrue(enabler.isOperatorEnabled("+"))
             assertFalse(enabler.isOperatorEnabled("-"))
 
-            verifyCallCount(1)
+            verifyMockCalls(callCount = 1)
         }
     }
 
@@ -62,6 +62,8 @@ class RandomEnablerTest {
             assertFalse(enabler.isOperatorEnabled(""))
             assertFalse(enabler.isOperatorEnabled("1"))
             assertFalse(enabler.isOperatorEnabled("^"))
+
+            verifyMockCalls(callCount = 1)
         }
     }
 
@@ -102,7 +104,7 @@ class RandomEnablerTest {
             enabledOps = listOf("+", "-")
             checkEnabled(enabler, enabledNumbers, enabledOps)
 
-            verifyCallCount(3)
+            verifyMockCalls(callCount = 3)
         }
     }
 
@@ -120,7 +122,7 @@ class RandomEnablerTest {
                 shuffledOpsIndices, // initial
                 (0..3).toList(), // repeat numbers
                 shuffledOpsIndices, // repeat ops
-                (0..3).toList(), // changed ops
+                (0..3).toList(), // changed values
             )
 
             every { IntRange(3, 7).seededRandom() } returns 5 // enabled numbers
@@ -138,10 +140,11 @@ class RandomEnablerTest {
             enabledOps = listOf("+", "-")
             checkEnabled(enabler, enabledNumbers, enabledOps)
 
-            verifyCallCount(4)
+            verifyMockCalls(callCount = 4)
         }
     }
 
+    // check isDigitEnabled and isOperatorEnabled for given lists of numbers and operators
     private fun checkEnabled(enabler: RandomEnabler, enabledNumbers: List<Int>, enabledOperators: List<String>) {
         repeat(10) {
             val result = enabler.isDigitEnabled(it)
@@ -164,7 +167,8 @@ class RandomEnablerTest {
         }
     }
 
-    private fun verifyCallCount(callCount: Int) {
+    // verify that mocked IntRange functions were called as expected
+    private fun verifyMockCalls(callCount: Int) {
         verify(exactly = callCount) { IntRange(3, 7).seededRandom() }
         verify(exactly = callCount) { IntRange(2, 3).seededRandom() }
         verify(exactly = callCount) { IntRange(0, 9).seededShuffled() }

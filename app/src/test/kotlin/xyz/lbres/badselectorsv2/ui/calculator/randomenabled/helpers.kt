@@ -55,6 +55,10 @@ fun checkState(
     clearButton.check(matches(buttonMatcher(true)))
 }
 
+/**
+ * Check current state of fragment.
+ * Checks that error message is displayed and all buttons except clear are disabled.
+ */
 fun checkErrorState(error: String) {
     checkState(
         error,
