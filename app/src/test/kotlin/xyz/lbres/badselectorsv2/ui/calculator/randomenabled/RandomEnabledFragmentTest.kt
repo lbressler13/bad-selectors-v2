@@ -235,19 +235,25 @@ class RandomEnabledFragmentTest {
 
     @Test
     fun computeError() {
-//        val fullNumbersLists = List(5) { numbersLists }.flatten()
-//        val fullOperatorsLists = List(5) { operatorsLists }.flatten()
-//        mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
-
-        mockRandomEnabler(listOf(true), listOf(true))
-        launchFragment()
+        val fullNumbersLists = List(6) { numbersLists }.flatten()
+        val fullOperatorsLists = List(6) { operatorsLists }.flatten()
+        mockRandomEnabler(fullNumbersLists.flatten(), fullOperatorsLists.flatten())
 
         fun checkErrorWithText(text: String, error: String) {
             typeTextWithIndex(text)
             clickEqualsWithIndex()
-            checkState(error, listOfValue(10, false), listOfValue(4, false), false, false)
+            checkState(
+                error,
+                listOfValue(10, false),
+                listOfValue(4, false),
+                equalsEnabled = false,
+                backspaceEnabled = false,
+            )
             clickClearWithIndex()
+            checkState("", fullNumbersLists[currentIndex], fullOperatorsLists[currentIndex])
         }
+
+        launchFragment()
 
         // syntax error
         var expectedError = "Err: Syntax Error"
