@@ -10,9 +10,9 @@ import xyz.lbres.kotlinutils.pair.TypePair
  * Implementation of binary search that uses randomized and larger-than-necessary ranges.
  * For example, if remaining values are [2, 3, 4, 10, 11, 12], the next range could be 1..9, which is binary but large.
  *
- * @param fullRange [IntRange]: initial list of values in the searcher
+ * @param range [IntRange]: initial list of values in the searcher
  */
-internal class BinaryRangeSearcher(private val fullRange: IntRange): RangeSearcher(fullRange) {
+internal class BinaryRangeSearcher(private val fullRange: IntRange) : RangeSearcher(fullRange) {
     /**
      * Values that may still be correct
      */
@@ -155,7 +155,7 @@ internal class BinaryRangeSearcher(private val fullRange: IntRange): RangeSearch
     /**
      * Get valid range when [remainingValues] has size 2
      *
-     * @return [IntRange]
+     * @return [Range]
      */
     private fun getRangeOf2(): Range {
         val first: Int = remainingValues[0]

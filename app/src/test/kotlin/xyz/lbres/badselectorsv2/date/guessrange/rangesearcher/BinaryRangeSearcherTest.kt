@@ -26,21 +26,17 @@ class BinaryRangeSearcherTest {
     // TODO split into several
     @Test
     fun testGetRange() {
-
     }
 
     @Test
     fun testMarkLastRangeCorrect() {
-
     }
 
     @Test
     fun testMarkLastRangeIncorrect() {
-
     }
 
     @Test
     fun testRestart() {
-
     }
 }
