@@ -26,6 +26,17 @@
     <string name="appbar_title_date">Bad Date Selectors</string>
     <string name="title_date">Date</string>
 
+    <string name="date_separator">/</string>
+
+    <!-- Guess Range -->
+    <string name="title_guess_range">Guess Range</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="to">to</string>
+    <string name="in_range_question">Is your %s in this range?</string>
+    <string name="correct_value_question">Is this the correct %s?</string>
+
 
     <!-- Calculator -->
     <string name="appbar_title_calc">Bad Calculators</string>

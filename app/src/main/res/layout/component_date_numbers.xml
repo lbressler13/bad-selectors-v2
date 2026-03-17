@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/FullWidthLinearLayout"
+    android:layout_marginTop="@dimen/settings_fragment_top_padding"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:id="@+id/month0"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/month1"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        style="@style/SelectedNumber"
+        android:text="@string/date_separator" />
+
+    <TextView
+        android:id="@+id/day0"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/day1"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        style="@style/SelectedNumber"
+        android:text="@string/date_separator" />
+
+    <TextView
+        android:id="@+id/year0"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/year1"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/year2"
+        style="@style/SelectedNumber" />
+
+    <TextView
+        android:id="@+id/year3"
+        style="@style/SelectedNumber" />
+</LinearLayout>

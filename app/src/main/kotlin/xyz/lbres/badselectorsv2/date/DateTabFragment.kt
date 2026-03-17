@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import xyz.lbres.badselectors.date.guessrange.GuessRangeFragment
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
@@ -20,6 +21,8 @@ class DateTabFragment : TabFragment() {
 
     override lateinit var binding: TabFragmentBinding
 
+    private val guessRangeFragment: GuessRangeFragment by lazy { GuessRangeFragment() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = TabFragmentBinding.inflate(layoutInflater)
         setupBaseFragment()
@@ -34,13 +37,16 @@ class DateTabFragment : TabFragment() {
      * @return [Fragment]
      */
     override fun getFragmentFromPosition(position: Int): Fragment {
-        throw NotImplementedError("DateTabFragment has no tabs")
+        return when (position) {
+            0 -> guessRangeFragment
+            else -> guessRangeFragment
+        }
     }
 
     companion object {
         val metadata = Metadata(
             R.string.title_date,
-            emptyList(),
+            listOf(R.string.title_guess_range),
             R.id.navigateHomeToDate,
         )
     }
