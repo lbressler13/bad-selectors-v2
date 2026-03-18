@@ -1,7 +1,6 @@
 package xyz.lbres.badselectorsv2.ui.calculator.randomenabled
 
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.badselectorsv2.ui.calculator.backspaceButton
 import xyz.lbres.badselectorsv2.ui.calculator.clearButton
@@ -10,8 +9,7 @@ import xyz.lbres.badselectorsv2.ui.calculator.mainText
 import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
 import xyz.lbres.badselectorsv2.ui.calculator.operatorButtons
 import xyz.lbres.badselectorsv2.ui.calculator.operators
-import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
-import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.kotlinutils.list.listOfValue
 
 /**
@@ -27,13 +25,9 @@ fun checkState(
 ) {
     mainText.check(matches(withText(text)))
 
-    val enabledMatcher = isEnabled()
-    val disabledMatcher = isDisabled()
-    val buttonMatcher = { enabled: Boolean -> simpleIf(enabled, enabledMatcher, disabledMatcher) }
-
     numberButtons.forEachIndexed { index, button ->
         try {
-            button.check(matches(buttonMatcher(enabledNumbers[index])))
+            button.check(matches(enabledMatcher(enabledNumbers[index])))
         } catch (e: AssertionError) {
             println("Error checking number button for '$index'")
             throw e
@@ -43,16 +37,16 @@ fun checkState(
     operators.forEachIndexed { index, operator ->
         val button = operatorButtons[operator]!!
         try {
-            button.check(matches(buttonMatcher(enabledOperators[index])))
+            button.check(matches(enabledMatcher(enabledOperators[index])))
         } catch (e: AssertionError) {
             println("Error checking operator button for '$operator'")
             throw e
         }
     }
 
-    equalsButton.check(matches(buttonMatcher(equalsEnabled)))
-    backspaceButton.check(matches(buttonMatcher(backspaceEnabled)))
-    clearButton.check(matches(buttonMatcher(true)))
+    equalsButton.check(matches(enabledMatcher(equalsEnabled)))
+    backspaceButton.check(matches(enabledMatcher(backspaceEnabled)))
+    clearButton.check(matches(enabledMatcher(true)))
 }
 
 /**

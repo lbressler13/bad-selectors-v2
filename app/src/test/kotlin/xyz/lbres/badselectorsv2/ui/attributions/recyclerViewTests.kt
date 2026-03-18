@@ -12,7 +12,6 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
-import xyz.lbres.badselectorsv2.ui.testutils.assertLinkOpened
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.matchesAtPosition
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.clickLinkInText
