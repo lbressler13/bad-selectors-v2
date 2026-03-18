@@ -97,4 +97,38 @@ class ViewExtTest {
         view.disable()
         assertFalse(view.isEnabled)
     }
+
+    @Test
+    fun halfOpacity() {
+        val context: Context = ApplicationProvider.getApplicationContext()
+        val view = View(context)
+        assertEquals(1f, view.alpha)
+        view.halfOpacity()
+        assertEquals(0.5f, view.alpha)
+
+        view.alpha = 0f
+        view.halfOpacity()
+        assertEquals(0.5f, view.alpha)
+
+        view.alpha = 0.5f
+        view.halfOpacity()
+        assertEquals(0.5f, view.alpha)
+    }
+
+    @Test
+    fun fullOpacity() {
+        val context: Context = ApplicationProvider.getApplicationContext()
+        val view = View(context)
+        assertEquals(1f, view.alpha)
+        view.fullOpacity()
+        assertEquals(1f, view.alpha)
+
+        view.alpha = 0f
+        view.fullOpacity()
+        assertEquals(1f, view.alpha)
+
+        view.alpha = 0.5f
+        view.fullOpacity()
+        assertEquals(1f, view.alpha)
+    }
 }

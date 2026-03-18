@@ -37,7 +37,7 @@ class DateTabFragment : TabFragment() {
      * @return [Fragment]
      */
     override fun getFragmentFromPosition(position: Int): Fragment {
-        return when(position) {
+        return when (position) {
             0 -> nestedCirclesFragment
             else -> nestedCirclesFragment
         }

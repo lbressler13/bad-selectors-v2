@@ -44,6 +44,11 @@ fun testNavigateWithPhoneSelectors() {
     runSingleSelectorNavigationTest("Shuffle Circle")
 }
 
+fun testNavigateWithDateSelectors() {
+    expandCollapseGroup(1) // TODO change these to be by text
+    runSingleSelectorNavigationTest("Nested Circles")
+}
+
 fun testNavigateWithCalcSelectors() {
     expandCollapseGroup(2)
     runSingleSelectorNavigationTest("Single Operation")
