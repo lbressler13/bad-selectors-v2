@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/circle"
+    android:scaleX="0.375"
+    android:scaleY="0.375"
+    android:layout_height="20dp"
+    android:layout_width="20dp"
+    android:maxHeight="20dp"
+    android:maxWidth="20dp"
+    android:minHeight="20dp"
+    android:minWidth="20dp" />

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
+import xyz.lbres.badselectorsv2.date.nestedcircles.NestedCirclesFragment
 
 class DateTabFragment : TabFragment() {
     override var metadata = DateTabFragment.metadata
@@ -19,6 +20,8 @@ class DateTabFragment : TabFragment() {
     override var navToOtpResId: Int? = R.id.navigateDateToOtp
 
     override lateinit var binding: TabFragmentBinding
+
+    private val nestedCirclesFragment: NestedCirclesFragment by lazy { NestedCirclesFragment() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = TabFragmentBinding.inflate(layoutInflater)
@@ -34,13 +37,16 @@ class DateTabFragment : TabFragment() {
      * @return [Fragment]
      */
     override fun getFragmentFromPosition(position: Int): Fragment {
-        throw NotImplementedError("DateTabFragment has no tabs")
+        return when(position) {
+            0 -> nestedCirclesFragment
+            else -> nestedCirclesFragment
+        }
     }
 
     companion object {
         val metadata = Metadata(
             R.string.title_date,
-            emptyList(),
+            listOf(R.string.title_nested_circles),
             R.id.navigateHomeToDate,
         )
     }

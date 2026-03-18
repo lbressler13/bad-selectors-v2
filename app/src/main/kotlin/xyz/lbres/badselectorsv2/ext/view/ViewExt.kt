@@ -36,3 +36,17 @@ fun View.invisible() {
 fun View.gone() {
     visibility = View.GONE
 }
+
+/**
+ * Set view opacity to 50%.
+ */
+fun View.halfOpacity() {
+    alpha = 0.5f
+}
+
+/**
+ * Set view opacity to 100%.
+ */
+fun View.fullOpacity() {
+    alpha = 1f
+}

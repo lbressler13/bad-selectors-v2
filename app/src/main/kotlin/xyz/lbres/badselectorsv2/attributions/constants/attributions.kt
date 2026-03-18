@@ -35,6 +35,8 @@ private val ilhamFitrotulHayatImages = listOf(
 )
 
 private val pixelPerfectImages = listOf(
+    ImageAttribution(R.drawable.ic_minus_circle, R.string.minus_cd, minusCircleUrl),
+    ImageAttribution(R.drawable.ic_plus_circle, R.string.plus_cd, plusCircleUrl),
     ImageAttribution(R.drawable.ic_times, R.string.times_cd, timesUrl),
 )
 

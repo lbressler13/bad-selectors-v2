@@ -26,6 +26,13 @@
     <string name="appbar_title_date">Bad Date Selectors</string>
     <string name="title_date">Date</string>
 
+    <string name="date_separator">/</string>
+
+    <!-- Nested Circles -->
+    <string name="title_nested_circles">Nested Circles</string>
+
+    <string name="change_available_years">Change Available Years</string>
+
 
     <!-- Calculator -->
     <string name="appbar_title_calc">Bad Calculators</string>
