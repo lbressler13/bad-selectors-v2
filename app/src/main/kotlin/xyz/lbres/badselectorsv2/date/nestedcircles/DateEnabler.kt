@@ -98,7 +98,7 @@ class DateEnabler {
     }
 
     fun setYearAt(index: Int?) {
-        year = simpleIf(index == null, { null },  { availableYears.get(index!!) })
+        year = simpleIf(index == null, { null }, { availableYears.get(index!!) })
     }
 
     /**

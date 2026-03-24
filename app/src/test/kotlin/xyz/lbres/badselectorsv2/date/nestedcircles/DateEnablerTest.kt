@@ -125,37 +125,48 @@ class DateEnablerTest {
         var enabler = DateEnabler()
         val year = mockDate.year
 
+        fun validateYears(startYear: Int) {
+            repeat(60) {
+                enabler.setYearAt(it)
+                assertEquals(startYear + it, enabler.year)
+            }
+        }
+
+        fun decrementAndValidate(startYear: Int, decrementCount: Int): Int {
+            var updatedStart = startYear
+            repeat(decrementCount) {
+                enabler.decrementAvailableYears()
+                updatedStart -= 60
+            }
+            validateYears(updatedStart)
+            return updatedStart
+        }
+
+        fun incrementAndValidate(startYear: Int, incrementCount: Int): Int {
+            var updatedStart = startYear
+            repeat(incrementCount) {
+                enabler.incrementAvailableYears()
+                updatedStart += 60
+            }
+            validateYears(updatedStart)
+            return updatedStart
+        }
+
         // initial values
         var startYear = year - 60 + 1
-        repeat(60) {
-            enabler.setYearAt(it)
-            assertEquals(startYear + it, enabler.year)
-        }
+        validateYears(startYear)
 
         // decremented
-        var decrementsToZero = year / 50
+        var decrementsToZero = year / 60
 
-        enabler.decrementAvailableYears()
+        startYear = decrementAndValidate(startYear, 1)
         decrementsToZero--
-        startYear -= 60
-        repeat(60) {
-            enabler.setYearAt(it)
-            assertEquals(startYear + it, enabler.year)
-        }
 
-        enabler.decrementAvailableYears()
-        enabler.decrementAvailableYears()
-        enabler.decrementAvailableYears()
+        startYear = decrementAndValidate(startYear, 3)
         decrementsToZero -= 3
-        startYear -= 60 * 3
-        repeat(60) {
-            enabler.setYearAt(it)
-            assertEquals(startYear + it, enabler.year)
-        }
 
         // decremented to zero
         repeat(decrementsToZero) { enabler.decrementAvailableYears() }
-        startYear = 0
         repeat(60) {
             enabler.setYearAt(it)
             assertEquals(it, enabler.year)
@@ -164,30 +175,16 @@ class DateEnablerTest {
         // incremented
         var incrementsToStart = year / 60
 
-        enabler.incrementAvailableYears()
+        startYear = incrementAndValidate(0, 1)
         incrementsToStart--
-        startYear += 60
-        repeat(60) {
-            enabler.setYearAt(it)
-            assertEquals(startYear + it, enabler.year)
-        }
 
-        enabler.incrementAvailableYears()
-        enabler.incrementAvailableYears()
+        startYear = incrementAndValidate(startYear, 2)
         incrementsToStart -= 2
-        startYear += 120
-        repeat(60) {
-            enabler.setYearAt(it)
-            assertEquals(startYear + it, enabler.year)
-        }
 
         // incremented to start
         repeat(incrementsToStart) { enabler.incrementAvailableYears() }
         startYear = year - 60 + 1
-        repeat(60) {
-            enabler.setYearAt(it)
-            assertEquals(startYear + it, enabler.year)
-        }
+        validateYears(startYear)
 
         // duplicate
         enabler.setYearAt(3)
