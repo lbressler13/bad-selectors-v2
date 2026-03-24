@@ -106,7 +106,49 @@ class DateEnablerTest {
 
     @Test
     fun testIncrementYear() {
-        val enabler = DateEnabler()
+        var enabler = DateEnabler()
+        val year = mockDate.year
+        var startYear = year - 60 + 1
+
+        // unabled to increment at start
+        enabler.incrementAvailableYears()
+        repeat(60) {
+            val number = enabler.availableYears.get(it)
+            assertEquals(startYear + it, number)
+        }
+
+        val iterations = year / 60 - 1
+        repeat(iterations + 1) { enabler.decrementAvailableYears() } // go down to 0
+
+        startYear = 0
+        repeat(iterations) {
+            enabler.incrementAvailableYears()
+            startYear += 60
+            repeat(60) { yearIdx ->
+                val number = enabler.availableYears.get(yearIdx)
+                assertEquals(startYear + yearIdx, number)
+            }
+        }
+
+        // back to start
+        println(enabler.availableYears)
+        enabler.incrementAvailableYears()
+        println(enabler.availableYears)
+        repeat(60) {
+            val number = enabler.availableYears.get(it)
+            assertEquals(year - 60 + 1 + it, number)
+        }
+
+        // check month/day enabled
+        enabler = DateEnabler()
+        enabler.day = 29 // 30
+        enabler.month = 3 // april
+        checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
+
+        enabler.decrementAvailableYears() // decrement because year already is at maximum
+        enabler.decrementAvailableYears()
+        enabler.incrementAvailableYears()
+        checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
     }
 
     @Test
