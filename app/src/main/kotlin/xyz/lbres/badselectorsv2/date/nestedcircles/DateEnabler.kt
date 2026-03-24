@@ -15,10 +15,6 @@ class DateEnabler {
     val minYear: Int = 0
     val maxYear: Int = LocalDate.now().year // current year
 
-    // all indices are initially valid
-    private val defaultValidDays: IntRange = 0 until maxDay
-    private val defaultValidMonths: IntRange = 0 until maxMonth
-
     private var _day: Int? = null
     private var _month: Int? = null
     var day: Int?
