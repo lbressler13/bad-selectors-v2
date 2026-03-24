@@ -3,14 +3,10 @@ package xyz.lbres.badselectorsv2.ui.date.nestedcircles
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isClickable
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
-import androidx.test.espresso.matcher.ViewMatchers.isNotClickable
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.allOf
 import org.junit.After
@@ -20,14 +16,13 @@ import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
-import xyz.lbres.badselectorsv2.ui.date.checkDate
-import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.ui.date.checkDate
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
+import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.runWithFailMessage
-import xyz.lbres.kotlinutils.general.simpleIf
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
@@ -39,7 +34,6 @@ class NestedCirclesFragmentTest {
     private val yearsCircleId = R.id.yearsLayout
 
     private var scenario: ActivityScenario<BaseActivity>? = null
-
 
     @Before
     fun setupTest() {
@@ -66,7 +60,6 @@ class NestedCirclesFragmentTest {
 
     @Test
     fun useButtons() {
-
     }
 
     @Test
@@ -111,12 +104,10 @@ class NestedCirclesFragmentTest {
 
     @Test
     fun changeYearsRange() {
-
     }
 
     @Test
     fun recreate() {
-
     }
 
     private fun clickCircleButton(parentId: Int, index: Int) {

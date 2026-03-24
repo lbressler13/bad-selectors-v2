@@ -1,10 +1,8 @@
 package xyz.lbres.badselectorsv2.date.nestedcircles
 
 import io.mockk.every
-import io.mockk.mockkClass
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import xyz.lbres.badselectorsv2.date.utils.maxDay
 import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.kotlinutils.closedrange.intrange.ext.get
 import xyz.lbres.kotlinutils.list.IntList
@@ -62,17 +60,13 @@ class DateEnablerTest {
         repeat(12) {
             runWithFailMessage("Error testing month $it") {
                 enabler.month = it
-                checkEnabledMonths(enabler)
-                checkEnabledDays(enabler, disabledDays(it))
-                checkEnabledYears(enabler)
+                checkEnabledDate(enabler, disabledDays = disabledDays(it))
             }
         }
 
         // set back to 0
         enabler.month = 0 // jan
-        checkEnabledMonths(enabler)
-        checkEnabledDays(enabler, disabledDays(0))
-        checkEnabledYears(enabler)
+        checkEnabledDate(enabler, disabledDays = disabledDays(0))
 
         // test doesn't change other components
     }
@@ -92,17 +86,13 @@ class DateEnablerTest {
         repeat(31) {
             runWithFailMessage("Failure testing day $it") {
                 enabler.day = it
-                checkEnabledMonths(enabler, disabledMonths(it))
-                checkEnabledDays(enabler)
-                checkEnabledYears(enabler)
+                checkEnabledDate(enabler, disabledMonths = disabledMonths(it))
             }
         }
 
         // set back to 0
         enabler.day = 0
-        checkEnabledMonths(enabler, disabledMonths(0))
-        checkEnabledDays(enabler)
-        checkEnabledYears(enabler)
+        checkEnabledDate(enabler, disabledMonths = disabledMonths(0))
 
         // test doesn't change other components
     }
@@ -117,7 +107,6 @@ class DateEnablerTest {
     @Test
     fun testIncrementYear() {
         val enabler = DateEnabler()
-
     }
 
     @Test
@@ -152,23 +141,29 @@ class DateEnablerTest {
 
         // check month/day enabled
         enabler = DateEnabler()
-        enabler.day = 29  // 30
+        enabler.day = 29 // 30
         enabler.month = 3 // april
-        checkEnabledMonths(enabler, listOf(1))
-        checkEnabledDays(enabler, listOf(30))
-        checkEnabledYears(enabler)
+        checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
 
         enabler.incrementAvailableYears() // increment because year already is at minimum
         enabler.incrementAvailableYears()
         enabler.decrementAvailableYears()
-        checkEnabledMonths(enabler, listOf(1))
-        checkEnabledDays(enabler, listOf(30))
-        checkEnabledYears(enabler)
+        checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
     }
 
     @Test
     fun testSetYearOffset() {
+    }
 
+    private fun checkEnabledDate(
+        enabler: DateEnabler,
+        disabledMonths: IntList = emptyList(),
+        disabledDays: IntList = emptyList(),
+        disabledYears: IntList = emptyList(),
+    ) {
+        checkEnabledMonths(enabler, disabledMonths)
+        checkEnabledDays(enabler, disabledDays)
+        checkEnabledYears(enabler, disabledYears)
     }
 
     private fun checkEnabledMonths(enabler: DateEnabler, disabledList: IntList = emptyList()) {

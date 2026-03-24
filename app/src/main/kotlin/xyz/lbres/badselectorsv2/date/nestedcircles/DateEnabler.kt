@@ -1,17 +1,13 @@
 package xyz.lbres.badselectorsv2.date.nestedcircles
 
-import xyz.lbres.badselectorsv2.date.utils.dayRange
 import xyz.lbres.badselectorsv2.date.utils.daysPerMonth
 import xyz.lbres.badselectorsv2.date.utils.maxDay
 import xyz.lbres.badselectorsv2.date.utils.maxMonth
-import xyz.lbres.badselectorsv2.date.utils.monthRange
-import xyz.lbres.kotlinutils.array.arrayOfValue
 import xyz.lbres.kotlinutils.booleanarray.booleanArrayOfValue
 import xyz.lbres.kotlinutils.closedrange.intrange.ext.get
 import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 import java.time.LocalDate
-import kotlin.collections.map
 
 // TODO leap year
 class DateEnabler {
@@ -65,7 +61,6 @@ class DateEnabler {
     // TODO to be used for leap year
     val enabledYears: IntList
         get() = enabledToList(_enabledYears)
-
 
     /**
      * Initialize available years
