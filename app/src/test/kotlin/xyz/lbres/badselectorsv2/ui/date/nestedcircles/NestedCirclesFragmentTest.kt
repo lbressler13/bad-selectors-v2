@@ -2,6 +2,7 @@ package xyz.lbres.badselectorsv2.ui.date.nestedcircles
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isClickable
@@ -25,6 +26,7 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
+import xyz.lbres.badselectorsv2.ui.testutils.runWithFailMessage
 import xyz.lbres.kotlinutils.general.simpleIf
 
 @Category(Robolectric::class)
@@ -59,6 +61,66 @@ class NestedCirclesFragmentTest {
         checkCircle(monthsCircleId)
         checkCircle(daysCircleId)
         checkCircle(yearsCircleId)
+        // TODO check exact # children
+    }
+
+    @Test
+    fun useButtons() {
+
+    }
+
+    @Test
+    fun disableButtons() {
+        // sets all buttons enabled
+        fun reset() {
+            clickCircleButton(monthsCircleId, 0)
+            clickCircleButton(daysCircleId, 0)
+            clickCircleButton(yearsCircleId, 0)
+        }
+
+        repeat(12) {
+            val disabledDays = when (it) {
+                1 -> listOf(29, 30)
+                3, 5, 8, 10 -> listOf(30)
+                else -> emptyList()
+            }
+            clickCircleButton(monthsCircleId, it)
+            runWithFailMessage("Error checking month $it") {
+                checkCircle(monthsCircleId)
+                checkCircle(daysCircleId, disabledDays)
+                checkCircle(yearsCircleId)
+            }
+        }
+
+        reset()
+
+        repeat(31) {
+            val disabledMonths = when (it) {
+                30 -> listOf(1, 3, 5, 8, 10)
+                29 -> listOf(1)
+                else -> emptyList()
+            }
+            clickCircleButton(daysCircleId, it)
+            runWithFailMessage("Error checking day $it") {
+                checkCircle(monthsCircleId, disabledMonths)
+                checkCircle(daysCircleId)
+                checkCircle(yearsCircleId)
+            }
+        }
+    }
+
+    @Test
+    fun changeYearsRange() {
+
+    }
+
+    @Test
+    fun recreate() {
+
+    }
+
+    private fun clickCircleButton(parentId: Int, index: Int) {
+        onView(atIndex(withId(parentId), index)).perform(click())
     }
 
     private fun checkCircle(parentId: Int, disabledButtons: List<Int> = emptyList()) {
@@ -71,6 +133,7 @@ class NestedCirclesFragmentTest {
 
         val parentMatcher = withId(parentId)
         repeat(childCount) {
+            println("$it, ${it !in disabledButtons}")
             val buttonMatcher = enabledMatcher(it !in disabledButtons)
             onView(atIndex(parentMatcher, it)).check(matches(buttonMatcher))
         }

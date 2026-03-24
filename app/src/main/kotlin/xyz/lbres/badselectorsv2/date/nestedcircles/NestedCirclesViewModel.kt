@@ -10,10 +10,26 @@ import xyz.lbres.kotlinutils.closedrange.intrange.ext.get
 import xyz.lbres.kotlinutils.list.IntList
 import java.time.LocalDate
 
+// TODO add leap year
+
 /**
  * ViewModel containing values that are specific to the date circle selector
  */
 class NestedCirclesViewModel : BaseDateViewModel() {
+    val enabler = DateEnabler()
+
+    override var day: Int?
+        get() = enabler.day
+        set(value) { enabler.day = value }
+
+    override var month: Int?
+        get() = enabler.month
+        set(value) { enabler.month = value }
+
+    override var year: Int?
+        get() = enabler.year
+        set(value) { enabler.year = value }
+
     val numYearsToDisplay: Int = 60
     val minYear: Int = 0
     val maxYear: Int = LocalDate.now().year // current year
@@ -31,6 +47,7 @@ class NestedCirclesViewModel : BaseDateViewModel() {
     /**
      * Days that are valid for the current month
      */
+    // TODO range
     var validDayIndices: IntList = defaultValidDayIndices
         private set
 

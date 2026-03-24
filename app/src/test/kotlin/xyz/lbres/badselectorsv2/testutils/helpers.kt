@@ -15,3 +15,12 @@ inline fun <reified T : Throwable> assertFailsWithMessage(message: String, block
     assertEquals(message, exception.message)
     return exception
 }
+
+fun runWithFailMessage(failureMessage: String, block: () -> Unit) {
+    try {
+        block()
+    } catch (e: AssertionError) {
+        println(failureMessage)
+        throw e
+    }
+}

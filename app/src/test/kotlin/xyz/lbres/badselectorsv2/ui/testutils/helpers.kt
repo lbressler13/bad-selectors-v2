@@ -48,3 +48,12 @@ fun navigateToSelector(groupName: String, selectorName: String) {
         .perform(actionOnItem<VH>(vhMatcher, clickExpandCollapse))
     onView(withText(selectorName)).perform(forceClick())
 }
+
+fun runWithFailMessage(failureMessage: String, block: () -> Unit) {
+    try {
+        block()
+    } catch (e: AssertionError) {
+        println(failureMessage)
+        throw e
+    }
+}

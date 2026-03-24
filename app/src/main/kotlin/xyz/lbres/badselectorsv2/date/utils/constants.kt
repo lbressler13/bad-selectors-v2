@@ -19,13 +19,6 @@ val daysPerMonth: List<Int> = listOf(
 )
 
 /**
- * Date components
- */
-const val MONTH = "month"
-const val DAY = "day"
-const val YEAR = "year"
-
-/**
  * Date values
  */
 const val maxMonth = 12

@@ -1,0 +1,143 @@
+package xyz.lbres.badselectorsv2.date.nestedcircles
+
+import xyz.lbres.badselectorsv2.date.utils.dayRange
+import xyz.lbres.badselectorsv2.date.utils.daysPerMonth
+import xyz.lbres.badselectorsv2.date.utils.maxDay
+import xyz.lbres.badselectorsv2.date.utils.maxMonth
+import xyz.lbres.badselectorsv2.date.utils.monthRange
+import xyz.lbres.kotlinutils.array.arrayOfValue
+import xyz.lbres.kotlinutils.booleanarray.booleanArrayOfValue
+import xyz.lbres.kotlinutils.closedrange.intrange.ext.get
+import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.list.IntList
+import java.time.LocalDate
+import kotlin.collections.map
+
+// TODO leap year
+class DateEnabler {
+    val numYears: Int = 60
+    val minYear: Int = 0
+    val maxYear: Int = LocalDate.now().year // current year
+
+    // all indices are initially valid
+    private val defaultValidDays: IntRange = 0 until maxDay
+    private val defaultValidMonths: IntRange = 0 until maxMonth
+
+    private var _day: Int? = null
+    private var _month: Int? = null
+    var day: Int?
+        get() = _day
+        set(value) {
+            _day = value
+            updateMonthsForDay()
+        }
+    var month: Int?
+        get() = _month
+        set(value) {
+            _month = value
+            updateDaysForMonth()
+        }
+    var year: Int? = null
+
+    /**
+     * Range of years that can be selected, has size [numYears]
+     */
+    var availableYears: IntRange
+        private set
+
+    private var _enabledDays = booleanArrayOfValue(maxDay, true)
+    private var _enabledMonths = booleanArrayOfValue(maxMonth, true)
+    private var _enabledYears = booleanArrayOfValue(numYears, true)
+
+    /**
+     * Days that are valid for the current month
+     */
+    // TODO just set these once when date is updated to make life easy
+    val enabledDays: IntList
+        get() = enabledToList(_enabledDays)
+
+    /**
+     * Months that are valid for the current day
+     */
+    val enabledMonths: IntList
+        get() = enabledToList(_enabledMonths)
+
+    // TODO to be used for leap year
+    val enabledYears: IntList
+        get() = enabledToList(_enabledYears)
+
+
+    /**
+     * Initialize available years
+     */
+    init {
+        val startYear = maxYear - numYears + 1
+        availableYears = startYear..maxYear
+    }
+
+    /**
+     * Update which days are valid based on the month.
+     * i.e. Days 30 and 31 are not valid for February
+     */
+    private fun updateDaysForMonth() {
+        val numDays = if (month == null) {
+            maxDay
+        } else {
+            daysPerMonth[month!!]
+        }
+
+        _enabledDays.indices.forEach {
+            _enabledDays[it] = it < numDays
+        }
+    }
+
+    /**
+     * Update which months are valid based on the day.
+     * i.e. February is not valid for day 30
+     */
+    private fun updateMonthsForDay() {
+        daysPerMonth.forEachIndexed { monthIndex, days ->
+            _enabledMonths[monthIndex] = day == null || day!! < days
+        }
+    }
+
+    fun setYearAt(index: Int) {
+        year = availableYears.get(index)
+    }
+
+    /**
+     * Increment years by the number of years to display, or to max year
+     */
+    fun incrementAvailableYears() {
+        var startYear: Int = availableYears.last + 1
+        var endYear: Int = startYear + numYears - 1
+
+        if (endYear >= maxYear) {
+            endYear = maxYear
+            startYear = maxYear - numYears + 1
+        }
+
+        availableYears = startYear..endYear
+    }
+
+    /**
+     * Decrement years by the number of years to display, or to min year
+     */
+    fun decrementAvailableYears() {
+        var endYear: Int = availableYears.first - 1
+        var startYear: Int = endYear - numYears + 1
+
+        if (startYear <= minYear) {
+            startYear = minYear
+            endYear = minYear + numYears - 1
+        }
+
+        availableYears = startYear..endYear
+    }
+
+    private fun enabledToList(enabled: BooleanArray): IntList {
+        return enabled
+            .mapIndexed { index, value -> simpleIf(value, index, null) }
+            .filterNotNull()
+    }
+}
