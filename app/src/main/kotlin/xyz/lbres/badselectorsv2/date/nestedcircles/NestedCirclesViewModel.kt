@@ -28,7 +28,7 @@ class NestedCirclesViewModel : BaseDateViewModel() {
 
     override var year: Int?
         get() = enabler.year
-        set(value) { enabler.year = value }
+        set(value) { enabler.setYearAt(value) } // TODO this doesn't work w/ setYearAt logic
 
     val numYearsToDisplay: Int = 60
     val minYear: Int = 0

@@ -19,7 +19,6 @@ class DateEnablerTest {
     @BeforeTest
     fun setupTest() {
         mockkStatic(LocalDate::class)
-        // mockkClass(LocalDate::class)
         every { LocalDate.now() } returns mockDate
     }
 
@@ -47,7 +46,7 @@ class DateEnablerTest {
 
     @Test
     fun testSetMonth() {
-        val enabler = DateEnabler()
+        var enabler = DateEnabler()
 
         fun disabledDays(month: Int): IntList {
             return when (month) {
@@ -68,12 +67,24 @@ class DateEnablerTest {
         enabler.month = 0 // jan
         checkEnabledDate(enabler, disabledDays = disabledDays(0))
 
-        // test doesn't change other components
+        // doesn't change other components
+        enabler = DateEnabler()
+        assertNull(enabler.day)
+        assertNull(enabler.year)
+        enabler.month = 6
+        assertNull(enabler.day)
+        assertNull(enabler.year)
+
+        enabler.day = 12
+        enabler.setYearAt(0)
+        enabler.month = 8
+        assertEquals(12, enabler.day)
+        assertEquals(1966, enabler.year)
     }
 
     @Test
     fun testSetDay() {
-        val enabler = DateEnabler()
+        var enabler = DateEnabler()
 
         fun disabledMonths(day: Int): IntList {
             return when (day) {
@@ -94,14 +105,113 @@ class DateEnablerTest {
         enabler.day = 0
         checkEnabledDate(enabler, disabledMonths = disabledMonths(0))
 
-        // test doesn't change other components
+        // doesn't change other components
+        enabler = DateEnabler()
+        assertNull(enabler.month)
+        assertNull(enabler.year)
+        enabler.day = 6
+        assertNull(enabler.month)
+        assertNull(enabler.year)
+
+        enabler.month = 2
+        enabler.setYearAt(0)
+        enabler.day = 8
+        assertEquals(2, enabler.month)
+        assertEquals(1966, enabler.year)
     }
 
     @Test
     fun testSetYear() {
-        val enabler = DateEnabler()
+        var enabler = DateEnabler()
+        val year = mockDate.year
 
-        // doesn't affect current day/month
+        // initial values
+        var startYear = year - 60 + 1
+        repeat(60) {
+            enabler.setYearAt(it)
+            assertEquals(startYear + it, enabler.year)
+        }
+
+        // decremented
+        var decrementsToZero = year / 50
+
+        enabler.decrementAvailableYears()
+        decrementsToZero--
+        startYear -= 60
+        repeat(60) {
+            enabler.setYearAt(it)
+            assertEquals(startYear + it, enabler.year)
+        }
+
+        enabler.decrementAvailableYears()
+        enabler.decrementAvailableYears()
+        enabler.decrementAvailableYears()
+        decrementsToZero -= 3
+        startYear -= 60 * 3
+        repeat(60) {
+            enabler.setYearAt(it)
+            assertEquals(startYear + it, enabler.year)
+        }
+
+        // decremented to zero
+        repeat(decrementsToZero) { enabler.decrementAvailableYears() }
+        startYear = 0
+        repeat(60) {
+            enabler.setYearAt(it)
+            assertEquals(it, enabler.year)
+        }
+
+        // incremented
+        var incrementsToStart = year / 60
+
+        enabler.incrementAvailableYears()
+        incrementsToStart--
+        startYear += 60
+        repeat(60) {
+            enabler.setYearAt(it)
+            assertEquals(startYear + it, enabler.year)
+        }
+
+        enabler.incrementAvailableYears()
+        enabler.incrementAvailableYears()
+        incrementsToStart -= 2
+        startYear += 120
+        repeat(60) {
+            enabler.setYearAt(it)
+            assertEquals(startYear + it, enabler.year)
+        }
+
+        // incremented to start
+        repeat(incrementsToStart) { enabler.incrementAvailableYears() }
+        startYear = year - 60 + 1
+        repeat(60) {
+            enabler.setYearAt(it)
+            assertEquals(startYear + it, enabler.year)
+        }
+
+        // duplicate
+        enabler.setYearAt(3)
+        assertEquals(startYear + 3, enabler.year)
+        enabler.setYearAt(3)
+        assertEquals(startYear + 3, enabler.year)
+
+        // null
+        enabler.setYearAt(null)
+        assertNull(enabler.year)
+
+        // doesn't change other components
+        enabler = DateEnabler()
+        assertNull(enabler.month)
+        assertNull(enabler.day)
+        enabler.setYearAt(6)
+        assertNull(enabler.month)
+        assertNull(enabler.day)
+
+        enabler.month = 2
+        enabler.day = 8
+        enabler.setYearAt(58)
+        assertEquals(2, enabler.month)
+        assertEquals(8, enabler.day)
     }
 
     @Test
@@ -191,10 +301,6 @@ class DateEnablerTest {
         enabler.incrementAvailableYears()
         enabler.decrementAvailableYears()
         checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
-    }
-
-    @Test
-    fun testSetYearOffset() {
     }
 
     private fun checkEnabledDate(

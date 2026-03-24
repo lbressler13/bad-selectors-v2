@@ -34,6 +34,7 @@ class DateEnabler {
             updateDaysForMonth()
         }
     var year: Int? = null
+        private set
 
     /**
      * Range of years that can be selected, has size [numYears]
@@ -96,8 +97,8 @@ class DateEnabler {
         }
     }
 
-    fun setYearAt(index: Int) {
-        year = availableYears.get(index)
+    fun setYearAt(index: Int?) {
+        year = simpleIf(index == null, { null },  { availableYears.get(index!!) })
     }
 
     /**
