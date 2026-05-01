@@ -68,7 +68,7 @@ class NestedCirclesFragmentTest {
         checkDate("________")
         checkYearsRangeButtons(true, false)
 
-        checkAllCirclesEnabled()
+        checkAllCircles()
         // check exact # children
         onView(atIndex(withId(monthsCircleId), 12)).check(doesNotExist())
         onView(atIndex(withId(daysCircleId), 31)).check(doesNotExist())
@@ -104,9 +104,7 @@ class NestedCirclesFragmentTest {
             }
             clickCircleButton(monthsCircleId, it)
             runWithFailMessage("Error checking month $it") {
-                checkCircle(monthsCircleId)
-                checkCircle(daysCircleId, disabledDays)
-                checkCircle(yearsCircleId)
+                checkAllCircles(disabledDays = disabledDays)
             }
         }
 
@@ -123,9 +121,7 @@ class NestedCirclesFragmentTest {
             }
             clickCircleButton(daysCircleId, it)
             runWithFailMessage("Error checking day $it") {
-                checkCircle(monthsCircleId, disabledMonths)
-                checkCircle(daysCircleId)
-                checkCircle(yearsCircleId)
+                checkAllCircles(disabledMonths = disabledMonths)
             }
         }
     }
@@ -139,7 +135,7 @@ class NestedCirclesFragmentTest {
         minusButton.perform(forceClick())
         checkDate("________")
         checkYearsRangeButtons(true, true)
-        checkAllCirclesEnabled()
+        checkAllCircles()
 
         var changedStart = mockDate.year - 60 * 2 + 1
         repeat(60) {
@@ -175,26 +171,19 @@ class NestedCirclesFragmentTest {
         clickCircleButton(monthsCircleId, 3)
         clickCircleButton(daysCircleId, 29)
         clickCircleButton(yearsCircleId, 0)
-        checkCircle(monthsCircleId, listOf(1))
-        checkCircle(daysCircleId, listOf(30))
-        checkCircle(yearsCircleId)
+        checkAllCircles(listOf(1), listOf(30))
         checkDate("0430$startYear")
 
         minusButton.perform(forceClick())
         minusButton.perform(forceClick())
         clickCircleButton(yearsCircleId, 0)
-        checkCircle(monthsCircleId, listOf(1))
-        checkCircle(daysCircleId, listOf(30))
-        checkCircle(yearsCircleId)
+        checkAllCircles(listOf(1), listOf(30))
         checkYearsRangeButtons(true, true)
         checkDate("0430${startYear - 60 * 2}")
 
         plusButton.perform(forceClick())
         clickCircleButton(yearsCircleId, 0)
-        checkCircle(monthsCircleId, listOf(1))
-        checkCircle(daysCircleId, listOf(30))
-        checkCircle(yearsCircleId)
-        checkYearsRangeButtons(true, true)
+        checkAllCircles(listOf(1), listOf(30))
         checkDate("0430${startYear - 60}")
     }
 
@@ -234,16 +223,10 @@ class NestedCirclesFragmentTest {
         }
     }
 
-    private fun checkAllCircles(disabledMonths: List<Int>, disabledDays: List<Int>, disabledYears: List<Int>) {
+    private fun checkAllCircles(disabledMonths: List<Int> = emptyList(), disabledDays: List<Int> = emptyList(), disabledYears: List<Int> = emptyList()) {
         checkCircle(monthsCircleId, disabledMonths)
         checkCircle(daysCircleId, disabledDays)
         checkCircle(yearsCircleId, disabledYears)
-    }
-
-    private fun checkAllCirclesEnabled() {
-        checkCircle(monthsCircleId)
-        checkCircle(daysCircleId)
-        checkCircle(yearsCircleId)
     }
 
     private fun checkYearsRangeButtons(minusEnabled: Boolean, plusEnabled: Boolean) {
