@@ -4,6 +4,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.databinding.ComponentDateNumbersBinding
 import xyz.lbres.badselectorsv2.ext.string.underlined
+import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
  * Fragment containing functionality that is used by all date selectors
@@ -17,7 +18,12 @@ abstract class BaseDateFragment : Fragment() {
      */
     protected open fun displayDay() {
         val views = listOf(dateNumbersLayout.day0, dateNumbersLayout.day1)
-        addNumberToViews(dateViewModel.day, views)
+        val dayToDisplay = if (dateViewModel.day == null) {
+            dateViewModel.day
+        } else {
+            dateViewModel.day!! + 1
+        }
+        addNumberToViews(dayToDisplay, views)
     }
 
     /**
@@ -25,7 +31,12 @@ abstract class BaseDateFragment : Fragment() {
      */
     protected open fun displayMonth() {
         val views = listOf(dateNumbersLayout.month0, dateNumbersLayout.month1)
-        addNumberToViews(dateViewModel.month, views)
+        val monthToDisplay = if (dateViewModel.month == null) {
+            dateViewModel.month
+        } else {
+            dateViewModel.month!! + 1
+        }
+        addNumberToViews(monthToDisplay, views)
     }
 
     /**

@@ -13,3 +13,6 @@ fun checkDate(date: String) {
         onView(withId(viewId)).check(matches(withText(text)))
     }
 }
+
+fun padToTwo(number: Int): String = number.toString().padStart(2, '0')
+fun padToFour(number: Int): String = number.toString().padStart(4, '0')

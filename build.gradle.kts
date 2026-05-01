@@ -20,7 +20,8 @@ val robolectricVersion by extra { "4.16.1" }
 val androidCompileSdk by extra { 35 }
 val androidJavaVersion by extra { JavaVersion.VERSION_11 }
 val androidJvmTarget by extra { "11" }
-val androidMinSdk by extra { 35 }
+// val androidMinSdk by extra { 35 }
+val androidMinSdk by extra { 34 }
 
 // ktlint
 val ktlintVersion by extra { "0.49.1" }

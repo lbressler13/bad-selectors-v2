@@ -3,11 +3,16 @@ package xyz.lbres.badselectorsv2.ui.date.nestedcircles
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.every
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
@@ -22,11 +27,17 @@ import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
-import xyz.lbres.badselectorsv2.ui.testutils.runWithFailMessage
+import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
+import xyz.lbres.badselectorsv2.ui.date.padToTwo
+import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
+import java.time.LocalDate
+import kotlin.test.assertFails
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class NestedCirclesFragmentTest {
+    private val mockDate = LocalDate.of(2025, 1, 1)
+
     private val minusButton = onView(withId(R.id.previousYearsButton))
     private val plusButton = onView(withId(R.id.nextYearsButton))
     private val monthsCircleId = R.id.monthsLayout
@@ -37,6 +48,9 @@ class NestedCirclesFragmentTest {
 
     @Before
     fun setupTest() {
+        // TODO check if this is needed
+        mockkStatic(LocalDate::class)
+        every { LocalDate.now() } returns mockDate
         scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
         navigateToSelector("Date", "Nested Circles")
     }
@@ -44,6 +58,7 @@ class NestedCirclesFragmentTest {
     @After
     fun cleanUpTest() {
         scenario = null
+        unmockkAll()
     }
 
     @Test
@@ -55,22 +70,33 @@ class NestedCirclesFragmentTest {
         checkCircle(monthsCircleId)
         checkCircle(daysCircleId)
         checkCircle(yearsCircleId)
-        // TODO check exact # children
+        // check exact # children
+        onView(atIndex(withId(monthsCircleId), 12)).check(doesNotExist())
+        onView(atIndex(withId(daysCircleId), 31)).check(doesNotExist())
+        onView(atIndex(withId(yearsCircleId), 60)).check(doesNotExist())
     }
 
     @Test
     fun useButtons() {
+        repeat(12) {
+            clickCircleButton(monthsCircleId, it)
+            checkDate("${padToTwo(it + 1)}______")
+        }
+
+        repeat(31) {
+            clickCircleButton(daysCircleId, it)
+            checkDate("12${padToTwo(it + 1)}____")
+        }
+
+        val startYear = mockDate.year - 60 + 1
+        repeat(60) {
+            clickCircleButton(yearsCircleId, it)
+            checkDate("1231${startYear + it}")
+        }
     }
 
     @Test
     fun disableButtons() {
-        // sets all buttons enabled
-        fun reset() {
-            clickCircleButton(monthsCircleId, 0)
-            clickCircleButton(daysCircleId, 0)
-            clickCircleButton(yearsCircleId, 0)
-        }
-
         repeat(12) {
             val disabledDays = when (it) {
                 1 -> listOf(29, 30)
@@ -85,7 +111,10 @@ class NestedCirclesFragmentTest {
             }
         }
 
-        reset()
+        // set all buttons enabled
+        clickCircleButton(monthsCircleId, 0)
+        clickCircleButton(daysCircleId, 0)
+        clickCircleButton(yearsCircleId, 0)
 
         repeat(31) {
             val disabledMonths = when (it) {
@@ -104,14 +133,30 @@ class NestedCirclesFragmentTest {
 
     @Test
     fun changeYearsRange() {
+        // decrement
+
+        // decrement to zero
+
+        // increment
+
+        // increment to start
+
+        // doesn't affect day or month selectors
     }
 
     @Test
     fun recreate() {
+        // blank
+
+        // with selected date
+
+        // with shifted year range
+
+        // with disabled buttons
     }
 
     private fun clickCircleButton(parentId: Int, index: Int) {
-        onView(atIndex(withId(parentId), index)).perform(click())
+        onView(atIndex(withId(parentId), index)).perform(forceClick())
     }
 
     private fun checkCircle(parentId: Int, disabledButtons: List<Int> = emptyList()) {
@@ -124,9 +169,10 @@ class NestedCirclesFragmentTest {
 
         val parentMatcher = withId(parentId)
         repeat(childCount) {
-            println("$it, ${it !in disabledButtons}")
-            val buttonMatcher = enabledMatcher(it !in disabledButtons)
-            onView(atIndex(parentMatcher, it)).check(matches(buttonMatcher))
+            runWithFailMessage("Failed checking button at $it with disabled buttons $disabledButtons") {
+                val buttonMatcher = enabledMatcher(it !in disabledButtons)
+                onView(atIndex(parentMatcher, it)).check(matches(buttonMatcher))
+            }
         }
     }
 }

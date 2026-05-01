@@ -15,6 +15,8 @@ import kotlin.test.assertNull
 
 class DateEnablerTest {
     private val mockDate = LocalDate.of(2025, 1, 1)
+    private val initialStartYear = 1966
+    private val numYears = 60
 
     @BeforeTest
     fun setupTest() {
@@ -35,7 +37,7 @@ class DateEnablerTest {
         assertNull(enabler.year)
 
         assertEquals(0, enabler.minYear)
-        assertEquals(60, enabler.numYears)
+        assertEquals(numYears, enabler.numYears)
         assertEquals(2025, enabler.maxYear)
         assertEquals(1966..2025, enabler.availableYears)
 
@@ -79,7 +81,7 @@ class DateEnablerTest {
         enabler.setYearAt(0)
         enabler.month = 8
         assertEquals(12, enabler.day)
-        assertEquals(1966, enabler.year)
+        assertEquals(initialStartYear, enabler.year)
     }
 
     @Test
@@ -117,7 +119,7 @@ class DateEnablerTest {
         enabler.setYearAt(0)
         enabler.day = 8
         assertEquals(2, enabler.month)
-        assertEquals(1966, enabler.year)
+        assertEquals(initialStartYear, enabler.year)
     }
 
     @Test
@@ -126,7 +128,7 @@ class DateEnablerTest {
         val year = mockDate.year
 
         fun validateYears(startYear: Int) {
-            repeat(60) {
+            repeat(numYears) {
                 enabler.setYearAt(it)
                 assertEquals(startYear + it, enabler.year)
             }
@@ -136,7 +138,7 @@ class DateEnablerTest {
             var updatedStart = startYear
             repeat(decrementCount) {
                 enabler.decrementAvailableYears()
-                updatedStart -= 60
+                updatedStart -= numYears
             }
             validateYears(updatedStart)
             return updatedStart
@@ -146,18 +148,18 @@ class DateEnablerTest {
             var updatedStart = startYear
             repeat(incrementCount) {
                 enabler.incrementAvailableYears()
-                updatedStart += 60
+                updatedStart += numYears
             }
             validateYears(updatedStart)
             return updatedStart
         }
 
         // initial values
-        var startYear = year - 60 + 1
+        var startYear = year - numYears + 1
         validateYears(startYear)
 
         // decremented
-        var decrementsToZero = year / 60
+        var decrementsToZero = year / numYears
 
         startYear = decrementAndValidate(startYear, 1)
         decrementsToZero--
@@ -167,13 +169,13 @@ class DateEnablerTest {
 
         // decremented to zero
         repeat(decrementsToZero) { enabler.decrementAvailableYears() }
-        repeat(60) {
+        repeat(numYears) {
             enabler.setYearAt(it)
             assertEquals(it, enabler.year)
         }
 
         // incremented
-        var incrementsToStart = year / 60
+        var incrementsToStart = year / numYears
 
         startYear = incrementAndValidate(0, 1)
         incrementsToStart--
@@ -183,7 +185,7 @@ class DateEnablerTest {
 
         // incremented to start
         repeat(incrementsToStart) { enabler.incrementAvailableYears() }
-        startYear = year - 60 + 1
+        startYear = year - numYears + 1
         validateYears(startYear)
 
         // duplicate
@@ -215,23 +217,23 @@ class DateEnablerTest {
     fun testIncrementYear() {
         var enabler = DateEnabler()
         val year = mockDate.year
-        var startYear = year - 60 + 1
+        var startYear = year - numYears + 1
 
         // unabled to increment at start
         enabler.incrementAvailableYears()
-        repeat(60) {
+        repeat(numYears) {
             val number = enabler.availableYears.get(it)
             assertEquals(startYear + it, number)
         }
 
-        val iterations = year / 60 - 1
+        val iterations = year / numYears - 1
         repeat(iterations + 1) { enabler.decrementAvailableYears() } // go down to 0
 
         startYear = 0
         repeat(iterations) {
             enabler.incrementAvailableYears()
-            startYear += 60
-            repeat(60) { yearIdx ->
+            startYear += numYears
+            repeat(numYears) { yearIdx ->
                 val number = enabler.availableYears.get(yearIdx)
                 assertEquals(startYear + yearIdx, number)
             }
@@ -241,9 +243,9 @@ class DateEnablerTest {
         println(enabler.availableYears)
         enabler.incrementAvailableYears()
         println(enabler.availableYears)
-        repeat(60) {
+        repeat(numYears) {
             val number = enabler.availableYears.get(it)
-            assertEquals(year - 60 + 1 + it, number)
+            assertEquals(year - numYears + 1 + it, number)
         }
 
         // check month/day enabled
@@ -263,12 +265,12 @@ class DateEnablerTest {
         var enabler = DateEnabler()
         val year = mockDate.year
 
-        val iterations = year / 60 - 1
-        var startYear = year - 60 + 1
+        val iterations = year / numYears - 1
+        var startYear = year - numYears + 1
         repeat(iterations) {
             enabler.decrementAvailableYears()
-            startYear -= 60
-            repeat(60) { yearIdx ->
+            startYear -= numYears
+            repeat(numYears) { yearIdx ->
                 val number = enabler.availableYears.get(yearIdx)
                 assertEquals(startYear + yearIdx, number)
             }
@@ -276,14 +278,14 @@ class DateEnablerTest {
 
         // to zero
         enabler.decrementAvailableYears()
-        repeat(60) {
+        repeat(numYears) {
             val number = enabler.availableYears.get(it)
             assertEquals(it, number)
         }
 
         // past zero
         enabler.decrementAvailableYears()
-        repeat(60) {
+        repeat(numYears) {
             val number = enabler.availableYears.get(it)
             assertEquals(it, number)
         }
@@ -328,7 +330,7 @@ class DateEnablerTest {
     }
 
     private fun checkEnabledYears(enabler: DateEnabler, disabledList: IntList = emptyList()) {
-        repeat(60) {
+        repeat(numYears) {
             runWithFailMessage("Failed checking year $it with list $disabledList") {
                 assertEquals(it !in disabledList, it in enabler.enabledYears)
             }
