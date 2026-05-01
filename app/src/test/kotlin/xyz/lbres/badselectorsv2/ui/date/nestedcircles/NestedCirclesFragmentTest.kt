@@ -37,6 +37,8 @@ import java.time.LocalDate
 class NestedCirclesFragmentTest {
     private val mockDate = LocalDate.of(2025, 1, 1)
     private val numYears = 60
+    private val startYear = mockDate.year - numYears + 1
+    private val maxChanges = mockDate.year / numYears
 
     private val minusButton = onView(withId(R.id.previousYearsButton))
     private val plusButton = onView(withId(R.id.nextYearsButton))
@@ -85,7 +87,6 @@ class NestedCirclesFragmentTest {
             checkDate("12${padToTwo(it + 1)}____")
         }
 
-        val startYear = mockDate.year - numYears + 1
         repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
             checkDate("1231${startYear + it}")
@@ -126,9 +127,6 @@ class NestedCirclesFragmentTest {
 
     @Test
     fun changeYearsRange() {
-        val startYear = mockDate.year - numYears + 1
-        val maxChanges = mockDate.year / numYears
-
         // decrement
         minusButton.perform(forceClick())
         checkDate("________")
@@ -187,16 +185,96 @@ class NestedCirclesFragmentTest {
     @Test
     fun recreate() {
         // blank
+        scenario!!.recreate()
+        checkDate("________")
+        checkYearsRangeButtons(true, false)
+        checkAllCircles()
 
         // with partial date
+        clickCircleButton(daysCircleId, 12)
+        var checkState = {
+            checkDate("__13____")
+            checkYearsRangeButtons(true, false)
+            checkAllCircles()
+        }
+        checkState()
+        scenario!!.recreate()
+        checkState()
+
+        clickCircleButton(yearsCircleId, 10)
+        checkState = {
+            checkDate("__13${startYear + 10}")
+            checkYearsRangeButtons(true, false)
+            checkAllCircles()
+        }
+        checkState()
+        scenario!!.recreate()
+        checkState()
 
         // with full date
+        clickCircleButton(monthsCircleId, 4)
+        checkState = {
+            checkDate("0513${startYear + 10}")
+            checkYearsRangeButtons(true, false)
+            checkAllCircles()
+        }
+        checkState()
+        scenario!!.recreate()
+        checkState()
 
         // with shifted year range
+        minusButton.perform(forceClick())
+        clickCircleButton(yearsCircleId, 15)
+        checkState = {
+            checkDate("0513${startYear - numYears + 15}")
+            checkYearsRangeButtons(true, true)
+            checkAllCircles()
+        }
+        checkState()
+        scenario!!.recreate()
+        checkState()
+
+        repeat(maxChanges - 1) { minusButton.perform(forceClick()) }
+        checkState = {
+            checkDate("0513${startYear - numYears + 15}")
+            checkYearsRangeButtons(false, true)
+            checkAllCircles()
+        }
+        checkState()
+        scenario!!.recreate()
+        checkState()
+
+        plusButton.perform(forceClick())
+        checkState = {
+            checkDate("0513${startYear - numYears + 15}")
+            checkYearsRangeButtons(true, true)
+            checkAllCircles()
+        }
+        checkState()
+        scenario!!.recreate()
+        checkState()
 
         // with disabled buttons
+        clickCircleButton(monthsCircleId, 1)
+        checkState = {
+            checkDate("0213${startYear - numYears + 15}")
+            checkYearsRangeButtons(true, true)
+            checkAllCircles(disabledDays = listOf(29, 30))
+        }
+        checkState()
+        scenario!!.recreate()
+        checkState()
 
-        // with new changed date
+        clickCircleButton(monthsCircleId, 5)
+        clickCircleButton(daysCircleId, 29)
+        checkState = {
+            checkDate("0630${startYear - numYears + 15}")
+            checkYearsRangeButtons(true, true)
+            checkAllCircles(listOf(1), disabledDays = listOf(30))
+        }
+        checkState()
+        scenario!!.recreate()
+        checkState()
     }
 
     private fun clickCircleButton(parentId: Int, index: Int) {
