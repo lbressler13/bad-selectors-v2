@@ -2,6 +2,7 @@ package xyz.lbres.badselectorsv2.ui.calculator.randomenabled
 
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import xyz.lbres.badselectorsv2.testutils.printErr
 import xyz.lbres.badselectorsv2.ui.calculator.backspaceButton
 import xyz.lbres.badselectorsv2.ui.calculator.clearButton
 import xyz.lbres.badselectorsv2.ui.calculator.equalsButton
@@ -29,7 +30,7 @@ fun checkState(
         try {
             button.check(matches(enabledMatcher(enabledNumbers[index])))
         } catch (e: AssertionError) {
-            println("Error checking number button for '$index'")
+            printErr("Error checking number button for '$index'")
             throw e
         }
     }
@@ -39,7 +40,7 @@ fun checkState(
         try {
             button.check(matches(enabledMatcher(enabledOperators[index])))
         } catch (e: AssertionError) {
-            println("Error checking operator button for '$operator'")
+            printErr("Error checking operator button for '$operator'")
             throw e
         }
     }

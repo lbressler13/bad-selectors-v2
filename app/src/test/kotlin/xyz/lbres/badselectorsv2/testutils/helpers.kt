@@ -20,7 +20,7 @@ fun runWithFailMessage(failureMessage: String, block: () -> Unit) {
     try {
         block()
     } catch (e: AssertionError) {
-        println(failureMessage)
+        printErr(failureMessage)
         throw e
     }
 }
