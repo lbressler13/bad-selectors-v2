@@ -5,7 +5,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
@@ -25,11 +24,9 @@ import xyz.lbres.badselectorsv2.ui.date.checkDate
 import xyz.lbres.badselectorsv2.ui.date.padToFour
 import xyz.lbres.badselectorsv2.ui.date.padToTwo
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
-import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
-import xyz.lbres.kotlinutils.general.simpleIf
 import java.time.LocalDate
 
 @Category(Robolectric::class)
@@ -50,7 +47,6 @@ class NestedCirclesFragmentTest {
 
     @Before
     fun setupTest() {
-        // TODO check if this is needed
         mockkStatic(LocalDate::class)
         every { LocalDate.now() } returns mockDate
         scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
