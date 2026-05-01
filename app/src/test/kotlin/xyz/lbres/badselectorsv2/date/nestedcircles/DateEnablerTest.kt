@@ -240,9 +240,7 @@ class DateEnablerTest {
         }
 
         // back to start
-        println(enabler.availableYears)
         enabler.incrementAvailableYears()
-        println(enabler.availableYears)
         repeat(numYears) {
             val number = enabler.availableYears.get(it)
             assertEquals(year - numYears + 1 + it, number)

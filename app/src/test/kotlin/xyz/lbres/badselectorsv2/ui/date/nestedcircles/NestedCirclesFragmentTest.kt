@@ -2,13 +2,11 @@ package xyz.lbres.badselectorsv2.ui.date.nestedcircles
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -22,23 +20,23 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.badselectorsv2.ui.date.checkDate
+import xyz.lbres.badselectorsv2.ui.date.padToFour
+import xyz.lbres.badselectorsv2.ui.date.padToTwo
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
-import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
-import xyz.lbres.badselectorsv2.ui.date.padToFour
-import xyz.lbres.badselectorsv2.ui.date.padToTwo
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.kotlinutils.general.simpleIf
 import java.time.LocalDate
-import kotlin.test.assertFails
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class NestedCirclesFragmentTest {
     private val mockDate = LocalDate.of(2025, 1, 1)
+    private val numYears = 60
 
     private val minusButton = onView(withId(R.id.previousYearsButton))
     private val plusButton = onView(withId(R.id.nextYearsButton))
@@ -87,8 +85,8 @@ class NestedCirclesFragmentTest {
             checkDate("12${padToTwo(it + 1)}____")
         }
 
-        val startYear = mockDate.year - 60 + 1
-        repeat(60) {
+        val startYear = mockDate.year - numYears + 1
+        repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
             checkDate("1231${startYear + it}")
         }
@@ -128,8 +126,8 @@ class NestedCirclesFragmentTest {
 
     @Test
     fun changeYearsRange() {
-        val startYear = mockDate.year - 60 + 1
-        val maxChanges = mockDate.year / 60
+        val startYear = mockDate.year - numYears + 1
+        val maxChanges = mockDate.year / numYears
 
         // decrement
         minusButton.perform(forceClick())
@@ -137,16 +135,15 @@ class NestedCirclesFragmentTest {
         checkYearsRangeButtons(true, true)
         checkAllCircles()
 
-        var changedStart = mockDate.year - 60 * 2 + 1
-        repeat(60) {
+        repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
-            checkDate("____${changedStart + it}")
+            checkDate("____${startYear - numYears + it}")
         }
 
         // decrement to zero
         repeat(maxChanges - 1) { minusButton.perform(forceClick()) }
         checkYearsRangeButtons(false, true)
-        repeat(60) {
+        repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
             checkDate("____${padToFour(it)}")
         }
@@ -154,15 +151,15 @@ class NestedCirclesFragmentTest {
         // increment
         plusButton.perform(forceClick())
         checkYearsRangeButtons(true, true)
-        repeat(60) {
+        repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
-            checkDate("____${padToFour(it + 60)}")
+            checkDate("____${padToFour(it + numYears)}")
         }
 
         // increment to start
         repeat(maxChanges - 1) { plusButton.perform(forceClick()) }
         checkYearsRangeButtons(true, false)
-        repeat(60) {
+        repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
             checkDate("____${startYear + it}")
         }
@@ -179,12 +176,12 @@ class NestedCirclesFragmentTest {
         clickCircleButton(yearsCircleId, 0)
         checkAllCircles(listOf(1), listOf(30))
         checkYearsRangeButtons(true, true)
-        checkDate("0430${startYear - 60 * 2}")
+        checkDate("0430${startYear - numYears * 2}")
 
         plusButton.perform(forceClick())
         clickCircleButton(yearsCircleId, 0)
         checkAllCircles(listOf(1), listOf(30))
-        checkDate("0430${startYear - 60}")
+        checkDate("0430${startYear - numYears}")
     }
 
     @Test
@@ -223,7 +220,11 @@ class NestedCirclesFragmentTest {
         }
     }
 
-    private fun checkAllCircles(disabledMonths: List<Int> = emptyList(), disabledDays: List<Int> = emptyList(), disabledYears: List<Int> = emptyList()) {
+    private fun checkAllCircles(
+        disabledMonths: List<Int> = emptyList(),
+        disabledDays: List<Int> = emptyList(),
+        disabledYears: List<Int> = emptyList(),
+    ) {
         checkCircle(monthsCircleId, disabledMonths)
         checkCircle(daysCircleId, disabledDays)
         checkCircle(yearsCircleId, disabledYears)

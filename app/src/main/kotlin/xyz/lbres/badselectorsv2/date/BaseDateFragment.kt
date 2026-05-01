@@ -4,7 +4,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.databinding.ComponentDateNumbersBinding
 import xyz.lbres.badselectorsv2.ext.string.underlined
-import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
  * Fragment containing functionality that is used by all date selectors
