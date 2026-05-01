@@ -28,8 +28,10 @@ import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
+import xyz.lbres.badselectorsv2.ui.date.padToFour
 import xyz.lbres.badselectorsv2.ui.date.padToTwo
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
+import xyz.lbres.kotlinutils.general.simpleIf
 import java.time.LocalDate
 import kotlin.test.assertFails
 
@@ -64,12 +66,9 @@ class NestedCirclesFragmentTest {
     @Test
     fun initialUi() {
         checkDate("________")
-        minusButton.check(matches(allOf(isDisplayed(), isEnabled())))
-        plusButton.check(matches(allOf(isDisplayed(), isDisabled())))
+        checkYearsRangeButtons(true, false)
 
-        checkCircle(monthsCircleId)
-        checkCircle(daysCircleId)
-        checkCircle(yearsCircleId)
+        checkAllCirclesEnabled()
         // check exact # children
         onView(atIndex(withId(monthsCircleId), 12)).check(doesNotExist())
         onView(atIndex(withId(daysCircleId), 31)).check(doesNotExist())
@@ -133,26 +132,85 @@ class NestedCirclesFragmentTest {
 
     @Test
     fun changeYearsRange() {
+        val startYear = mockDate.year - 60 + 1
+        val maxChanges = mockDate.year / 60
+
         // decrement
+        minusButton.perform(forceClick())
+        checkDate("________")
+        checkYearsRangeButtons(true, true)
+        checkAllCirclesEnabled()
+
+        var changedStart = mockDate.year - 60 * 2 + 1
+        repeat(60) {
+            clickCircleButton(yearsCircleId, it)
+            checkDate("____${changedStart + it}")
+        }
 
         // decrement to zero
+        repeat(maxChanges - 1) { minusButton.perform(forceClick()) }
+        checkYearsRangeButtons(false, true)
+        repeat(60) {
+            clickCircleButton(yearsCircleId, it)
+            checkDate("____${padToFour(it)}")
+        }
 
         // increment
+        plusButton.perform(forceClick())
+        checkYearsRangeButtons(true, true)
+        repeat(60) {
+            clickCircleButton(yearsCircleId, it)
+            checkDate("____${padToFour(it + 60)}")
+        }
 
         // increment to start
+        repeat(maxChanges - 1) { plusButton.perform(forceClick()) }
+        checkYearsRangeButtons(true, false)
+        repeat(60) {
+            clickCircleButton(yearsCircleId, it)
+            checkDate("____${startYear + it}")
+        }
 
         // doesn't affect day or month selectors
+        clickCircleButton(monthsCircleId, 3)
+        clickCircleButton(daysCircleId, 29)
+        clickCircleButton(yearsCircleId, 0)
+        checkCircle(monthsCircleId, listOf(1))
+        checkCircle(daysCircleId, listOf(30))
+        checkCircle(yearsCircleId)
+        checkDate("0430$startYear")
+
+        minusButton.perform(forceClick())
+        minusButton.perform(forceClick())
+        clickCircleButton(yearsCircleId, 0)
+        checkCircle(monthsCircleId, listOf(1))
+        checkCircle(daysCircleId, listOf(30))
+        checkCircle(yearsCircleId)
+        checkYearsRangeButtons(true, true)
+        checkDate("0430${startYear - 60 * 2}")
+
+        plusButton.perform(forceClick())
+        clickCircleButton(yearsCircleId, 0)
+        checkCircle(monthsCircleId, listOf(1))
+        checkCircle(daysCircleId, listOf(30))
+        checkCircle(yearsCircleId)
+        checkYearsRangeButtons(true, true)
+        checkDate("0430${startYear - 60}")
     }
 
     @Test
     fun recreate() {
         // blank
 
-        // with selected date
+        // with partial date
+
+        // with full date
 
         // with shifted year range
 
         // with disabled buttons
+
+        // with new changed date
     }
 
     private fun clickCircleButton(parentId: Int, index: Int) {
@@ -174,5 +232,25 @@ class NestedCirclesFragmentTest {
                 onView(atIndex(parentMatcher, it)).check(matches(buttonMatcher))
             }
         }
+    }
+
+    private fun checkAllCircles(disabledMonths: List<Int>, disabledDays: List<Int>, disabledYears: List<Int>) {
+        checkCircle(monthsCircleId, disabledMonths)
+        checkCircle(daysCircleId, disabledDays)
+        checkCircle(yearsCircleId, disabledYears)
+    }
+
+    private fun checkAllCirclesEnabled() {
+        checkCircle(monthsCircleId)
+        checkCircle(daysCircleId)
+        checkCircle(yearsCircleId)
+    }
+
+    private fun checkYearsRangeButtons(minusEnabled: Boolean, plusEnabled: Boolean) {
+        val enabledMatcher = { enabled: Boolean ->
+            simpleIf(enabled, isEnabled(), isDisabled())
+        }
+        minusButton.check(matches(allOf(isDisplayed(), enabledMatcher(minusEnabled))))
+        plusButton.check(matches(allOf(isDisplayed(), enabledMatcher(plusEnabled))))
     }
 }
