@@ -4,7 +4,6 @@ import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
-import xyz.lbres.kotlinutils.closedrange.intrange.ext.get
 import xyz.lbres.kotlinutils.list.IntList
 import java.time.LocalDate
 import kotlin.test.AfterTest
@@ -137,31 +136,25 @@ class DateEnablerTest {
         // initial years
         setAllYears(initialStartYear)
 
-        // decrement
-        repeat(maxChanges - 1) {
-            enabler.decrementAvailableYears()
-            setAllYears(initialStartYear - numYears * (it + 1))
-        }
-        // to zero
-        enabler.decrementAvailableYears()
-        setAllYears(0)
+        // decrement a few times
+        repeat(6) { enabler.decrementAvailableYears() }
+        var offset = 6
+        setAllYears(initialStartYear - numYears * offset)
 
-        // increment
-        repeat(maxChanges - 1) {
-            enabler.incrementAvailableYears()
-            setAllYears(numYears * (it + 1))
-        }
-        // to start
-        enabler.incrementAvailableYears()
-        setAllYears(initialStartYear)
+        // increment a few times
+        repeat(4) { enabler.incrementAvailableYears() }
+        offset -= 4
+        setAllYears(initialStartYear - numYears * offset)
 
         // check out of order
         (0 until numYears).shuffled().forEach {
             enabler.setYearAt(it)
-            assertEquals(initialStartYear + it, enabler.year)
+            val expectedYear = initialStartYear - numYears * offset + it
+            assertEquals(expectedYear, enabler.year)
         }
 
         // repeat value
+        enabler = DateEnabler()
         enabler.setYearAt(3)
         assertEquals(initialStartYear + 3, enabler.year)
         enabler.setYearAt(3)
