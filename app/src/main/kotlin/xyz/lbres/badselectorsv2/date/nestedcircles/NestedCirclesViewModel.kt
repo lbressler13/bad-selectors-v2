@@ -20,6 +20,6 @@ class NestedCirclesViewModel : BaseDateViewModel() {
     override var year: Int?
         get() = enabler.year
         set(_) {
-            Log.e(null, "Cannot set year directly. Must use setYearFromIndex")
+            Log.e(null, "Cannot set year directly. Must use enabler.setYearAt")
         }
 }

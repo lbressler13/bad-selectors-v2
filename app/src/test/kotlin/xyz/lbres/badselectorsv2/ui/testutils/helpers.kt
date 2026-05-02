@@ -25,6 +25,11 @@ private typealias VH = SelectorGroupViewHolder
  */
 fun isDisabled() = not(isEnabled())
 
+/**
+ * Matcher to check if view is either enabled or disabled
+ *
+ * @param enabled [Boolean]: true for enabled matcher, false for disabled matcher
+ */
 fun enabledMatcher(enabled: Boolean) = simpleIf(enabled, isEnabled(), isDisabled())
 
 /**

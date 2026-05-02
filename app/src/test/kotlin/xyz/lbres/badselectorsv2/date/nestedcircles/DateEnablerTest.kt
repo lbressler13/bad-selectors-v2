@@ -15,8 +15,8 @@ import kotlin.test.assertNull
 
 class DateEnablerTest {
     private val mockDate = LocalDate.of(2025, 1, 1)
-    private val initialStartYear = 1966
     private val numYears = 60
+    private val initialStartYear = mockDate.year - numYears + 1
 
     @BeforeTest
     fun setupTest() {
@@ -38,12 +38,12 @@ class DateEnablerTest {
 
         assertEquals(0, enabler.minYear)
         assertEquals(numYears, enabler.numYears)
-        assertEquals(2025, enabler.maxYear)
-        assertEquals(1966..2025, enabler.availableYears)
+        assertEquals(mockDate.year, enabler.maxYear)
+        assertEquals(initialStartYear..mockDate.year, enabler.availableYears)
 
         assertEquals((0 until 31).toList(), enabler.enabledDays)
         assertEquals((0 until 12).toList(), enabler.enabledMonths)
-        assertEquals((0 until 60).toList(), enabler.enabledYears)
+        assertEquals((0 until numYears).toList(), enabler.enabledYears)
     }
 
     @Test
@@ -300,38 +300,19 @@ class DateEnablerTest {
         checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
     }
 
+    // validate that the correct months, days, and years are enabled
     private fun checkEnabledDate(
         enabler: DateEnabler,
         disabledMonths: IntList = emptyList(),
         disabledDays: IntList = emptyList(),
         disabledYears: IntList = emptyList(),
     ) {
-        checkEnabledMonths(enabler, disabledMonths)
-        checkEnabledDays(enabler, disabledDays)
-        checkEnabledYears(enabler, disabledYears)
-    }
+        val actualMonths = (0 until 12).toList() - enabler.enabledMonths
+        val actualDays = (0 until 31).toList() - enabler.enabledDays
+        val actualYears = (0 until numYears).toList() - enabler.enabledYears
 
-    private fun checkEnabledMonths(enabler: DateEnabler, disabledList: IntList = emptyList()) {
-        repeat(12) {
-            runWithFailMessage("Failed checking month $it with list $disabledList") {
-                assertEquals(it !in disabledList, it in enabler.enabledMonths)
-            }
-        }
-    }
-
-    private fun checkEnabledDays(enabler: DateEnabler, disabledList: IntList = emptyList()) {
-        repeat(31) {
-            runWithFailMessage("Failed checking day $it with list $disabledList") {
-                assertEquals(it !in disabledList, it in enabler.enabledDays)
-            }
-        }
-    }
-
-    private fun checkEnabledYears(enabler: DateEnabler, disabledList: IntList = emptyList()) {
-        repeat(numYears) {
-            runWithFailMessage("Failed checking year $it with list $disabledList") {
-                assertEquals(it !in disabledList, it in enabler.enabledYears)
-            }
-        }
+        assertEquals(disabledMonths.sorted(), actualMonths.sorted())
+        assertEquals(disabledDays.sorted(), actualDays.sorted())
+        assertEquals(disabledYears.sorted(), actualYears.sorted())
     }
 }

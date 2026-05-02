@@ -46,18 +46,19 @@ class DateEnabler {
      * Days that are valid for the current month
      */
     // TODO just set these once when date is updated to make life easy
-    val enabledDays: IntList
-        get() = enabledToList(_enabledDays)
+    var enabledDays: IntList = enabledToList(_enabledDays)
+        private set
+        // get() = enabledToList(_enabledDays)
 
     /**
      * Months that are valid for the current day
      */
-    val enabledMonths: IntList
-        get() = enabledToList(_enabledMonths)
+    var enabledMonths: IntList = enabledToList(_enabledMonths)
+        private set
+    // get() = enabledToList(_enabledMonths)
 
-    // TODO to be used for leap year
-    val enabledYears: IntList
-        get() = enabledToList(_enabledYears)
+    // to be used for leap year
+    val enabledYears: IntList = enabledToList(_enabledYears)
 
     /**
      * Initialize available years
@@ -81,6 +82,7 @@ class DateEnabler {
         _enabledDays.indices.forEach {
             _enabledDays[it] = it < numDays
         }
+        enabledDays = enabledToList(_enabledDays)
     }
 
     /**
@@ -91,6 +93,7 @@ class DateEnabler {
         daysPerMonth.forEachIndexed { monthIndex, days ->
             _enabledMonths[monthIndex] = day == null || day!! < days
         }
+        enabledMonths = enabledToList(_enabledMonths)
     }
 
     fun setYearAt(index: Int?) {
@@ -127,6 +130,12 @@ class DateEnabler {
         availableYears = startYear..endYear
     }
 
+    /**
+     * Convert boolean array to list of ints where enabled = true
+     *
+     * @param enabled [BooleanArray]: array indicating which numbers should be included in the list
+     * @return [IntList]: list consisting of only indices where the value in [enabled] is true
+     */
     private fun enabledToList(enabled: BooleanArray): IntList {
         return enabled
             .mapIndexed { index, value -> simpleIf(value, index, null) }

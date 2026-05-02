@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
-import androidx.core.view.forEachIndexed
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.databinding.ComponentDateNumbersBinding
 import xyz.lbres.badselectorsv2.databinding.FragmentNestedCirclesBinding
@@ -21,7 +20,6 @@ import xyz.lbres.kotlinutils.list.IntList
 /**
  * Fragment that displays 3 concentric, unlabelled circles of buttons, corresponding to year, day, and month.
  * The range of available years to select can be changed via buttons on screen.
- * A setting can also be enabled to shuffle the order of numbers in each circle.
  */
 class NestedCirclesFragment : BaseDateFragment() {
     private lateinit var viewModel: NestedCirclesViewModel

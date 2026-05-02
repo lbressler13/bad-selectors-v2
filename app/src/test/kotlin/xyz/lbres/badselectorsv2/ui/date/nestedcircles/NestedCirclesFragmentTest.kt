@@ -6,6 +6,7 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -62,6 +63,7 @@ class NestedCirclesFragmentTest {
     @Test
     fun initialUi() {
         checkState()
+        onView(withText("Change Available Years")).check(matches(isDisplayed()))
         // check exact # children
         onView(atIndex(withId(monthsCircleId), 12)).check(doesNotExist())
         onView(atIndex(withId(daysCircleId), 31)).check(doesNotExist())
