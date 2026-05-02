@@ -22,8 +22,8 @@ import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.badselectorsv2.ui.date.checkDate
+import xyz.lbres.badselectorsv2.ui.date.formatDate
 import xyz.lbres.badselectorsv2.ui.date.padToFour
-import xyz.lbres.badselectorsv2.ui.date.padToTwo
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
@@ -64,7 +64,7 @@ class NestedCirclesFragmentTest {
     fun initialUi() {
         checkState()
         onView(withText("Change Available Years")).check(matches(isDisplayed()))
-        // check exact # children
+        // check exact number of children
         onView(atIndex(withId(monthsCircleId), 12)).check(doesNotExist())
         onView(atIndex(withId(daysCircleId), 31)).check(doesNotExist())
         onView(atIndex(withId(yearsCircleId), 60)).check(doesNotExist())
@@ -74,17 +74,17 @@ class NestedCirclesFragmentTest {
     fun useButtons() {
         repeat(12) {
             clickCircleButton(monthsCircleId, it)
-            checkDate("${padToTwo(it + 1)}______")
+            checkDate(it + 1)
         }
 
         repeat(31) {
             clickCircleButton(daysCircleId, it)
-            checkDate("12${padToTwo(it + 1)}____")
+            checkDate(12, it + 1)
         }
 
         repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
-            checkDate("1231${startYear + it}")
+            checkDate(12, 31, startYear + it)
         }
     }
 
@@ -128,7 +128,7 @@ class NestedCirclesFragmentTest {
 
         repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
-            checkDate("____${startYear - numYears + it}")
+            checkDate(year = startYear - numYears + it)
         }
 
         // decrement to zero
@@ -136,7 +136,7 @@ class NestedCirclesFragmentTest {
         checkYearsRangeButtons(false, true)
         repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
-            checkDate("____${padToFour(it)}")
+            checkDate(year = it)
         }
 
         // increment
@@ -144,7 +144,7 @@ class NestedCirclesFragmentTest {
         checkYearsRangeButtons(true, true)
         repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
-            checkDate("____${padToFour(it + numYears)}")
+            checkDate(year = numYears + it)
         }
 
         // increment to start
@@ -152,25 +152,25 @@ class NestedCirclesFragmentTest {
         checkYearsRangeButtons(true, false)
         repeat(numYears) {
             clickCircleButton(yearsCircleId, it)
-            checkDate("____${startYear + it}")
+            checkDate(year = startYear + it)
         }
 
         // doesn't affect day or month selectors
         clickCircleButton(monthsCircleId, 3)
         clickCircleButton(daysCircleId, 29)
         clickCircleButton(yearsCircleId, 0)
-        var date = "0430$startYear"
+        var date = formatDate(4, 30, startYear)
         checkState(date = date, disabledMonths = listOf(1), disabledDays = listOf(30))
 
         minusButton.perform(forceClick())
         minusButton.perform(forceClick())
         clickCircleButton(yearsCircleId, 0)
-        date = "0430${startYear - numYears * 2}"
+        date = formatDate(4, 30, startYear - numYears * 2)
         checkState(date = date, disabledMonths = listOf(1), disabledDays = listOf(30), plusEnabled = true)
 
         plusButton.perform(forceClick())
         clickCircleButton(yearsCircleId, 0)
-        date = "0430${startYear - numYears}"
+        date = formatDate(4, 30, startYear - numYears)
         checkState(date = date, disabledMonths = listOf(1), disabledDays = listOf(30), plusEnabled = true)
     }
 
@@ -182,20 +182,20 @@ class NestedCirclesFragmentTest {
 
         // with partial date
         clickCircleButton(daysCircleId, 12)
-        var date = "__13____"
+        var date = formatDate(day = 13)
         checkState(date = date)
         scenario!!.recreate()
         checkState(date = date)
 
         clickCircleButton(yearsCircleId, 10)
-        date = "__13${startYear + 10}"
+        date = formatDate(day = 13, year = startYear + 10)
         checkState(date = date)
         scenario!!.recreate()
         checkState(date = date)
 
         // with full date
         clickCircleButton(monthsCircleId, 4)
-        date = "0513${startYear + 10}"
+        date = formatDate(5, 13, startYear + 10)
         checkState(date = date)
         scenario!!.recreate()
         checkState(date = date)
@@ -203,13 +203,13 @@ class NestedCirclesFragmentTest {
         // with shifted year range
         minusButton.perform(forceClick())
         clickCircleButton(yearsCircleId, 15)
-        date = "0513${startYear - numYears + 15}"
+        date = formatDate(5, 13, startYear - numYears + 15)
         checkState(date = date, plusEnabled = true)
         scenario!!.recreate()
         checkState(date = date, plusEnabled = true)
 
         repeat(maxChanges - 1) { minusButton.perform(forceClick()) }
-        date = "0513${startYear - numYears + 15}"
+        date = formatDate(5, 13, startYear - numYears + 15)
         checkState(date = date, minusEnabled = false, plusEnabled = true)
         scenario!!.recreate()
         checkState(date = date, minusEnabled = false, plusEnabled = true)
@@ -221,14 +221,14 @@ class NestedCirclesFragmentTest {
 
         // with disabled buttons
         clickCircleButton(monthsCircleId, 1)
-        date = "0213${startYear - numYears + 15}"
+        date = formatDate(2, 13, startYear - numYears + 15)
         checkState(date = date, plusEnabled = true, disabledDays = listOf(29, 30))
         scenario!!.recreate()
         checkState(date = date, plusEnabled = true, disabledDays = listOf(29, 30))
 
         clickCircleButton(monthsCircleId, 5)
         clickCircleButton(daysCircleId, 29)
-        date = "0630${startYear - numYears + 15}"
+        date = formatDate(6, 30, startYear - numYears + 15)
         checkState(date = date, plusEnabled = true, disabledMonths = listOf(1), disabledDays = listOf(30))
         scenario!!.recreate()
         checkState(date = date, plusEnabled = true, disabledMonths = listOf(1), disabledDays = listOf(30))

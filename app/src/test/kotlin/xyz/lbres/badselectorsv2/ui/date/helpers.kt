@@ -5,6 +5,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
  * Check that a date is displayed in the date numbers component
@@ -19,7 +20,19 @@ fun checkDate(date: String) {
     }
 }
 
-/** Pad a number with 0s to create a string of length 2 */
+fun checkDate(month: Int? = null, day: Int? = null, year: Int? = null) {
+    checkDate(formatDate(month, day, year))
+}
+
+// Pad a number with 0s to create a string of length 2
 fun padToTwo(number: Int): String = number.toString().padStart(2, '0')
-/** Pad a number with 0s to create a string of length 4 */
+
+// Pad a number with 0s to create a string of length 4
 fun padToFour(number: Int): String = number.toString().padStart(4, '0')
+
+fun formatDate(month: Int? = null, day: Int? = null, year: Int? = null): String {
+    val monthStr = simpleIf(month == null, { "__" }, { padToTwo(month!!) })
+    val dayStr = simpleIf(day == null, { "__" }, { padToTwo(day!!) })
+    val yearStr = simpleIf(year == null, { "____" }, { padToFour(year!!) })
+    return "$monthStr$dayStr$yearStr"
+}
