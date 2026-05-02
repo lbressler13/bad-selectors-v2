@@ -211,35 +211,22 @@ class DateEnablerTest {
     @Test
     fun testIncrementYear() {
         var enabler = DateEnabler()
-        val year = mockDate.year // TODO delete
-        var startYear = initialStartYear
 
         // unabled to increment at start
         enabler.incrementAvailableYears()
-        repeat(numYears) {
-            val number = enabler.availableYears.get(it)
-            assertEquals(startYear + it, number)
-        }
+        validateYears(enabler, initialStartYear)
 
-        val iterations = year / numYears - 1
-        repeat(iterations + 1) { enabler.decrementAvailableYears() } // go down to 0
+        // decrement to zero
+        repeat(maxChanges) { enabler.decrementAvailableYears() }
 
-        startYear = 0
-        repeat(iterations) {
+        // increment
+        repeat(maxChanges - 1) {
             enabler.incrementAvailableYears()
-            startYear += numYears
-            repeat(numYears) { yearIdx ->
-                val number = enabler.availableYears.get(yearIdx)
-                assertEquals(startYear + yearIdx, number)
-            }
+            validateYears(enabler, (it + 1) * 60)
         }
-
-        // back to start
+        // to start
         enabler.incrementAvailableYears()
-        repeat(numYears) {
-            val number = enabler.availableYears.get(it)
-            assertEquals(year - numYears + 1 + it, number)
-        }
+        validateYears(enabler, initialStartYear)
 
         // check month/day enabled
         enabler = DateEnabler()
@@ -256,32 +243,26 @@ class DateEnablerTest {
     @Test
     fun testDecrementYear() {
         var enabler = DateEnabler()
-        val year = mockDate.year
 
-        val iterations = year / numYears - 1
-        var startYear = year - numYears + 1
-        repeat(iterations) {
+        // decrement
+        repeat(maxChanges - 1) {
             enabler.decrementAvailableYears()
-            startYear -= numYears
-            repeat(numYears) { yearIdx ->
-                val number = enabler.availableYears.get(yearIdx)
-                assertEquals(startYear + yearIdx, number)
-            }
+            val startYear = initialStartYear - 60 * (it + 1)
+            validateYears(enabler, startYear)
         }
-
         // to zero
         enabler.decrementAvailableYears()
-        repeat(numYears) {
-            val number = enabler.availableYears.get(it)
-            assertEquals(it, number)
-        }
+        validateYears(enabler, 0)
 
-        // past zero
+        // unable to decrement at zero
         enabler.decrementAvailableYears()
-        repeat(numYears) {
-            val number = enabler.availableYears.get(it)
-            assertEquals(it, number)
-        }
+        validateYears(enabler, 0)
+
+        // decrement after increment
+        enabler.incrementAvailableYears()
+        enabler.incrementAvailableYears()
+        enabler.decrementAvailableYears()
+        validateYears(enabler, numYears)
 
         // check month/day enabled
         enabler = DateEnabler()
@@ -289,9 +270,8 @@ class DateEnablerTest {
         enabler.month = 3 // april
         checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
 
-        enabler.incrementAvailableYears() // increment because year already is at minimum
-        enabler.incrementAvailableYears()
         enabler.decrementAvailableYears()
+        validateYears(enabler, initialStartYear - numYears)
         checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
     }
 
