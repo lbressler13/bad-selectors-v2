@@ -17,6 +17,7 @@ class DateEnablerTest {
     private val mockDate = LocalDate.of(2025, 1, 1)
     private val numYears = 60
     private val initialStartYear = mockDate.year - numYears + 1
+    val maxChanges = mockDate.year / numYears
 
     @BeforeTest
     fun setupTest() {
@@ -126,13 +127,7 @@ class DateEnablerTest {
     fun testSetYear() {
         var enabler = DateEnabler()
         val year = mockDate.year
-
-        fun validateYears(startYear: Int) {
-            repeat(numYears) {
-                enabler.setYearAt(it)
-                assertEquals(startYear + it, enabler.year)
-            }
-        }
+        val maxChanges = year / numYears
 
         fun decrementAndValidate(startYear: Int, decrementCount: Int): Int {
             var updatedStart = startYear
@@ -140,7 +135,7 @@ class DateEnablerTest {
                 enabler.decrementAvailableYears()
                 updatedStart -= numYears
             }
-            validateYears(updatedStart)
+            validateYears(enabler, updatedStart)
             return updatedStart
         }
 
@@ -150,16 +145,16 @@ class DateEnablerTest {
                 enabler.incrementAvailableYears()
                 updatedStart += numYears
             }
-            validateYears(updatedStart)
+            validateYears(enabler, updatedStart)
             return updatedStart
         }
 
         // initial values
         var startYear = year - numYears + 1
-        validateYears(startYear)
+        validateYears(enabler, startYear)
 
         // decremented
-        var decrementsToZero = year / numYears
+        var decrementsToZero = maxChanges
 
         startYear = decrementAndValidate(startYear, 1)
         decrementsToZero--
@@ -175,7 +170,7 @@ class DateEnablerTest {
         }
 
         // incremented
-        var incrementsToStart = year / numYears
+        var incrementsToStart = maxChanges
 
         startYear = incrementAndValidate(0, 1)
         incrementsToStart--
@@ -186,7 +181,7 @@ class DateEnablerTest {
         // incremented to start
         repeat(incrementsToStart) { enabler.incrementAvailableYears() }
         startYear = year - numYears + 1
-        validateYears(startYear)
+        validateYears(enabler, startYear)
 
         // duplicate
         enabler.setYearAt(3)
@@ -216,8 +211,8 @@ class DateEnablerTest {
     @Test
     fun testIncrementYear() {
         var enabler = DateEnabler()
-        val year = mockDate.year
-        var startYear = year - numYears + 1
+        val year = mockDate.year // TODO delete
+        var startYear = initialStartYear
 
         // unabled to increment at start
         enabler.incrementAvailableYears()
@@ -314,5 +309,12 @@ class DateEnablerTest {
         assertEquals(disabledMonths.sorted(), actualMonths.sorted())
         assertEquals(disabledDays.sorted(), actualDays.sorted())
         assertEquals(disabledYears.sorted(), actualYears.sorted())
+    }
+
+    private fun validateYears(enabler: DateEnabler, startYear: Int) {
+        repeat(numYears) {
+            enabler.setYearAt(it)
+            assertEquals(startYear + it, enabler.year)
+        }
     }
 }
