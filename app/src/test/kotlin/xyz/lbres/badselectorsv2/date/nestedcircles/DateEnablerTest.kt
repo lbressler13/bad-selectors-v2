@@ -32,9 +32,7 @@ class DateEnablerTest {
     @Test
     fun testInit() {
         val enabler = DateEnabler()
-        assertNull(enabler.day)
-        assertNull(enabler.month)
-        assertNull(enabler.year)
+        checkDate(enabler)
 
         assertEquals(0, enabler.minYear)
         assertEquals(numYears, enabler.numYears)
@@ -71,17 +69,13 @@ class DateEnablerTest {
 
         // doesn't change other components
         enabler = DateEnabler()
-        assertNull(enabler.day)
-        assertNull(enabler.year)
         enabler.month = 6
-        assertNull(enabler.day)
-        assertNull(enabler.year)
+        checkDate(enabler, month = 6)
 
         enabler.day = 12
         enabler.setYearAt(0)
         enabler.month = 8
-        assertEquals(12, enabler.day)
-        assertEquals(initialStartYear, enabler.year)
+        checkDate(enabler, 8, 12, initialStartYear)
     }
 
     @Test
@@ -109,17 +103,13 @@ class DateEnablerTest {
 
         // doesn't change other components
         enabler = DateEnabler()
-        assertNull(enabler.month)
-        assertNull(enabler.year)
         enabler.day = 6
-        assertNull(enabler.month)
-        assertNull(enabler.year)
+        checkDate(enabler, day = 6)
 
         enabler.month = 2
         enabler.setYearAt(0)
         enabler.day = 8
-        assertEquals(2, enabler.month)
-        assertEquals(initialStartYear, enabler.year)
+        checkDate(enabler, 2, 8, initialStartYear)
     }
 
     @Test
@@ -169,17 +159,13 @@ class DateEnablerTest {
 
         // doesn't change other components
         enabler = DateEnabler()
-        assertNull(enabler.month)
-        assertNull(enabler.day)
         enabler.setYearAt(6)
-        assertNull(enabler.month)
-        assertNull(enabler.day)
+        checkDate(enabler, year = initialStartYear + 6)
 
         enabler.month = 2
         enabler.day = 8
         enabler.setYearAt(58)
-        assertEquals(2, enabler.month)
-        assertEquals(8, enabler.day)
+        checkDate(enabler, 2, 8, initialStartYear + 58)
     }
 
     @Test
@@ -188,7 +174,7 @@ class DateEnablerTest {
 
         // unabled to increment at start
         enabler.incrementAvailableYears()
-        validateYears(enabler, initialStartYear)
+        checkEnabledYears(enabler, initialStartYear)
 
         // decrement to zero
         repeat(maxChanges) { enabler.decrementAvailableYears() }
@@ -196,11 +182,11 @@ class DateEnablerTest {
         // increment
         repeat(maxChanges - 1) {
             enabler.incrementAvailableYears()
-            validateYears(enabler, (it + 1) * 60)
+            checkEnabledYears(enabler, (it + 1) * 60)
         }
         // to start
         enabler.incrementAvailableYears()
-        validateYears(enabler, initialStartYear)
+        checkEnabledYears(enabler, initialStartYear)
 
         // check month/day enabled
         enabler = DateEnabler()
@@ -222,21 +208,21 @@ class DateEnablerTest {
         repeat(maxChanges - 1) {
             enabler.decrementAvailableYears()
             val startYear = initialStartYear - numYears * (it + 1)
-            validateYears(enabler, startYear)
+            checkEnabledYears(enabler, startYear)
         }
         // to zero
         enabler.decrementAvailableYears()
-        validateYears(enabler, 0)
+        checkEnabledYears(enabler, 0)
 
         // unable to decrement at zero
         enabler.decrementAvailableYears()
-        validateYears(enabler, 0)
+        checkEnabledYears(enabler, 0)
 
         // decrement after increment
         enabler.incrementAvailableYears()
         enabler.incrementAvailableYears()
         enabler.decrementAvailableYears()
-        validateYears(enabler, numYears)
+        checkEnabledYears(enabler, numYears)
 
         // check month/day enabled
         enabler = DateEnabler()
@@ -245,7 +231,7 @@ class DateEnablerTest {
         checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
 
         enabler.decrementAvailableYears()
-        validateYears(enabler, initialStartYear - numYears)
+        checkEnabledYears(enabler, initialStartYear - numYears)
         checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
     }
 
@@ -265,14 +251,16 @@ class DateEnablerTest {
         assertEquals(disabledYears.sorted(), actualYears.sorted())
     }
 
-    private fun validateYears(enabler: DateEnabler, startYear: Int) {
+    // check the current date set in the enabler
+    private fun checkDate(enabler: DateEnabler, month: Int? = null, day: Int? = null, year: Int? = null) {
+        assertEquals(month, enabler.month)
+        assertEquals(day, enabler.day)
+        assertEquals(year, enabler.year)
+    }
+
+    // check the enabled years range
+    private fun checkEnabledYears(enabler: DateEnabler, startYear: Int) {
         val expectedYears = (startYear until startYear + numYears).toList()
         assertEquals(expectedYears.sorted(), enabler.availableYears.sorted())
-//        val endYear = startYear + numYears
-//        assertEquals(startYear until endYear, enabe)
-//        repeat(numYears) {
-//            enabler.setYearAt(it)
-//            assertEquals(startYear + it, enabler.year)
-//        }
     }
 }

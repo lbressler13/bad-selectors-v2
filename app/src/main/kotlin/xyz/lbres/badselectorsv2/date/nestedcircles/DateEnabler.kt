@@ -45,17 +45,14 @@ class DateEnabler {
     /**
      * Days that are valid for the current month
      */
-    // TODO just set these once when date is updated to make life easy
     var enabledDays: IntList = enabledToList(_enabledDays)
         private set
-        // get() = enabledToList(_enabledDays)
 
     /**
      * Months that are valid for the current day
      */
     var enabledMonths: IntList = enabledToList(_enabledMonths)
         private set
-    // get() = enabledToList(_enabledMonths)
 
     // to be used for leap year
     val enabledYears: IntList = enabledToList(_enabledYears)
