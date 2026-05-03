@@ -83,12 +83,11 @@ abstract class AppScreenFragment : NavHostFragment() {
      */
     private fun addNavOnClick(button: View, actionResId: Int?, tabFragment: Boolean) {
         val tabKey = getString(R.string.tab_index_key)
-        val tabArgs = bundleOf(tabKey to 0)
+        val args = if (tabFragment) bundleOf(tabKey to 0) else null
 
         button.setOnClickListener {
-            when {
-                tabFragment && actionResId != null -> requireBaseActivity().runNavAction(actionResId, tabArgs)
-                actionResId != null -> requireBaseActivity().runNavAction(actionResId)
+            if (actionResId != null) {
+                requireBaseActivity().runNavAction(actionResId, args)
             }
         }
     }
