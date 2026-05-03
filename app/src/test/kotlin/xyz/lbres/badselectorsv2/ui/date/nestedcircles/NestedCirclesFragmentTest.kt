@@ -23,7 +23,6 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.badselectorsv2.ui.date.checkDate
 import xyz.lbres.badselectorsv2.ui.date.formatDate
-import xyz.lbres.badselectorsv2.ui.date.padToFour
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
@@ -234,10 +233,12 @@ class NestedCirclesFragmentTest {
         checkState(date = date, plusEnabled = true, disabledMonths = listOf(1), disabledDays = listOf(30))
     }
 
+    // click on the button at the given index
     private fun clickCircleButton(parentId: Int, index: Int) {
         onView(atIndex(withId(parentId), index)).perform(forceClick())
     }
 
+    // check current state of ui
     private fun checkState(
         date: String = "________",
         disabledMonths: List<Int> = emptyList(),
@@ -247,15 +248,24 @@ class NestedCirclesFragmentTest {
         plusEnabled: Boolean = false,
     ) {
         checkDate(date)
-
-        checkCircle(monthsCircleId, disabledMonths)
-        checkCircle(daysCircleId, disabledDays)
-        checkCircle(yearsCircleId, disabledYears)
+        checkAllCircles(disabledMonths, disabledDays, disabledYears)
 
         minusButton.check(matches(allOf(isDisplayed(), enabledMatcher(minusEnabled))))
         plusButton.check(matches(allOf(isDisplayed(), enabledMatcher(plusEnabled))))
     }
 
+    // check that the correct buttons are enabled or disabled in all circles
+    private fun checkAllCircles(
+        disabledMonths: List<Int> = emptyList(),
+        disabledDays: List<Int> = emptyList(),
+        disabledYears: List<Int> = emptyList(),
+    ) {
+        checkCircle(monthsCircleId, disabledMonths)
+        checkCircle(daysCircleId, disabledDays)
+        checkCircle(yearsCircleId, disabledYears)
+    }
+
+    // check that the correct buttons are enabled or disabled in a circle
     private fun checkCircle(parentId: Int, disabledButtons: List<Int> = emptyList()) {
         val childCount = when (parentId) {
             R.id.monthsLayout -> 12
@@ -273,16 +283,7 @@ class NestedCirclesFragmentTest {
         }
     }
 
-    private fun checkAllCircles(
-        disabledMonths: List<Int> = emptyList(),
-        disabledDays: List<Int> = emptyList(),
-        disabledYears: List<Int> = emptyList(),
-    ) {
-        checkCircle(monthsCircleId, disabledMonths)
-        checkCircle(daysCircleId, disabledDays)
-        checkCircle(yearsCircleId, disabledYears)
-    }
-
+    // check that the plus/minus buttons are enabled or disabled
     private fun checkYearsRangeButtons(minusEnabled: Boolean, plusEnabled: Boolean) {
         minusButton.check(matches(allOf(isDisplayed(), enabledMatcher(minusEnabled))))
         plusButton.check(matches(allOf(isDisplayed(), enabledMatcher(plusEnabled))))

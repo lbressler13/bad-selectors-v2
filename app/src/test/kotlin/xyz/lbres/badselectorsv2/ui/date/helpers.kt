@@ -30,6 +30,7 @@ fun padToTwo(number: Int): String = number.toString().padStart(2, '0')
 // Pad a number with 0s to create a string of length 4
 fun padToFour(number: Int): String = number.toString().padStart(4, '0')
 
+// format date string for checkDate
 fun formatDate(month: Int? = null, day: Int? = null, year: Int? = null): String {
     val monthStr = simpleIf(month == null, { "__" }, { padToTwo(month!!) })
     val dayStr = simpleIf(day == null, { "__" }, { padToTwo(day!!) })

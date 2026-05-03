@@ -2,6 +2,7 @@ package xyz.lbres.badselectorsv2.ui.home
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
@@ -39,6 +40,16 @@ private val selectorNames: List<StringList> = listOf(
 fun expandCollapseGroup(position: Int) {
     val clickExpandCollapse = actionOnChildWithId(R.id.expandCollapseButton, click())
     selectorGroupRecycler.perform(actionOnItemAtPosition<SGVH>(position, clickExpandCollapse))
+}
+
+/**
+ * Click the expand/collapse button for an element in the main RecyclerView
+ *
+ * @param title [String]: position of item to click
+ */
+fun expandCollapseGroup(title: String) {
+    onView(allOf(withId(R.id.selectorTitle), withText(title)))
+        .perform(scrollTo(), click())
 }
 
 /**

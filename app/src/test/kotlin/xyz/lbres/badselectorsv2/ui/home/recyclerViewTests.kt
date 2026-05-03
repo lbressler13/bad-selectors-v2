@@ -40,17 +40,17 @@ fun testExpansionsPersistedOnLeave() {
 }
 
 fun testNavigateWithPhoneSelectors() {
-    expandCollapseGroup(0)
+    expandCollapseGroup("Phone")
     runSingleSelectorNavigationTest("Shuffle Circle")
 }
 
 fun testNavigateWithDateSelectors() {
-    expandCollapseGroup(1) // TODO change these to be by text
+    expandCollapseGroup("Date")
     runSingleSelectorNavigationTest("Nested Circles")
 }
 
 fun testNavigateWithCalcSelectors() {
-    expandCollapseGroup(2)
+    expandCollapseGroup("Calculator")
     runSingleSelectorNavigationTest("Single Operation")
 }
 
