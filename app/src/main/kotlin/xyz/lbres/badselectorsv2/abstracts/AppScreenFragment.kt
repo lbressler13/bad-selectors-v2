@@ -15,9 +15,10 @@ import xyz.lbres.badselectorsv2.otp.OTPTabFragment
 import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 
 /**
- * Abstract fragment to handle common functionality involving the BaseActivity
+ * Abstract fragment to handle common functionality involving the BaseActivity.
+ * To be used only for main app screens, not individual tabs within a tab fragment.
  */
-abstract class BaseFragment : NavHostFragment() {
+abstract class AppScreenFragment : NavHostFragment() {
 
     /**
      * Resource ID of title to display in action bar

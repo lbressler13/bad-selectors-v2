@@ -1,6 +1,6 @@
 package xyz.lbres.badselectorsv2
 
-import xyz.lbres.badselectorsv2.abstracts.BaseFragment
+import xyz.lbres.badselectorsv2.abstracts.AppScreenFragment
 import xyz.lbres.badselectorsv2.devtools.DeveloperToolsDialog
 import xyz.lbres.badselectorsv2.ext.view.visible
 
@@ -19,7 +19,7 @@ object ProductFlavor : ProductFlavorConfig {
 
         val dialog = DeveloperToolsDialog()
         devToolsButton.setOnClickListener {
-            val fragmentManager = BaseFragment.dialogFragmentManager
+            val fragmentManager = AppScreenFragment.dialogFragmentManager
 
             if (fragmentManager != null) {
                 dialog.show(fragmentManager, DeveloperToolsDialog.TAG)

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.abstracts.BaseFragment
+import xyz.lbres.badselectorsv2.abstracts.AppScreenFragment
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
 import xyz.lbres.badselectorsv2.databinding.FragmentHomeBinding
 import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupAdapter
@@ -16,7 +16,7 @@ import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupAdapter
 /**
  * Initial fragment in the app
  */
-class HomeFragment : BaseFragment() {
+class HomeFragment : AppScreenFragment() {
     override var navToPhoneResId: Int? = R.id.navigateHomeToPhone
     override var navToCalcResId: Int? = R.id.navigateHomeToCalc
     override var navToDateResId: Int? = R.id.navigateHomeToDate
