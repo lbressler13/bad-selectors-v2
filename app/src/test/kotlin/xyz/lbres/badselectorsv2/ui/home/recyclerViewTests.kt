@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.withTab
+import kotlin.collections.removeLast as removeLastKt
 
 fun testExpandCollapseSelectors() {
     val allPositions = getExpandablePositions()
@@ -21,7 +22,7 @@ fun testExpandCollapseSelectors() {
 
     // expand
     while (collapsedPositions.isNotEmpty()) {
-        val position = collapsedPositions.removeAt(0) // TODO removeFirst
+        val position = collapsedPositions.removeLastKt()
         expandCollapseGroup(position)
         expandedPositions.add(position)
         checkGroupsExpandedCollapsed(expandedPositions)
@@ -29,7 +30,7 @@ fun testExpandCollapseSelectors() {
 
     // collapse
     while (expandedPositions.isNotEmpty()) {
-        val position = expandedPositions.removeAt(0)
+        val position = expandedPositions.removeLastKt()
         expandCollapseGroup(position)
         collapsedPositions.add(position)
         checkGroupsExpandedCollapsed(expandedPositions)

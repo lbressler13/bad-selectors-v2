@@ -38,6 +38,9 @@ private val getSelectorNames = { position: Int ->
         .map { context.getString(it) }
 }
 
+/**
+ * Get indices of group selectors that can be expanded
+ */
 fun getExpandablePositions(): IntList {
     return TabFragment.allMetadata
         .mapIndexed { index, metadata -> simpleIf(metadata.tabTitleResIds.isEmpty(), null, index) }
@@ -71,13 +74,8 @@ fun expandCollapseGroup(title: String) {
  */
 fun checkGroupsExpandedCollapsed(expandedPositions: IntList) {
     val collapsedPositions = getExpandablePositions() - expandedPositions
-
-    for (position in expandedPositions) {
-        checkGroupExpanded(position)
-    }
-    for (position in collapsedPositions) {
-        checkGroupCollapsed(position)
-    }
+    expandedPositions.forEach(::checkGroupExpanded)
+    collapsedPositions.forEach(::checkGroupCollapsed)
 }
 
 // check that a single selector group is collapsed

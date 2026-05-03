@@ -175,6 +175,12 @@ class NestedCirclesFragmentTest {
 
     @Test
     fun recreate() {
+        fun checkAndRecreate(check: () -> Unit) {
+            check()
+            scenario!!.recreate()
+            check()
+        }
+
         // blank
         scenario!!.recreate()
         checkState()
@@ -182,55 +188,50 @@ class NestedCirclesFragmentTest {
         // with partial date
         clickCircleButton(daysCircleId, 12)
         var date = formatDate(day = 13)
-        checkState(date = date)
-        scenario!!.recreate()
-        checkState(date = date)
+        checkAndRecreate { checkState(date = date) }
 
         clickCircleButton(yearsCircleId, 10)
         date = formatDate(day = 13, year = startYear + 10)
-        checkState(date = date)
-        scenario!!.recreate()
-        checkState(date = date)
+        checkAndRecreate { checkState(date = date) }
 
         // with full date
         clickCircleButton(monthsCircleId, 4)
         date = formatDate(5, 13, startYear + 10)
-        checkState(date = date)
-        scenario!!.recreate()
-        checkState(date = date)
+        checkAndRecreate { checkState(date = date) }
 
         // with shifted year range
         minusButton.perform(forceClick())
         clickCircleButton(yearsCircleId, 15)
         date = formatDate(5, 13, startYear - numYears + 15)
-        checkState(date = date, plusEnabled = true)
-        scenario!!.recreate()
-        checkState(date = date, plusEnabled = true)
+        checkAndRecreate { checkState(date = date, plusEnabled = true) }
 
         repeat(maxChanges - 1) { minusButton.perform(forceClick()) }
         date = formatDate(5, 13, startYear - numYears + 15)
-        checkState(date = date, minusEnabled = false, plusEnabled = true)
-        scenario!!.recreate()
-        checkState(date = date, minusEnabled = false, plusEnabled = true)
+        checkAndRecreate { checkState(date = date, minusEnabled = false, plusEnabled = true) }
 
         plusButton.perform(forceClick())
-        checkState(date = date, plusEnabled = true)
-        scenario!!.recreate()
-        checkState(date = date, plusEnabled = true)
+        checkAndRecreate { checkState(date = date, plusEnabled = true) }
 
         // with disabled buttons
         clickCircleButton(monthsCircleId, 1)
         date = formatDate(2, 13, startYear - numYears + 15)
-        checkState(date = date, plusEnabled = true, disabledDays = listOf(29, 30))
-        scenario!!.recreate()
-        checkState(date = date, plusEnabled = true, disabledDays = listOf(29, 30))
+        checkAndRecreate {
+            checkState(date = date, plusEnabled = true, disabledDays = listOf(29, 30))
+        }
 
         clickCircleButton(monthsCircleId, 5)
         clickCircleButton(daysCircleId, 29)
         date = formatDate(6, 30, startYear - numYears + 15)
-        checkState(date = date, plusEnabled = true, disabledMonths = listOf(1), disabledDays = listOf(30))
-        scenario!!.recreate()
-        checkState(date = date, plusEnabled = true, disabledMonths = listOf(1), disabledDays = listOf(30))
+        checkAndRecreate {
+            checkState(date = date, plusEnabled = true, disabledMonths = listOf(1), disabledDays = listOf(30))
+        }
+
+        // with disabled minus button
+        clickCircleButton(monthsCircleId, 0)
+        clickCircleButton(daysCircleId, 0)
+        date = formatDate(1, 1, startYear - numYears + 15)
+        repeat(maxChanges - 1) { minusButton.perform(forceClick()) }
+        checkAndRecreate { checkState(date = date, minusEnabled = false, plusEnabled = true) }
     }
 
     // click on the button at the given index
