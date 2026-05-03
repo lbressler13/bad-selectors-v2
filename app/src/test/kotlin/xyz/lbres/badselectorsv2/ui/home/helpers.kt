@@ -80,6 +80,7 @@ fun checkGroupsExpandedCollapsed(expandedPositions: IntList) {
     }
 }
 
+// check that a single selector group is collapsed
 private fun checkGroupCollapsed(position: Int) {
     selectorGroupRecycler.perform(scrollToPosition<SGVH>(position))
     for (name in getSelectorNames(position)) {
@@ -87,6 +88,7 @@ private fun checkGroupCollapsed(position: Int) {
     }
 }
 
+// check that a single selector group is expanded
 private fun checkGroupExpanded(position: Int) {
     selectorGroupRecycler.perform(scrollToPosition<SGVH>(position))
 
@@ -94,9 +96,7 @@ private fun checkGroupExpanded(position: Int) {
         val nestedPosition = idxPair.index
         val name = idxPair.value
 
-        val scrollSelectorRecycler = actionOnChildWithId(nestedRecyclerId, scrollToPosition<SVH>(nestedPosition))
-        selectorGroupRecycler.perform(actionOnItemAtPosition<SGVH>(position, scrollSelectorRecycler))
-
+        val scrollNestedRecycler = actionOnChildWithId(nestedRecyclerId, scrollToPosition<SVH>(nestedPosition))
         val nameMatcher = allOf(isShown(), withText(name))
         val nestedMatcher = allOf(
             withId(nestedRecyclerId),
@@ -104,7 +104,8 @@ private fun checkGroupExpanded(position: Int) {
             matchesAtPosition(nestedPosition, nameMatcher),
         )
 
-        onView(withText(name)).perform(scrollTo())
-        selectorGroupRecycler.check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
+        selectorGroupRecycler
+            .perform(actionOnItemAtPosition<SGVH>(position, scrollNestedRecycler))
+            .check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
     }
 }
