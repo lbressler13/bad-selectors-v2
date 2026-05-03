@@ -8,7 +8,7 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
- * Check that a date is displayed in the date numbers component
+ * Check that the correct date is displayed in the date numbers component
  *
  * @param date [String]: 8-character string consisting of digits and underscores
  */
@@ -24,10 +24,10 @@ fun checkDate(month: Int? = null, day: Int? = null, year: Int? = null) {
     checkDate(formatDate(month, day, year))
 }
 
-// Pad a number with 0s to create a string of length 2
+// pad number with 0s to create a string of length 2
 fun padToTwo(number: Int): String = number.toString().padStart(2, '0')
 
-// Pad a number with 0s to create a string of length 4
+// pad number with 0s to create a string of length 4
 fun padToFour(number: Int): String = number.toString().padStart(4, '0')
 
 // format date string for checkDate

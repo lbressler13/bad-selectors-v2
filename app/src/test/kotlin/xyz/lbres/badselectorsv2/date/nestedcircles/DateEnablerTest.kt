@@ -182,8 +182,9 @@ class DateEnablerTest {
         // increment
         repeat(maxChanges - 1) {
             enabler.incrementAvailableYears()
-            checkEnabledYears(enabler, (it + 1) * 60)
+            checkEnabledYears(enabler, (it + 1) * numYears)
         }
+
         // to start
         enabler.incrementAvailableYears()
         checkEnabledYears(enabler, startYear)
@@ -194,7 +195,7 @@ class DateEnablerTest {
         enabler.month = 3 // april
         checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
 
-        enabler.decrementAvailableYears() // decrement because year already is at maximum
+        enabler.decrementAvailableYears() // decrement because year is already at maximum
         enabler.decrementAvailableYears()
         enabler.incrementAvailableYears()
         checkEnabledDate(enabler, disabledMonths = listOf(1), disabledDays = listOf(30))
@@ -209,6 +210,7 @@ class DateEnablerTest {
             enabler.decrementAvailableYears()
             checkEnabledYears(enabler, startYear - numYears * (it + 1))
         }
+
         // to zero
         enabler.decrementAvailableYears()
         checkEnabledYears(enabler, 0)

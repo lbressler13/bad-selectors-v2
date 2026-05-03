@@ -231,6 +231,15 @@ class NestedCirclesFragmentTest {
         checkState(date = date, plusEnabled = true, disabledMonths = listOf(1), disabledDays = listOf(30))
         scenario!!.recreate()
         checkState(date = date, plusEnabled = true, disabledMonths = listOf(1), disabledDays = listOf(30))
+
+        // with disabled minus button
+        clickCircleButton(monthsCircleId, 0)
+        clickCircleButton(daysCircleId, 0)
+        date = formatDate(1, 1, startYear - numYears + 15)
+        repeat(maxChanges - 1) { minusButton.perform(forceClick()) }
+        checkState(date = date, minusEnabled = false, plusEnabled = true)
+        scenario!!.recreate()
+        checkState(date = date, minusEnabled = false, plusEnabled = true)
     }
 
     // click on the button at the given index

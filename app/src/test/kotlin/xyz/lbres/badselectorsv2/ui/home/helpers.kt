@@ -38,6 +38,9 @@ private val getSelectorNames = { position: Int ->
         .map { context.getString(it) }
 }
 
+/**
+ * Get indices of group selectors that can be expanded
+ */
 fun getExpandablePositions(): IntList {
     return TabFragment.allMetadata
         .mapIndexed { index, metadata -> simpleIf(metadata.tabTitleResIds.isEmpty(), null, index) }
