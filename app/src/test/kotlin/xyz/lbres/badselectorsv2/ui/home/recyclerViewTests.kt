@@ -1,5 +1,6 @@
 package xyz.lbres.badselectorsv2.ui.home
 
+import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
@@ -12,16 +13,29 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.withTab
 
 fun testExpandCollapseSelectors() {
+    val allPositions = getExpandablePositions()
+    val expandedPositions: MutableList<Int> = mutableListOf()
+    val collapsedPositions = allPositions.toMutableList()
+
     // start collapsed
     checkGroupsCollapsed(listOf(0))
+    checkGroupsExpandedCollapsed(expandedPositions)
 
     // expand
-    expandCollapseGroup(0)
-    checkGroupsExpanded(listOf(0))
+    while (collapsedPositions.isNotEmpty()) {
+        val position = collapsedPositions.removeAt(0) // TODO removeFirst
+        expandCollapseGroup(position)
+        expandedPositions.add(position)
+        checkGroupsExpandedCollapsed(expandedPositions)
+    }
 
     // collapse
-    expandCollapseGroup(0)
-    checkGroupsCollapsed(listOf(0))
+    while (expandedPositions.isNotEmpty()) {
+        val position = expandedPositions.removeAt(0)
+        expandCollapseGroup(position)
+        collapsedPositions.add(position)
+        checkGroupsExpandedCollapsed(expandedPositions)
+    }
 }
 
 fun testExpansionsPersistedOnLeave() {

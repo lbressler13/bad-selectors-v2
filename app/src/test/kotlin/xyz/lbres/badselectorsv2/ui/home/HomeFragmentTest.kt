@@ -82,7 +82,6 @@ class HomeFragmentTest {
 
     @Test
     fun recreate() {
-        // expandCollapseGroup("Date")
         expandCollapseGroup(1)
         scenario!!.recreate()
         checkGroupsExpanded(listOf(1))
