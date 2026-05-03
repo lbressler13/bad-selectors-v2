@@ -84,7 +84,6 @@ class HomeFragmentTest {
     fun recreate() {
         expandCollapseGroup(1)
         scenario!!.recreate()
-        checkGroupsExpanded(listOf(1))
-        checkGroupsCollapsed(listOf(0, 2))
+        checkGroupsExpandedCollapsed(listOf(1))
     }
 }

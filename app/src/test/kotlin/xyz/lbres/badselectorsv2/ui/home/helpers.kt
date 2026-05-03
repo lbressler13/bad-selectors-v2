@@ -6,13 +6,11 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.badselectorsv2.R
@@ -66,6 +64,11 @@ fun expandCollapseGroup(title: String) {
         .perform(scrollTo(), click())
 }
 
+/**
+ * Check that the specified groups are expanded, and all others are collapsed
+ *
+ * @param expandedPositions [IntList]: list of groups which should be expanded
+ */
 fun checkGroupsExpandedCollapsed(expandedPositions: IntList) {
     val collapsedPositions = getExpandablePositions() - expandedPositions
 
@@ -103,27 +106,5 @@ private fun checkGroupExpanded(position: Int) {
 
         onView(withText(name)).perform(scrollTo())
         selectorGroupRecycler.check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
-    }
-}
-
-/**
- * Check that the specified groups are collapsed
- *
- * @param positions [IntList]: list of groups which should be collapsed
- */
-fun checkGroupsCollapsed(positions: IntList) {
-    for (position in positions) {
-        checkGroupCollapsed(position)
-    }
-}
-
-/**
- * Check that the specified groups are expanded
- *
- * @param positions [IntList]: list of groups which should be expanded
- */
-fun checkGroupsExpanded(positions: IntList) {
-    for (position in positions) {
-        checkGroupExpanded(position)
     }
 }

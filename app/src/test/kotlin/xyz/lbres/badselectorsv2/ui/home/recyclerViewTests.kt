@@ -1,6 +1,5 @@
 package xyz.lbres.badselectorsv2.ui.home
 
-import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
@@ -18,7 +17,6 @@ fun testExpandCollapseSelectors() {
     val collapsedPositions = allPositions.toMutableList()
 
     // start collapsed
-    checkGroupsCollapsed(listOf(0))
     checkGroupsExpandedCollapsed(expandedPositions)
 
     // expand
@@ -44,13 +42,14 @@ fun testExpansionsPersistedOnLeave() {
     onView(withId(R.id.navigationPhone)).perform(click())
 
     pressBack()
-    checkGroupsExpanded(listOf(0))
+    checkGroupsExpandedCollapsed(listOf(0))
 
     // using buttons
+    expandCollapseGroup(2)
     onView(withId(R.id.navigationPhone)).perform(click())
 
     onView(withId(R.id.navigationHome)).perform(click())
-    checkGroupsExpanded(listOf(0))
+    checkGroupsExpandedCollapsed(listOf(0, 2))
 }
 
 fun testNavigateWithPhoneSelectors() {
