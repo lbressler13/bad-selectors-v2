@@ -15,6 +15,7 @@ import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.matchesAtPosition
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.clickLinkInText
+import kotlin.collections.removeLast as removeLastKt
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
 private val attributionsRecycler = onView(withId(R.id.attributionsRecycler))
@@ -39,14 +40,14 @@ fun testExpandCollapseAttributions() {
     checkExpandedCollapsed(expandedPositions)
 
     while (collapsedPositions.isNotEmpty()) {
-        val position = collapsedPositions.removeAt(0) // TODO removeFirst
+        val position = collapsedPositions.removeLastKt()
         expandCollapseAttribution(position)
         expandedPositions.add(position)
         checkExpandedCollapsed(expandedPositions)
     }
 
     while (expandedPositions.isNotEmpty()) {
-        val position = expandedPositions.removeAt(0)
+        val position = expandedPositions.removeLastKt()
         expandCollapseAttribution(position)
         collapsedPositions.add(position)
         checkExpandedCollapsed(expandedPositions)
