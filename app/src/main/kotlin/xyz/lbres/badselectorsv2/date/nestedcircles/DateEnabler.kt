@@ -128,7 +128,7 @@ class DateEnabler {
     }
 
     /**
-     * Convert boolean array to list of ints where enabled = true
+     * Convert boolean array to list of indices where enabled = true
      *
      * @param enabled [BooleanArray]: array indicating which numbers should be included in the list
      * @return [IntList]: list consisting of only indices where the value in [enabled] is true
