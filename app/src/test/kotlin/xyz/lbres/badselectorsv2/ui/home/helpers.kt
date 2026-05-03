@@ -1,5 +1,7 @@
 package xyz.lbres.badselectorsv2.ui.home
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -12,6 +14,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.abstracts.TabFragment
 import xyz.lbres.badselectorsv2.home.selector.SelectorViewHolder
 import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.isShown
@@ -19,7 +22,6 @@ import xyz.lbres.badselectorsv2.ui.testutils.matchers.matchesAtPosition
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
-import xyz.lbres.kotlinutils.list.StringList
 
 // private aliases for ViewActions that require the vh class
 private typealias SVH = SelectorViewHolder
@@ -28,9 +30,11 @@ private typealias SGVH = SelectorGroupViewHolder
 private val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
 private val nestedRecyclerId = R.id.selectorRecycler
 
-private val selectorNames: List<StringList> = listOf(
-    listOf("Shuffle Circle"),
-)
+private val getSelectorNames = { position: Int ->
+    val context: Context = ApplicationProvider.getApplicationContext()
+    TabFragment.allMetadata[position].tabTitleResIds
+        .map { context.getString(it) }
+}
 
 /**
  * Click the expand/collapse button for an element in the main RecyclerView
@@ -60,7 +64,7 @@ fun expandCollapseGroup(title: String) {
 fun checkGroupsCollapsed(positions: IntList) {
     for (position in positions) {
         selectorGroupRecycler.perform(scrollToPosition<SGVH>(0))
-        for (name in selectorNames[position]) {
+        for (name in getSelectorNames(position)) {
             onView(withText(name)).check(isNotPresented())
         }
     }
@@ -75,7 +79,7 @@ fun checkGroupsExpanded(positions: IntList) {
     for (position in positions) {
         selectorGroupRecycler.perform(scrollToPosition<SGVH>(position))
 
-        for (idxPair in selectorNames[position].withIndex()) {
+        for (idxPair in getSelectorNames(position).withIndex()) {
             val nestedPosition = idxPair.index
             val name = idxPair.value
 
