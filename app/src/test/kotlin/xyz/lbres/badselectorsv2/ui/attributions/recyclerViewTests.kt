@@ -32,37 +32,25 @@ fun testExpandCollapseAttributions() {
     }
 
     val indices = authorTitles.indices.toList()
-    checkImagesNotPresented(indices)
 
-    val expanded = mutableListOf<Int>()
+    val expandedPositions = mutableListOf<Int>()
+    val collapsedPositions = indices.toMutableList()
 
-    val expandGroup = { index: Int ->
-        expandCollapseAttribution(index)
-        expanded.add(index)
-        checkImagesDisplayed(expanded)
-        checkImagesNotPresented(indices - expanded)
+    checkExpandedCollapsed(expandedPositions)
+
+    while (collapsedPositions.isNotEmpty()) {
+        val position = collapsedPositions.removeAt(0) // TODO removeFirst
+        expandCollapseAttribution(position)
+        expandedPositions.add(position)
+        checkExpandedCollapsed(expandedPositions)
     }
 
-    val collapseGroup = { index: Int ->
-        expandCollapseAttribution(index)
-        expanded.remove(index)
-        checkImagesDisplayed(expanded)
-        checkImagesNotPresented(indices - expanded)
+    while (expandedPositions.isNotEmpty()) {
+        val position = expandedPositions.removeAt(0)
+        expandCollapseAttribution(position)
+        collapsedPositions.add(position)
+        checkExpandedCollapsed(expandedPositions)
     }
-
-    // expand all
-    expandGroup(1)
-    expandGroup(0)
-    expandGroup(4)
-    expandGroup(2)
-    expandGroup(3)
-
-    // collapse
-    collapseGroup(4)
-    collapseGroup(1)
-    collapseGroup(0)
-    collapseGroup(2)
-    collapseGroup(3)
 }
 
 fun testAttributionLinks() {
