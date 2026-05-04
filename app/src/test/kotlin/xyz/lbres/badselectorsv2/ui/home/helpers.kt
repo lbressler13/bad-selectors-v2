@@ -22,7 +22,6 @@ import xyz.lbres.badselectorsv2.ui.testutils.matchers.matchesAtPosition
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 
 // private aliases for ViewActions that require the vh class
@@ -42,9 +41,8 @@ private val getSelectorNames = { position: Int ->
  * Get indices of group selectors that can be expanded
  */
 fun getExpandablePositions(): IntList {
-    return TabFragment.allMetadata
-        .mapIndexed { index, metadata -> simpleIf(metadata.tabTitleResIds.isEmpty(), null, index) }
-        .filterNotNull()
+    val metadata = TabFragment.allMetadata
+    return metadata.indices.filter { metadata[it].tabTitleResIds.isNotEmpty() }
 }
 
 /**

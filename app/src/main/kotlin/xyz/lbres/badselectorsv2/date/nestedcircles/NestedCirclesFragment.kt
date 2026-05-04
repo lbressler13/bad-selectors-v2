@@ -54,11 +54,11 @@ class NestedCirclesFragment : BaseDateFragment() {
      */
     private fun initPlusMinusButtons() {
         // buttons that are used to adjust which years are available
-        binding.previousYearsButton.setOnClickListener {
+        binding.decrementYearsButton.setOnClickListener {
             viewModel.enabler.decrementAvailableYears()
             updatePlusMinusButtons()
         }
-        binding.nextYearsButton.setOnClickListener {
+        binding.incrementYearsButton.setOnClickListener {
             viewModel.enabler.incrementAvailableYears()
             updatePlusMinusButtons()
         }
@@ -71,15 +71,15 @@ class NestedCirclesFragment : BaseDateFragment() {
      */
     private fun updatePlusMinusButtons() {
         if (viewModel.enabler.availableYears.first <= viewModel.enabler.minYear) {
-            disableYearControlButton(binding.previousYearsButton)
+            disableYearControlButton(binding.decrementYearsButton)
         } else {
-            enableYearControlButton(binding.previousYearsButton)
+            enableYearControlButton(binding.decrementYearsButton)
         }
 
         if (viewModel.enabler.maxYear <= viewModel.enabler.availableYears.last) {
-            disableYearControlButton(binding.nextYearsButton)
+            disableYearControlButton(binding.incrementYearsButton)
         } else {
-            enableYearControlButton(binding.nextYearsButton)
+            enableYearControlButton(binding.incrementYearsButton)
         }
     }
 

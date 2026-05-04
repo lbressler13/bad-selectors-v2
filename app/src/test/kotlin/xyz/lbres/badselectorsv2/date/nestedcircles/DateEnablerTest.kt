@@ -116,7 +116,7 @@ class DateEnablerTest {
     fun testSetYear() {
         var enabler = DateEnabler()
 
-        val setAllYears = { startYear: Int ->
+        val checkAllYears = { startYear: Int ->
             repeat(numYears) {
                 enabler.setYearAt(it)
                 assertEquals(startYear + it, enabler.year)
@@ -124,17 +124,17 @@ class DateEnablerTest {
         }
 
         // initial years
-        setAllYears(startYear)
+        checkAllYears(startYear)
 
         // decrement a few times
         repeat(6) { enabler.decrementAvailableYears() }
         var offset = 6
-        setAllYears(startYear - numYears * offset)
+        checkAllYears(startYear - numYears * offset)
 
         // increment a few times
         repeat(4) { enabler.incrementAvailableYears() }
         offset -= 4
-        setAllYears(startYear - numYears * offset)
+        checkAllYears(startYear - numYears * offset)
 
         // check out of order
         (0 until numYears).shuffled().forEach {

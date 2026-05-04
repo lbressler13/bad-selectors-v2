@@ -9,6 +9,9 @@ import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 import java.time.LocalDate
 
+/**
+ * Tracks enabled and disabled date components, for use in the date nested circles selector
+ */
 // TODO leap year
 class DateEnabler {
     val numYears: Int = 60
@@ -93,6 +96,11 @@ class DateEnabler {
         enabledMonths = enabledToList(_enabledMonths)
     }
 
+    /**
+     * Set [year] to a value from [availableYears]
+     *
+     * @param index [Int]?: index into [availableYears], or null if the year should be null
+     */
     fun setYearAt(index: Int?) {
         year = simpleIf(index == null, { null }, { availableYears.get(index!!) })
     }
@@ -134,8 +142,6 @@ class DateEnabler {
      * @return [IntList]: list consisting of only indices where the value in [enabled] is true
      */
     private fun enabledToList(enabled: BooleanArray): IntList {
-        return enabled
-            .mapIndexed { index, value -> simpleIf(value, index, null) }
-            .filterNotNull()
+        return enabled.indices.filter { enabled[it] }
     }
 }
