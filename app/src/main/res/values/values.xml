@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Date -->
+    <!-- Nested Circles -->
+    <integer name="daysCircleNumChildren">31</integer>
+    <integer name="monthsCircleNumChildren">12</integer>
+    <integer name="yearsCircleNumChildren">60</integer>
+
+
+    <!-- Phone -->
+    <!-- Shuffle Circle -->
     <integer name="phoneCircleNumChildren">10</integer>
 </resources>

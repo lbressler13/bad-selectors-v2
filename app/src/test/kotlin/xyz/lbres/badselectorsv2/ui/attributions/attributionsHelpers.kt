@@ -1,15 +1,18 @@
 package xyz.lbres.badselectorsv2.ui.attributions
 
+import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.intent.Intents.getIntents
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
+import org.junit.Assert.assertEquals
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.attributions.authorattribution.AuthorAttributionViewHolder
 import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
@@ -19,6 +22,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.matchers.matchesAtPosition
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
+import java.lang.AssertionError
 
 private val imageUrls = authorAttributions.map { it.images.map { it.url } }
 private val attributionsRecycler = onView(withId(R.id.attributionsRecycler))
@@ -101,4 +105,20 @@ fun checkImagesDisplayed(positions: IntList) {
             attributionsRecycler.check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
         }
     }
+}
+
+/**
+ * Assert that the correct number of link clicks have occurred, and that the most recent has the correct url.
+ *
+ * @param expectedLinkClicks [Int]: expected number of times that links have been clicked
+ */
+fun assertLinkOpened(url: String, expectedLinkClicks: Int) {
+    val intents = getIntents().filter { it.action == Intent.ACTION_VIEW }
+
+    if (intents.size != expectedLinkClicks) {
+        throw AssertionError("Expected $expectedLinkClicks link clicks, found ${intents.size}")
+    }
+
+    val intent = intents.last()
+    assertEquals(url, intent.dataString)
 }

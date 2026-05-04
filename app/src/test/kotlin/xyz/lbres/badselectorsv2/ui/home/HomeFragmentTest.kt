@@ -68,13 +68,7 @@ class HomeFragmentTest {
 
     @Test fun navigateWithPhoneSelectors() = testNavigateWithPhoneSelectors()
     @Test fun navigateWithCalcSelectors() = testNavigateWithCalcSelectors()
-
-    @Test
-    fun navigateWithDateLabel() {
-        val selectorGroupRecycler = onView(withId(R.id.selectorGroupRecycler))
-        selectorGroupRecycler.perform(actionOnItemAtPosition<SelectorGroupViewHolder>(1, forceClick()))
-        actionBar.check(matches(withTitle("Bad Date Selectors")))
-    }
+    @Test fun navigateWithDateSelectors() = testNavigateWithDateSelectors()
 
     @Test
     fun navigateWithOtpLabel() {
@@ -88,8 +82,8 @@ class HomeFragmentTest {
 
     @Test
     fun recreate() {
-        expandCollapseGroup(0)
+        expandCollapseGroup(1)
         scenario!!.recreate()
-        checkGroupsExpanded(listOf(0))
+        checkGroupsExpandedCollapsed(listOf(1))
     }
 }

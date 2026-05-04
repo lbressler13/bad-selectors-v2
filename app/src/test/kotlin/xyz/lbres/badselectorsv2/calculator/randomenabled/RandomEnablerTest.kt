@@ -6,6 +6,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import junit.framework.TestCase.assertFalse
+import xyz.lbres.badselectorsv2.testutils.printErr
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
 import kotlin.test.AfterTest
@@ -151,7 +152,7 @@ class RandomEnablerTest {
             try {
                 assertEquals(it in enabledNumbers, result)
             } catch (e: AssertionError) {
-                println("Failure checking index $it")
+                printErr("Failure checking index $it")
                 throw e
             }
         }
@@ -161,7 +162,7 @@ class RandomEnablerTest {
             try {
                 assertEquals(op in enabledOperators, result)
             } catch (e: AssertionError) {
-                println("Failure checking operator $op")
+                printErr("Failure checking operator $op")
                 throw e
             }
         }

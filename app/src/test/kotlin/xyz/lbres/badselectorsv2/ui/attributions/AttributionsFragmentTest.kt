@@ -29,7 +29,6 @@ import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.ProductFlavor
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
-import xyz.lbres.badselectorsv2.ui.testutils.assertLinkOpened
 import xyz.lbres.badselectorsv2.ui.testutils.hideDevToolsButton
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.matchesAtPosition
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.withTitle

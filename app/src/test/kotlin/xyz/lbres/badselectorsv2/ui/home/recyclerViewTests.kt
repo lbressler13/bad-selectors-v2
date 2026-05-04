@@ -10,18 +10,31 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.withTab
+import kotlin.collections.removeLast as removeLastKt
 
 fun testExpandCollapseSelectors() {
+    val allPositions = getExpandablePositions()
+    val expandedPositions: MutableList<Int> = mutableListOf()
+    val collapsedPositions = allPositions.toMutableList()
+
     // start collapsed
-    checkGroupsCollapsed(listOf(0))
+    checkGroupsExpandedCollapsed(expandedPositions)
 
     // expand
-    expandCollapseGroup(0)
-    checkGroupsExpanded(listOf(0))
+    while (collapsedPositions.isNotEmpty()) {
+        val position = collapsedPositions.removeLastKt()
+        expandCollapseGroup(position)
+        expandedPositions.add(position)
+        checkGroupsExpandedCollapsed(expandedPositions)
+    }
 
     // collapse
-    expandCollapseGroup(0)
-    checkGroupsCollapsed(listOf(0))
+    while (expandedPositions.isNotEmpty()) {
+        val position = expandedPositions.removeLastKt()
+        expandCollapseGroup(position)
+        collapsedPositions.add(position)
+        checkGroupsExpandedCollapsed(expandedPositions)
+    }
 }
 
 fun testExpansionsPersistedOnLeave() {
@@ -30,22 +43,28 @@ fun testExpansionsPersistedOnLeave() {
     onView(withId(R.id.navigationPhone)).perform(click())
 
     pressBack()
-    checkGroupsExpanded(listOf(0))
+    checkGroupsExpandedCollapsed(listOf(0))
 
     // using buttons
+    expandCollapseGroup(2)
     onView(withId(R.id.navigationPhone)).perform(click())
 
     onView(withId(R.id.navigationHome)).perform(click())
-    checkGroupsExpanded(listOf(0))
+    checkGroupsExpandedCollapsed(listOf(0, 2))
 }
 
 fun testNavigateWithPhoneSelectors() {
-    expandCollapseGroup(0)
+    expandCollapseGroup("Phone")
     runSingleSelectorNavigationTest("Shuffle Circle")
 }
 
+fun testNavigateWithDateSelectors() {
+    expandCollapseGroup("Date")
+    runSingleSelectorNavigationTest("Nested Circles")
+}
+
 fun testNavigateWithCalcSelectors() {
-    expandCollapseGroup(2)
+    expandCollapseGroup("Calculator")
     runSingleSelectorNavigationTest("Single Operation")
 }
 
