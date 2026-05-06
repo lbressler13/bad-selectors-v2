@@ -49,7 +49,7 @@ class DigitShuffler {
 
         val probabilityNull = 0.001f // 1 / 1000
         val nextNull = createRandom().nextBoolean(probabilityNull)
-        digit = simpleIf(canUseNull && nextNull, { null }, { digits[index] })
+        digit = simpleIf(canUseNull && nextNull, null, digits[index])
 
         return digit
     }

@@ -69,41 +69,40 @@ fun expandCollapseAttribution(position: Int) {
 }
 
 /**
- * Check that image urls for specified dropdowns are not visible
+ * Check that image urls for specified dropdowns are visible
  *
- * @param positions [IntList]: list of positions where image urls should not be visible
+ * @param expandedPositions [IntList]: list of positions where image urls should be visible
  */
-fun checkImagesNotPresented(positions: IntList) {
-    for (position in positions) {
-        attributionsRecycler.perform(scrollToAuthorPosition(0))
-        for (url in imageUrls[position]) {
-            onView(withText(url)).check(isNotPresented())
-        }
+fun checkExpandedCollapsed(expandedPositions: IntList) {
+    val collapsedPositions = authorAttributions.indices - expandedPositions
+    expandedPositions.forEach(::checkExpanded)
+    collapsedPositions.forEach(::checkCollapsed)
+}
+
+// check that a single attribution is expanded
+private fun checkExpanded(position: Int) {
+    attributionsRecycler.perform(scrollToAuthorPosition(position))
+
+    for (pair in imageUrls[position].withIndex()) {
+        val nestedPosition = pair.index
+        val url = pair.value
+
+        val scrollImagesRecycler = actionOnChildWithId(R.id.imagesRecycler, scrollToImagePosition(nestedPosition))
+        attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, scrollImagesRecycler))
+
+        val urlMatcher = allOf(isShown(), hasDescendant(withText(url)))
+        val nestedMatcher =
+            allOf(withId(nestedRecyclerId), isDisplayed(), matchesAtPosition(nestedPosition, urlMatcher))
+
+        attributionsRecycler.check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
     }
 }
 
-/**
- * Check that image urls for specified dropdowns are visible
- *
- * @param positions [IntList]: list of positions where image urls should be visible
- */
-fun checkImagesDisplayed(positions: IntList) {
-    for (position in positions) {
-        attributionsRecycler.perform(scrollToAuthorPosition(position))
-
-        for (pair in imageUrls[position].withIndex()) {
-            val nestedPosition = pair.index
-            val url = pair.value
-
-            val scrollImagesRecycler = actionOnChildWithId(R.id.imagesRecycler, scrollToImagePosition(nestedPosition))
-            attributionsRecycler.perform(actionOnAuthorItemAtPosition(position, scrollImagesRecycler))
-
-            val urlMatcher = allOf(isShown(), hasDescendant(withText(url)))
-            val nestedMatcher =
-                allOf(withId(nestedRecyclerId), isDisplayed(), matchesAtPosition(nestedPosition, urlMatcher))
-
-            attributionsRecycler.check(matches(matchesAtPosition(position, hasDescendant(nestedMatcher))))
-        }
+// check that a single attribution is collapsed
+private fun checkCollapsed(position: Int) {
+    attributionsRecycler.perform(scrollToAuthorPosition(0))
+    for (url in imageUrls[position]) {
+        onView(withText(url)).check(isNotPresented())
     }
 }
 

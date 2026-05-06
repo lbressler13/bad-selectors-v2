@@ -41,12 +41,6 @@ class BaseActivity : AppCompatActivity() {
      */
     fun runNavAction(actionResId: Int, args: Bundle? = null) {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        if (args == null) {
-            navController.navigate(actionResId)
-        } else {
-            navController.navigate(actionResId, args)
-        }
+        navHostFragment.navController.navigate(actionResId, args)
     }
 }

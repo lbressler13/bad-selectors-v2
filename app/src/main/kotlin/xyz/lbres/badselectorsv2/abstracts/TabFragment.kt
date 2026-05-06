@@ -17,7 +17,7 @@ import xyz.lbres.kotlinutils.list.IntList
 /**
  * Abstract fragment to handle common functionality for fragments that contain a tab layout.
  */
-abstract class TabFragment : BaseFragment() {
+abstract class TabFragment : AppScreenFragment() {
     /**
      * Metadata about the current fragment
      */

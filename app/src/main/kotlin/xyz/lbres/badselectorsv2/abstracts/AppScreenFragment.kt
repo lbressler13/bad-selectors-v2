@@ -15,9 +15,10 @@ import xyz.lbres.badselectorsv2.otp.OTPTabFragment
 import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
 
 /**
- * Abstract fragment to handle common functionality involving the BaseActivity
+ * Abstract fragment to handle common functionality involving the BaseActivity.
+ * To be used only for main app screens, not individual tabs within a tab fragment.
  */
-abstract class BaseFragment : NavHostFragment() {
+abstract class AppScreenFragment : NavHostFragment() {
 
     /**
      * Resource ID of title to display in action bar
@@ -82,12 +83,11 @@ abstract class BaseFragment : NavHostFragment() {
      */
     private fun addNavOnClick(button: View, actionResId: Int?, tabFragment: Boolean) {
         val tabKey = getString(R.string.tab_index_key)
-        val tabArgs = bundleOf(tabKey to 0)
+        val args = if (tabFragment) bundleOf(tabKey to 0) else null
 
         button.setOnClickListener {
-            when {
-                tabFragment && actionResId != null -> requireBaseActivity().runNavAction(actionResId, tabArgs)
-                actionResId != null -> requireBaseActivity().runNavAction(actionResId)
+            if (actionResId != null) {
+                requireBaseActivity().runNavAction(actionResId, args)
             }
         }
     }

@@ -123,18 +123,13 @@ class AttributionsFragmentTest {
 
     @Test
     fun expandFlaticonMessageAndAttributions() {
+        // expand all
         onView(withId(R.id.expandCollapseMessage)).perform(click())
+        authorAttributions.indices.forEach(::expandCollapseAttribution)
+
+        // validate display
         onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
-
-        expandCollapseAttribution(0)
-        checkImagesDisplayed(listOf(0))
-        checkImagesNotPresented(listOf(1))
-
-        expandCollapseAttribution(1)
-        checkImagesDisplayed(listOf(0, 1))
-
-        expandCollapseAttribution(2)
-        checkImagesDisplayed(listOf(0, 1, 2))
+        checkExpandedCollapsed(authorAttributions.indices.toList())
     }
 
     @Test
@@ -220,7 +215,7 @@ class AttributionsFragmentTest {
                 .perform(scrollToAuthorPosition(it))
                 .check(matches(matchesAtPosition(it, allOf(isDisplayed(), withAuthorTitle))))
         }
-        checkImagesNotPresented(listOf(0, 1))
+        checkExpandedCollapsed(emptyList())
 
         // expand some
         if (ProductFlavor.devMode) {
@@ -233,8 +228,7 @@ class AttributionsFragmentTest {
 
         scenario!!.recreate()
 
-        checkImagesDisplayed(expandedIndices)
-        checkImagesNotPresented(authorTitles.indices - expandedIndices)
+        checkExpandedCollapsed(expandedIndices)
         onView(withId(R.id.expandCollapseMessage)).check(matches(withText("Collapse")))
     }
 }

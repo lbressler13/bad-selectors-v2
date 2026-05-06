@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.abstracts.BaseFragment
+import xyz.lbres.badselectorsv2.abstracts.AppScreenFragment
 import xyz.lbres.badselectorsv2.attributions.authorattribution.AuthorAttributionAdapter
 import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
 import xyz.lbres.badselectorsv2.attributions.constants.flaticonAttrPolicyUrl
@@ -23,7 +23,7 @@ import xyz.lbres.badselectorsv2.utils.createUnderlineText
 /**
  * Fragment to display image attributions for all Flaticon images used in the app, as required by Flaticon
  */
-class AttributionsFragment : BaseFragment() {
+class AttributionsFragment : AppScreenFragment() {
     private lateinit var binding: FragmentAttributionsBinding
     private lateinit var viewModel: AttributionsViewModel
 
