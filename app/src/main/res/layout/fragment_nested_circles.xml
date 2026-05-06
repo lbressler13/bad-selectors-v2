@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/previousYearsButton"
+            android:id="@+id/decrementYearsButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="5dp"
@@ -84,7 +84,7 @@
             tools:ignore="RtlSymmetry" />
 
         <ImageButton
-            android:id="@+id/nextYearsButton"
+            android:id="@+id/incrementYearsButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"

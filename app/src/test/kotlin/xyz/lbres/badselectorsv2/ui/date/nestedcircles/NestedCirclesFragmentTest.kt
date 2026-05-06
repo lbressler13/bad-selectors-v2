@@ -37,8 +37,8 @@ class NestedCirclesFragmentTest {
     private val startYear = mockDate.year - numYears + 1
     private val maxChanges = mockDate.year / numYears
 
-    private val minusButton = onView(withId(R.id.previousYearsButton))
-    private val plusButton = onView(withId(R.id.nextYearsButton))
+    private val minusButton = onView(withId(R.id.decrementYearsButton))
+    private val plusButton = onView(withId(R.id.incrementYearsButton))
     private val monthsCircleId = R.id.monthsLayout
     private val daysCircleId = R.id.daysLayout
     private val yearsCircleId = R.id.yearsLayout
@@ -266,7 +266,7 @@ class NestedCirclesFragmentTest {
         checkCircle(yearsCircleId, disabledYears)
     }
 
-    // check that the correct buttons are enabled or disabled in a circle
+    // check that the correct buttons are enabled or disabled in a single circle
     private fun checkCircle(parentId: Int, disabledButtons: List<Int> = emptyList()) {
         val childCount = when (parentId) {
             R.id.monthsLayout -> 12
