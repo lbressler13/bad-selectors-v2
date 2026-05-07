@@ -13,7 +13,7 @@ import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
-import xyz.lbres.badselectorsv2.calculator.randomenabled.RandomEnabler
+import xyz.lbres.badselectorsv2.calculator.randomenabled.RandomEnabledViewModel
 import xyz.lbres.badselectorsv2.ui.calculator.clickBackspace
 import xyz.lbres.badselectorsv2.ui.calculator.clickClear
 import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
@@ -311,15 +311,15 @@ class RandomEnabledFragmentTest {
         checkErrorState("Err: Syntax Error")
     }
 
-    // mock RandomEnabler class
+    // mock random enablement code in viewmodel class
     private fun mockRandomEnabler(
         numbersReturnValues: List<Boolean> = numbersLists.flatten(),
         operatorsReturnValues: List<Boolean> = operatorsLists.flatten(),
     ) {
-        mockkConstructor(RandomEnabler::class)
-        every { constructedWith<RandomEnabler>().isDigitEnabled(any()) } returnsMany numbersReturnValues
-        every { constructedWith<RandomEnabler>().isOperatorEnabled(any()) } returnsMany operatorsReturnValues
-        justRun { constructedWith<RandomEnabler>().update() }
+        mockkConstructor(RandomEnabledViewModel::class)
+        every { constructedWith<RandomEnabledViewModel>().isDigitEnabled(any()) } returnsMany numbersReturnValues
+        every { constructedWith<RandomEnabledViewModel>().isOperatorEnabled(any()) } returnsMany operatorsReturnValues
+        justRun { constructedWith<RandomEnabledViewModel>().updateEnabled() }
     }
 
     // cannot launch scenario in before block due to mocking requirements

@@ -14,7 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class RandomEnablerTest {
+class RandomEnabledViewModelTest {
     private val shuffledNumbers = listOf(1, 4, 7, 3, 2, 6, 0, 8, 9, 5)
     private val shuffledOpsIndices = listOf(0, 2, 3, 1)
     private val operators = listOf("+", "-", "x", "/")
@@ -33,16 +33,16 @@ class RandomEnablerTest {
             every { IntRange(0, 9).seededShuffled() } returns shuffledNumbers
             every { IntRange(0, 3).seededShuffled() } returns shuffledOpsIndices
 
-            val enabler = RandomEnabler()
+            val vm = RandomEnabledViewModel()
             val enabledNumbers = shuffledNumbers.subList(0, 5)
             val enabledOps = listOf("+", "x")
-            checkEnabled(enabler, enabledNumbers, enabledOps)
+            checkEnabled(vm, enabledNumbers, enabledOps)
 
             // duplicate values
-            assertTrue(enabler.isDigitEnabled(4))
-            assertFalse(enabler.isDigitEnabled(6))
-            assertTrue(enabler.isOperatorEnabled("+"))
-            assertFalse(enabler.isOperatorEnabled("-"))
+            assertTrue(vm.isDigitEnabled(4))
+            assertFalse(vm.isDigitEnabled(6))
+            assertTrue(vm.isOperatorEnabled("+"))
+            assertFalse(vm.isOperatorEnabled("-"))
 
             verifyMockCalls(callCount = 1)
         }
@@ -57,19 +57,19 @@ class RandomEnablerTest {
             every { IntRange(0, 9).seededShuffled() } returns shuffledNumbers
             every { IntRange(0, 3).seededShuffled() } returns shuffledOpsIndices
 
-            val enabler = RandomEnabler()
-            assertFalse(enabler.isDigitEnabled(10))
-            assertFalse(enabler.isDigitEnabled(-1))
-            assertFalse(enabler.isOperatorEnabled(""))
-            assertFalse(enabler.isOperatorEnabled("1"))
-            assertFalse(enabler.isOperatorEnabled("^"))
+            val vm = RandomEnabledViewModel()
+            assertFalse(vm.isDigitEnabled(10))
+            assertFalse(vm.isDigitEnabled(-1))
+            assertFalse(vm.isOperatorEnabled(""))
+            assertFalse(vm.isOperatorEnabled("1"))
+            assertFalse(vm.isOperatorEnabled("^"))
 
             verifyMockCalls(callCount = 1)
         }
     }
 
     @Test
-    fun testUpdate() {
+    fun testUpdateEnabled() {
         mockkStatic(IntRange::seededRandom, IntRange::seededShuffled)
         with(mockk<IntRange>()) {
             val numbersValues = listOf(
@@ -90,20 +90,20 @@ class RandomEnablerTest {
             every { IntRange(0, 9).seededShuffled() } returnsMany numbersValues
             every { IntRange(0, 3).seededShuffled() } returnsMany opIndexValues
 
-            val enabler = RandomEnabler()
+            val vm = RandomEnabledViewModel()
             var enabledNumbers = shuffledNumbers.subList(0, 4)
             var enabledOps = listOf("+", "x", "/")
-            checkEnabled(enabler, enabledNumbers, enabledOps)
+            checkEnabled(vm, enabledNumbers, enabledOps)
 
-            enabler.update()
+            vm.updateEnabled()
             enabledNumbers = (0..6).toList() // first 7 numbers
             enabledOps = listOf("+", "-", "x")
-            checkEnabled(enabler, enabledNumbers, enabledOps)
+            checkEnabled(vm, enabledNumbers, enabledOps)
 
-            enabler.update()
+            vm.updateEnabled()
             enabledNumbers = (0..2).toList() // first 3 numbers
             enabledOps = listOf("+", "-")
-            checkEnabled(enabler, enabledNumbers, enabledOps)
+            checkEnabled(vm, enabledNumbers, enabledOps)
 
             verifyMockCalls(callCount = 3)
         }
@@ -131,24 +131,24 @@ class RandomEnablerTest {
             every { IntRange(0, 9).seededShuffled() } returnsMany numbersValues
             every { IntRange(0, 3).seededShuffled() } returnsMany opIndexValues
 
-            val enabler = RandomEnabler()
+            val vm = RandomEnabledViewModel()
             var enabledNumbers = shuffledNumbers.subList(0, 5)
             var enabledOps = listOf("+", "x")
-            checkEnabled(enabler, enabledNumbers, enabledOps)
+            checkEnabled(vm, enabledNumbers, enabledOps)
 
-            enabler.update()
+            vm.updateEnabled()
             enabledNumbers = (0..4).toList()
             enabledOps = listOf("+", "-")
-            checkEnabled(enabler, enabledNumbers, enabledOps)
+            checkEnabled(vm, enabledNumbers, enabledOps)
 
             verifyMockCalls(callCount = 4)
         }
     }
 
     // check isDigitEnabled and isOperatorEnabled for given lists of numbers and operators
-    private fun checkEnabled(enabler: RandomEnabler, enabledNumbers: List<Int>, enabledOperators: List<String>) {
+    private fun checkEnabled(vm: RandomEnabledViewModel, enabledNumbers: List<Int>, enabledOperators: List<String>) {
         repeat(10) {
-            val result = enabler.isDigitEnabled(it)
+            val result = vm.isDigitEnabled(it)
             try {
                 assertEquals(it in enabledNumbers, result)
             } catch (e: AssertionError) {
@@ -158,7 +158,7 @@ class RandomEnablerTest {
         }
 
         for (op in operators) {
-            val result = enabler.isOperatorEnabled(op)
+            val result = vm.isOperatorEnabled(op)
             try {
                 assertEquals(op in enabledOperators, result)
             } catch (e: AssertionError) {
