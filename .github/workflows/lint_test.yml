@@ -152,8 +152,8 @@ jobs:
       - name: Tests
         run: ./gradlew :customview:test --info --stacktrace
 
-  clear-cache:
-    runs-on: ubuntu-latest
-    needs: [ lint, app-unit-tests, app-integration-tests, customview-tests ]
-    if: ${{ always() }}
-
+#  clear-cache:
+#    runs-on: ubuntu-latest
+#    needs: [ lint, app-unit-tests, app-integration-tests, customview-tests ]
+#    if: ${{ always() }}
+#
