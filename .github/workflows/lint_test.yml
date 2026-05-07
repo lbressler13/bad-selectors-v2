@@ -11,12 +11,16 @@ on:
           - unit
           - robolectric
           - all
+      integrationTests:
+        description: Run integration tests
+        default: true
+        type: boolean
   workflow_call:
     inputs:
-      testType:
-        required: true
-        default: all
-        type: string
+      integrationTests:
+        default: true
+        type: boolean
+        required: false
   pull_request:
   push:
 
@@ -76,6 +80,8 @@ jobs:
     name: "Unit Tests (app module)"
     runs-on: ubuntu-latest
     needs: ["dependencies"]
+    # run on push if not on master, or if integration tests is passed and not false
+    if: ${{ (github.event_name != 'push' || github.ref == 'refs/heads/main') || inputs.integrationTests == true }}
 
     steps:
       - name: Checkout
@@ -95,9 +101,32 @@ jobs:
 
       - name: Tests
         run: |
-          TEST_TYPE=${{ inputs.testType || (github.event_name == 'push' && 'unit') || (github.event_name == 'pull_request' && 'all') || 'all' }}
-          echo "Running test with test type: $TEST_TYPE"
-          ./gradlew :app:test -PtestType="$TEST_TYPE" --stacktrace
+          ./gradlew :app:test -PtestType="unit" --stacktrace
+
+  app-integration-tests:
+    name: "Integration Tests (app module)"
+    runs-on: ubuntu-latest
+    needs: ["dependencies"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Java Version
+        uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+          cache-cleanup: always
+
+      - name: Tests
+        run: |
+          ./gradlew :app:test -PtestType="robolectric" --stacktrace
 
   customview-unit-tests:
     name: "Unit Tests (customview module)"
