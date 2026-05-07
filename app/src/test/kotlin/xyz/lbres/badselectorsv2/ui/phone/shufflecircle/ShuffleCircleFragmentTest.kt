@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.phone.shufflecircle.DigitShuffler
+import xyz.lbres.badselectorsv2.phone.shufflecircle.ShuffleCircleViewModel
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
@@ -78,7 +78,7 @@ class ShuffleCircleFragmentTest {
         }
         val phoneNumber = turns.map { it[it.lastIndex].second }
 
-        mockDigitShuffler(returnValues)
+        mockDigitShuffling(returnValues)
         launchFragment()
 
         turns.forEachIndexed { index, turn ->
@@ -99,7 +99,7 @@ class ShuffleCircleFragmentTest {
     @Test
     fun restart() {
         val returnValues = (0..9).toList()
-        mockDigitShuffler(returnValues)
+        mockDigitShuffling(returnValues)
         launchFragment()
         repeat(10) {
             circleButton(0).perform(forceClick())
@@ -116,8 +116,8 @@ class ShuffleCircleFragmentTest {
         val phoneNumber = (0..9).toList()
         val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
         val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
-        mockDigitShuffler(returnValues)
-        every { constructedWith<DigitShuffler>().digit } returnsMany digitPropValues
+        mockDigitShuffling(returnValues)
+        every { constructedWith<ShuffleCircleViewModel>().currentDigit } returnsMany digitPropValues
 
         val scenario = launchFragment()
 
@@ -175,11 +175,11 @@ class ShuffleCircleFragmentTest {
         checkInitialUi()
     }
 
-    // mock DigitShuffler class
-    private fun mockDigitShuffler(returnValues: IntList) {
-        mockkConstructor(DigitShuffler::class)
-        every { constructedWith<DigitShuffler>().getAtIndex(any(), any()) } returnsMany returnValues
-        justRun { constructedWith<DigitShuffler>().update() }
+    // mock digit shuffling logic in view model
+    private fun mockDigitShuffling(returnValues: IntList) {
+        mockkConstructor(ShuffleCircleViewModel::class)
+        every { constructedWith<ShuffleCircleViewModel>().getDigitAtIndex(any(), any()) } returnsMany returnValues
+        justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
     }
 
     // cannot launch scenario in before block due to mocking requirements
