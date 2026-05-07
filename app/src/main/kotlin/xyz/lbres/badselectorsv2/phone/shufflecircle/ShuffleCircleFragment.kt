@@ -20,7 +20,6 @@ import xyz.lbres.badselectorsv2.phone.utils.numDigits
 /**
  * Fragment that displays an unlabelled button circle layout, where values are shuffled when a user selects a value.
  * Shuffling is not guaranteed to happen every time a button is pressed.
- * Shuffling and frequency of shuffling is handled by a [DigitShuffler].
  */
 class ShuffleCircleFragment : BasePhoneFragment() {
     private lateinit var binding: FragmentPhoneShuffleCircleBinding
@@ -75,7 +74,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
      * Initialize buttons in circle layout
      */
     private fun initButtonCircle() {
-        val initialDigit = viewModel.digitShuffler.digit
+        val initialDigit = viewModel.currentDigit
         binding.currentDigit.text = if (initialDigit == -1 || initialDigit == null) {
             ""
         } else {
@@ -85,14 +84,14 @@ class ShuffleCircleFragment : BasePhoneFragment() {
         // get digit based on index of button, and update ui
         binding.circleLayout.setChildOnClickListener { _, index ->
             val nullable = viewModel.russianRoulette && viewModel.currentIndex != 0
-            val digit = viewModel.digitShuffler.getAtIndex(index, nullable)
+            val digit = viewModel.getDigitAtIndex(index, nullable)
 
             if (digit == null) {
                 binding.currentDigit.text = ""
                 reset()
             } else {
                 binding.currentDigit.text = digit.toString()
-                viewModel.digitShuffler.update()
+                viewModel.updateDigits()
             }
         }
     }
@@ -112,7 +111,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
                 setRestartUi()
             }
 
-            viewModel.digitShuffler.reset()
+            viewModel.reset()
             binding.currentDigit.text = ""
         }
     }

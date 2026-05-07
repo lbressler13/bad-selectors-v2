@@ -1,8 +1,80 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
+import xyz.lbres.badselectorsv2.phone.utils.digitsRange
+import xyz.lbres.badselectorsv2.utils.createRandom
+import xyz.lbres.badselectorsv2.utils.seededRandom
+import xyz.lbres.badselectorsv2.utils.seededShuffled
+import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.random.ext.nextBoolean
 
 class ShuffleCircleViewModel : BasePhoneViewModel() {
     val russianRoulette = false
-    val digitShuffler = DigitShuffler()
+
+    /**
+     * Current order
+     */
+    private var digitsOrder: IntList = digitsRange.toList()
+
+    /**
+     * Number of updates until next shuffle
+     */
+    private var nextShuffle: Int = 0
+
+    /**
+     * Last value returned by [getDigitAtIndex]
+     */
+    var currentDigit: Int? = -1
+        private set
+
+    /**
+     * Initialize shuffled numbers
+     */
+    init {
+        updateDigits()
+    }
+
+    /**
+     * Get the value of a specific index.
+     * Guaranteed to never return null twice in a row.
+     *
+     * @param index [Int]: index to retrieve number for
+     * @param nullable [Boolean]: if a null value can be returned, equivalent to the russian roulette setting.
+     * Defaults to `false`.
+     * @return [Int]?: number at [index], with some probability of null if [nullable] is true
+     */
+    fun getDigitAtIndex(index: Int, nullable: Boolean = false): Int? {
+        val canUseNull = nullable && currentDigit != null && currentDigit != -1
+
+        val probabilityNull = 0.001f // 1 / 1000
+        val nextNull = createRandom().nextBoolean(probabilityNull)
+        currentDigit = simpleIf(canUseNull && nextNull, null, digitsOrder[index])
+
+        return currentDigit
+    }
+
+    /**
+     * Update count to next shuffle, and shuffle digits if necessary
+     */
+    fun updateDigits() {
+        if (nextShuffle == 0) {
+            digitsOrder = digitsRange.seededShuffled()
+
+            // next shuffle is between 0 and 2 updates
+            nextShuffle = (0..2).seededRandom()
+        } else {
+            nextShuffle--
+        }
+    }
+
+    /**
+     * Reset all data
+     */
+    fun reset() {
+        digitsOrder = digitsRange.toMutableList()
+        currentDigit = -1
+        nextShuffle = 0
+        updateDigits()
+    }
 }
