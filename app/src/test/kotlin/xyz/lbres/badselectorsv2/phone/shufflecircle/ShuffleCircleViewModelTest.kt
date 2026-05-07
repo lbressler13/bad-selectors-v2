@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
-class DigitShufflerTest {
+class ShuffleCircleViewModelTest {
     private val shuffledDigits = listOf(7, 4, 0, 2, 5, 6, 8, 1, 3, 9)
 
     @AfterTest
@@ -25,8 +25,8 @@ class DigitShufflerTest {
 
     @Test
     fun testInit() {
-        val shuffler = DigitShuffler()
-        assertEquals(-1, shuffler.digit)
+        val vm = ShuffleCircleViewModel()
+        assertEquals(-1, vm.currentDigit)
     }
 
     @Test
@@ -35,26 +35,26 @@ class DigitShufflerTest {
         with(mockk<IntRange>()) {
             every { IntRange(0, 9).seededShuffled() } returns shuffledDigits
 
-            val shuffler = DigitShuffler()
+            val vm = ShuffleCircleViewModel()
             repeat(10) {
-                val result = shuffler.getAtIndex(it)
+                val result = vm.getDigitAtIndex(it)
                 assertEquals(shuffledDigits[it], result)
-                assertEquals(shuffledDigits[it], shuffler.digit)
+                assertEquals(shuffledDigits[it], vm.currentDigit)
             }
 
             // duplicate digit
-            var result = shuffler.getAtIndex(7)
+            var result = vm.getDigitAtIndex(7)
             assertEquals(shuffledDigits[7], result)
-            result = shuffler.getAtIndex(7)
+            result = vm.getDigitAtIndex(7)
             assertEquals(shuffledDigits[7], result)
         }
     }
 
     @Test
     fun testGetAtIndexOob() {
-        val shuffler = DigitShuffler()
-        assertFailsWith<IndexOutOfBoundsException> { shuffler.getAtIndex(10) }
-        assertFailsWith<IndexOutOfBoundsException> { shuffler.getAtIndex(-1) }
+        val vm = ShuffleCircleViewModel()
+        assertFailsWith<IndexOutOfBoundsException> { vm.getDigitAtIndex(10) }
+        assertFailsWith<IndexOutOfBoundsException> { vm.getDigitAtIndex(-1) }
     }
 
     @Test
@@ -71,39 +71,39 @@ class DigitShufflerTest {
             every { IntRange(0, 9).seededShuffled() } returns shuffledDigits
             every { IntRange(0, 2).seededRandom() } returns 0
 
-            val shuffler = DigitShuffler()
+            val vm = ShuffleCircleViewModel()
             // initial, true is ignored
-            var result = shuffler.getAtIndex(4, true)
+            var result = vm.getDigitAtIndex(4, true)
             assertEquals(shuffledDigits[4], result)
 
             // non-null digit, false
-            result = shuffler.getAtIndex(6, true)
+            result = vm.getDigitAtIndex(6, true)
             assertEquals(shuffledDigits[6], result)
 
             // null digit, true
-            result = shuffler.getAtIndex(6, true)
+            result = vm.getDigitAtIndex(6, true)
             assertNull(result)
 
             // previous digit is null, true is ignored
-            result = shuffler.getAtIndex(1, true)
+            result = vm.getDigitAtIndex(1, true)
             assertEquals(shuffledDigits[1], result)
 
             // new digit, false
-            result = shuffler.getAtIndex(7, true)
+            result = vm.getDigitAtIndex(7, true)
             assertEquals(shuffledDigits[7], result)
 
             // new digit, false
-            result = shuffler.getAtIndex(0, true)
+            result = vm.getDigitAtIndex(0, true)
             assertEquals(shuffledDigits[0], result)
 
             // null digit, true
-            result = shuffler.getAtIndex(2, true)
+            result = vm.getDigitAtIndex(2, true)
             assertNull(result)
         }
     }
 
     @Test
-    fun testUpdate() {
+    fun testupdateDigits() {
         // mock shuffle digits
         val digitsValues = listOf(
             shuffledDigits,
@@ -120,30 +120,30 @@ class DigitShufflerTest {
             every { IntRange(0, 9).seededShuffled() } returnsMany digitsValues
             every { IntRange(0, 2).seededRandom() } returnsMany shuffleValues
 
-            val shuffler = DigitShuffler()
-            val updateAndCheck = { idx: Int ->
-                shuffler.update()
-                checkDigits(shuffler, digitsValues[idx])
+            val vm = ShuffleCircleViewModel()
+            val updateDigitsAndCheck = { idx: Int ->
+                vm.updateDigits()
+                checkDigits(vm, digitsValues[idx])
             }
 
             // init
-            checkDigits(shuffler, digitsValues[0])
+            checkDigits(vm, digitsValues[0])
 
             // 0
-            updateAndCheck(1)
+            updateDigitsAndCheck(1)
 
             // 2
-            updateAndCheck(1)
-            updateAndCheck(1)
-            updateAndCheck(2)
+            updateDigitsAndCheck(1)
+            updateDigitsAndCheck(1)
+            updateDigitsAndCheck(2)
 
             // 1
-            updateAndCheck(2)
-            updateAndCheck(3)
+            updateDigitsAndCheck(2)
+            updateDigitsAndCheck(3)
 
             // 1
-            updateAndCheck(3)
-            updateAndCheck(4)
+            updateDigitsAndCheck(3)
+            updateDigitsAndCheck(4)
         }
     }
 
@@ -163,23 +163,23 @@ class DigitShufflerTest {
             every { IntRange(0, 9).seededShuffled() } returnsMany digitsValues
             every { IntRange(0, 2).seededRandom() } returnsMany shuffleValues
 
-            val shuffler = DigitShuffler()
-            shuffler.getAtIndex(0)
-            assertEquals(shuffledDigits[0], shuffler.digit)
+            val vm = ShuffleCircleViewModel()
+            vm.getDigitAtIndex(0)
+            assertEquals(shuffledDigits[0], vm.currentDigit)
 
-            shuffler.reset()
-            assertEquals(-1, shuffler.digit)
+            vm.reset()
+            assertEquals(-1, vm.currentDigit)
 
-            // reset when update count isn't 0
-            shuffler.update()
-            checkDigits(shuffler, digitsValues[1])
-            shuffler.reset()
+            // reset when updateDigits count isn't 0
+            vm.updateDigits()
+            checkDigits(vm, digitsValues[1])
+            vm.reset()
 
-            checkDigits(shuffler, digitsValues[2])
+            checkDigits(vm, digitsValues[2])
         }
     }
 
-    private fun checkDigits(shuffler: DigitShuffler, expected: List<Int>) {
-        repeat(10) { assertEquals(expected[it], shuffler.getAtIndex(it)) }
+    private fun checkDigits(vm: ShuffleCircleViewModel, expected: List<Int>) {
+        repeat(10) { assertEquals(expected[it], vm.getDigitAtIndex(it)) }
     }
 }
