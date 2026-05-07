@@ -96,7 +96,7 @@ jobs:
       - name: Tests
         run: |
           TEST_TYPE=${{ inputs.testType || (github.event_name == 'push' && 'unit') || (github.event_name == 'pull_request' && 'all') || 'all' }}
-          echo "Running test with test type: "$TEST_TYPE"
+          echo "Running test with test type: $TEST_TYPE"
           ./gradlew :app:test -PtestType="$TEST_TYPE" --stacktrace
 
   customview-unit-tests:
