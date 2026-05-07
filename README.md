@@ -1,6 +1,6 @@
 # Bad Selectors v2
 
-[![All Tests](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml/badge.svg?branch=main)](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/all_checks.yml)
+[![All Tests](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/lint_test.yml/badge.svg?branch=main)](https://github.com/lbressler13/bad-selectors-v2/actions/workflows/lint_test.yml)
 
 ## Overview
 

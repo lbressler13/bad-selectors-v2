@@ -18,7 +18,7 @@ on:
         default: all
         type: string
   pull_request:
-#  push:
+  push:
 #    branches-ignore:
 #    # runs on main as part of All Checks
 #    - main
@@ -60,7 +60,9 @@ jobs:
           java-version: 17
 
       - name: Tests
-        run: ./gradlew :app:test -PtestType="${{ inputs.testType || 'unit' }}" --stacktrace
+        run: |
+          TEST_TYPE=${{ inputs.testType || (github.event_name == 'push' && 'unit') || (github.event_name == 'pull_request' && 'all') || 'all' }}
+          ./gradlew :app:test -PtestType="${TEST_TYPE}" --stacktrace
 
   customview-unit-tests:
     name: "Unit Tests (customview module)"

@@ -12,5 +12,4 @@ jobs:
     uses: ./.github/workflows/lint_test.yml
     secrets: inherit
     with:
-      # testType: all
-      testType: unit
+      testType: all
