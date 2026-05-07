@@ -94,7 +94,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
      */
     private fun updateEnabledButtons(newButtons: Boolean = true) {
         if (newButtons) {
-            viewModel.enabler.update()
+            viewModel.updateEnabled()
         }
 
         val numberButtons = listOf(
@@ -111,7 +111,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
         )
 
         numberButtons.forEachIndexed { index, button ->
-            if (viewModel.enabler.isDigitEnabled(index)) {
+            if (viewModel.isDigitEnabled(index)) {
                 enableButton(button)
             } else {
                 disableButton(button)
@@ -126,7 +126,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
         )
 
         operatorPairs.forEach { (button, operator) ->
-            val enabled = viewModel.enabler.isOperatorEnabled(operator)
+            val enabled = viewModel.isOperatorEnabled(operator)
             simpleIf(enabled, { enableButton(button) }, { disableButton(button) })
         }
     }
