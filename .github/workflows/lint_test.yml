@@ -80,6 +80,31 @@ jobs:
     name: "Unit Tests (app module)"
     runs-on: ubuntu-latest
     needs: ["dependencies"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Java Version
+        uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+          cache-cleanup: always
+
+      - name: Tests
+        run: |
+          ./gradlew :app:test -PtestType="unit" --info --stacktrace
+
+  app-integration-tests:
+    name: "Integration Tests (app module)"
+    runs-on: ubuntu-latest
+    needs: ["dependencies"]
     # run on push if not on master, or if integration tests is passed and not false
     if: ${{ (github.event_name != 'push' || github.ref == 'refs/heads/main') || inputs.integrationTests == true }}
 
@@ -101,10 +126,10 @@ jobs:
 
       - name: Tests
         run: |
-          ./gradlew :app:test -PtestType="unit" --stacktrace
+          ./gradlew :app:test -PtestType="robolectric" --info --stacktrace
 
-  app-integration-tests:
-    name: "Integration Tests (app module)"
+  customview-tests:
+    name: "Tests (customview module)"
     runs-on: ubuntu-latest
     needs: ["dependencies"]
 
@@ -125,29 +150,10 @@ jobs:
           cache-cleanup: always
 
       - name: Tests
-        run: |
-          ./gradlew :app:test -PtestType="robolectric" --stacktrace
+        run: ./gradlew :customview:test --info --stacktrace
 
-  customview-unit-tests:
-    name: "Unit Tests (customview module)"
+  clear-cache:
     runs-on: ubuntu-latest
-    needs: ["dependencies"]
+    needs: [ lint, app-unit-tests, app-integration-tests, customview-tests ]
+    if: ${{ always() }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set Java Version
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 17
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-read-only: true
-          cache-cleanup: always
-
-      - name: Tests
-        run: ./gradlew :customview:test --stacktrace
