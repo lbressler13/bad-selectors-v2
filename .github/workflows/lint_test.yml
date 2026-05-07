@@ -97,7 +97,7 @@ jobs:
     name: "Integration Tests (app)"
     runs-on: ubuntu-latest
     needs: ["dependencies"]
-    # run on push if not on master, or if integration tests is passed and not false
+    # run on push if not on main, or if integration tests input is set
     if: ${{ (github.event_name != 'push' || github.ref == 'refs/heads/main') || inputs.integrationTests == true }}
 
     steps:
