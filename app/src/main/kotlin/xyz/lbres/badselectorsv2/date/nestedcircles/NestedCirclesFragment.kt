@@ -55,11 +55,11 @@ class NestedCirclesFragment : BaseDateFragment() {
     private fun initPlusMinusButtons() {
         // buttons that are used to adjust which years are available
         binding.decrementYearsButton.setOnClickListener {
-            viewModel.enabler.decrementAvailableYears()
+            viewModel.decrementAvailableYears()
             updatePlusMinusButtons()
         }
         binding.incrementYearsButton.setOnClickListener {
-            viewModel.enabler.incrementAvailableYears()
+            viewModel.incrementAvailableYears()
             updatePlusMinusButtons()
         }
 
@@ -70,13 +70,13 @@ class NestedCirclesFragment : BaseDateFragment() {
      * Update enabled/disabled state of buttons to increment and decrement years, depending on the available years
      */
     private fun updatePlusMinusButtons() {
-        if (viewModel.enabler.availableYears.first <= viewModel.enabler.minYear) {
+        if (viewModel.availableYears.first <= viewModel.minYear) {
             disableYearControlButton(binding.decrementYearsButton)
         } else {
             enableYearControlButton(binding.decrementYearsButton)
         }
 
-        if (viewModel.enabler.maxYear <= viewModel.enabler.availableYears.last) {
+        if (viewModel.maxYear <= viewModel.availableYears.last) {
             disableYearControlButton(binding.incrementYearsButton)
         } else {
             enableYearControlButton(binding.incrementYearsButton)
@@ -88,17 +88,17 @@ class NestedCirclesFragment : BaseDateFragment() {
      */
     private fun populateCircleLayouts() {
         binding.monthsLayout.setChildOnClickListener { _, index ->
-            viewModel.enabler.month = index
+            viewModel.month = index
             displayMonth()
         }
 
         binding.daysLayout.setChildOnClickListener { _, index ->
-            viewModel.enabler.day = index
+            viewModel.day = index
             displayDay()
         }
 
         binding.yearsLayout.setChildOnClickListener { _, index ->
-            viewModel.enabler.setYearAt(index)
+            viewModel.setYearAt(index)
             displayYear()
         }
     }
@@ -108,7 +108,7 @@ class NestedCirclesFragment : BaseDateFragment() {
      */
     override fun displayMonth() {
         super.displayMonth()
-        enableSubset(binding.daysLayout, viewModel.enabler.enabledDays)
+        enableSubset(binding.daysLayout, viewModel.enabledDays)
     }
 
     /**
@@ -116,7 +116,7 @@ class NestedCirclesFragment : BaseDateFragment() {
      */
     override fun displayDay() {
         super.displayDay()
-        enableSubset(binding.monthsLayout, viewModel.enabler.enabledMonths)
+        enableSubset(binding.monthsLayout, viewModel.enabledMonths)
     }
 
     /**
