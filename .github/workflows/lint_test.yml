@@ -3,78 +3,143 @@ name: Lint and Test
 on:
   workflow_dispatch:
     inputs:
-      testType:
-        description: App Test Type
-        default: unit
-        type: choice
-        options:
-          - unit
-          - robolectric
-          - all
+      integrationTests:
+        description: Run integration tests
+        default: true
+        type: boolean
   workflow_call:
     inputs:
-      testType:
-        required: true
-        default: all
-        type: string
+      integrationTests:
+        default: true
+        type: boolean
+        required: false
   pull_request:
-#  push:
-#    branches-ignore:
-#    # runs on main as part of All Checks
-#    - main
+  push:
 
 env:
   USERNAME: ${{ secrets.USERNAME }}
   TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
 jobs:
-  lint:
-    name: "Linting"
+  dependencies:
+    name: "Cache Dependencies"
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Set Java Version
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-write-only: true
+          cache-cleanup: always
+
+      - name: Install Dependencies
+        run: ./gradlew build --dry-run # installs dependencies without building
+
+  lint:
+    name: "Linting"
+    runs-on: ubuntu-latest
+    needs: ["dependencies"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set Java Version
+        uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+          cache-cleanup: always
 
       - name: Linting
         run: ./gradlew ktlintCheck
 
   app-unit-tests:
-    name: "Unit Tests (app module)"
+    name: "Unit Tests (app)"
     runs-on: ubuntu-latest
+    needs: ["dependencies"]
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Set Java Version
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+          cache-cleanup: always
 
       - name: Tests
-        run: ./gradlew :app:test -PtestType="${{ inputs.testType || 'unit' }}" --stacktrace
+        run: |
+          ./gradlew :app:test -PtestType="unit" --stacktrace
 
-  customview-unit-tests:
-    name: "Unit Tests (customview module)"
+  app-integration-tests:
+    name: "Integration Tests (app)"
     runs-on: ubuntu-latest
+    needs: ["dependencies"]
+    # run on push if not on main, or if integration tests input is set
+    if: ${{ (github.event_name != 'push' || github.ref == 'refs/heads/main') || inputs.integrationTests == true }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Set Java Version
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+          cache-cleanup: always
+
+      - name: Tests
+        run: |
+          ./gradlew :app:test -PtestType="robolectric" --stacktrace
+
+  customview-tests:
+    name: "Tests (customview)"
+    runs-on: ubuntu-latest
+    needs: ["dependencies"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set Java Version
+        uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+          cache-cleanup: always
 
       - name: Tests
         run: ./gradlew :customview:test --stacktrace
