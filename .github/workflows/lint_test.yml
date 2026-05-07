@@ -45,9 +45,8 @@ jobs:
           cache-write-only: true
           cache-cleanup: always
 
-      - name: Linting
-        run: ./gradlew ktlintCheck
-
+      - name: Install Dependencies
+        run: ./gradlew build  # TODO confirm this command at a more reasonable hour of the day
 
   lint:
     name: "Linting"
