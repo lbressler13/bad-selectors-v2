@@ -172,6 +172,32 @@ class PhoneNumberGeneratorTest {
         }
     }
 
+    // test that the repeats remaining is being pulled from correct range
+    @Test
+    fun testRepeatCounts() {
+        val range = 2..4
+        val generator = PhoneNumberGenerator(range)
+
+        val counts: MutableSet<Int> = mutableSetOf()
+        var currentCount = 0
+        var lastGenerated: IntList? = null
+
+        repeat(200) {
+            val generated = generator.generateNumber()
+            if (generated == lastGenerated) {
+                currentCount++
+            } else {
+                if (lastGenerated != null) {
+                    counts.add(currentCount)
+                }
+                currentCount = 1
+                lastGenerated = generated
+            }
+        }
+
+        assertEquals(range.toSet(), counts)
+    }
+
     @Test
     fun testFreezeAtIndex() {
         val generatedNumbers: MutableSet<IntList> = mutableSetOf()
