@@ -2,6 +2,8 @@ package xyz.lbres.badselectorsv2.phone.utils
 
 import android.util.Log
 import xyz.lbres.badselectorsv2.utils.seededRandom
+import xyz.lbres.kotlinutils.array.ext.setAllValues
+import xyz.lbres.kotlinutils.closedrange.intrange.ext.size
 import xyz.lbres.kotlinutils.intarray.ext.mapInPlaceIndexed
 import xyz.lbres.kotlinutils.intarray.ext.setAllValues
 import xyz.lbres.kotlinutils.intarray.intArrayOfValue
@@ -37,8 +39,10 @@ class PhoneNumberGenerator(
      */
     private var repeatsRemaining = 0
 
-    // TODO
-    // private val frozenDigits: Array<Int?> = arrayOfNulls(digitsRange.size())
+    /**
+     * Fixed digits that will not be changed when new number is generated
+     */
+    private val frozenDigits: Array<Int?> = arrayOfNulls(digitsRange.size())
 
     /**
      * The next generated number
@@ -72,14 +76,15 @@ class PhoneNumberGenerator(
         if (repeatsRemaining <= 0) {
             generatedNumber.mapInPlaceIndexed { index, _ ->
                 val remaining = remainingValues[index]
-                if (remaining.isEmpty()) {
-                    resetRemainingAt(index)
-                }
-
-                if (allowRepeatDigits) {
-                    remaining.random()
-                } else {
-                    remaining.popRandom()!!
+                when {
+                    frozenDigits[index] != null -> frozenDigits[index]!!
+                    allowRepeatDigits -> remaining.random()
+                    else -> {
+                        if (remaining.isEmpty()) {
+                            resetRemainingAt(index)
+                        }
+                        remaining.popRandom()!!
+                    }
                 }
             }
 
@@ -88,6 +93,18 @@ class PhoneNumberGenerator(
 
         repeatsRemaining--
         return generatedNumber.toList()
+    }
+
+    /**
+     * Freeze value at a given position.
+     * Future generated numbers will have the same values at this position until [reset] is called.
+     *
+     * @param index [Int]
+     */
+    fun freezeAtIndex(index: Int) {
+        if (generatedNumber[index] != -1) {
+            frozenDigits[index] = generatedNumber[index]
+        }
     }
 
     /**
@@ -105,6 +122,7 @@ class PhoneNumberGenerator(
     fun reset() {
         remainingValues.indices.forEach { resetRemainingAt(it) }
         generatedNumber.setAllValues(-1)
+        frozenDigits.setAllValues(null)
         repeatsRemaining = 0
     }
 }
