@@ -178,7 +178,7 @@ class ShuffleCircleFragmentTest {
     // mock digit shuffling logic in view model
     private fun mockDigitShuffling(returnValues: IntList) {
         mockkConstructor(ShuffleCircleViewModel::class)
-        every { constructedWith<ShuffleCircleViewModel>().getDigitAtIndex(any(), any()) } returnsMany returnValues
+        every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(any(), any()) } returnsMany returnValues
         justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
     }
 

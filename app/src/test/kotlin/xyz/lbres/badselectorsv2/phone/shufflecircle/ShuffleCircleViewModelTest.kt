@@ -39,7 +39,7 @@ class ShuffleCircleViewModelTest {
     fun testInit() {
         val vm = ShuffleCircleViewModel()
         assertEquals(-1, vm.currentDigit)
-        digitsRange.forEach { vm.getDigitAtIndex(it) in digitsRange }
+        digitsRange.forEach { vm.getGeneratedAtIndex(it) in digitsRange }
     }
 
     @Test
@@ -67,26 +67,26 @@ class ShuffleCircleViewModelTest {
     }
 
     @Test
-    fun testGetAtIndex() {
+    fun testGetGeneratedAtIndex() {
         setUpdateMocks(listOf(shuffledDigits))
         val vm = ShuffleCircleViewModel()
         repeat(10) {
-            val result = vm.getDigitAtIndex(it)
+            val result = vm.getGeneratedAtIndex(it)
             assertEquals(shuffledDigits[it], result)
             assertEquals(shuffledDigits[it], vm.currentDigit)
         }
 
-        var result = vm.getDigitAtIndex(7)
+        var result = vm.getGeneratedAtIndex(7)
         assertEquals(shuffledDigits[7], result)
-        result = vm.getDigitAtIndex(7)
+        result = vm.getGeneratedAtIndex(7)
         assertEquals(shuffledDigits[7], result)
     }
 
     @Test
     fun testGetAtIndexOob() {
         val vm = ShuffleCircleViewModel()
-        assertFailsWith<IndexOutOfBoundsException> { vm.getDigitAtIndex(10) }
-        assertFailsWith<IndexOutOfBoundsException> { vm.getDigitAtIndex(-1) }
+        assertFailsWith<IndexOutOfBoundsException> { vm.getGeneratedAtIndex(10) }
+        assertFailsWith<IndexOutOfBoundsException> { vm.getGeneratedAtIndex(-1) }
     }
 
     @Test
@@ -130,31 +130,31 @@ class ShuffleCircleViewModelTest {
         val vm = ShuffleCircleViewModel()
 
         // initial, true is ignored
-        var result = vm.getDigitAtIndex(4, true)
+        var result = vm.getGeneratedAtIndex(4, true)
         assertEquals(shuffledDigits[4], result)
 
         // non-null digit, false
-        result = vm.getDigitAtIndex(6, true)
+        result = vm.getGeneratedAtIndex(6, true)
         assertEquals(shuffledDigits[6], result)
 
         // null digit, true
-        result = vm.getDigitAtIndex(6, true)
+        result = vm.getGeneratedAtIndex(6, true)
         assertNull(result)
 
         // previous digit is null, true is ignored
-        result = vm.getDigitAtIndex(1, true)
+        result = vm.getGeneratedAtIndex(1, true)
         assertEquals(shuffledDigits[1], result)
 
         // new digit, false
-        result = vm.getDigitAtIndex(7, true)
+        result = vm.getGeneratedAtIndex(7, true)
         assertEquals(shuffledDigits[7], result)
 
         // new digit, false
-        result = vm.getDigitAtIndex(0, true)
+        result = vm.getGeneratedAtIndex(0, true)
         assertEquals(shuffledDigits[0], result)
 
         // null digit, true
-        result = vm.getDigitAtIndex(2, true)
+        result = vm.getGeneratedAtIndex(2, true)
         assertNull(result)
     }
 
@@ -215,7 +215,7 @@ class ShuffleCircleViewModelTest {
         checkDigits(vm, forceDigitsValues[0])
 
         // validate that the must recently returned value is 0
-        vm.getDigitAtIndex(0)
+        vm.getGeneratedAtIndex(0)
         assertEquals(0, vm.currentDigit)
 
         vm.resetData()
@@ -235,7 +235,7 @@ class ShuffleCircleViewModelTest {
     }
 
     private fun checkDigits(vm: ShuffleCircleViewModel, expected: List<Int>) {
-        val actual = List(numDigits) { vm.getDigitAtIndex(it) }
+        val actual = List(numDigits) { vm.getGeneratedAtIndex(it) }
         assertEquals(expected, actual)
     }
 }

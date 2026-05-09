@@ -84,7 +84,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
         // get digit based on index of button, and update ui
         binding.circleLayout.setChildOnClickListener { _, index ->
             val nullable = viewModel.russianRoulette && viewModel.currentIndex != 0
-            val digit = viewModel.getDigitAtIndex(index, nullable)
+            val digit = viewModel.getGeneratedAtIndex(index, nullable)
 
             if (digit == null) {
                 binding.currentDigit.text = ""
