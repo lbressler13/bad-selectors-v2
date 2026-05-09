@@ -91,7 +91,7 @@ jobs:
 
       - name: Tests
         run: |
-          ./gradlew :app:test -PtestType="unit" --stacktrace
+          ./gradlew :app:test -PtestType="unit" --stacktrace --verbose
 
   app-integration-tests:
     name: "Integration Tests (app)"
