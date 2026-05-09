@@ -58,6 +58,14 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     }
 
     /**
+     * Increment value of [currentIndex] and force-update digits
+     */
+    override fun incrementCurrentIndex() {
+        super.incrementCurrentIndex()
+        digitsOrder = generator.generateNumber(forceRegenerate = true)
+    }
+
+    /**
      * Reset all data
      */
     fun reset() {

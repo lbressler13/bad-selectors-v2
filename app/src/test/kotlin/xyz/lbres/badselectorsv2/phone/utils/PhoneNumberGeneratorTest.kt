@@ -118,6 +118,51 @@ class PhoneNumberGeneratorTest {
     }
 
     @Test
+    fun testForceGenerate() {
+        // default
+        var generator = PhoneNumberGenerator()
+        var generated = generator.generateNumber()
+        assertNotEquals(generated, generator.generateNumber(true))
+
+        // no repeat digits
+        generator = PhoneNumberGenerator(false)
+        val generatedNumbers: MutableSet<IntList> = mutableSetOf()
+        repeat(6) { generatedNumbers.add(generator.generateNumber()) }
+        generated = generator.generateNumber(true)
+        digitsRange.forEach {
+            assertFalse { generated[it] in digitsAtIndex(it, generatedNumbers) }
+        }
+
+        // repeat full numbers
+        withMockedRange(2..4, listOf(4, 2, 3, 2)) {
+            generator = PhoneNumberGenerator(fullNumberRepeats = 2..4)
+            generated = generator.generateNumber()
+            assertEquals(generated, generator.generateNumber()) // 4
+
+            var previousGenerated = generated
+            generated = generator.generateNumber(true)
+            assertNotEquals(previousGenerated, generated)
+            assertEquals(generated, generator.generateNumber())
+
+            previousGenerated = generated
+            generated = generator.generateNumber()
+            assertNotEquals(previousGenerated, generated)
+            assertEquals(generated, generator.generateNumber())
+        }
+
+        // frozen
+        generator = PhoneNumberGenerator()
+        generated = generator.generateNumber()
+        generator.freezeAtIndex(4)
+        val frozen = generated[4]
+        repeat(2) {
+            val newGenerated = generator.generateNumber()
+            assertNotEquals(generated, newGenerated)
+            assertEquals(frozen, newGenerated[4])
+        }
+    }
+
+    @Test
     fun testFreezeAtIndex() {
         val generatedNumbers: MutableSet<IntList> = mutableSetOf()
         var generator = PhoneNumberGenerator()
