@@ -24,17 +24,14 @@ import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.phone.shufflecircle.ShuffleCircleViewModel
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
-import xyz.lbres.badselectorsv2.phone.utils.numDigits
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.listOfNulls
-import kotlin.test.assertFails
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
@@ -114,69 +111,70 @@ class ShuffleCircleFragmentTest {
         checkInitialUi()
     }
 
-//    @Test
-//    fun recreate() {
-//        val phoneNumber = (0..9).toList()
-//        val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
-//        val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
-//        mockDigitShuffling(returnValues)
-//        every { constructedWith<ShuffleCircleViewModel>().currentDigit } returnsMany digitPropValues
-//
-//        val scenario = launchFragment()
-//
-//        // set first 2 digits
-//        repeat(2) {
-//            circleButton(0).perform(forceClick())
-//            selectButton.perform(forceClick())
-//        }
-//        currentDigit.check(matches(withText("")))
-//        restartButton.check(isNotPresented())
-//        checkPhoneNumber(phoneNumber, 0..1)
-//
-//        // check that blank digit is persisted
-//        scenario.recreate()
-//        currentDigit.check(matches(withText("")))
-//        restartButton.check(isNotPresented())
-//        checkPhoneNumber(phoneNumber, 0..1)
-//
-//        // set currentDigit
-//        circleButton(0).perform(forceClick())
-//        currentDigit.check(matches(withText("0")))
-//        checkPhoneNumber(phoneNumber, 0..1)
-//
-//        // check that digit is persisted
-//        scenario.recreate()
-//        currentDigit.check(matches(withText("0")))
-//        checkPhoneNumber(phoneNumber, 0..1)
-//
-//        // get next digit
-//        circleButton(0).perform(forceClick())
-//        currentDigit.check(matches(withText("2")))
-//        selectButton.perform(forceClick()) // digit 3
-//        checkPhoneNumber(phoneNumber, 0..2)
-//
-//        // use saved digit
-//        circleButton(0).perform(forceClick())
-//        scenario.recreate()
-//        selectButton.perform(forceClick()) // digit 4
-//        checkPhoneNumber(phoneNumber, 0..3)
-//
-//        // finish phone number
-//        repeat(6) {
-//            circleButton(0).perform(forceClick())
-//            selectButton.perform(forceClick())
-//        }
-//        checkRestartUi(phoneNumber)
-//
-//        // check restart persisted
-//        scenario.recreate()
-//        checkRestartUi(phoneNumber)
-//
-//        // clear restart
-//        restartButton.perform(forceClick())
-//        scenario.recreate()
-//        checkInitialUi()
-//    }
+    @Test
+    fun recreate() {
+        val phoneNumber = (0..9).toList()
+        val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
+        val turns = returnValues.map { 0 to it }
+        val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
+        mockGetGenerated(turns)
+        every { constructedWith<ShuffleCircleViewModel>().currentDigit } returnsMany digitPropValues
+
+        val scenario = launchFragment()
+
+        // set first 2 digits
+        repeat(2) {
+            circleButton(0).perform(forceClick())
+            selectButton.perform(forceClick())
+        }
+        currentDigit.check(matches(withText("")))
+        restartButton.check(isNotPresented())
+        checkPhoneNumber(phoneNumber, 0..1)
+
+        // check that blank digit is persisted
+        scenario.recreate()
+        currentDigit.check(matches(withText("")))
+        restartButton.check(isNotPresented())
+        checkPhoneNumber(phoneNumber, 0..1)
+
+        // set currentDigit
+        circleButton(0).perform(forceClick())
+        currentDigit.check(matches(withText("0")))
+        checkPhoneNumber(phoneNumber, 0..1)
+
+        // check that digit is persisted
+        scenario.recreate()
+        currentDigit.check(matches(withText("0")))
+        checkPhoneNumber(phoneNumber, 0..1)
+
+        // get next digit
+        circleButton(0).perform(forceClick())
+        currentDigit.check(matches(withText("2")))
+        selectButton.perform(forceClick()) // digit 3
+        checkPhoneNumber(phoneNumber, 0..2)
+
+        // use saved digit
+        circleButton(0).perform(forceClick())
+        scenario.recreate()
+        selectButton.perform(forceClick()) // digit 4
+        checkPhoneNumber(phoneNumber, 0..3)
+
+        // finish phone number
+        repeat(6) {
+            circleButton(0).perform(forceClick())
+            selectButton.perform(forceClick())
+        }
+        checkRestartUi(phoneNumber)
+
+        // check restart persisted
+        scenario.recreate()
+        checkRestartUi(phoneNumber)
+
+        // clear restart
+        restartButton.perform(forceClick())
+        scenario.recreate()
+        checkInitialUi()
+    }
 
     private fun mockGetGenerated(turns: List<Pair<Int, Int>>) {
         val groupedResults: Map<Int, IntList> = turns.groupBy { it.first }
