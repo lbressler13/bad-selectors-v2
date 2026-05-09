@@ -5,6 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import xyz.lbres.badselectorsv2.testutils.mockkLog
 import xyz.lbres.badselectorsv2.testutils.runWithRetries
@@ -139,24 +140,49 @@ class FullNumberGeneratorTest {
         var generated = generator.generateNumber()
         val frozen: Array<Int?> = arrayOfNulls(numDigits)
 
+        val freezeDigits = { digits: List<Int> ->
+            digits.forEach {
+                generator.freezeAtIndex(it)
+                frozen[it] = generated[it]
+            }
+        }
+        val freezeDigit = { digit: Int -> freezeDigits(listOf(digit)) }
+        val generate = { repetitions: Int ->
+            repeat(repetitions) {
+                generated = generator.generateNumber()
+                generatedNumbers.add(generated)
+            }
+        }
+        // val generate = { generate(1) }
+
+        // default generator
+        generator = FullNumberGenerator()
+        val freezeOrder = listOf(6, 2, 4, 9, 0, 1, 3, 7, 8, 5)
+        repeat(10) {
+            generate(1)
+            freezeDigit(freezeOrder[it])
+            for (i in 0 until it) {
+                val digit = freezeOrder[it]
+                assertEquals(frozen[digit], generated[digit])
+            }
+        }
+        repeat(5) {
+            generate(1)
+            assertEquals(frozen.toList(), generated)
+        }
+
+        // reset values
         frozen.setAllValues(null)
         generatedNumbers.clear()
 
         // no digit repeats
         generator = FullNumberGenerator(false)
-        generated = generator.generateNumber()
-        generatedNumbers.add(generated)
+        generate(1)
         var frozenDigits = listOf(0, 1, 3, 5, 9)
-        frozenDigits.forEach {
-            generator.freezeAtIndex(it)
-            frozen[it] = generated[it]
-        }
-        repeat(6) { generatedNumbers.add(generator.generateNumber()) }
-        generated = generator.generateNumber()
-        generatedNumbers.add(generated)
-        generator.freezeAtIndex(7)
-        frozen[7] = generated[7]
-        repeat(2) { generatedNumbers.add(generator.generateNumber()) }
+        freezeDigits(frozenDigits)
+        generate(7)
+        freezeDigit(7)
+        generate(2)
         digitsRange.forEach {
             val digits = digitsAtIndex(it, generatedNumbers)
             when (it) {
@@ -165,8 +191,69 @@ class FullNumberGeneratorTest {
                 else -> assertEquals(digitsRange.toSet(), digits)
             }
         }
+        generate(2)
+        freezeDigits(listOf(2, 4, 6, 8))
+        repeat(5) {
+            generate(1)
+            assertEquals(frozen.toList(), generated)
+        }
+
+        // reset values
+        frozen.setAllValues(null)
+        generatedNumbers.clear()
 
         // full number repeats
+        generator = FullNumberGenerator(false, 2..4)
+        val mockRandomValues = listOf(2, 4, 3)
+        mockkStatic(IntRange::seededRandom) {
+            with(mockk<IntRange>()) {
+                every { IntRange(2, 4).seededRandom() } returnsMany mockRandomValues
+                generate(1)
+                freezeDigit(6) // freeze after 1 repeat
+                generate(2)
+                assertEquals(frozen[6], generated[6])
+                freezeDigits(listOf(4, 9))
+                val prevGenerated = generated
+                generate(1)
+                // nothing updates before repeat count it up
+                assertEquals(prevGenerated, generated)
+                generate(4)
+                // everything else updates when repeat count it up
+                repeat(numDigits) {
+                    if (it in listOf(4, 6, 9)) {
+                        assertEquals(frozen[it], generated[it])
+                    } else {
+                        assertNotEquals(prevGenerated[it], generated[it])
+                    }
+                }
+            }
+        }
+        unmockkStatic(IntRange::seededRandom)
+
+        // repeat freezing
+        generator = FullNumberGenerator()
+        generate(1)
+        freezeDigit(2)
+        val frozenVal = generated[2]
+        generate(2)
+        freezeDigit(2)
+        generate(2)
+        assertEquals(frozenVal, generated[2])
+
+        // reset values
+        frozen.setAllValues(null)
+        generatedNumbers.clear()
+
+        // freeze after reset
+        generator = FullNumberGenerator()
+        freezeDigit(3)
+        generator.reset()
+        while (generated[3] == frozen[3]) {
+            generate(1)
+        }
+        freezeDigit(3)
+        generate(1)
+        assertEquals(frozen[3], generated[3])
     }
 
     @Test
