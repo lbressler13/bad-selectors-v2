@@ -99,8 +99,6 @@ class ShuffleCircleFragmentTest {
     fun restart() {
         val returnValues = (0..9).toList()
         mockGetGenerated(returnValues)
-//        val turns = returnValues.map { 0 to it }
-//        mockGetGenerated(turns)
         launchFragment()
         repeat(10) {
             circleButton(0).perform(forceClick())
@@ -117,10 +115,8 @@ class ShuffleCircleFragmentTest {
         val phoneNumber = (0..9).toList()
         val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
         mockGetGenerated(returnValues)
-        // val turns = returnValues.map { 0 to it }
         val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
-        // mockGetGenerated(turns)
-        every { constructedWith<ShuffleCircleViewModel>().currentDigit } returnsMany digitPropValues
+        every { constructedWith<ShuffleCircleViewModel>().generatedDigit } returnsMany digitPropValues
 
         val scenario = launchFragment()
 
@@ -178,12 +174,13 @@ class ShuffleCircleFragmentTest {
         checkInitialUi()
     }
 
+    // mock digit generation in view model
     private fun mockGetGenerated(turns: List<Pair<Int, Int>>) {
+        // group mock returns by index
         val groupedResults: Map<Int, IntList> = turns.groupBy { it.first }
             .mapValues { kvp -> kvp.value.map { it.second } }
 
         mockkConstructor(ShuffleCircleViewModel::class)
-        // mock results per index
         groupedResults.forEach {
             every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(it.key) } returnsMany it.value
         }

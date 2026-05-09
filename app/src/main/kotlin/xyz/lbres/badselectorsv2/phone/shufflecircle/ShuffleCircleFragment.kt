@@ -74,7 +74,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
      * Initialize buttons in circle layout
      */
     private fun initButtonCircle() {
-        val initialDigit = viewModel.currentDigit
+        val initialDigit = viewModel.generatedDigit
         binding.currentDigit.text = if (initialDigit == -1 || initialDigit == null) {
             ""
         } else {

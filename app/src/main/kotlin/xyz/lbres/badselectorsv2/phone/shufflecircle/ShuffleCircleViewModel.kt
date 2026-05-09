@@ -21,7 +21,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     /**
      * Last value returned by [getGeneratedAtIndex]
      */
-    var currentDigit: Int? = -1
+    var generatedDigit: Int? = -1
         private set
 
     /**
@@ -39,13 +39,13 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      * @return [Int]?: number at [index], with some probability of null if [nullable] is true
      */
     fun getGeneratedAtIndex(index: Int): Int? {
-        val canUseNull = russianRoulette && currentIndex != 0 && currentDigit != null && currentDigit != -1
+        val canUseNull = russianRoulette && currentIndex != 0 && generatedDigit != null && generatedDigit != -1
 
         val probabilityNull = 0.001f // 1 / 1000
         val nextNull = createRandom().nextBoolean(probabilityNull)
-        currentDigit = simpleIf(canUseNull && nextNull, null, digitsOrder[index])
+        generatedDigit = simpleIf(canUseNull && nextNull, null, digitsOrder[index])
 
-        return currentDigit
+        return generatedDigit
     }
 
     /**
@@ -61,7 +61,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     override fun incrementCurrentIndex() {
         super.incrementCurrentIndex()
         digitsOrder = generator.generateNumber(forceRegenerate = true)
-        currentDigit = null
+        generatedDigit = null
     }
 
     /**
@@ -69,7 +69,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      */
     override fun resetData() {
         super.resetData()
-        currentDigit = -1
+        generatedDigit = -1
         generator.reset()
         updateDigits()
     }
