@@ -183,8 +183,8 @@ class FullNumberGeneratorTest {
         assertEquals(10, allGenerated.toSet().size)
         // ensure all 10 digits are included
         repeat(10) { index ->
-              val generatedAtDigit = allGenerated.map { it[index] }.toSet()
-              assertEquals(digitsRange.toSet(), generatedAtDigit)
+            val generatedAtDigit = allGenerated.map { it[index] }.toSet()
+            assertEquals(digitsRange.toSet(), generatedAtDigit)
         }
     }
 
@@ -215,7 +215,7 @@ class FullNumberGeneratorTest {
             val generated = generator.generateNumber()
             generated.forEachIndexed { index, value -> newGeneratedDigits[index].add(value) }
         }
-        repeat(10) { assertEquals(digitsRange.toSet(), newGeneratedDigits[it])}
+        repeat(10) { assertEquals(digitsRange.toSet(), newGeneratedDigits[it]) }
 
         // extended range
         generator = FullNumberGenerator(fullNumberRepeats = 2..4)

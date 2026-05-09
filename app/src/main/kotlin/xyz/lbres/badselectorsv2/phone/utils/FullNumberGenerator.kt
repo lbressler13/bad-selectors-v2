@@ -41,7 +41,10 @@ class FullNumberGenerator(
         }
 
         if (this.fullNumberRepeats != fullNumberRepeats) {
-            Log.w(null, "Invalid full number repeats range provided: $fullNumberRepeats. Using alternate range ${this.fullNumberRepeats} instead.")
+            /* ktlint-disable max-line-length */
+            val warningMessage = "Invalid full number repeats range provided: $fullNumberRepeats. Using alternate range ${this.fullNumberRepeats} instead."
+            /* ktlint-enable max-line-length */
+            Log.w(null, warningMessage)
         }
     }
 
