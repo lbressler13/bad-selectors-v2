@@ -98,8 +98,9 @@ class ShuffleCircleFragmentTest {
     @Test
     fun restart() {
         val returnValues = (0..9).toList()
-        val turns = returnValues.map { 0 to it }
-        mockGetGenerated(turns)
+        mockGetGenerated(returnValues)
+//        val turns = returnValues.map { 0 to it }
+//        mockGetGenerated(turns)
         launchFragment()
         repeat(10) {
             circleButton(0).perform(forceClick())
@@ -115,9 +116,10 @@ class ShuffleCircleFragmentTest {
     fun recreate() {
         val phoneNumber = (0..9).toList()
         val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
-        val turns = returnValues.map { 0 to it }
+        mockGetGenerated(returnValues)
+        // val turns = returnValues.map { 0 to it }
         val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
-        mockGetGenerated(turns)
+        // mockGetGenerated(turns)
         every { constructedWith<ShuffleCircleViewModel>().currentDigit } returnsMany digitPropValues
 
         val scenario = launchFragment()
@@ -193,6 +195,9 @@ class ShuffleCircleFragmentTest {
         val paramMatcher = EqMatcher(1..3)
         every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(any()) } returns (0..9).toList()
     }
+
+    @JvmName("mockGetGeneratedIntList")
+    private fun mockGetGenerated(returnValues: IntList) = mockGetGenerated(returnValues.map { 0 to it })
 
     // cannot launch scenario in before block due to mocking requirements
     private fun launchFragment(): ActivityScenario<BaseActivity> {
