@@ -39,6 +39,9 @@ class FullNumberGenerator(
      */
     private var repeatsRemaining = 0
 
+    /**
+     * Fixed digits that will not be changed when new number is generated
+     */
     private val frozenDigits: Array<Int?> = arrayOfNulls(digitsRange.size())
 
     /**
@@ -72,16 +75,14 @@ class FullNumberGenerator(
     fun generateNumber(): IntList {
         if (repeatsRemaining <= 0) {
             generatedNumber.mapInPlaceIndexed { index, _ ->
-                if (frozenDigits[index] != null) {
-                    frozenDigits[index]!!
-                } else {
-                    val remaining = remainingValues[index]
-                    if (remaining.isEmpty()) {
-                        resetRemainingAt(index)
-                    }
-                    if (allowRepeatDigits) {
-                        remaining.random()
-                    } else {
+                val remaining = remainingValues[index]
+                when {
+                    frozenDigits[index] != null -> frozenDigits[index]!!
+                    allowRepeatDigits -> remaining.random()
+                    else -> {
+                        if (remaining.isEmpty()) {
+                            resetRemainingAt(index)
+                        }
                         remaining.popRandom()!!
                     }
                 }
