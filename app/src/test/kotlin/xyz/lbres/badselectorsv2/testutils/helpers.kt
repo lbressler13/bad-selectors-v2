@@ -30,3 +30,27 @@ fun runWithFailMessage(failureMessage: String, block: () -> Unit) {
         throw e
     }
 }
+
+/**
+ * Run a test multiple times, and only throw AssertionError if thrown on all repetitions
+ *
+ * @param retries [Int]: number of retries
+ * @param block: code to run
+ */
+fun runWithRetries(retries: Int, block: () -> Unit) {
+    var error: AssertionError? = null
+    for (i in 0 until retries) {
+        try {
+            block()
+            error = null
+            break
+        } catch (e: AssertionError) {
+            val remainingRetries = retries - i - 1
+            printWarn("AssertionError thrown. $remainingRetries retries remaining.")
+            error = e
+        }
+    }
+    if (error != null) {
+        throw error
+    }
+}
