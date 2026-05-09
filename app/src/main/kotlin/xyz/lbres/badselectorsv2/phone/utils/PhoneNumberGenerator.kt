@@ -97,6 +97,7 @@ class PhoneNumberGenerator(
         }
 
         repeatsRemaining--
+        println("PNG: generateValue called with param $forceRegenerate. Returning ${generatedNumber.contentToString()}")
         return generatedNumber.toList()
     }
 

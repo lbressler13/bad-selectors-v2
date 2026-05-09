@@ -9,7 +9,7 @@ import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 
 class ShuffleCircleViewModel : BasePhoneViewModel() {
-    val russianRoulette = false
+    var russianRoulette = false
 
     private val generator = PhoneNumberGenerator(1..3)
 
@@ -36,17 +36,16 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      * Guaranteed to never return null twice in a row.
      *
      * @param index [Int]: index to retrieve number for
-     * @param nullable [Boolean]: if a null value can be returned, equivalent to the russian roulette setting.
-     * Defaults to `false`.
      * @return [Int]?: number at [index], with some probability of null if [nullable] is true
      */
-    fun getGeneratedAtIndex(index: Int, nullable: Boolean = false): Int? {
-        val canUseNull = nullable && currentDigit != null && currentDigit != -1
+    fun getGeneratedAtIndex(index: Int): Int? {
+        val canUseNull = russianRoulette && currentIndex != 0 && currentDigit != null && currentDigit != -1
 
         val probabilityNull = 0.001f // 1 / 1000
         val nextNull = createRandom().nextBoolean(probabilityNull)
         currentDigit = simpleIf(canUseNull && nextNull, null, digitsOrder[index])
 
+        println("VM: Got generated value $currentDigit at index $index. ${digitsOrder}")
         return currentDigit
     }
 
@@ -63,6 +62,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     override fun incrementCurrentIndex() {
         super.incrementCurrentIndex()
         digitsOrder = generator.generateNumber(forceRegenerate = true)
+        currentDigit = null
     }
 
     /**

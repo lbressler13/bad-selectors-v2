@@ -117,44 +117,53 @@ class ShuffleCircleViewModelTest {
     }
 
     @Test
-    fun testGetAtIndexNullable() {
+    fun testGetGeneratedAtIndexRussianRoulette() {
         mockkStatic("xyz.lbres.kotlinutils.random.ext.RandomExtKt")
         mockkStatic(::createRandom, IntRange::seededRandom, IntRange::seededShuffled)
 
-        val nextBoolValues = listOf(true, false, true, true, false, false, true)
+        val nextBoolValues = listOf(true, true, true, false, true, true, false, false, true)
         every { createRandom() } returns mockk {
             every { nextBoolean(any<Float>()) } returnsMany nextBoolValues
         }
 
-        setUpdateMocks(listOf(shuffledDigits))
+        setUpdateMocks(listOf(shuffledDigits), listOf(shuffledDigits))
         val vm = ShuffleCircleViewModel()
+        vm.russianRoulette = true
+
+        // first index, true is ignored
+        var result = vm.getGeneratedAtIndex(4)
+        assertEquals(shuffledDigits[4], result)
+        result = vm.getGeneratedAtIndex(1)
+        assertEquals(shuffledDigits[1], result)
+
+        vm.incrementCurrentIndex()
 
         // initial, true is ignored
-        var result = vm.getGeneratedAtIndex(4, true)
+        result = vm.getGeneratedAtIndex(4)
         assertEquals(shuffledDigits[4], result)
 
         // non-null digit, false
-        result = vm.getGeneratedAtIndex(6, true)
+        result = vm.getGeneratedAtIndex(6)
         assertEquals(shuffledDigits[6], result)
 
         // null digit, true
-        result = vm.getGeneratedAtIndex(6, true)
+        result = vm.getGeneratedAtIndex(6)
         assertNull(result)
 
         // previous digit is null, true is ignored
-        result = vm.getGeneratedAtIndex(1, true)
+        result = vm.getGeneratedAtIndex(1)
         assertEquals(shuffledDigits[1], result)
 
         // new digit, false
-        result = vm.getGeneratedAtIndex(7, true)
+        result = vm.getGeneratedAtIndex(7)
         assertEquals(shuffledDigits[7], result)
 
         // new digit, false
-        result = vm.getGeneratedAtIndex(0, true)
+        result = vm.getGeneratedAtIndex(0)
         assertEquals(shuffledDigits[0], result)
 
         // null digit, true
-        result = vm.getGeneratedAtIndex(2, true)
+        result = vm.getGeneratedAtIndex(2)
         assertNull(result)
     }
 
