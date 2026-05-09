@@ -36,29 +36,12 @@ class FullNumberGeneratorTest {
     @Test
     fun testGenerateWithoutRepeats() {
         val generator = FullNumberGenerator(allowRepeatDigits = false)
-        var previousGenerated: Set<IntList> = emptySet()
-        repeat(3) {
-            // generate numbers
-            val generatedNumbers: MutableSet<IntList> = mutableSetOf()
-            repeat(10) { generatedNumbers.add(generator.generateNumber()) }
-
-            // ensure that numbers were not all duplicates
-            generatedNumbers.forEach { number ->
-                assertFalse { number.all { it == number[0] } }
-            }
-            assertEquals(10, generatedNumbers.size)
-
+        testBehaviour(generator) { generatedNumbers ->
             // ensure all 10 digits are included
-            repeat(10) { index ->
+            repeat(numDigits) { index ->
                 val generatedAtDigit = generatedNumbers.map { it[index] }.toSet()
                 assertEquals(digitsRange.toSet(), generatedAtDigit)
             }
-
-            // ensure the generator isn't cycling through the same combinations
-            if (previousGenerated.isNotEmpty()) {
-                assertNotEquals(previousGenerated, generatedNumbers)
-            }
-            previousGenerated = generatedNumbers
         }
     }
 
@@ -149,10 +132,9 @@ class FullNumberGeneratorTest {
                     }
 
                     // ensure total generated numbers is correct
-                    assertEquals(10, generatedNumbers.size)
-                    assertEquals(10, generatedNumbers.toSet().size)
+                    assertEquals(numDigits, generatedNumbers.size)
                     // ensure all 10 digits are included
-                    repeat(10) { index ->
+                    repeat(numDigits) { index ->
                         val generatedAtDigit = generatedNumbers.map { it[index] }.toSet()
                         assertEquals(digitsRange.toSet(), generatedAtDigit)
                     }
@@ -171,19 +153,19 @@ class FullNumberGeneratorTest {
     fun testReset() {
         // with repeats
         var generator = FullNumberGenerator()
-        testDefaultBehaviour(generator, 2)
+        testDefaultBehaviour(generator)
         generator.reset()
-        testDefaultBehaviour(generator, 2)
+        testDefaultBehaviour(generator)
 
         // without repeats
         generator = FullNumberGenerator(false)
-        val generatedDigits = List(10) { mutableSetOf<Int>() }
+        val generatedDigits = List(numDigits) { mutableSetOf<Int>() }
         repeat(3) {
             val generated = generator.generateNumber()
             generated.forEachIndexed { index, value -> generatedDigits[index].add(value) }
         }
         generator.reset()
-        val newGeneratedDigits = List(10) { mutableSetOf<Int>() }
+        val newGeneratedDigits = List(numDigits) { mutableSetOf<Int>() }
         repeat(3) {
             val generated = generator.generateNumber()
             generated.forEachIndexed { index, value -> newGeneratedDigits[index].add(value) }
@@ -194,7 +176,7 @@ class FullNumberGeneratorTest {
             val generated = generator.generateNumber()
             generated.forEachIndexed { index, value -> newGeneratedDigits[index].add(value) }
         }
-        repeat(10) { assertEquals(digitsRange.toSet(), newGeneratedDigits[it]) }
+        repeat(numDigits) { assertEquals(digitsRange.toSet(), newGeneratedDigits[it]) }
 
         // extended range
         generator = FullNumberGenerator(fullNumberRepeats = 2..4)
@@ -214,7 +196,7 @@ class FullNumberGeneratorTest {
                 // interrupt
                 generator.reset()
 
-                // generate again
+                // 3
                 var prevGenerated = generated
                 generated = generator.generateNumber()
                 assertNotEquals(prevGenerated, generated)
@@ -230,35 +212,41 @@ class FullNumberGeneratorTest {
         }
     }
 
-    private fun testDefaultBehaviour(generator: FullNumberGenerator, repetitions: Int = 3) {
+    private fun testBehaviour(generator: FullNumberGenerator, validateNumbers: (Set<IntList>) -> Unit) {
         var previousGenerated: Set<IntList> = emptySet()
-        repeat(repetitions) {
+        repeat(3) {
             // generate numbers
             val generatedNumbers: MutableSet<IntList> = mutableSetOf()
-            repeat(10) { generatedNumbers.add(generator.generateNumber()) }
+            repeat(numDigits) { generatedNumbers.add(generator.generateNumber()) }
 
             // ensure that numbers were not all duplicates
             generatedNumbers.forEach { number ->
                 assertFalse { number.all { it == number[0] } }
             }
-            assertEquals(10, generatedNumbers.size)
+            assertEquals(numDigits, generatedNumbers.size)
 
             // validate selected digits
-            var containsAllCount = 0
-            repeat(10) { index ->
-                val generatedAtDigit = generatedNumbers.map { it[index] }.toSet()
-                assertTrue(digitsRange.toSet().containsAll(generatedAtDigit))
-                if (generatedAtDigit == digitsRange.toSet()) {
-                    containsAllCount++
-                }
-            }
-            assertNotEquals(10, containsAllCount)
+            validateNumbers(generatedNumbers)
 
             // ensure the generator isn't cycling through the same combinations
             if (previousGenerated.isNotEmpty()) {
                 assertNotEquals(previousGenerated, generatedNumbers)
             }
             previousGenerated = generatedNumbers
+        }
+    }
+
+    private fun testDefaultBehaviour(generator: FullNumberGenerator) {
+        testBehaviour(generator) { generatedNumbers ->
+            var containsAllCount = 0
+            repeat(numDigits) { index ->
+                val generatedAtDigit = generatedNumbers.map { it[index] }.toSet()
+                assertTrue(digitsRange.toSet().containsAll(generatedAtDigit))
+                if (generatedAtDigit == digitsRange.toSet()) {
+                    containsAllCount++
+                }
+            }
+            assertNotEquals(numDigits, containsAllCount)
         }
     }
 
