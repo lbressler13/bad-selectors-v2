@@ -1,10 +1,9 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
+import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.utils.createRandom
-import xyz.lbres.badselectorsv2.utils.seededRandom
-import xyz.lbres.badselectorsv2.utils.seededShuffled
 import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
@@ -12,15 +11,12 @@ import xyz.lbres.kotlinutils.random.ext.nextBoolean
 class ShuffleCircleViewModel : BasePhoneViewModel() {
     val russianRoulette = false
 
+    private val generator = PhoneNumberGenerator(fullNumberRepeats = 1..3)
+
     /**
      * Current order
      */
     private var digitsOrder: IntList = digitsRange.toList()
-
-    /**
-     * Number of updates until next shuffle
-     */
-    private var nextShuffle: Int = 0
 
     /**
      * Last value returned by [getDigitAtIndex]
@@ -58,23 +54,15 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      * Update count to next shuffle, and shuffle digits if necessary
      */
     fun updateDigits() {
-        if (nextShuffle == 0) {
-            digitsOrder = digitsRange.seededShuffled()
-
-            // next shuffle is between 0 and 2 updates
-            nextShuffle = (0..2).seededRandom()
-        } else {
-            nextShuffle--
-        }
+        digitsOrder = generator.generateNumber()
     }
 
     /**
      * Reset all data
      */
     fun reset() {
-        digitsOrder = digitsRange.toMutableList()
         currentDigit = -1
-        nextShuffle = 0
+        generator.reset()
         updateDigits()
     }
 }
