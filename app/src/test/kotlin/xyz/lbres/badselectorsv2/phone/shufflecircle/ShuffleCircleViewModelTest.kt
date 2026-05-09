@@ -103,7 +103,7 @@ class ShuffleCircleViewModelTest {
     }
 
     @Test
-    fun testupdateDigits() {
+    fun testUpdateDigits() {
         // mock shuffle digits
         val digitsValues = listOf(
             shuffledDigits,
