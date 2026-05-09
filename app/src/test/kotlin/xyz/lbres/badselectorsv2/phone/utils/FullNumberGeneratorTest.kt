@@ -62,9 +62,9 @@ class FullNumberGeneratorTest {
         generator = FullNumberGenerator(fullNumberRepeats = 4..4)
         repeat(5) { testRepeatedNumber(generator, 4, previousGenerated) }
 
-        withMockedRange(1..3, listOf(1, 3, 2, 1))
-        withMockedRange(4..8, listOf(5, 5, 5, 5))
-        withMockedRange(1 until 8, listOf(5, 5, 5, 5))
+        testMockedRangeRepeats(1..3, listOf(1, 3, 2, 1))
+        testMockedRangeRepeats(4..8, listOf(5, 5, 5, 5))
+        testMockedRangeRepeats(1 until 8, listOf(5, 5, 5, 5))
     }
 
     @Test
@@ -84,9 +84,9 @@ class FullNumberGeneratorTest {
         testFullRangeInvalid(5..2)
 
         // invalid range start only
-        withMockedRange(1..3, listOf(1, 3, 2, 1), initialRange = -3..3)
+        testMockedRangeRepeats(1..3, listOf(1, 3, 2, 1), initialRange = -3..3)
         verify { Log.w(null, errorMessage(-3..3, 1..3)) }
-        withMockedRange(1..7, listOf(5, 5, 5, 5), initialRange = 0 until 8)
+        testMockedRangeRepeats(1..7, listOf(5, 5, 5, 5), initialRange = 0 until 8)
         verify { Log.w(null, errorMessage(0..7, 1..7)) }
     }
 
@@ -344,7 +344,7 @@ class FullNumberGeneratorTest {
     /**
      * Validate number generation with given a repeats range
      */
-    private fun withMockedRange(range: IntRange, mockReturns: IntList, initialRange: IntRange? = null) {
+    private fun testMockedRangeRepeats(range: IntRange, mockReturns: IntList, initialRange: IntRange? = null) {
         withMockedRange(range, mockReturns) {
             val previousGenerated: MutableSet<IntList> = mutableSetOf()
             val generator = FullNumberGenerator(fullNumberRepeats = initialRange ?: range)
