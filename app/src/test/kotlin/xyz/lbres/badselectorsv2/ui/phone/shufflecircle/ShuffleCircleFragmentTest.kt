@@ -77,23 +77,14 @@ class ShuffleCircleFragmentTest {
             listOf(9 to 6, 7 to 6, 4 to 6, 1 to 3),
             listOf(6 to 3, 4 to 8, 3 to 9, 1 to 1, 4 to 2, 5 to 2, 9 to 2, 1 to 3),
         )
-        // add values for get after increment
+        // used in incrementCurrentDigit
         val forceTurns = turns.map { it.first() }.subList(1, turns.size)
-        println(forceTurns)
-        val augmentedTurns = turns.map {
-            it + listOf(it.last())
-        }
-        val returnValues = turns.flatMap { turn ->
-            turn.map { it.second }
-        }
         val phoneNumber = turns.map { it[it.lastIndex].second }
 
-        mockDigitShuffling(turns.flatten(), forceTurns)
+        mockGetGenerated(turns.flatten())
         launchFragment()
 
         turns.forEachIndexed { index, turn ->
-            // println("T: Turn: $index, $turn")
-            // println("T: Phone number: $phoneNumber")
             turn.forEach {
                 val buttonIndex = it.first
                 val value = it.second
@@ -210,6 +201,19 @@ class ShuffleCircleFragmentTest {
         // every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(any()) } returnsMany returnValues
         // justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
         // every { constructedWith<ShuffleCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
+    }
+
+    private fun mockGetGenerated(turns: List<Pair<Int, Int>>) {
+//        val returnValues = turns.map { kvp ->
+//            val index = kvp.first
+//            val value = kvp.second
+//            List(numDigits) { simpleIf(it == index, value, 0) }
+//        }
+        val returnValues = turns.map { it.second }
+        mockkConstructor(ShuffleCircleViewModel::class)
+        every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(any()) } returnsMany returnValues
+        justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
+        every { constructedWith<ShuffleCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
     }
 
     // cannot launch scenario in before block due to mocking requirements
