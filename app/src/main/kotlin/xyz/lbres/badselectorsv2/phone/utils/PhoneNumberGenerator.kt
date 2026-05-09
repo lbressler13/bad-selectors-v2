@@ -18,7 +18,7 @@ import xyz.lbres.kotlinutils.set.mutableset.ext.popRandom
  * The repeat count will be chosen randomly from this range each time that a number is generated.
  * Defaults to 1..1, which indicates that a new number will be generated each time.
  */
-class FullNumberGenerator(
+class PhoneNumberGenerator(
     private val allowRepeatDigits: Boolean = true,
     fullNumberRepeats: IntRange = 1..1,
 ) {

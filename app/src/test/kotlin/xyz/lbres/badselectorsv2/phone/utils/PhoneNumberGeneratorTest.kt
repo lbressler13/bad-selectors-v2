@@ -17,7 +17,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
-class FullNumberGeneratorTest {
+class PhoneNumberGeneratorTest {
     @BeforeTest
     fun setupTests() {
         mockkLog()
@@ -30,12 +30,13 @@ class FullNumberGeneratorTest {
 
     @Test
     fun testGenerateNumber() {
-        testDefaultBehaviour(FullNumberGenerator())
+        testDefaultBehaviour(PhoneNumberGenerator())
+        verify(exactly = 0) { Log.w(any(), any<String>()) }
     }
 
     @Test
     fun testGenerateNoDigitRepeats() {
-        val generator = FullNumberGenerator(allowRepeatDigits = false)
+        val generator = PhoneNumberGenerator(allowRepeatDigits = false)
         testBehaviour(generator) { generatedNumbers ->
             // ensure all 10 digits are included
             repeat(numDigits) { index ->
@@ -43,26 +44,27 @@ class FullNumberGeneratorTest {
                 assertEquals(digitsRange.toSet(), generatedAtDigit)
             }
         }
+        verify(exactly = 0) { Log.w(any(), any<String>()) }
     }
 
     @Test
     fun testGenerateFullRepeats() {
         val previousGenerated: MutableSet<IntList> = mutableSetOf()
 
-        var generator = FullNumberGenerator(fullNumberRepeats = 2..2)
+        var generator = PhoneNumberGenerator(fullNumberRepeats = 2..2)
         repeat(5) {
             val generated = testRepeatedNumber(generator, 2, previousGenerated)
             previousGenerated.add(generated)
         }
 
-        generator = FullNumberGenerator(fullNumberRepeats = 2 until 3)
+        generator = PhoneNumberGenerator(fullNumberRepeats = 2 until 3)
         repeat(2) {
             val generated = testRepeatedNumber(generator, 2, previousGenerated)
             previousGenerated.add(generated)
         }
 
         previousGenerated.clear()
-        generator = FullNumberGenerator(fullNumberRepeats = 4..4)
+        generator = PhoneNumberGenerator(fullNumberRepeats = 4..4)
         repeat(5) {
             val generated = testRepeatedNumber(generator, 4, previousGenerated)
             previousGenerated.add(generated)
@@ -73,6 +75,7 @@ class FullNumberGeneratorTest {
             testMockedRange(4..8, listOf(5, 5, 5, 5))
             testMockedRange(1 until 8, listOf(5, 5, 5, 5))
         }
+        verify(exactly = 0) { Log.w(any(), any<String>()) }
     }
 
     @Test
@@ -82,7 +85,7 @@ class FullNumberGeneratorTest {
         }
 
         val testFullRangeInvalid = { range: IntRange ->
-            testDefaultBehaviour(FullNumberGenerator(fullNumberRepeats = range))
+            testDefaultBehaviour(PhoneNumberGenerator(fullNumberRepeats = range))
             verify { Log.w(null, errorMessage(range, 1..1)) }
         }
 
@@ -102,7 +105,7 @@ class FullNumberGeneratorTest {
 
     @Test
     fun testGenerateNoDigitRepeatsAndFullRepeats() {
-        val generator = FullNumberGenerator(false, 2..6)
+        val generator = PhoneNumberGenerator(false, 2..6)
         var previousGenerated: Set<IntList> = emptySet()
         val mockRandomValues = listOf(2, 5, 4, 3, 3, 6, 2, 5, 4, 2)
         mockkStatic(IntRange::seededRandom) {
@@ -128,18 +131,19 @@ class FullNumberGeneratorTest {
                 }
             }
         }
+        verify(exactly = 0) { Log.w(any(), any<String>()) }
     }
 
     @Test
     fun testReset() {
         // with digit repeats
-        var generator = FullNumberGenerator()
+        var generator = PhoneNumberGenerator()
         testDefaultBehaviour(generator)
         generator.reset()
         testDefaultBehaviour(generator)
 
         // without digit repeats
-        generator = FullNumberGenerator(false)
+        generator = PhoneNumberGenerator(false)
         val generatedNumbers = mutableSetOf<IntList>()
         repeat(3) { generatedNumbers.add(generator.generateNumber()) }
         generator.reset()
@@ -159,7 +163,7 @@ class FullNumberGeneratorTest {
 
     @Test
     fun testResetFullRepeats() {
-        val generator = FullNumberGenerator(fullNumberRepeats = 2..4)
+        val generator = PhoneNumberGenerator(fullNumberRepeats = 2..4)
         val mockRandomValues = listOf(2, 4, 3, 2)
         mockkStatic(IntRange::seededRandom) {
             with(mockk<IntRange>()) {
@@ -190,7 +194,7 @@ class FullNumberGeneratorTest {
     /**
      * Test that a generator is generating unique numbers and perform extra validation on the generated numbers
      */
-    private fun testBehaviour(generator: FullNumberGenerator, validateNumbers: (Set<IntList>) -> Unit) {
+    private fun testBehaviour(generator: PhoneNumberGenerator, validateNumbers: (Set<IntList>) -> Unit) {
         var previousGenerated: Set<IntList> = emptySet()
         repeat(3) {
             // generate numbers
@@ -215,7 +219,7 @@ class FullNumberGeneratorTest {
     /**
      * Test that generator behaves like it was initialized with default parameters
      */
-    private fun testDefaultBehaviour(generator: FullNumberGenerator) {
+    private fun testDefaultBehaviour(generator: PhoneNumberGenerator) {
         testBehaviour(generator) { generatedNumbers ->
             var containsAllCount = 0
             repeat(numDigits) { index ->
@@ -234,7 +238,7 @@ class FullNumberGeneratorTest {
      */
     private fun testMockedRange(repeatsRange: IntRange, mockRandomValues: IntList, initialRange: IntRange? = null) {
         val previousGenerated: MutableSet<IntList> = mutableSetOf()
-        val generator = FullNumberGenerator(fullNumberRepeats = initialRange ?: repeatsRange)
+        val generator = PhoneNumberGenerator(fullNumberRepeats = initialRange ?: repeatsRange)
 
         with(mockk<IntRange>()) {
             every { IntRange(repeatsRange.first, repeatsRange.last).seededRandom() } returnsMany mockRandomValues
@@ -251,7 +255,7 @@ class FullNumberGeneratorTest {
      * Validate that a number doesn't change and doesn't match previous numbers
      */
     private fun testRepeatedNumber(
-        generator: FullNumberGenerator,
+        generator: PhoneNumberGenerator,
         repetitions: Int,
         previousGenerated: Set<IntList> = emptySet(),
     ): IntList {
