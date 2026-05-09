@@ -8,6 +8,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import xyz.lbres.badselectorsv2.testutils.mockkLog
 import xyz.lbres.badselectorsv2.utils.seededRandom
+import xyz.lbres.kotlinutils.array.ext.setAllValues
 import xyz.lbres.kotlinutils.list.IntList
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -131,12 +132,69 @@ class FullNumberGeneratorTest {
     }
 
     @Test
+    fun testFreezeAtIndex() {
+        val generatedNumbers: MutableSet<IntList> = mutableSetOf()
+        var generator = FullNumberGenerator()
+        var generated = generator.generateNumber()
+        val frozen: Array<Int?> = arrayOfNulls(numDigits)
+
+        frozen.setAllValues(null)
+        generatedNumbers.clear()
+
+        // no digit repeats
+        generator = FullNumberGenerator(false)
+        generated = generator.generateNumber()
+        generatedNumbers.add(generated)
+        var frozenDigits = listOf(0, 1, 3, 5, 9)
+        frozenDigits.forEach {
+            generator.freezeAtIndex(it)
+            frozen[it] = generated[it]
+        }
+        repeat(6) { generatedNumbers.add(generator.generateNumber()) }
+        generated = generator.generateNumber()
+        generatedNumbers.add(generated)
+        generator.freezeAtIndex(7)
+        frozen[7] = generated[7]
+        repeat(2) { generatedNumbers.add(generator.generateNumber()) }
+        digitsRange.forEach {
+            val digits = digitsAtIndex(it, generatedNumbers)
+            when (it) {
+                in frozenDigits -> assertEquals(setOf(frozen[it]), digits)
+                7 -> assertEquals(8, digits.size)
+                else -> assertEquals(digitsRange.toSet(), digits)
+            }
+        }
+
+        // full number repeats
+    }
+
+    @Test
     fun testReset() {
         // with digit repeats
         var generator = FullNumberGenerator()
         testDefaultBehaviour(generator)
         generator.reset()
         testDefaultBehaviour(generator)
+
+        // frozen digits
+        val generated = generator.generateNumber()
+        val frozen = generated[2]
+        generator.freezeAtIndex(2)
+        generator.reset()
+        // retries because there's a 10% chance of a match each time
+        var error: AssertionError? = null
+        for (i in 0..2) {
+            try {
+                assertNotEquals(frozen, generator.generateNumber()[2])
+                error = null
+                break
+            } catch (e: AssertionError) {
+                error = e
+            }
+        }
+        if (error != null) {
+            throw error
+        }
 
         // without digit repeats
         generator = FullNumberGenerator(false)
