@@ -99,7 +99,7 @@ class PhoneNumberGenerator(
      * Freeze value at a given position.
      * Future generated numbers will have the same values at this position until [reset] is called.
      *
-     * @param index [Int]
+     * @param index [Int]: position to freeze value
      */
     fun freezeAtIndex(index: Int) {
         if (generatedNumber[index] != -1) {

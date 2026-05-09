@@ -282,7 +282,7 @@ class PhoneNumberGeneratorTest {
                 every { IntRange(2, 4).seededRandom() } returnsMany mockRandomValues
 
                 // 2
-                testRepeatedNumber(generator, 2, add = false)
+                testRepeatedNumber(generator, 2, add = false) // reset after 2 generations
 
                 // 4
                 var generated = testRepeatedNumber(generator, 2, add = false)
@@ -346,7 +346,7 @@ class PhoneNumberGeneratorTest {
     }
 
     /**
-     * Validate number generation with given a repeats range
+     * Validate number generation given a repeats range
      */
     private fun testMockedRangeRepeats(range: IntRange, mockReturns: IntList, initialRange: IntRange? = null) {
         withMockedRange(range, mockReturns) {
