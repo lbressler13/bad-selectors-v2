@@ -2,6 +2,7 @@ package xyz.lbres.badselectorsv2.phone.utils
 
 import android.util.Log
 import xyz.lbres.badselectorsv2.utils.seededRandom
+import xyz.lbres.kotlinutils.intarray.ext.mapInPlaceIndexed
 import xyz.lbres.kotlinutils.intarray.ext.setAllValues
 import xyz.lbres.kotlinutils.intarray.intArrayOfValue
 import xyz.lbres.kotlinutils.list.IntList
@@ -40,15 +41,16 @@ class FullNumberGenerator(
     // private val frozenDigits: Array<Int?> = arrayOfNulls(digitsRange.size())
 
     /**
-     * The next suggested number
+     * The next generated number
      */
     private var generatedNumber: IntArray = intArrayOfValue(numDigits, -1)
 
     init {
+        // start of repeats range must be >= 1, and first must be before last
         this.fullNumberRepeats = when {
             fullNumberRepeats.first > fullNumberRepeats.last -> 1..1
             fullNumberRepeats.last < 1 -> 1..1
-            fullNumberRepeats.first <= 1 -> 1..fullNumberRepeats.last
+            fullNumberRepeats.first < 1 -> 1..fullNumberRepeats.last
             else -> fullNumberRepeats
         }
 
@@ -62,27 +64,23 @@ class FullNumberGenerator(
 
     /**
      * Update the value of the generated number.
-     * Pulls from [remainingValues] if [allowRepeatDigits] is false
+     * Pulls from the remaining values list if [allowRepeatDigits] is false
      *
      * @return [IntList]: new generated number
      */
     fun generateNumber(): IntList {
         if (repeatsRemaining <= 0) {
-            // reset digits that have no remaining options
-            for (digit in digitsRange) {
-                if (!allowRepeatDigits && remainingValues[digit].isEmpty()) {
-                    resetRemainingAt(digit)
+            generatedNumber.mapInPlaceIndexed { index, _ ->
+                val remaining = remainingValues[index]
+                if (remaining.isEmpty()) {
+                    resetRemainingAt(index)
                 }
-            }
 
-            // generate number
-            remainingValues.forEachIndexed { index, remaining ->
-                val result = if (allowRepeatDigits) {
+                if (allowRepeatDigits) {
                     remaining.random()
                 } else {
                     remaining.popRandom()!!
                 }
-                generatedNumber[index] = result
             }
 
             repeatsRemaining = fullNumberRepeats.seededRandom()
