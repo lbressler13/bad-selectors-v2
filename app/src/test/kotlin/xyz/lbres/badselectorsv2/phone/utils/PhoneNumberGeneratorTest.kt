@@ -20,6 +20,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
+// TODO split file
+
 class PhoneNumberGeneratorTest {
     @BeforeTest
     fun setupTests() {
@@ -29,6 +31,11 @@ class PhoneNumberGeneratorTest {
     @AfterTest
     fun cleanupTest() {
         unmockkAll()
+    }
+
+    @Test
+    fun testAlternateConstructor() {
+        // TODO
     }
 
     @Test

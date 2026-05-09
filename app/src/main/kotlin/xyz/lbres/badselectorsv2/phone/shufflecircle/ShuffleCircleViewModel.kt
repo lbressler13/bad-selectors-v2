@@ -11,7 +11,8 @@ import xyz.lbres.kotlinutils.random.ext.nextBoolean
 class ShuffleCircleViewModel : BasePhoneViewModel() {
     val russianRoulette = false
 
-    private val generator = PhoneNumberGenerator(fullNumberRepeats = 1..3)
+    // private val generator = PhoneNumberGenerator(fullNumberRepeats = 1..3)
+    private val generator = PhoneNumberGenerator(1..3)
 
     /**
      * Current order
@@ -40,12 +41,14 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      * Defaults to `false`.
      * @return [Int]?: number at [index], with some probability of null if [nullable] is true
      */
+    // TODO rename this, too similar to getDigit
     fun getDigitAtIndex(index: Int, nullable: Boolean = false): Int? {
         val canUseNull = nullable && currentDigit != null && currentDigit != -1
 
         val probabilityNull = 0.001f // 1 / 1000
         val nextNull = createRandom().nextBoolean(probabilityNull)
         currentDigit = simpleIf(canUseNull && nextNull, null, digitsOrder[index])
+        println("Called getDigitAtIndex with index $index. Returning $currentDigit")
 
         return currentDigit
     }
@@ -55,6 +58,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      */
     fun updateDigits() {
         digitsOrder = generator.generateNumber()
+        println("Called generate number. Result: $digitsOrder")
     }
 
     /**
@@ -63,12 +67,14 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     override fun incrementCurrentIndex() {
         super.incrementCurrentIndex()
         digitsOrder = generator.generateNumber(forceRegenerate = true)
+        println("Called generate number with force update. Result: $digitsOrder")
     }
 
     /**
      * Reset all data
      */
-    fun reset() {
+    override fun resetData() {
+        super.resetData()
         currentDigit = -1
         generator.reset()
         updateDigits()
