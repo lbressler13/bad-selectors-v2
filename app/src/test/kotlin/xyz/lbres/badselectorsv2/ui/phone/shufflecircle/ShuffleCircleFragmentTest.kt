@@ -34,6 +34,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.listOfNulls
+import kotlin.test.assertFails
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
@@ -97,20 +98,21 @@ class ShuffleCircleFragmentTest {
         checkRestartUi(phoneNumber)
     }
 
-//    @Test
-//    fun restart() {
-//        val returnValues = (0..9).toList()
-//        mockDigitShuffling(returnValues)
-//        launchFragment()
-//        repeat(10) {
-//            circleButton(0).perform(forceClick())
-//            selectButton.perform(forceClick())
-//        }
-//        checkPhoneNumber(returnValues)
-//
-//        restartButton.perform(forceClick())
-//        checkInitialUi()
-//    }
+    @Test
+    fun restart() {
+        val returnValues = (0..9).toList()
+        val turns = returnValues.map { 0 to it }
+        mockGetGenerated(turns)
+        launchFragment()
+        repeat(10) {
+            circleButton(0).perform(forceClick())
+            selectButton.perform(forceClick())
+        }
+        checkPhoneNumber(returnValues)
+
+        restartButton.perform(forceClick())
+        checkInitialUi()
+    }
 
 //    @Test
 //    fun recreate() {
