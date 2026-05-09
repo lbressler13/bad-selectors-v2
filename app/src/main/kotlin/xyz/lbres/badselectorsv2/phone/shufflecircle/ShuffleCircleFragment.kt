@@ -110,7 +110,6 @@ class ShuffleCircleFragment : BasePhoneFragment() {
                 setRestartUi()
             }
 
-            viewModel.resetData()
             binding.currentDigit.text = ""
         }
     }

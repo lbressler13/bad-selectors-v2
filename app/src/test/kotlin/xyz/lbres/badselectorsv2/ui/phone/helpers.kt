@@ -28,11 +28,11 @@ val digitViews = listOf(
  * @param digitsToCheck [List]<Int>: list of digits to check, defaults to full range of digits
  */
 fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: List<Int> = (0..9).toList()) {
-    println("H: Digits to check: $expectedNumber, $digitsToCheck")
+    // println("H: Digits to check: $expectedNumber, $digitsToCheck")
     repeat(10) {
         val expectedText = expectedNumber[it]?.toString() ?: "_"
         if (it in digitsToCheck) {
-            println("H: Checking index $it")
+            // println("H: Checking index $it")
             digitViews[it].check(matches(allOf(isDisplayed(), withText(expectedText))))
         }
     }

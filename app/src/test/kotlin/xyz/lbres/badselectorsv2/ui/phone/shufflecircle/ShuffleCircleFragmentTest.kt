@@ -78,7 +78,8 @@ class ShuffleCircleFragmentTest {
             listOf(6 to 3, 4 to 8, 3 to 9, 1 to 1, 4 to 2, 5 to 2, 9 to 2, 1 to 3),
         )
         // add values for get after increment
-        val forceTurns = turns.map { it.first() }
+        val forceTurns = turns.map { it.first() }.subList(1, turns.size)
+        println(forceTurns)
         val augmentedTurns = turns.map {
             it + listOf(it.last())
         }
@@ -91,8 +92,8 @@ class ShuffleCircleFragmentTest {
         launchFragment()
 
         turns.forEachIndexed { index, turn ->
-            println("T: Turn: $index, $turn")
-            println("T: Phone number: $phoneNumber")
+            // println("T: Turn: $index, $turn")
+            // println("T: Phone number: $phoneNumber")
             turn.forEach {
                 val buttonIndex = it.first
                 val value = it.second

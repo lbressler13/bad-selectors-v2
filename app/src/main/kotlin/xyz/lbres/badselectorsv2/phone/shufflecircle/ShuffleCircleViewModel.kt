@@ -54,6 +54,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      */
     fun updateDigits() {
         digitsOrder = generator.generateNumber()
+        println("VM: Generating numbers in updateDigits: $digitsOrder")
     }
 
     /**
@@ -62,6 +63,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     override fun incrementCurrentIndex() {
         super.incrementCurrentIndex()
         digitsOrder = generator.generateNumber(forceRegenerate = true)
+        println("VM: Force generating numbers in increment: $digitsOrder")
         currentDigit = null
     }
 
