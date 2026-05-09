@@ -7,6 +7,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import xyz.lbres.badselectorsv2.testutils.mockkLog
+import xyz.lbres.badselectorsv2.testutils.runWithRetries
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.kotlinutils.array.ext.setAllValues
 import xyz.lbres.kotlinutils.list.IntList
@@ -182,18 +183,8 @@ class FullNumberGeneratorTest {
         generator.freezeAtIndex(2)
         generator.reset()
         // retries because there's a 10% chance of a match each time
-        var error: AssertionError? = null
-        for (i in 0..2) {
-            try {
-                assertNotEquals(frozen, generator.generateNumber()[2])
-                error = null
-                break
-            } catch (e: AssertionError) {
-                error = e
-            }
-        }
-        if (error != null) {
-            throw error
+        runWithRetries(3) {
+            assertNotEquals(frozen, generator.generateNumber()[2])
         }
 
         // without digit repeats
