@@ -8,21 +8,33 @@ import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.set.mutableset.ext.popRandom
 
 /**
- * Generate a randomized phone number
+ * Generator for creating a randomized phone number
+ *
+ * @param allowRepeatDigits [Boolean]: If values can be repeated at a position. If true, each generated number will have a new value at every position.
+ * When all 10 values have been used, the list of remaining values will reset.
+ * Defaults to false.
+ * @param fullNumberRepeats [IntRange]: The number of times that a generated number can occur before a new number is generated.
+ * The repeat count will be chosen randomly from this range each time that a number is generated.
+ * Defaults to 1..1, which indicates that a new number will be generated each time.
  */
 class FullNumberGenerator(
     private val allowRepeatDigits: Boolean = true,
     fullNumberRepeats: IntRange = 1..1,
 ) {
-
-    private val fullNumberRepeats: IntRange
-
     /**
      * Remaining values for each digit
      */
     private val remainingValues: Array<MutableSet<Int>> = Array(numDigits) { digitsRange.toMutableSet() }
 
-    private var nextShuffle = 0
+    /**
+     * Number of times that a generated number can occur before a new number is generated
+     */
+    private val fullNumberRepeats: IntRange
+
+    /**
+     * Number of generations remaining before new number is generated
+     */
+    private var repeatsRemaining = 0
 
     // TODO
     // private val frozenDigits: Array<Int?> = arrayOfNulls(digitsRange.size())
@@ -55,7 +67,7 @@ class FullNumberGenerator(
      * @return [IntList]: new generated number
      */
     fun generateNumber(): IntList {
-        if (nextShuffle <= 0) {
+        if (repeatsRemaining <= 0) {
             // reset digits that have no remaining options
             for (digit in digitsRange) {
                 if (!allowRepeatDigits && remainingValues[digit].isEmpty()) {
@@ -66,18 +78,17 @@ class FullNumberGenerator(
             // generate number
             remainingValues.forEachIndexed { index, remaining ->
                 val result = if (allowRepeatDigits) {
-                    remaining.random() // TODO seeded
+                    remaining.random()
                 } else {
                     remaining.popRandom()!!
                 }
                 generatedNumber[index] = result
             }
 
-            nextShuffle = fullNumberRepeats.seededRandom() - 1
-        } else {
-            nextShuffle--
+            repeatsRemaining = fullNumberRepeats.seededRandom()
         }
 
+        repeatsRemaining--
         return generatedNumber.toList()
     }
 
@@ -96,6 +107,6 @@ class FullNumberGenerator(
     fun reset() {
         remainingValues.indices.forEach { resetRemainingAt(it) }
         generatedNumber.setAllValues(-1)
-        nextShuffle = 0
+        repeatsRemaining = 0
     }
 }

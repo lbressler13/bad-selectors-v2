@@ -109,21 +109,15 @@ class FullNumberGeneratorTest {
             "Invalid full number repeats range provided: $initialRange. Using alternate range $newRange instead."
         }
 
-        var range = 0..0
-        testDefaultBehaviour(FullNumberGenerator(fullNumberRepeats = range))
-        verify { Log.w(null, errorMessage(range, 1..1)) }
+        val testDefaultRange = { range: IntRange ->
+            testDefaultBehaviour(FullNumberGenerator(fullNumberRepeats = range))
+            verify { Log.w(null, errorMessage(range, 1..1)) }
+        }
 
-        range = -2..-1
-        testDefaultBehaviour(FullNumberGenerator(fullNumberRepeats = range))
-        verify { Log.w(null, errorMessage(range, 1..1)) }
-
-        range = -2 until 2
-        testDefaultBehaviour(FullNumberGenerator(fullNumberRepeats = range))
-        verify { Log.w(null, errorMessage(range, 1..1)) }
-
-        range = 5..2
-        testDefaultBehaviour(FullNumberGenerator(fullNumberRepeats = range))
-        verify { Log.w(null, errorMessage(range, 1..1)) }
+        testDefaultRange(0..0)
+        testDefaultRange(-2..-1)
+        testDefaultRange(-2 until 2)
+        testDefaultRange(5..2)
 
         // range start modified
         mockkStatic(IntRange::seededRandom) {
@@ -136,55 +130,40 @@ class FullNumberGeneratorTest {
 
     @Test
     fun testGenerateNoRepeatsAndExtendedTime() {
-//        repeat(3) {
-//            // generate numbers
-//            val generatedNumbers: MutableSet<IntList> = mutableSetOf()
-//            repeat(10) { generatedNumbers.add(generator.generateNumber()) }
-//
-//            // ensure that numbers were not all duplicates
-//            generatedNumbers.forEach { number ->
-//                assertFalse { number.all { it == number[0] } }
-//            }
-//            assertEquals(10, generatedNumbers.size)
-//
-//            // ensure all 10 digits are included
-//            repeat(10) { index ->
-//                val generatedAtDigit = generatedNumbers.map { it[index] }.toSet()
-//                assertEquals(digitsRange.toSet(), generatedAtDigit)
-//            }
-//
-//            // ensure the generator isn't cycling through the same combinations
-//            if (previousGenerated.isNotEmpty()) {
-//                assertNotEquals(previousGenerated, generatedNumbers)
-//            }
-//            previousGenerated = generatedNumbers
-//        }
-
-        // TODO run test several times
-        val allGenerated: MutableList<IntList> = mutableListOf()
         val generator = FullNumberGenerator(false, 2..6)
+        var previousGenerated: Set<IntList> = emptySet()
         val mockRandomValues = listOf(2, 5, 4, 3, 3, 6, 2, 5, 4, 2)
         mockkStatic(IntRange::seededRandom) {
-            with(mockk<IntRange>()) {
-                every { IntRange(2, 6).seededRandom() } returnsMany mockRandomValues
+            repeat(3) {
+                with(mockk<IntRange>()) {
+                    every { IntRange(2, 6).seededRandom() } returnsMany mockRandomValues
 
-                mockRandomValues.forEach {
-                    // add numbers
-                    val generated = generator.generateNumber()
-                    repeat(it - 1) {
-                        assertEquals(generated, generator.generateNumber())
+                    // generate numbers
+                    val generatedNumbers: MutableSet<IntList> = mutableSetOf()
+                    mockRandomValues.forEach {
+                        val generated = generator.generateNumber()
+                        repeat(it - 1) {
+                            assertEquals(generated, generator.generateNumber())
+                        }
+                        generatedNumbers.add(generated)
                     }
-                    allGenerated.add(generated)
+
+                    // ensure total generated numbers is correct
+                    assertEquals(10, generatedNumbers.size)
+                    assertEquals(10, generatedNumbers.toSet().size)
+                    // ensure all 10 digits are included
+                    repeat(10) { index ->
+                        val generatedAtDigit = generatedNumbers.map { it[index] }.toSet()
+                        assertEquals(digitsRange.toSet(), generatedAtDigit)
+                    }
+
+                    // ensure the generator isn't cycling through the same combinations
+                    if (previousGenerated.isNotEmpty()) {
+                        assertNotEquals(previousGenerated, generatedNumbers)
+                    }
+                    previousGenerated = generatedNumbers
                 }
             }
-        }
-
-        assertEquals(10, allGenerated.size)
-        assertEquals(10, allGenerated.toSet().size)
-        // ensure all 10 digits are included
-        repeat(10) { index ->
-            val generatedAtDigit = allGenerated.map { it[index] }.toSet()
-            assertEquals(digitsRange.toSet(), generatedAtDigit)
         }
     }
 
