@@ -1,7 +1,6 @@
 package xyz.lbres.badselectorsv2.phone.shufflecircle
 
 import io.mockk.EqMatcher
-import io.mockk.OfTypeMatcher
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -17,7 +16,6 @@ import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import kotlin.collections.listOf
 import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -30,7 +28,7 @@ class ShuffleCircleViewModelTest {
 
     // @BeforeTest
     // fun setupTest() {
-        // mockkConstructor(PhoneNumberGenerator::class)
+    // mockkConstructor(PhoneNumberGenerator::class)
     // }
 
     @AfterTest
@@ -171,35 +169,11 @@ class ShuffleCircleViewModelTest {
         }
     }
 
-//    @Test
-//    fun simpleTest() {
-//        val mockValues = listOf(
-//            shuffledDigits,
-//            (0..9).toList()
-//        )
-//        mockkConstructor(PhoneNumberGenerator::class)
-//        val intRangeMatcher = EqMatcher(fullNumberRepeats)
-//        every { constructedWith<PhoneNumberGenerator>(intRangeMatcher).generateNumber() } returnsMany mockValues
-//        every { constructedWith<PhoneNumberGenerator>(intRangeMatcher).generateNumber(false) } returns shuffledDigits
-//        every { constructedWith<PhoneNumberGenerator>(intRangeMatcher).generateNumber(true) } returns (0..9).toList()
-//
-//        val vm = ShuffleCircleViewModel()
-//        var generated = getDigits(vm)
-//        println(generated)
-//        assertEquals(shuffledDigits, generated)
-//
-//        vm.incrementCurrentIndex()
-//        generated = getDigits(vm)
-//        println(generated)
-//        assertEquals((0..9).toList(), generated)
-//    }
-
     @Test
     fun testResetData() {
         // mock shuffle digits
         val digitsValues = listOf(
             shuffledDigits,
-            listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
             listOf(3, 6, 2, 7, 9, 8, 5, 4, 1, 0),
         )
         val forceDigitsValues = listOf(
@@ -209,10 +183,7 @@ class ShuffleCircleViewModelTest {
 
         // initialize vm
         val vm = ShuffleCircleViewModel()
-        // var generated = getDigits(vm)
-        // println(generated)
         checkDigits(vm, digitsValues[0])
-        // assertEquals(digitsValues[0], generated)
 
         // set index 0 = 5
         vm.setCurrentDigit(5)
@@ -231,19 +202,13 @@ class ShuffleCircleViewModelTest {
         assertEquals(1, vm.currentIndex)
 
         // validate generated number
-        // generated = getDigits(vm)
-        // println(generated)
         checkDigits(vm, forceDigitsValues[0])
-        // assertEquals(forceDigitsValues[0], generated)
 
         // validate that the must recently returned value is 0
         vm.getDigitAtIndex(0)
         assertEquals(0, vm.currentDigit)
 
         vm.resetData()
-        // generated = getDigits(vm)
-        // println(generated)
-        // assertEquals(digitsValues[1], generated)
         assertEquals(0, vm.currentIndex)
         assertEquals(vm.currentDigit, -1)
         checkDigits(vm, digitsValues[1])
@@ -252,17 +217,13 @@ class ShuffleCircleViewModelTest {
     private fun setUpdateMocks(mockValues: List<IntList>, forceMockValues: List<IntList> = emptyList()) {
         val paramMatcher = EqMatcher(fullNumberRepeats)
         mockkConstructor(PhoneNumberGenerator::class)
-        every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber() } returnsMany mockValues
-        // every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(false) } returns (2..11).toList()
         every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(false) } returnsMany mockValues
         every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(true) } returnsMany forceMockValues
-        // every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(true) } returns (0..9).toList()
         every { constructedWith<PhoneNumberGenerator>(paramMatcher).reset() } answers { callOriginal() }
     }
 
-    // private fun getDigits(vm: ShuffleCircleViewModel) = List(numDigits) { vm.getDigitAtIndex(it) }
-
     private fun checkDigits(vm: ShuffleCircleViewModel, expected: List<Int>) {
-        repeat(10) { assertEquals(expected[it], vm.getDigitAtIndex(it)) }
+        val actual = List(numDigits) { vm.getDigitAtIndex(it) }
+        assertEquals(expected, actual)
     }
 }

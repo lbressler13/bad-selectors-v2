@@ -48,7 +48,6 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
         val probabilityNull = 0.001f // 1 / 1000
         val nextNull = createRandom().nextBoolean(probabilityNull)
         currentDigit = simpleIf(canUseNull && nextNull, null, digitsOrder[index])
-        println("Called getDigitAtIndex with index $index. Returning $currentDigit")
 
         return currentDigit
     }
@@ -58,7 +57,6 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      */
     fun updateDigits() {
         digitsOrder = generator.generateNumber()
-        println("Called generate number. Result: $digitsOrder")
     }
 
     /**
@@ -67,7 +65,6 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     override fun incrementCurrentIndex() {
         super.incrementCurrentIndex()
         digitsOrder = generator.generateNumber(forceRegenerate = true)
-        println("Called generate number with force update. Result: $digitsOrder")
     }
 
     /**
