@@ -77,8 +77,6 @@ class ShuffleCircleFragmentTest {
             listOf(9 to 6, 7 to 6, 4 to 6, 1 to 3),
             listOf(6 to 3, 4 to 8, 3 to 9, 1 to 1, 4 to 2, 5 to 2, 9 to 2, 1 to 3),
         )
-        // used in incrementCurrentDigit
-        val forceTurns = turns.map { it.first() }.subList(1, turns.size)
         val phoneNumber = turns.map { it[it.lastIndex].second }
 
         mockGetGenerated(turns.flatten())
@@ -178,42 +176,22 @@ class ShuffleCircleFragmentTest {
 //        checkInitialUi()
 //    }
 
-    // mock digit shuffling logic in view model
-    private fun mockDigitShuffling(turns: List<Pair<Int, Int>>, forceTurns: List<Pair<Int, Int>>) {
-        val returnValues = turns.map { kvp ->
-            val index = kvp.first
-            val value = kvp.second
-            List(numDigits) { simpleIf(it == index, value, 0) }
-        }
-        val forceReturnValues = forceTurns.map { kvp ->
-            val index = kvp.first
-            val value = kvp.second
-            List(numDigits) { simpleIf(it == index, value, 0) }
-        }
-
-        mockkConstructor(PhoneNumberGenerator::class)
-        val paramMatcher = EqMatcher(1..3)
-        every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(false) } returnsMany returnValues
-        every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(true) } returnsMany forceReturnValues
-        every { constructedWith<PhoneNumberGenerator>(paramMatcher).reset() } answers { callOriginal() }
-
-        // mockkConstructor(ShuffleCircleViewModel::class)
-        // every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(any()) } returnsMany returnValues
-        // justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
-        // every { constructedWith<ShuffleCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
-    }
-
     private fun mockGetGenerated(turns: List<Pair<Int, Int>>) {
-//        val returnValues = turns.map { kvp ->
-//            val index = kvp.first
-//            val value = kvp.second
-//            List(numDigits) { simpleIf(it == index, value, 0) }
-//        }
-        val returnValues = turns.map { it.second }
+        val groupedResults: Map<Int, IntList> = turns.groupBy { it.first }
+            .mapValues { kvp -> kvp.value.map { it.second } }
+
         mockkConstructor(ShuffleCircleViewModel::class)
-        every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(any()) } returnsMany returnValues
+        // mock results per index
+        groupedResults.forEach {
+            every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(it.key) } returnsMany it.value
+        }
         justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
         every { constructedWith<ShuffleCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
+
+        // mock generate call in incrementCurrentIndex
+        mockkConstructor(PhoneNumberGenerator::class)
+        val paramMatcher = EqMatcher(1..3)
+        every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(any()) } returns (0..9).toList()
     }
 
     // cannot launch scenario in before block due to mocking requirements
