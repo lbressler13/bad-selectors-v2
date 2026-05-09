@@ -35,7 +35,13 @@ class PhoneNumberGeneratorTest {
 
     @Test
     fun testAlternateConstructor() {
-        // TODO
+        val mockReturns = listOf(2, 3, 2, 4)
+        withMockedRange(2..4, mockReturns) {
+            val previousGenerated: MutableSet<IntList> = mutableSetOf()
+            val generator = PhoneNumberGenerator(2..4)
+            mockReturns.forEach { testRepeatedNumber(generator, it, previousGenerated) }
+            assertEquals(mockReturns.size, previousGenerated.size)
+        }
     }
 
     @Test

@@ -43,6 +43,30 @@ class ShuffleCircleViewModelTest {
     }
 
     @Test
+    fun testGetAndSetDigit() {
+        val paramMatcher = EqMatcher(1..3)
+        every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(false) } returns shuffledDigits
+        every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(true) } returns shuffledDigits
+        val vm = ShuffleCircleViewModel()
+
+        repeat(numDigits) { assertNull(vm.getDigitAt(it)) }
+
+        digitsRange.forEach { index ->
+            val digit = shuffledDigits[index]
+            vm.setCurrentDigit(digit)
+
+            repeat(numDigits) {
+                if (it <= index) {
+                    assertEquals(shuffledDigits[it], vm.getDigitAt(it))
+                } else {
+                    assertNull(vm.getDigitAt(it))
+                }
+            }
+            vm.incrementCurrentIndex()
+        }
+    }
+
+    @Test
     fun testGetAtIndex() {
         setUpdateMocks(listOf(shuffledDigits))
         val vm = ShuffleCircleViewModel()
@@ -67,7 +91,29 @@ class ShuffleCircleViewModelTest {
 
     @Test
     fun testIncrementCurrentIndex() {
-        // TODO
+        val digitsValues = listOf(
+            (0..9).toList(),
+            listOf(3, 6, 2, 7, 9, 8, 5, 4, 1, 0),
+            listOf(9, 8, 7, 4, 5, 6, 2, 1, 0, 3),
+            (0..9).toList().reversed(),
+            listOf(1, 3, 5, 7, 9, 0, 2, 4, 6, 8),
+            listOf(2, 4, 6, 8, 0, 9, 7, 5, 3, 1),
+            listOf(0, 3, 6, 9, 2, 4, 8, 6, 5, 1),
+            listOf(9, 8, 7, 4, 1, 3, 0, 6, 5, 2),
+            listOf(5, 4, 3, 2, 1, 0, 6, 7, 8, 9),
+            listOf(0, 5, 1, 6, 2, 4, 9, 8, 3, 7),
+            (0..9).toList().reversed(),
+            (0..9).toList().reversed(),
+            (0..9).toList().reversed(),
+        )
+        setUpdateMocks(listOf(shuffledDigits), digitsValues)
+
+        val vm = ShuffleCircleViewModel()
+        repeat(10) {
+            vm.incrementCurrentIndex()
+            assertEquals(it + 1, vm.currentIndex)
+            checkDigits(vm, digitsValues[it])
+        }
     }
 
     @Test
@@ -138,14 +184,11 @@ class ShuffleCircleViewModelTest {
 
     @Test
     fun testResetData() {
-        // mock shuffle digits
         val digitsValues = listOf(
             shuffledDigits,
             listOf(3, 6, 2, 7, 9, 8, 5, 4, 1, 0),
         )
-        val forceDigitsValues = listOf(
-            listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
-        )
+        val forceDigitsValues = listOf((0..9).toList())
         setUpdateMocks(digitsValues, forceDigitsValues)
 
         // initialize vm

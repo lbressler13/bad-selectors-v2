@@ -26,7 +26,6 @@ abstract class BasePhoneViewModel : ViewModel() {
      * @return [Int]?: the current value of the digit, or `null` if there is no current value
      */
     fun getDigitAt(index: Int): Int? {
-        println(digits.contentToString())
         return digits[index]
     }
 
@@ -37,7 +36,6 @@ abstract class BasePhoneViewModel : ViewModel() {
      */
     fun setCurrentDigit(value: Int) {
         digits[currentIndex] = value
-        println("Set value $value at index $currentIndex")
     }
 
     /**
