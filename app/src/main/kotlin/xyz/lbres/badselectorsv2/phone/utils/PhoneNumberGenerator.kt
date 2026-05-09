@@ -73,7 +73,7 @@ class PhoneNumberGenerator(
      * Update the value of the generated number.
      * Pulls from the remaining values list if [allowRepeatDigits] is false
      *
-     * @param forceRegenerate [Boolean]: force a new number to be generated, regardless of the amount of time until the next update.
+     * @param forceRegenerate [Boolean]: force a new number to be generated, regardless of the repeats remaining until the next update.
      * Defaults to false.
      * @return [IntList]: new generated number
      */

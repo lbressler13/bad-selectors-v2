@@ -32,7 +32,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     }
 
     /**
-     * Get the value of the generated number at specific index.
+     * Get the value of the generated number at a specific index.
      * Guaranteed to never return null twice in a row.
      *
      * @param index [Int]: index to retrieve number for

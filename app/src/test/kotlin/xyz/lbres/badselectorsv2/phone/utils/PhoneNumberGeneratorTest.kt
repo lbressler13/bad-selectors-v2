@@ -172,7 +172,7 @@ class PhoneNumberGeneratorTest {
         }
     }
 
-    // test that the repeats remaining is being pulled from correct range
+    // test that the repeats counts are being pulled from correct range
     @Test
     fun testRepeatCounts() {
         val range = 2..4

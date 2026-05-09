@@ -44,7 +44,7 @@ class ShuffleCircleViewModelTest {
 
     @Test
     fun testGetAndSetDigit() {
-        setUpdateMocks(listOf(shuffledDigits), listOf(shuffledDigits))
+        setupGeneratorMocks(listOf(shuffledDigits), listOf(shuffledDigits))
         val vm = ShuffleCircleViewModel()
 
         repeat(numDigits) { assertNull(vm.getDigitAt(it)) }
@@ -66,7 +66,7 @@ class ShuffleCircleViewModelTest {
 
     @Test
     fun testGetGeneratedAtIndex() {
-        setUpdateMocks(listOf(shuffledDigits))
+        setupGeneratorMocks(listOf(shuffledDigits))
         val vm = ShuffleCircleViewModel()
         repeat(10) {
             val result = vm.getGeneratedAtIndex(it)
@@ -101,7 +101,7 @@ class ShuffleCircleViewModelTest {
             listOf(5, 4, 3, 2, 1, 0, 6, 7, 8, 9),
             listOf(0, 5, 1, 6, 2, 4, 9, 8, 3, 7),
         )
-        setUpdateMocks(listOf(shuffledDigits), digitsValues)
+        setupGeneratorMocks(listOf(shuffledDigits), digitsValues)
 
         val vm = ShuffleCircleViewModel()
         repeat(10) {
@@ -121,7 +121,7 @@ class ShuffleCircleViewModelTest {
             every { nextBoolean(any<Float>()) } returnsMany nextBoolValues
         }
 
-        setUpdateMocks(listOf(shuffledDigits), listOf(shuffledDigits))
+        setupGeneratorMocks(listOf(shuffledDigits), listOf(shuffledDigits))
         val vm = ShuffleCircleViewModel()
         vm.russianRoulette = true
 
@@ -171,7 +171,7 @@ class ShuffleCircleViewModelTest {
             listOf(9, 8, 7, 4, 5, 6, 2, 1, 0, 3),
             listOf(1, 3, 5, 7, 9, 0, 2, 4, 6, 8),
         )
-        setUpdateMocks(digitsValues)
+        setupGeneratorMocks(digitsValues)
 
         val vm = ShuffleCircleViewModel()
         val updateDigitsAndCheck = { idx: Int ->
@@ -193,7 +193,7 @@ class ShuffleCircleViewModelTest {
             listOf(3, 6, 2, 7, 9, 8, 5, 4, 1, 0),
         )
         val forceDigitsValues = listOf((0..9).toList())
-        setUpdateMocks(digitsValues, forceDigitsValues)
+        setupGeneratorMocks(digitsValues, forceDigitsValues)
 
         val vm = ShuffleCircleViewModel()
         checkDigits(vm, digitsValues[0])
@@ -218,7 +218,7 @@ class ShuffleCircleViewModelTest {
     }
 
     // mock generation in number generator
-    private fun setUpdateMocks(mockValues: List<IntList>, forceMockValues: List<IntList> = emptyList()) {
+    private fun setupGeneratorMocks(mockValues: List<IntList>, forceMockValues: List<IntList> = emptyList()) {
         val paramMatcher = EqMatcher(1..3)
         every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(false) } returnsMany mockValues
         every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(true) } returnsMany forceMockValues
