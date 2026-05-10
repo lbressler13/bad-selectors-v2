@@ -25,6 +25,7 @@ abstract class BasePhoneViewModel : ViewModel() {
      * @param index [Int]: index of digit
      * @return [Int]?: the current value of the digit, or `null` if there is no current value
      */
+    // TODO remove and replace w/ _digits & digits
     fun getDigitAt(index: Int): Int? {
         return digits[index]
     }

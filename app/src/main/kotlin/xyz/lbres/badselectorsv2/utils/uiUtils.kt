@@ -36,6 +36,18 @@ fun setImageButtonTint(button: View, color: Int) {
 }
 
 /**
+ * Get theme colorPrimary color value.
+ *
+ * @param context [Context]
+ * @return [Int]: the color value
+ */
+fun getColorPrimary(context: Context): Int {
+    val color = TypedValue()
+    context.theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, color, true)
+    return color.data
+}
+
+/**
  * Get theme colorOnPrimary color value.
  *
  * @param context [Context]
@@ -44,6 +56,18 @@ fun setImageButtonTint(button: View, color: Int) {
 fun getColorOnPrimary(context: Context): Int {
     val color = TypedValue()
     context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, color, true)
+    return color.data
+}
+
+/**
+ * Get theme colorOnBackground color value.
+ *
+ * @param context [Context]
+ * @return [Int]: the color value
+ */
+fun getColorOnBackground(context: Context): Int {
+    val color = TypedValue()
+    context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, color, true)
     return color.data
 }
 

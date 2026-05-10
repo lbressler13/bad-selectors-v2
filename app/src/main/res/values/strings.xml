@@ -18,6 +18,12 @@
 
     <string name="phone_separator">-</string>
 
+    <!-- Select Correct -->
+    <string name="title_select_correct">Select Correct</string>
+
+    <string name="mark_correct">Tap digits to mark as correct</string>
+    <string name="generate_new_number">Generate New Number</string>
+
     <!-- Shuffle Circle -->
     <string name="title_shuffle_circle">Shuffle Circle</string>
 
