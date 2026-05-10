@@ -8,6 +8,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.EqMatcher
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockkConstructor
@@ -22,6 +23,7 @@ import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.phone.shufflecircle.ShuffleCircleViewModel
+import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
@@ -73,12 +75,9 @@ class ShuffleCircleFragmentTest {
             listOf(9 to 6, 7 to 6, 4 to 6, 1 to 3),
             listOf(6 to 3, 4 to 8, 3 to 9, 1 to 1, 4 to 2, 5 to 2, 9 to 2, 1 to 3),
         )
-        val returnValues = turns.flatMap { turn ->
-            turn.map { it.second }
-        }
         val phoneNumber = turns.map { it[it.lastIndex].second }
 
-        mockDigitShuffling(returnValues)
+        mockGetGenerated(turns.flatten())
         launchFragment()
 
         turns.forEachIndexed { index, turn ->
@@ -99,7 +98,7 @@ class ShuffleCircleFragmentTest {
     @Test
     fun restart() {
         val returnValues = (0..9).toList()
-        mockDigitShuffling(returnValues)
+        mockGetGenerated(returnValues)
         launchFragment()
         repeat(10) {
             circleButton(0).perform(forceClick())
@@ -115,9 +114,9 @@ class ShuffleCircleFragmentTest {
     fun recreate() {
         val phoneNumber = (0..9).toList()
         val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
+        mockGetGenerated(returnValues)
         val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
-        mockDigitShuffling(returnValues)
-        every { constructedWith<ShuffleCircleViewModel>().currentDigit } returnsMany digitPropValues
+        every { constructedWith<ShuffleCircleViewModel>().generatedDigit } returnsMany digitPropValues
 
         val scenario = launchFragment()
 
@@ -175,12 +174,27 @@ class ShuffleCircleFragmentTest {
         checkInitialUi()
     }
 
-    // mock digit shuffling logic in view model
-    private fun mockDigitShuffling(returnValues: IntList) {
+    // mock digit generation in view model
+    private fun mockGetGenerated(turns: List<Pair<Int, Int>>) {
+        // group mock returns by index
+        val groupedResults: Map<Int, IntList> = turns.groupBy { it.first }
+            .mapValues { kvp -> kvp.value.map { it.second } }
+
         mockkConstructor(ShuffleCircleViewModel::class)
-        every { constructedWith<ShuffleCircleViewModel>().getDigitAtIndex(any(), any()) } returnsMany returnValues
+        groupedResults.forEach {
+            every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(it.key) } returnsMany it.value
+        }
         justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
+        every { constructedWith<ShuffleCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
+
+        // mock generate call in incrementCurrentIndex
+        mockkConstructor(PhoneNumberGenerator::class)
+        val paramMatcher = EqMatcher(1..3)
+        every { constructedWith<PhoneNumberGenerator>(paramMatcher).generateNumber(any()) } returns (0..9).toList()
     }
+
+    @JvmName("mockGetGeneratedIntList")
+    private fun mockGetGenerated(returnValues: IntList) = mockGetGenerated(returnValues.map { 0 to it })
 
     // cannot launch scenario in before block due to mocking requirements
     private fun launchFragment(): ActivityScenario<BaseActivity> {

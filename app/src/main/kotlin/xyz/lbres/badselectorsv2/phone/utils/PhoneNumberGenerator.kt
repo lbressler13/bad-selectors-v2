@@ -24,6 +24,9 @@ class PhoneNumberGenerator(
     private val allowRepeatDigits: Boolean = true,
     fullNumberRepeats: IntRange = 1..1,
 ) {
+
+    constructor(fullNumberRepeats: IntRange) : this(true, fullNumberRepeats)
+
     /**
      * Remaining values for each digit
      */
@@ -70,10 +73,12 @@ class PhoneNumberGenerator(
      * Update the value of the generated number.
      * Pulls from the remaining values list if [allowRepeatDigits] is false
      *
+     * @param forceRegenerate [Boolean]: force a new number to be generated, regardless of the repeats remaining until the next update.
+     * Defaults to false.
      * @return [IntList]: new generated number
      */
-    fun generateNumber(): IntList {
-        if (repeatsRemaining <= 0) {
+    fun generateNumber(forceRegenerate: Boolean = false): IntList {
+        if (forceRegenerate || repeatsRemaining <= 0) {
             generatedNumber.mapInPlaceIndexed { index, _ ->
                 val remaining = remainingValues[index]
                 when {

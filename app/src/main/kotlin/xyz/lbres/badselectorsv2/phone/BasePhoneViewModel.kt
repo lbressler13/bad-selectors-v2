@@ -41,7 +41,7 @@ abstract class BasePhoneViewModel : ViewModel() {
     /**
      * Increment value of [currentIndex]
      */
-    fun incrementCurrentIndex() {
+    open fun incrementCurrentIndex() {
         currentIndex++
     }
 

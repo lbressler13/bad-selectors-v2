@@ -74,7 +74,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
      * Initialize buttons in circle layout
      */
     private fun initButtonCircle() {
-        val initialDigit = viewModel.currentDigit
+        val initialDigit = viewModel.generatedDigit
         binding.currentDigit.text = if (initialDigit == -1 || initialDigit == null) {
             ""
         } else {
@@ -83,8 +83,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
 
         // get digit based on index of button, and update ui
         binding.circleLayout.setChildOnClickListener { _, index ->
-            val nullable = viewModel.russianRoulette && viewModel.currentIndex != 0
-            val digit = viewModel.getDigitAtIndex(index, nullable)
+            val digit = viewModel.getGeneratedAtIndex(index)
 
             if (digit == null) {
                 binding.currentDigit.text = ""
@@ -111,7 +110,6 @@ class ShuffleCircleFragment : BasePhoneFragment() {
                 setRestartUi()
             }
 
-            viewModel.reset()
             binding.currentDigit.text = ""
         }
     }
