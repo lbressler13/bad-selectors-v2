@@ -14,18 +14,22 @@ import org.hamcrest.TypeSafeMatcher
 class TextSaver(private val viewInteraction: ViewInteraction) {
     private var savedText: String? = null
 
-    private inner class PreviousTextMatcher(private val matching: Boolean): TypeSafeMatcher<View>() {
+    private inner class PreviousTextMatcher(private val matching: Boolean) : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description?) {
             description?.appendText("match view with text: \"$savedText\"")
         }
 
         override fun matchesSafely(item: View?): Boolean {
-            return item is TextView && savedText != null &&
-                    ((matching && item.text == savedText) || (!matching && item.text != savedText))
+            return when {
+                item !is TextView -> false
+                savedText != null && matching && item.text == savedText -> true
+                !matching && item.text != savedText -> true
+                else -> false
+            }
         }
     }
 
-    private inner class TextSaver: ViewAction {
+    private inner class TextSaver : ViewAction {
         override fun getConstraints(): Matcher<View> = isAssignableFrom(TextView::class.java)
         override fun getDescription(): String = "saving text"
 

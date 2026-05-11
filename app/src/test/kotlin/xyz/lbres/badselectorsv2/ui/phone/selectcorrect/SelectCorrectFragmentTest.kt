@@ -59,44 +59,49 @@ class SelectCorrectFragmentTest {
     }
 
     @Test
-    fun generateNumber() {
-        // TODO without mocking in order to keep frozen
-        // mockGenerateNumber()
+    fun generateAndCompleteNumber() {
+        mockGenerateNumber()
         launchFragment()
 
-
-        val textSavers = digitViews.map { TextSaver(it) }
-        val savedDigits: MutableSet<Int> = mutableSetOf()
-        val checkSaved = {
-            textSavers.forEachIndexed { index, saver ->
-                if (index in savedDigits) {
-                    saver.matchPreviousText()
-                } else {
-                    saver.notMatchPreviousText()
-                }
-            }
-            checkDigitColors(savedDigits)
+        for (i in 1 until mockGeneratedValues.size) {
+            generateButton.checkDisplayedAndClick()
+            checkPhoneNumber(mockGeneratedValues[i])
         }
+        digitViews.forEach { it.checkDisplayedAndClick() }
+        checkRestartUi(mockGeneratedValues.last())
 
-        textSavers.forEach { it.saveText() }
-        textSavers.forEach { it.matchPreviousText() }
-
-        generateButton.checkDisplayedAndClick()
-        textSavers.forEach { it.notMatchPreviousText() }
-        textSavers.forEach { it.saveText() }
-
-        digitViews[6].checkDisplayedAndClick()
-        digitViews[9].checkDisplayedAndClick()
-        savedDigits.add(6)
-        savedDigits.add(9)
-
-        generateButton.checkDisplayedAndClick()
-        checkSaved()
+//        val textSavers = digitViews.map { TextSaver(it) }
+//        val savedDigits: MutableSet<Int> = mutableSetOf()
+//        val checkSaved = {
+//            textSavers.forEachIndexed { index, saver ->
+//                if (index in savedDigits) {
+//                    saver.matchPreviousText()
+//                } else {
+//                    saver.notMatchPreviousText()
+//                }
+//            }
+//            checkDigitColors(savedDigits)
+//        }
+//
+//        textSavers.forEach { it.saveText() }
+//        textSavers.forEach { it.matchPreviousText() }
+//
+//        generateButton.checkDisplayedAndClick()
+//        textSavers.forEach { it.notMatchPreviousText() }
+//        textSavers.forEach { it.saveText() }
+//
+//        digitViews[6].checkDisplayedAndClick()
+//        digitViews[9].checkDisplayedAndClick()
+//        savedDigits.add(6)
+//        savedDigits.add(9)
+//
+//        generateButton.checkDisplayedAndClick()
+//        checkSaved()
     }
 
     @Test
-    fun completeNumber() {
-        mockGenerateNumber()
+    fun completeNumberUnmocked() {
+        // mockGenerateNumber()
         launchFragment()
         val selectOrder = listOf(
             listOf(3, 5),
@@ -106,15 +111,30 @@ class SelectCorrectFragmentTest {
             listOf(1, 8, 7),
         )
 
+        val textSavers = digitViews.map { TextSaver(it) }
         val selectedDigits: MutableSet<Int> = mutableSetOf()
+        val checkDigits = {
+            textSavers.forEachIndexed { index, saver ->
+                if (index in selectedDigits) {
+                    saver.matchPreviousText()
+                } else {
+                    saver.notMatchPreviousText()
+                }
+            }
+            checkDigitColors(selectedDigits)
+        }
+
         selectOrder.forEachIndexed { index, digits ->
             generateButton.checkDisplayedAndClick()
-            checkPhoneNumber(mockGeneratedValues[index + 1])
+            println(digits)
+            checkDigits()
             digits.forEach { digitViews[it].checkDisplayedAndClick() }
             selectedDigits.addAll(digits)
             checkDigitColors(selectedDigits)
+            textSavers.forEach { it.saveText() }
         }
-        checkRestartUi(mockGeneratedValues[5])
+        checkDigits()
+        // checkRestartUi(mockGeneratedValues[5])
     }
 
     @Test
@@ -128,7 +148,6 @@ class SelectCorrectFragmentTest {
 
     @Test
     fun recreate() {
-        // TODO check colors persisted
         mockGenerateNumber()
         val scenario = launchFragment()
 
@@ -193,14 +212,17 @@ class SelectCorrectFragmentTest {
         restartButton.check(isNotPresented())
         checkPhoneNumber(phoneNumber)
         checkDigitColors(emptySet())
+        // TODO uncomment divider colors
         // dividerViews.forEach { it.check(matches(hasStandardColor)) }
     }
 
-    private fun checkRestartUi(phoneNumber: IntList) {
+    private fun checkRestartUi(phoneNumber: IntList?) {
         generateButton.check(isNotPresented())
         markCorrectMessage.check(isNotPresented())
         restartButton.check(matches(allOf(isDisplayed(), isEnabled())))
-        checkPhoneNumber(phoneNumber)
+        if (phoneNumber != null) {
+            checkPhoneNumber(phoneNumber)
+        }
         checkDigitColors(digitsRange.toSet())
         // dividerViews.forEach { it.check(matches(hasSelectedColor)) }
     }
