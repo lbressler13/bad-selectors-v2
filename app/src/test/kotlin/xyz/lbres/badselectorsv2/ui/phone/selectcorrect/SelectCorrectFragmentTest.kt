@@ -4,7 +4,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.hasTextColor
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -25,6 +24,7 @@ import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
+import xyz.lbres.badselectorsv2.ui.testutils.matchers.hasThemeTextColor
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
@@ -198,7 +198,6 @@ class SelectCorrectFragmentTest {
         perform(forceClick())
     }
 
-    // TODO custom matcher for theme attribute
-    private val hasStandardColor = hasTextColor(R.color.black)
-    private val hasSelectedColor = hasTextColor(R.color.teal_700)
+    private val hasStandardColor = hasThemeTextColor(com.google.android.material.R.attr.colorOnBackground)
+    private val hasSelectedColor = hasThemeTextColor(com.google.android.material.R.attr.colorPrimary)
 }
