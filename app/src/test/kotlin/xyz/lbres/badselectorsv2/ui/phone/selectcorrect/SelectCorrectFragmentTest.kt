@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import org.hamcrest.CoreMatchers.not
 import org.hamcrest.core.AllOf.allOf
 import org.junit.After
 import org.junit.Test
@@ -27,8 +28,10 @@ import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.phone.dividerViews
 import xyz.lbres.badselectorsv2.ui.testutils.TextSaver
+import xyz.lbres.badselectorsv2.ui.testutils.matchPreviousText
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.hasThemeTextColor
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
+import xyz.lbres.badselectorsv2.ui.testutils.saveText
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
@@ -52,6 +55,7 @@ class SelectCorrectFragmentTest {
     @After
     fun cleanupTest() {
         unmockkAll()
+        TextSaver.clear()
     }
 
     @Test
@@ -85,17 +89,17 @@ class SelectCorrectFragmentTest {
             listOf(1, 8, 7),
         )
 
-        val textSavers = digitViews.map { TextSaver(it) }
+        digitViews.forEach { it.perform(saveText()) }
         val selectedDigits: MutableSet<Int> = mutableSetOf()
 
         selectOrder.forEachIndexed { index, digits ->
             generateButton.checkDisplayedAndClick()
 
             // check that the correct digits are frozen from previous update
-            textSavers.forEachIndexed { index, saver ->
+            digitViews.forEachIndexed { index, view ->
                 when (index) {
-                    in selectedDigits -> saver.matchPreviousText()
-                    else -> saver.notMatchPreviousText()
+                    in selectedDigits -> view.check(matches(matchPreviousText()))
+                    else -> view.check(matches(not(matchPreviousText())))
                 }
             }
 
@@ -103,12 +107,11 @@ class SelectCorrectFragmentTest {
             digits.forEach {
                 digitViews[it].checkDisplayedAndClick()
                 selectedDigits.add(it)
-
                 checkDigitColors(selectedDigits, selectedDigits.size == numDigits)
             }
-            textSavers.forEach(TextSaver::saveText)
+            digitViews.forEach { it.perform(saveText()) }
         }
-        textSavers.forEach(TextSaver::matchPreviousText)
+        digitViews.forEach { it.check(matches(matchPreviousText())) }
         checkRestartUi(null)
     }
 
