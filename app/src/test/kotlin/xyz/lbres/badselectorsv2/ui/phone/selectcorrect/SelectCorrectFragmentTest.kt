@@ -28,12 +28,12 @@ import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.phone.dividerViews
 import xyz.lbres.badselectorsv2.ui.testutils.TextSaver
-import xyz.lbres.badselectorsv2.ui.testutils.matchPreviousText
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.hasThemeTextColor
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.saveText
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
+import xyz.lbres.badselectorsv2.ui.testutils.withPreviousText
 import xyz.lbres.kotlinutils.list.IntList
 
 @Category(Robolectric::class)
@@ -98,8 +98,8 @@ class SelectCorrectFragmentTest {
             // check that the correct digits are frozen from previous update
             digitViews.forEachIndexed { index, view ->
                 when (index) {
-                    in selectedDigits -> view.check(matches(matchPreviousText()))
-                    else -> view.check(matches(not(matchPreviousText())))
+                    in selectedDigits -> view.check(matches(withPreviousText()))
+                    else -> view.check(matches(not(withPreviousText())))
                 }
             }
 
@@ -111,7 +111,7 @@ class SelectCorrectFragmentTest {
             }
             digitViews.forEach { it.perform(saveText()) }
         }
-        digitViews.forEach { it.check(matches(matchPreviousText())) }
+        digitViews.forEach { it.check(matches(withPreviousText())) }
         checkRestartUi(null)
     }
 
