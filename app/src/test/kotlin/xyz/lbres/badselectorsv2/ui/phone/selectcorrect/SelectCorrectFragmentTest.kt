@@ -30,10 +30,8 @@ import xyz.lbres.badselectorsv2.ui.phone.dividerViews
 import xyz.lbres.badselectorsv2.ui.testutils.TextSaver
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.hasThemeTextColor
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
-import xyz.lbres.badselectorsv2.ui.testutils.saveText
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.badselectorsv2.ui.testutils.withPreviousText
 import xyz.lbres.kotlinutils.list.IntList
 
 @Category(Robolectric::class)
@@ -55,7 +53,6 @@ class SelectCorrectFragmentTest {
     @After
     fun cleanupTest() {
         unmockkAll()
-        TextSaver.clear()
     }
 
     @Test
@@ -88,6 +85,9 @@ class SelectCorrectFragmentTest {
             listOf(6),
             listOf(1, 8, 7),
         )
+        val textSaver = TextSaver()
+        val saveText = { textSaver.saveText() }
+        val withPreviousText = { textSaver.withPreviousText() }
 
         digitViews.forEach { it.perform(saveText()) }
         val selectedDigits: MutableSet<Int> = mutableSetOf()

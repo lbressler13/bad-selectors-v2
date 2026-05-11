@@ -12,10 +12,10 @@ import org.hamcrest.TypeSafeMatcher
 /**
  * Util to save text from a textview and validate the current text against the previously saved text
  */
-object TextSaver {
+class TextSaver {
     private var savedText: MutableMap<Int, String> = mutableMapOf()
 
-    private class PreviousTextMatcher() : TypeSafeMatcher<View>() {
+    private inner class PreviousTextMatcher() : TypeSafeMatcher<View>() {
         override fun describeTo(description: Description?) {
             description?.appendText("match text in view")
         }
@@ -25,7 +25,7 @@ object TextSaver {
         }
     }
 
-    private class TextSaveAction : ViewAction {
+    private inner class TextSaveAction : ViewAction {
         override fun getConstraints(): Matcher<View> = isAssignableFrom(TextView::class.java)
         override fun getDescription(): String = "saving text"
 
@@ -52,13 +52,3 @@ object TextSaver {
      */
     fun clear() = savedText.clear()
 }
-
-/**
- * Save current text
- */
-fun saveText(): ViewAction = TextSaver.saveText()
-
-/**
- * Check that the current text matches the saved text
- */
-fun withPreviousText(): Matcher<View> = TextSaver.withPreviousText()
