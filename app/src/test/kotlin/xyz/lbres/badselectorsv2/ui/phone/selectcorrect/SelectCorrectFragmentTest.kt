@@ -4,6 +4,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.hasTextColor
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -21,6 +22,7 @@ import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
+import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
@@ -82,10 +84,13 @@ class SelectCorrectFragmentTest {
             listOf(1, 8, 7),
         )
 
+        val selectedDigits: MutableSet<Int> = mutableSetOf()
         selectOrder.forEachIndexed { index, digits ->
             generateButton.checkDisplayedAndClick()
             checkPhoneNumber(mockGeneratedValues[index + 1])
             digits.forEach { digitViews[it].checkDisplayedAndClick() }
+            selectedDigits.addAll(digits)
+            checkDigitColors(selectedDigits)
         }
         checkRestartUi(mockGeneratedValues[5])
     }
@@ -101,6 +106,7 @@ class SelectCorrectFragmentTest {
 
     @Test
     fun recreate() {
+        // TODO check colors persisted
         mockGenerateNumber()
         val scenario = launchFragment()
 
@@ -111,13 +117,23 @@ class SelectCorrectFragmentTest {
 
         // generated
         generateButton.checkDisplayedAndClick()
+        checkDigitColors(emptySet())
         checkPhoneNumber(mockGeneratedValues[1])
         scenario.recreate()
+        checkDigitColors(emptySet())
         checkPhoneNumber(mockGeneratedValues[1])
 
         digitViews[3].checkDisplayedAndClick()
         digitViews[7].checkDisplayedAndClick()
+        checkDigitColors(setOf(3, 7))
         scenario.recreate()
+        checkDigitColors(setOf(3, 7))
+        checkPhoneNumber(mockGeneratedValues[1])
+
+        digitViews[2].checkDisplayedAndClick()
+        checkDigitColors(setOf(2, 3, 7))
+        scenario.recreate()
+        checkDigitColors(setOf(2, 3, 7))
         checkPhoneNumber(mockGeneratedValues[1])
 
         // completed number
@@ -154,6 +170,8 @@ class SelectCorrectFragmentTest {
         markCorrectMessage.check(matches(allOf(isDisplayed(), withText(markCorrectText))))
         restartButton.check(isNotPresented())
         checkPhoneNumber(phoneNumber)
+        checkDigitColors(emptySet())
+        // dividerViews.forEach { it.check(matches(hasStandardColor)) }
     }
 
     private fun checkRestartUi(phoneNumber: IntList) {
@@ -161,10 +179,26 @@ class SelectCorrectFragmentTest {
         markCorrectMessage.check(isNotPresented())
         restartButton.check(matches(allOf(isDisplayed(), isEnabled())))
         checkPhoneNumber(phoneNumber)
+        checkDigitColors(digitsRange.toSet())
+        // dividerViews.forEach { it.check(matches(hasSelectedColor)) }
+    }
+
+    private fun checkDigitColors(selectedDigits: Set<Int>) {
+        digitViews.forEachIndexed { index, view ->
+            if (index in selectedDigits) {
+                view.check(matches(hasSelectedColor))
+            } else {
+                view.check(matches(hasStandardColor))
+            }
+        }
     }
 
     private fun ViewInteraction.checkDisplayedAndClick() {
         check(matches(isDisplayed()))
         perform(forceClick())
     }
+
+    // TODO custom matcher for theme attribute
+    private val hasStandardColor = hasTextColor(R.color.black)
+    private val hasSelectedColor = hasTextColor(R.color.teal_700)
 }
