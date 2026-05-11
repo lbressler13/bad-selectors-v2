@@ -182,7 +182,7 @@ class PhoneNumberGeneratorTest {
         var currentCount = 0
         var lastGenerated: IntList? = null
 
-        repeat(400) {
+        repeat(600) {
             val generated = generator.generateNumber()
             if (generated == lastGenerated) {
                 currentCount++
