@@ -4,7 +4,7 @@ import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 
 /**
- * ViewModel containing values that are specific to the phone choose correct selector
+ * ViewModel containing values that are specific to the phone select correct selector
  */
 class SelectCorrectViewModel : BasePhoneViewModel() {
     private val generator: PhoneNumberGenerator = PhoneNumberGenerator(allowRepeatDigits = false)

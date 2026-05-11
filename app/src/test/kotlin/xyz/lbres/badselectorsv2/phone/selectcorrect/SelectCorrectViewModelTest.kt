@@ -10,7 +10,6 @@ import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.listOfNulls
 import kotlin.collections.listOf
 import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -26,11 +25,6 @@ class SelectCorrectViewModelTest {
         listOf(9, 8, 7, 4, 5, 6, 2, 1, 0, 3),
         listOf(1, 3, 5, 7, 9, 0, 2, 4, 6, 8),
     )
-
-    @BeforeTest
-    fun setupTest() {
-        mockkConstructor(PhoneNumberGenerator::class)
-    }
 
     @AfterTest
     fun cleanupTest() {
@@ -107,6 +101,7 @@ class SelectCorrectViewModelTest {
 
     // mock generation in number generator
     private fun setupGeneratorMocks(values: List<IntList> = mockGeneratedValues) {
+        mockkConstructor(PhoneNumberGenerator::class)
         every { constructedWith<PhoneNumberGenerator>().generateNumber(false) } returnsMany values
         every { constructedWith<PhoneNumberGenerator>().reset() } answers { callOriginal() }
     }

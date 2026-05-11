@@ -41,7 +41,7 @@ class HasThemeTextColorMatcher(private val themeAttrId: Int) : TypeSafeMatcher<V
 
 /**
  * [Matcher] to check that the current text color of a [TextView] matches a theme attribute.
- * Alternate to hasTextColor, which requires a color resource ide.
+ * Alternate to hasTextColor, which requires a color resource id.
  *
  * @param themeAttrId [Int]: id of theme attribute to check
  */

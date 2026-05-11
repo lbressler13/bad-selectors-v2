@@ -53,14 +53,13 @@ class SelectCorrectFragment : BasePhoneFragment() {
             }
         } else {
             digitViews.indices.forEach { updateSingleDigitUi(it) }
+            binding.digitsLayout.phoneDivider0.setTextColor(getTextColor(false))
+            binding.digitsLayout.phoneDivider1.setTextColor(getTextColor(false))
         }
 
         // show restart UI if needed
         if (viewModel.completedNumber) {
             showRestartUi()
-        } else {
-            binding.digitsLayout.phoneDivider0.setTextColor(getTextColor(false))
-            binding.digitsLayout.phoneDivider1.setTextColor(getTextColor(false))
         }
     }
 

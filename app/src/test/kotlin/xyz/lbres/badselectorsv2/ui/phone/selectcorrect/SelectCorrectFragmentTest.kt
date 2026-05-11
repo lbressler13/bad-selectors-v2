@@ -22,6 +22,7 @@ import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
+import xyz.lbres.badselectorsv2.phone.utils.numDigits
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.phone.dividerViews
@@ -75,7 +76,6 @@ class SelectCorrectFragmentTest {
 
     @Test
     fun completeNumberUnmocked() {
-        // mockGenerateNumber()
         launchFragment()
         val selectOrder = listOf(
             listOf(3, 5),
@@ -87,27 +87,29 @@ class SelectCorrectFragmentTest {
 
         val textSavers = digitViews.map { TextSaver(it) }
         val selectedDigits: MutableSet<Int> = mutableSetOf()
-        val checkDigits = {
-            textSavers.forEachIndexed { index, saver ->
-                if (index in selectedDigits) {
-                    saver.matchPreviousText()
-                } else {
-                    saver.notMatchPreviousText()
-                }
-            }
-            checkDigitColors(selectedDigits)
-        }
 
         selectOrder.forEachIndexed { index, digits ->
             generateButton.checkDisplayedAndClick()
-            println(digits)
-            checkDigits()
-            digits.forEach { digitViews[it].checkDisplayedAndClick() }
-            selectedDigits.addAll(digits)
-            checkDigitColors(selectedDigits)
-            textSavers.forEach { it.saveText() }
+
+            // check that the correct digits are frozen from previous update
+            textSavers.forEachIndexed { index, saver ->
+                when (index) {
+                    in selectedDigits -> saver.matchPreviousText()
+                    else -> saver.notMatchPreviousText()
+                }
+            }
+
+            // add each digit
+            digits.forEach {
+                digitViews[it].checkDisplayedAndClick()
+                selectedDigits.add(it)
+
+                checkDigitColors(selectedDigits, selectedDigits.size == numDigits)
+            }
+            textSavers.forEach(TextSaver::saveText)
         }
-        checkDigits()
+        textSavers.forEach(TextSaver::matchPreviousText)
+        checkRestartUi(null)
     }
 
     @Test
@@ -185,7 +187,6 @@ class SelectCorrectFragmentTest {
         restartButton.check(isNotPresented())
         checkPhoneNumber(phoneNumber)
         checkDigitColors(emptySet())
-        dividerViews.forEach { it.check(matches(hasStandardColor)) }
     }
 
     private fun checkRestartUi(phoneNumber: IntList?) {
@@ -195,11 +196,10 @@ class SelectCorrectFragmentTest {
         if (phoneNumber != null) {
             checkPhoneNumber(phoneNumber)
         }
-        checkDigitColors(digitsRange.toSet())
-        dividerViews.forEach { it.check(matches(hasSelectedColor)) }
+        checkDigitColors(digitsRange.toSet(), true)
     }
 
-    private fun checkDigitColors(selectedDigits: Set<Int>) {
+    private fun checkDigitColors(selectedDigits: Set<Int>, dividersSelected: Boolean = false) {
         digitViews.forEachIndexed { index, view ->
             if (index in selectedDigits) {
                 view.check(matches(hasSelectedColor))
@@ -207,6 +207,8 @@ class SelectCorrectFragmentTest {
                 view.check(matches(hasStandardColor))
             }
         }
+        val dividerMatcher = if (dividersSelected) hasSelectedColor else hasStandardColor
+        dividerViews.forEach { it.check(matches(dividerMatcher)) }
     }
 
     private fun ViewInteraction.checkDisplayedAndClick() {

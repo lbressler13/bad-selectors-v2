@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -13,7 +13,7 @@ import org.hamcrest.TypeSafeMatcher
 import xyz.lbres.badselectorsv2.testutils.printWarn
 
 /**
- * Util to save text from a textview and validate the current text against previous text
+ * Util to save text from a textview and validate the current text against the previously saved text
  */
 class TextSaver(private val viewInteraction: ViewInteraction) {
     private var savedText: String? = null
@@ -56,16 +56,10 @@ class TextSaver(private val viewInteraction: ViewInteraction) {
     /**
      * Check that the current text matches the saved text
      */
-    fun matchPreviousText() = viewInteraction.check(ViewAssertions.matches(PreviousTextMatcher(true)))
+    fun matchPreviousText() = viewInteraction.check(matches(PreviousTextMatcher(true)))
 
     /**
      * Check that the current text does not match the saved text
      */
-    fun notMatchPreviousText() = viewInteraction.check(
-        ViewAssertions.matches(
-            PreviousTextMatcher(
-                false,
-            ),
-        ),
-    )
+    fun notMatchPreviousText() = viewInteraction.check(matches(PreviousTextMatcher(false)))
 }

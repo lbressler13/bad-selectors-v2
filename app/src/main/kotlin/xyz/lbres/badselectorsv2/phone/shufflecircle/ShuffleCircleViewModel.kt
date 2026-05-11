@@ -14,7 +14,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     private val generator = PhoneNumberGenerator(1..3)
 
     /**
-     * Last generator number. Must be private to account for russian roulette
+     * Last generated number. Must be private to account for russian roulette
      */
     private var generatedNumber: IntList = digitsRange.toList()
 

@@ -189,14 +189,12 @@ class PhoneNumberGeneratorTest {
             } else {
                 if (lastGenerated != null) {
                     counts.add(currentCount)
-                    println("Adding count: $currentCount")
                 }
                 currentCount = 1
                 lastGenerated = generated
             }
         }
 
-        println("Final counts: $counts")
         assertEquals(range.toSet(), counts)
     }
 
