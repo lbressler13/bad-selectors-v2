@@ -58,6 +58,9 @@ class SelectCorrectFragment : BasePhoneFragment() {
         // show restart UI if needed
         if (viewModel.completedNumber) {
             showRestartUi()
+        } else {
+            binding.digitsLayout.phoneDivider0.setTextColor(getTextColor(false))
+            binding.digitsLayout.phoneDivider1.setTextColor(getTextColor(false))
         }
     }
 

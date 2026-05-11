@@ -24,6 +24,8 @@ import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
+import xyz.lbres.badselectorsv2.ui.phone.dividerViews
+import xyz.lbres.badselectorsv2.ui.testutils.TextSaver
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.hasThemeTextColor
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
@@ -69,34 +71,6 @@ class SelectCorrectFragmentTest {
         }
         digitViews.forEach { it.checkDisplayedAndClick() }
         checkRestartUi(mockGeneratedValues.last())
-
-//        val textSavers = digitViews.map { TextSaver(it) }
-//        val savedDigits: MutableSet<Int> = mutableSetOf()
-//        val checkSaved = {
-//            textSavers.forEachIndexed { index, saver ->
-//                if (index in savedDigits) {
-//                    saver.matchPreviousText()
-//                } else {
-//                    saver.notMatchPreviousText()
-//                }
-//            }
-//            checkDigitColors(savedDigits)
-//        }
-//
-//        textSavers.forEach { it.saveText() }
-//        textSavers.forEach { it.matchPreviousText() }
-//
-//        generateButton.checkDisplayedAndClick()
-//        textSavers.forEach { it.notMatchPreviousText() }
-//        textSavers.forEach { it.saveText() }
-//
-//        digitViews[6].checkDisplayedAndClick()
-//        digitViews[9].checkDisplayedAndClick()
-//        savedDigits.add(6)
-//        savedDigits.add(9)
-//
-//        generateButton.checkDisplayedAndClick()
-//        checkSaved()
     }
 
     @Test
@@ -134,7 +108,6 @@ class SelectCorrectFragmentTest {
             textSavers.forEach { it.saveText() }
         }
         checkDigits()
-        // checkRestartUi(mockGeneratedValues[5])
     }
 
     @Test
@@ -212,8 +185,7 @@ class SelectCorrectFragmentTest {
         restartButton.check(isNotPresented())
         checkPhoneNumber(phoneNumber)
         checkDigitColors(emptySet())
-        // TODO uncomment divider colors
-        // dividerViews.forEach { it.check(matches(hasStandardColor)) }
+        dividerViews.forEach { it.check(matches(hasStandardColor)) }
     }
 
     private fun checkRestartUi(phoneNumber: IntList?) {
@@ -224,7 +196,7 @@ class SelectCorrectFragmentTest {
             checkPhoneNumber(phoneNumber)
         }
         checkDigitColors(digitsRange.toSet())
-        // dividerViews.forEach { it.check(matches(hasSelectedColor)) }
+        dividerViews.forEach { it.check(matches(hasSelectedColor)) }
     }
 
     private fun checkDigitColors(selectedDigits: Set<Int>) {
