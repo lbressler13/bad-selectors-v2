@@ -25,7 +25,7 @@ class TextSaver {
         }
     }
 
-    private inner class TextSaveAction : ViewAction {
+    private inner class SaveTextAction : ViewAction {
         override fun getConstraints(): Matcher<View> = isAssignableFrom(TextView::class.java)
         override fun getDescription(): String = "saving text"
 
@@ -40,7 +40,7 @@ class TextSaver {
     /**
      * Save current text
      */
-    fun saveText(): ViewAction = TextSaveAction()
+    fun saveText(): ViewAction = SaveTextAction()
 
     /**
      * Check that the current text matches the saved text
