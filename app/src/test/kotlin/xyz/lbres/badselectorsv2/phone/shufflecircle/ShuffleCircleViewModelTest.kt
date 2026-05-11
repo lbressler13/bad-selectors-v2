@@ -13,6 +13,7 @@ import xyz.lbres.badselectorsv2.utils.createRandom
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
 import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.list.listOfNulls
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 import kotlin.collections.listOf
 import kotlin.test.AfterTest
@@ -47,7 +48,7 @@ class ShuffleCircleViewModelTest {
         setupGeneratorMocks(listOf(shuffledDigits), listOf(shuffledDigits))
         val vm = ShuffleCircleViewModel()
 
-        repeat(numDigits) { assertNull(vm.getDigitAt(it)) }
+        assertEquals(listOfNulls<Int?>(numDigits), vm.digits)
 
         digitsRange.forEach { index ->
             val digit = shuffledDigits[index]
@@ -55,9 +56,9 @@ class ShuffleCircleViewModelTest {
 
             repeat(numDigits) {
                 if (it <= index) {
-                    assertEquals(shuffledDigits[it], vm.getDigitAt(it))
+                    assertEquals(shuffledDigits[it], vm.digits[it])
                 } else {
-                    assertNull(vm.getDigitAt(it))
+                    assertNull(vm.digits[it])
                 }
             }
             vm.incrementCurrentIndex()
@@ -205,8 +206,8 @@ class ShuffleCircleViewModelTest {
         vm.getGeneratedAtIndex(0)
 
         // check state before reset
-        assertEquals(5, vm.getDigitAt(0))
-        assertEquals(2, vm.getDigitAt(1))
+        assertEquals(5, vm.digits[0])
+        assertEquals(2, vm.digits[1])
         assertEquals(1, vm.currentIndex)
         assertEquals(0, vm.generatedDigit)
 

@@ -46,7 +46,7 @@ abstract class BasePhoneFragment : Fragment() {
      * @param index [Int]: index of digit to display
      */
     protected fun displayDigitAtIndex(index: Int) {
-        val digit = phoneViewModel.getDigitAt(index)
+        val digit = phoneViewModel.digits[index]
         val view = digitViews[index]
         val text = if (digit == null || digit !in digitsRange) {
             emptyDigit

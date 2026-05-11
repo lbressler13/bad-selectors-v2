@@ -10,10 +10,8 @@ import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.phone.BasePhoneFragment
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
-import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.utils.getColorOnBackground
 import xyz.lbres.badselectorsv2.utils.getColorPrimary
-import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
  * Fragment that displays a randomized phone number and allows users to select correct digits and re-shuffle remaining
@@ -47,18 +45,17 @@ class SelectCorrectFragment : BasePhoneFragment() {
      * Update the UI to display the correct digits, and display restart UI if needed
      */
     private fun updateUi() {
-        // display empty number
-        if (viewModel.initialized) {
-            digitViews.indices.forEach { updateSingleDigitUi(it) }
-        } else {
+        if (viewModel.generatedNumber.any { it == -1 }) {
             digitViews.forEach {
                 it.text = emptyDigit
                 it.setTextColor(standardColor())
             }
+        } else {
+            digitViews.indices.forEach { updateSingleDigitUi(it) }
         }
 
         // show restart UI if needed
-        if (digitsRange.none { viewModel.getDigitAt(it) == null}) {
+        if (viewModel.completedNumber) {
             showRestartUi()
         }
     }
@@ -70,7 +67,7 @@ class SelectCorrectFragment : BasePhoneFragment() {
      */
     private fun updateSingleDigitUi(index: Int) {
         val view = digitViews[index]
-        val textColor = if (viewModel.getDigitAt(index) == null) {
+        val textColor = if (viewModel.digits[index] == null) {
             standardColor()
         } else {
             selectedColor()
@@ -111,7 +108,7 @@ class SelectCorrectFragment : BasePhoneFragment() {
     private fun initOnClicks() {
         // generate button
         binding.generateNumberButton.setOnClickListener {
-            viewModel.generateNumber()
+            viewModel.updateNumber()
             updateUi()
         }
 

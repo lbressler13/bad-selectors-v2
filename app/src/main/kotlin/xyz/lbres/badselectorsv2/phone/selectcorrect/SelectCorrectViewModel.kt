@@ -8,11 +8,17 @@ import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
  */
 class SelectCorrectViewModel : BasePhoneViewModel() {
     private val generator: PhoneNumberGenerator = PhoneNumberGenerator(allowRepeatDigits = false)
+
     private var _generatedNumber: List<Int> = generator.generateNumber()
     val generatedNumber: List<Int>
         get() = _generatedNumber
-    val initialized: Boolean
-        get() = generatedNumber.none { it == -1 }
+
+
+    /**
+     * If all digits of the phone number have been set
+     */
+    val completedNumber: Boolean
+        get() = digits.none { it == null }
 
     /**
      * Save the value of a digit, based on its current value in the current generated number
@@ -21,14 +27,15 @@ class SelectCorrectViewModel : BasePhoneViewModel() {
      */
     fun setDigitAt(index: Int) {
         generator.freezeAtIndex(index)
-        digits[index] = generatedNumber[index]
+        _digits[index] = generatedNumber[index]
     }
 
     /**
      * Generate a new number
      */
-    fun generateNumber() {
+    fun updateNumber(): List<Int> {
         _generatedNumber = generator.generateNumber()
+        return generatedNumber
     }
 
     /**
@@ -37,6 +44,6 @@ class SelectCorrectViewModel : BasePhoneViewModel() {
     override fun resetData() {
         super.resetData()
         generator.reset()
-        generateNumber()
+        updateNumber()
     }
 }
