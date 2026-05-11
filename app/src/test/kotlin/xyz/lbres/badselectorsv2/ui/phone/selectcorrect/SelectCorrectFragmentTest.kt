@@ -30,8 +30,6 @@ import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
 
-// TODO check selected colors
-
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class SelectCorrectFragmentTest {
@@ -63,13 +61,37 @@ class SelectCorrectFragmentTest {
     @Test
     fun generateNumber() {
         // TODO without mocking in order to keep frozen
-        mockGenerateNumber()
+        // mockGenerateNumber()
         launchFragment()
 
-        for (i in 1 until mockGeneratedValues.size) {
-            generateButton.checkDisplayedAndClick()
-            checkPhoneNumber(mockGeneratedValues[i])
+
+        val textSavers = digitViews.map { TextSaver(it) }
+        val savedDigits: MutableSet<Int> = mutableSetOf()
+        val checkSaved = {
+            textSavers.forEachIndexed { index, saver ->
+                if (index in savedDigits) {
+                    saver.matchPreviousText()
+                } else {
+                    saver.notMatchPreviousText()
+                }
+            }
+            checkDigitColors(savedDigits)
         }
+
+        textSavers.forEach { it.saveText() }
+        textSavers.forEach { it.matchPreviousText() }
+
+        generateButton.checkDisplayedAndClick()
+        textSavers.forEach { it.notMatchPreviousText() }
+        textSavers.forEach { it.saveText() }
+
+        digitViews[6].checkDisplayedAndClick()
+        digitViews[9].checkDisplayedAndClick()
+        savedDigits.add(6)
+        savedDigits.add(9)
+
+        generateButton.checkDisplayedAndClick()
+        checkSaved()
     }
 
     @Test
