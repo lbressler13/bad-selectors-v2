@@ -13,7 +13,6 @@ class SelectCorrectViewModel : BasePhoneViewModel() {
     val generatedNumber: List<Int>
         get() = _generatedNumber
 
-
     /**
      * If all digits of the phone number have been set
      */
