@@ -175,7 +175,7 @@ class PhoneNumberGeneratorTest {
     // test that the repeats counts are being pulled from correct range
     @Test
     fun testRepeatCounts() {
-        val range = 2..4
+        val range = 1..3
         val generator = PhoneNumberGenerator(range)
 
         val counts: MutableSet<Int> = mutableSetOf()
