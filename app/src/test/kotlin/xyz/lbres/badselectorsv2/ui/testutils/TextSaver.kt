@@ -6,7 +6,7 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -38,8 +38,7 @@ class TextSaver(private val viewInteraction: ViewInteraction) {
     }
 
     private inner class TextSaver : ViewAction {
-        override fun getConstraints(): Matcher<View> =
-            ViewMatchers.isAssignableFrom(TextView::class.java)
+        override fun getConstraints(): Matcher<View> = isAssignableFrom(TextView::class.java)
         override fun getDescription(): String = "saving text"
 
         override fun perform(uiController: UiController, view: View) {

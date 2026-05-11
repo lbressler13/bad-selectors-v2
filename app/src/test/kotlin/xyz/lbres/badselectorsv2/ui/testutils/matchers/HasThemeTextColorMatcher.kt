@@ -9,7 +9,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import xyz.lbres.badselectorsv2.testutils.printErr
 
-class HasThemeTextColorMatcher(private val themeAttrId: Int) : TypeSafeMatcher<View>() {
+private class HasThemeTextColorMatcher(private val themeAttrId: Int) : TypeSafeMatcher<View>() {
     override fun describeTo(description: Description?) {
         description?.appendText("match view with text color from attribute: $themeAttrId")
     }
