@@ -18,7 +18,9 @@ import xyz.lbres.badselectorsv2.utils.getColorPrimary
  */
 class SelectCorrectFragment : BasePhoneFragment() {
     private lateinit var viewModel: SelectCorrectViewModel
-    override lateinit var phoneViewModel: BasePhoneViewModel
+    override val phoneViewModel: BasePhoneViewModel
+        get() = viewModel
+
     private lateinit var binding: FragmentSelectCorrectBinding
     override var underlineDigits: Boolean = false
 
@@ -31,7 +33,6 @@ class SelectCorrectFragment : BasePhoneFragment() {
         savedInstanceState: Bundle?,
     ): View {
         viewModel = ViewModelProvider(requireActivity())[SelectCorrectViewModel::class.java]
-        phoneViewModel = viewModel
         binding = FragmentSelectCorrectBinding.inflate(layoutInflater, container, false)
 
         initDigitViews(binding.digitsLayout)
@@ -48,7 +49,7 @@ class SelectCorrectFragment : BasePhoneFragment() {
         if (viewModel.generatedNumber.any { it == -1 }) {
             digitViews.forEach {
                 it.text = emptyDigit
-                it.setTextColor(standardColor())
+                it.setTextColor(getTextColor(false))
             }
         } else {
             digitViews.indices.forEach { updateSingleDigitUi(it) }
@@ -67,11 +68,8 @@ class SelectCorrectFragment : BasePhoneFragment() {
      */
     private fun updateSingleDigitUi(index: Int) {
         val view = digitViews[index]
-        val textColor = if (viewModel.digits[index] == null) {
-            standardColor()
-        } else {
-            selectedColor()
-        }
+        val textColor = getTextColor(viewModel.digits[index] != null)
+
         view.setTextColor(textColor)
 
         val proposed = viewModel.generatedNumber[index]
@@ -82,8 +80,8 @@ class SelectCorrectFragment : BasePhoneFragment() {
      * Show restart button and hide main body
      */
     private fun showRestartUi() {
-        binding.digitsLayout.phoneDivider0.setTextColor(selectedColor())
-        binding.digitsLayout.phoneDivider1.setTextColor(selectedColor())
+        binding.digitsLayout.phoneDivider0.setTextColor(getTextColor(true))
+        binding.digitsLayout.phoneDivider1.setTextColor(getTextColor(true))
 
         binding.restartButton.root.visible()
         binding.mainBody.gone()
@@ -97,8 +95,8 @@ class SelectCorrectFragment : BasePhoneFragment() {
         binding.restartButton.root.gone()
         binding.mainBody.visible()
 
-        binding.digitsLayout.phoneDivider0.setTextColor(standardColor())
-        binding.digitsLayout.phoneDivider1.setTextColor(standardColor())
+        binding.digitsLayout.phoneDivider0.setTextColor(getTextColor(false))
+        binding.digitsLayout.phoneDivider1.setTextColor(getTextColor(false))
         updateUi()
     }
 
@@ -124,6 +122,14 @@ class SelectCorrectFragment : BasePhoneFragment() {
         binding.restartButton.root.setOnClickListener { reset() }
     }
 
-    private fun selectedColor(): Int = getColorPrimary(requireContext())
-    private fun standardColor(): Int = getColorOnBackground(requireContext())
+    /**
+     * Get display color for character based on whether or not it's selected
+     */
+    private fun getTextColor(selected: Boolean): Int {
+        return if (selected) {
+            getColorPrimary(requireContext())
+        } else {
+            getColorOnBackground(requireContext())
+        }
+    }
 }
