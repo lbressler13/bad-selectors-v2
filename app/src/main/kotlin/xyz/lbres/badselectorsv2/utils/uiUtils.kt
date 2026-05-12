@@ -36,16 +36,31 @@ fun setImageButtonTint(button: View, color: Int) {
 }
 
 /**
+ * Get theme colorPrimary color value.
+ *
+ * @param context [Context]
+ * @return [Int]: the color value
+ */
+fun getColorPrimary(context: Context) = getThemeColor(context, com.google.android.material.R.attr.colorPrimary)
+
+/**
  * Get theme colorOnPrimary color value.
  *
  * @param context [Context]
  * @return [Int]: the color value
  */
-fun getColorOnPrimary(context: Context): Int {
-    val color = TypedValue()
-    context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, color, true)
-    return color.data
-}
+fun getColorOnPrimary(context: Context) = getThemeColor(context, com.google.android.material.R.attr.colorOnPrimary)
+
+/**
+ * Get theme colorOnBackground color value.
+ *
+ * @param context [Context]
+ * @return [Int]: the color value
+ */
+fun getColorOnBackground(context: Context) = getThemeColor(
+    context,
+    com.google.android.material.R.attr.colorOnBackground,
+)
 
 /**
  * Get theme disabledForeground color value.
@@ -53,8 +68,17 @@ fun getColorOnPrimary(context: Context): Int {
  * @param context [Context]
  * @return [Int]: the color value
  */
-fun getDisabledForeground(context: Context): Int {
+fun getDisabledForeground(context: Context) = getThemeColor(context, R.attr.disabledForeground)
+
+/**
+ * Get a theme color value
+ *
+ * @param context [Context]
+ * @param attrResId [Int]: id of resource
+ * @return [Int] the color value
+ */
+private fun getThemeColor(context: Context, attrResId: Int): Int {
     val color = TypedValue()
-    context.theme.resolveAttribute(R.attr.disabledForeground, color, true)
+    context.theme.resolveAttribute(attrResId, color, true)
     return color.data
 }

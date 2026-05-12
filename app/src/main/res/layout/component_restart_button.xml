@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/ConstrainCenter"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_marginBottom="@dimen/navbar_activity_bottom_margin"
+    android:background="@drawable/circle_with_border"
+    android:scaleX="3"
+    android:scaleY="3"
+    android:src="@drawable/ic_restart"
+    android:visibility="gone"
+    android:contentDescription="@string/restart_cd"
+    app:tint="?colorOnBackground" />

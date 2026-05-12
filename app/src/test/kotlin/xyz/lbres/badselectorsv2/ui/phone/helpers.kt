@@ -21,6 +21,11 @@ val digitViews = listOf(
     onView(withId(R.id.digit9)),
 )
 
+val dividerViews = listOf(
+    onView(withId(R.id.phoneDivider0)),
+    onView(withId(R.id.phoneDivider1)),
+)
+
 /**
  * Check that correct phone number is displayed in digit views
  *

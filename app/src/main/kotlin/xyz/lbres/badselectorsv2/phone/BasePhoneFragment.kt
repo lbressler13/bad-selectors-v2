@@ -46,9 +46,13 @@ abstract class BasePhoneFragment : Fragment() {
      * @param index [Int]: index of digit to display
      */
     protected fun displayDigitAtIndex(index: Int) {
-        val digit = phoneViewModel.getDigitAt(index)
+        val digit = phoneViewModel.digits[index]
         val view = digitViews[index]
-        val text = digit?.toString() ?: emptyDigit
+        val text = if (digit == null || digit !in digitsRange) {
+            emptyDigit
+        } else {
+            digit.toString()
+        }
         view.text = simpleIf(underlineDigits, text.underlined(), text)
     }
 
