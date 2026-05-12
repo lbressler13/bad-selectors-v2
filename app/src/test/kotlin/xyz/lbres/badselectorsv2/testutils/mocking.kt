@@ -7,7 +7,7 @@ import io.mockk.mockkStatic
 /**
  * Mock the Log class. Must be unmocked at the end of each test
  */
-fun mockkLog() {
+fun mockLog() {
     mockkStatic(Log::class)
     every { Log.v(any(), any()) } returns 1
     every { Log.d(any(), any()) } returns 1

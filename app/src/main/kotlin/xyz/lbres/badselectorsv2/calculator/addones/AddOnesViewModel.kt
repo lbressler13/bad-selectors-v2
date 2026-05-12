@@ -1,5 +1,6 @@
 package xyz.lbres.badselectorsv2.calculator.addones
 
+import android.util.Log
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.CalcData
 import xyz.lbres.kotlinutils.array.ext.setAllValues
@@ -50,10 +51,16 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
      * @param index [Int]: index of saved value to add
      */
     fun appendSavedValueAtIndex(index: Int) {
-        val position = calcData.computeText.size
-        savedValueIndices[index] = position
-
-        appendComputeText(savedValues[index].toString())
+        val baseError = "Unable to append saved value at $index"
+        when {
+            savedValues[index] == null -> Log.e(null, "$baseError, value is null")
+            savedValueIndices[index] != null -> Log.e(null, "$baseError, value already added")
+            else -> {
+                val position = calcData.computeText.size
+                savedValueIndices[index] = position
+                appendComputeText(savedValues[index].toString())
+            }
+        }
     }
 
     /**
@@ -75,7 +82,11 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
     fun saveComputedValue() {
         val computed = calcData.computedValue
         val index = savedValues.indexOfFirst { it == null }
-        _savedValues[index] = computed
+        if (index == -1) {
+            Log.e(null, "Unable to save value $computed, no spots available")
+        } else if (computed != null) {
+            _savedValues[index] = computed
+        }
     }
 
     /**
