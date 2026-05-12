@@ -17,7 +17,6 @@ import xyz.lbres.badselectorsv2.attributions.constants.authorAttributions
 import xyz.lbres.badselectorsv2.attributions.constants.flaticonAttrPolicyUrl
 import xyz.lbres.badselectorsv2.attributions.constants.flaticonUrl
 import xyz.lbres.badselectorsv2.databinding.FragmentAttributionsBinding
-import xyz.lbres.badselectorsv2.attributions.HorizontalDividerDecoration
 import xyz.lbres.badselectorsv2.utils.createUnderlineText
 
 /**

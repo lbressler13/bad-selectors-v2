@@ -20,7 +20,7 @@
         <item name="actionBarBackground">@color/dark_action_bar</item>
         <item name="actionBarTextColor">@color/black</item>
         <!-- Custom values -->
-        <item name="clearStoredColor">@color/white</item>
+        <item name="clearStoredColor">@color/black</item>
         <item name="disabledBackground">@color/dark_disabled_background_gray</item>
         <item name="disabledForeground">@color/dark_disabled_foreground_gray</item>
     </style>

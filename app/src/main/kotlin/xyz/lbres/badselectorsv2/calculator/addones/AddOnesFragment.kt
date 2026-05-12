@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
@@ -18,13 +17,11 @@ import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.badselectorsv2.ext.view.fullOpacity
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.halfOpacity
-import xyz.lbres.badselectorsv2.ext.view.invisible
 import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.utils.getColorOnPrimary
 import xyz.lbres.badselectorsv2.utils.getDisabledForeground
 import xyz.lbres.badselectorsv2.utils.setImageButtonTint
 import xyz.lbres.kotlinutils.collection.ext.countNotNull
-import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
  * Fragment with calculator that contains buttons for adding, subtracting, and one, as well as several saved values.
@@ -53,7 +50,6 @@ class AddOnesFragment : BaseCalculatorFragment() {
         binding = FragmentAddOnesBinding.inflate(layoutInflater, container, false)
         rootView = binding.root
 
-        // savedValueViews = binding.savedNumbersLayout.children.toList()
         savedValueViews = listOf(binding.savedValueText1, binding.savedValueText2)
 
         // init UI
@@ -149,11 +145,7 @@ class AddOnesFragment : BaseCalculatorFragment() {
             textview.disableAndDim()
         }
 
-        if (value != null && (!inUse || computationComplete)) {
-            deleteButton.enableAndBrighten()
-        } else {
-            deleteButton.disableAndDim()
-        }
+        deleteButton.isEnabled = value != null && (!inUse || computationComplete)
     }
 
     /**
