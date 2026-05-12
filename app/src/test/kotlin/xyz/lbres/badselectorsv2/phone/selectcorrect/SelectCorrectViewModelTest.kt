@@ -18,7 +18,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class SelectCorrectViewModelTest {
-    val mockGeneratedValues = listOf(
+    private val mockGeneratedValues = listOf(
         listOf(7, 4, 0, 2, 5, 6, 8, 1, 3, 9),
         listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
         listOf(3, 6, 2, 7, 9, 8, 5, 4, 1, 0),
