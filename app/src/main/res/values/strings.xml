@@ -62,6 +62,9 @@
     <!-- Enable Random -->
     <string name="title_random_enabled">Random Enabled</string>
 
+    <!-- Add One -->
+    <string name="title_add_ones">Add Ones</string>
+
 
     <!-- OTP -->
     <string name="appbar_title_otp">Bad OTP Receivers</string>
@@ -103,6 +106,7 @@
     <string name="phone_cd">Phone</string>
     <string name="restart_cd">Restart</string>
     <string name="settings_cd">Settings</string>
+    <string name="store_cd">Store value</string>
     <string name="times_cd">Times</string>
 
 

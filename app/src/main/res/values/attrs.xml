@@ -2,6 +2,7 @@
 <resources>
     <attr name="actionBarBackground" format="reference" />
     <attr name="actionBarTextColor" format="reference" />
+    <attr name="clearStoredColor" format="reference" />
     <attr name="disabledBackground" format="reference" />
     <attr name="disabledForeground" format="reference" />
 </resources>
