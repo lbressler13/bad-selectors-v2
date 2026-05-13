@@ -7,7 +7,7 @@ import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
  * ViewModel containing values that are specific to the phone select correct selector
  */
 class SelectCorrectViewModel : BasePhoneViewModel() {
-    // private var singleSelect = false
+    var singleSelect = false
 
     private val generator: PhoneNumberGenerator = PhoneNumberGenerator(allowRepeatDigits = false)
 
@@ -27,8 +27,13 @@ class SelectCorrectViewModel : BasePhoneViewModel() {
      * @param index [Int]: index of value to save
      */
     fun setDigitAt(index: Int) {
-        generator.freezeAtIndex(index)
-        _digits[index] = generatedNumber[index]
+        if (!generator.frozenAtIndex(index)) {
+            generator.freezeAtIndex(index)
+            _digits[index] = generatedNumber[index]
+            if (singleSelect) {
+                updateNumber()
+            }
+        }
     }
 
     /**

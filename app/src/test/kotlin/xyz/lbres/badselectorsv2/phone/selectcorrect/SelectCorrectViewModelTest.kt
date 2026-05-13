@@ -14,6 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -78,6 +79,35 @@ class SelectCorrectViewModelTest {
     }
 
     @Test
+    fun testSetDigitAtSingleSelect() {
+        val vm = SelectCorrectViewModel()
+
+        // turn on
+        var generated = vm.generatedNumber
+        vm.singleSelect = true
+        assertEquals(generated, vm.generatedNumber)
+
+        // set while on
+        vm.setDigitAt(3)
+        assertNotEquals(generated, vm.generatedNumber)
+        generated = vm.generatedNumber
+        vm.setDigitAt(6)
+        assertNotEquals(generated, vm.generatedNumber)
+        generated = vm.generatedNumber
+        vm.setDigitAt(3)
+        assertEquals(generated, vm.generatedNumber)
+
+        // turn back off
+        vm.singleSelect = false
+        assertEquals(generated, vm.generatedNumber)
+        vm.setDigitAt(0)
+        vm.setDigitAt(9)
+        assertEquals(generated, vm.generatedNumber)
+        vm.updateNumber()
+        assertNotEquals(generated, vm.generatedNumber)
+    }
+
+    @Test
     fun testResetData() {
         setupGeneratorMocks()
         val vm = SelectCorrectViewModel()
@@ -104,5 +134,7 @@ class SelectCorrectViewModelTest {
         mockkConstructor(PhoneNumberGenerator::class)
         every { constructedWith<PhoneNumberGenerator>().generateNumber(false) } returnsMany values
         every { constructedWith<PhoneNumberGenerator>().reset() } answers { callOriginal() }
+        every { constructedWith<PhoneNumberGenerator>().freezeAtIndex(any()) } answers { callOriginal() }
+        every { constructedWith<PhoneNumberGenerator>().frozenAtIndex(any()) } answers { callOriginal() }
     }
 }

@@ -113,6 +113,17 @@ class PhoneNumberGenerator(
     }
 
     /**
+     * Check if the value at an index is frozen
+     *
+     * @param index [Int]: position to check
+     * @return [Boolean]: true if the value is frozen, false if it is not
+     */
+    fun frozenAtIndex(index: Int): Boolean {
+        println("$index, ${frozenDigits.contentToString()}")
+        return frozenDigits[index] != null
+    }
+
+    /**
      * Reset the list of remaining values for a single digit
      *
      * @param index [Int]: index of digit to reset

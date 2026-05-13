@@ -115,6 +115,11 @@ class SelectCorrectFragmentTest {
     }
 
     @Test
+    fun singleSelect() {
+        // TODO
+    }
+
+    @Test
     fun restart() {
         mockGenerateNumber()
         launchFragment()
