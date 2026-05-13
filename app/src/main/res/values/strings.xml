@@ -23,6 +23,7 @@
 
     <string name="mark_correct">Tap digits to mark as correct</string>
     <string name="generate_new_number">Generate New Number</string>
+    <string name="single_select">Single select</string>
 
     <!-- Shuffle Circle -->
     <string name="title_shuffle_circle">Shuffle Circle</string>
@@ -75,6 +76,12 @@
     <string name="author_attr_template">Icon made by %s from %s</string>
     <string name="expand">Expand</string>
     <string name="collapse">Collapse</string>
+
+
+    <!-- Settings -->
+    <string name="title_settings">Settings</string>
+
+    <string name="done">Done</string>
 
 
     <!-- Keys -->
