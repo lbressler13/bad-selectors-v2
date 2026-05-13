@@ -4,45 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="200dp">
+    android:paddingTop="@dimen/tab_activity_top_padding">
 
     <include
         android:id="@+id/settingsButton"
         layout="@layout/component_settings_button" />
 
-    <include
-        android:id="@+id/digitsLayout"
-        layout="@layout/component_phone_number" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mainBody"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/digitsLayout">
+        android:layout_height="match_parent"
+        android:paddingTop="120dp">
 
-        <TextView
-            android:id="@+id/markCorrectText"
-            style="@style/ConstrainHorizontalCenter"
-            android:layout_width="wrap_content"
-            android:paddingTop="30dp"
-            android:text="@string/mark_correct"
-            android:textSize="25sp"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+        <include
+            android:id="@+id/digitsLayout"
+            layout="@layout/component_phone_number" />
 
-        <Button
-            android:id="@+id/generateNumberButton"
-            style="@style/ConstrainHorizontalCenter"
-            android:layout_marginTop="30dp"
-            android:text="@string/generate_new_number"
-            app:layout_constraintTop_toBottomOf="@id/markCorrectText"
-            tools:ignore="MissingConstraints" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainBody"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/digitsLayout">
+
+            <TextView
+                android:id="@+id/markCorrectText"
+                style="@style/ConstrainHorizontalCenter"
+                android:layout_width="wrap_content"
+                android:paddingTop="30dp"
+                android:text="@string/mark_correct"
+                android:textSize="25sp"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <Button
+                android:id="@+id/generateNumberButton"
+                style="@style/ConstrainHorizontalCenter"
+                android:layout_marginTop="30dp"
+                android:text="@string/generate_new_number"
+                app:layout_constraintTop_toBottomOf="@id/markCorrectText"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/restartButton"
+            layout="@layout/component_restart_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <include
-        android:id="@+id/restartButton"
-        layout="@layout/component_restart_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

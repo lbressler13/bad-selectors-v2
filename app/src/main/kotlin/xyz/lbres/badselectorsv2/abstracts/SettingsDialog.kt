@@ -15,7 +15,7 @@ import xyz.lbres.badselectorsv2.R
 /**
  * Abstract dialog to handle common functionality between settings dialogs, including init, dismiss, and setting up ViewModel
  */
-abstract class SettingsDialog<T: ViewBinding> : DialogFragment() {
+abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
     protected lateinit var binding: T
 
     /**
