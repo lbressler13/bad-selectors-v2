@@ -12,10 +12,3 @@ import xyz.lbres.badselectorsv2.R
 fun openDevTools() {
     onView(withId(R.id.devToolsButton)).perform(click())
 }
-
-/**
- * Close dialog
- */
-fun closeDialog() {
-    onView(withText("Done")).perform(click())
-}

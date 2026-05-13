@@ -2,6 +2,7 @@ package xyz.lbres.badselectorsv2.ui.phone.selectcorrect
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
@@ -27,8 +28,11 @@ import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.phone.dividerViews
 import xyz.lbres.badselectorsv2.ui.testutils.TextSaver
+import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.hasThemeTextColor
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
+import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
+import xyz.lbres.badselectorsv2.ui.testutils.openSettingsDialog
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.IntList
@@ -48,6 +52,7 @@ class SelectCorrectFragmentTest {
     private val generateButton = onView(withId(R.id.generateNumberButton))
     private val markCorrectMessage = onView(withId(R.id.markCorrectText))
     private val restartButton = onView(withId(R.id.restartButton))
+    private val singleSelectSwitch = onViewInDialog(withId(R.id.singleSelectSwitch))
 
     @After
     fun cleanupTest() {
@@ -116,7 +121,53 @@ class SelectCorrectFragmentTest {
 
     @Test
     fun singleSelect() {
-        // TODO
+        mockGenerateNumber()
+        launchFragment()
+
+        // enable single select
+        openSettingsDialog()
+        singleSelectSwitch.perform(click())
+        closeDialog()
+
+        // click single digit
+        digitViews[4].perform(forceClick())
+        checkPhoneNumber(mockGeneratedValues[1])
+        digitViews[6].perform(forceClick())
+        checkPhoneNumber(mockGeneratedValues[2])
+
+        // generate normally
+        generateButton.perform(forceClick())
+        checkPhoneNumber(mockGeneratedValues[3])
+
+        digitViews[9].perform(forceClick())
+        checkPhoneNumber(mockGeneratedValues[4])
+
+        // change back
+        openSettingsDialog()
+        singleSelectSwitch.perform(click())
+        closeDialog()
+        checkPhoneNumber(mockGeneratedValues[4])
+
+        digitViews[0].perform(click())
+        digitViews[7].perform(click())
+        checkPhoneNumber(mockGeneratedValues[4])
+    }
+
+    @Test
+    fun settingsDialog() {
+        mockGenerateNumber()
+        launchFragment()
+        digitViews[3].perform(forceClick())
+
+        // open dialog
+        openSettingsDialog()
+        onViewInDialog(withText("Settings")).check(matches(isDisplayed()))
+        singleSelectSwitch.check(matches(isDisplayed()))
+
+        // close and validate that ui didn't change
+        closeDialog()
+        checkPhoneNumber(mockGeneratedValues[0])
+        checkDigitColors(setOf(3))
     }
 
     @Test
@@ -178,10 +229,14 @@ class SelectCorrectFragmentTest {
         return scenario
     }
 
+    private fun checkPhoneNumber(mockIndex: Int) = checkPhoneNumber(mockGeneratedValues[mockIndex])
+
     private fun mockGenerateNumber(mockValues: List<IntList> = mockGeneratedValues) {
         mockkConstructor(PhoneNumberGenerator::class)
         every { constructedWith<PhoneNumberGenerator>().generateNumber(false) } returnsMany mockValues
         every { constructedWith<PhoneNumberGenerator>().reset() } answers { callOriginal() }
+        every { constructedWith<PhoneNumberGenerator>().freezeAtIndex(any()) } answers { callOriginal() }
+        every { constructedWith<PhoneNumberGenerator>().frozenAtIndex(any()) } answers { callOriginal() }
     }
 
     private fun checkInitialUi(phoneNumber: IntList) {
@@ -207,6 +262,9 @@ class SelectCorrectFragmentTest {
     }
 
     private fun checkDigitColors(selectedDigits: Set<Int>, dividersSelected: Boolean = false) {
+        val hasStandardColor = hasThemeTextColor(com.google.android.material.R.attr.colorOnBackground)
+        val hasSelectedColor = hasThemeTextColor(com.google.android.material.R.attr.colorPrimary)
+
         digitViews.forEachIndexed { index, view ->
             if (index in selectedDigits) {
                 view.check(matches(hasSelectedColor))
@@ -217,7 +275,4 @@ class SelectCorrectFragmentTest {
         val dividerMatcher = if (dividersSelected) hasSelectedColor else hasStandardColor
         dividerViews.forEach { it.check(matches(dividerMatcher)) }
     }
-
-    private val hasStandardColor = hasThemeTextColor(com.google.android.material.R.attr.colorOnBackground)
-    private val hasSelectedColor = hasThemeTextColor(com.google.android.material.R.attr.colorPrimary)
 }

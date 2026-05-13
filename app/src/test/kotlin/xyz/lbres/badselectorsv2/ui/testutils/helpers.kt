@@ -53,3 +53,14 @@ fun navigateToSelector(groupName: String, selectorName: String) {
         .perform(actionOnItem<VH>(vhMatcher, clickExpandCollapse))
     onView(withText(selectorName)).perform(forceClick())
 }
+
+fun openSettingsDialog() {
+    onView(withId(R.id.settingsButton)).perform(forceClick())
+}
+
+/**
+ * Close dialog
+ */
+fun closeDialog() {
+    onView(withText("Done")).perform(click())
+}
