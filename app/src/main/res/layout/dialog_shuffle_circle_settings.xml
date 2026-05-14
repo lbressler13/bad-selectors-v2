@@ -7,9 +7,9 @@
     android:paddingTop="@dimen/settings_dialog_top_padding">
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/singleSelectSwitch"
+        android:id="@+id/russianRouletteSwitch"
         style="@style/SettingsSwitch"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/single_select" />
+        android:text="@string/russian_roulette" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

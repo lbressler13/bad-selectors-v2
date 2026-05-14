@@ -7,9 +7,9 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/tab_activity_top_padding">
 
-<!--    <include-->
-<!--        android:id="@+id/settingsButton"-->
-<!--        layout="@layout/component_settings_button" />-->
+    <include
+        android:id="@+id/settingsButton"
+        layout="@layout/component_settings_button" />
 
     <include
         android:id="@+id/digitsLayout"

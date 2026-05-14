@@ -38,6 +38,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
         binding = FragmentPhoneShuffleCircleBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity())[ShuffleCircleViewModel::class.java]
 
+        initSettingsDialog()
         initDigitViews(binding.digitsLayout)
         initButtonCircle()
 
@@ -111,6 +112,16 @@ class ShuffleCircleFragment : BasePhoneFragment() {
             }
 
             binding.currentDigit.text = ""
+        }
+    }
+
+    /**
+     * Initialize dialog to update settings
+     */
+    private fun initSettingsDialog() {
+        binding.settingsButton.root.setOnClickListener {
+            val settingsDialog = ShuffleCircleSettingsDialog()
+            settingsDialog.show(childFragmentManager, ShuffleCircleSettingsDialog.TAG)
         }
     }
 }
