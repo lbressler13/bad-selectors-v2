@@ -318,6 +318,35 @@ class PhoneNumberGeneratorTest {
     }
 
     @Test
+    fun testFrozenAtIndex() {
+        val generator = PhoneNumberGenerator()
+
+        // all false before generation
+        digitsRange.forEach { assertFalse(generator.frozenAtIndex(it)) }
+        digitsRange.forEach { generator.freezeAtIndex(it) }
+        digitsRange.forEach { assertFalse(generator.frozenAtIndex(it)) }
+
+        generator.generateNumber()
+        val frozen: MutableSet<Int> = mutableSetOf()
+        val freeze = { index: Int ->
+            generator.freezeAtIndex(index)
+            frozen.add(index)
+        }
+
+        digitsRange.forEach { assertEquals(it in frozen, generator.frozenAtIndex(it)) }
+        listOf(2, 4, 3, 9).forEach { freeze(it) }
+        digitsRange.forEach { assertEquals(it in frozen, generator.frozenAtIndex(it)) }
+        listOf(6, 8, 2, 1, 0).forEach { freeze(it) }
+        digitsRange.forEach { assertEquals(it in frozen, generator.frozenAtIndex(it)) }
+        freeze(7)
+        digitsRange.forEach { assertEquals(it in frozen, generator.frozenAtIndex(it)) }
+
+        // after reset
+        generator.reset()
+        digitsRange.forEach { assertFalse(generator.frozenAtIndex(it)) }
+    }
+
+    @Test
     fun testReset() {
         // with digit repeats
         var generator = PhoneNumberGenerator()

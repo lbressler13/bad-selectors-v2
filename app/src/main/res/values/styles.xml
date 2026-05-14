@@ -98,4 +98,13 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">40sp</item>
     </style>
+
+
+    <!-- Switch -->
+    <style name="SettingsSwitch">
+        <!-- Layout -->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
 </resources>

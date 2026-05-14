@@ -12,5 +12,4 @@
         <item>30000ms</item>
         <item>60000ms</item>
     </string-array>
-    <string name="done">Done</string>
 </resources>
