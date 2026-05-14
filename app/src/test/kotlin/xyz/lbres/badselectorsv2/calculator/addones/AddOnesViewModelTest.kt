@@ -4,6 +4,7 @@ import android.util.Log
 import io.mockk.unmockkAll
 import io.mockk.verify
 import xyz.lbres.badselectorsv2.calculator.splitText
+import xyz.lbres.badselectorsv2.calculator.utils.CalcData
 import xyz.lbres.badselectorsv2.testutils.mockLog
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -11,6 +12,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AddOnesViewModelTest {
+    private val empty: List<Int?> = listOf(null, null)
+
     @BeforeTest
     fun setupTest() {
         mockLog()
@@ -19,6 +22,14 @@ class AddOnesViewModelTest {
     @AfterTest
     fun cleanupTest() {
         unmockkAll()
+    }
+
+    @Test
+    fun testInit() {
+        val vm = AddOnesViewModel()
+        assertEquals(2, vm.maxSavedValues)
+        assertEquals(empty, vm.savedValues)
+        assertEquals(CalcData(), vm.calcData)
     }
 
     @Test
@@ -58,13 +69,13 @@ class AddOnesViewModelTest {
         var expectedText = splitText("+2")
         assertEquals(expectedText, vm.calcData.computeText)
 
-        repeatBackspace(vm, 2)
+        vm = AddOnesViewModel()
+        saveResult(vm, 2)
         appendText(vm, "1")
         vm.appendSavedValueAtIndex(0)
         expectedText = splitText("12")
         assertEquals(expectedText, vm.calcData.computeText)
 
-        repeatBackspace(vm, 2)
         vm = AddOnesViewModel()
         saveResult(vm, 2)
         appendText(vm, "1+1-1-")
@@ -105,20 +116,19 @@ class AddOnesViewModelTest {
     @Test
     fun testClearSavedValueAtIndex() {
         val vm = AddOnesViewModel()
-        val noneSaved: List<Int?> = listOf(null, null)
 
         // clear with none
         vm.clearSavedValueAtIndex(0)
-        assertEquals(noneSaved, vm.savedValues)
+        assertEquals(empty, vm.savedValues)
         vm.clearSavedValueAtIndex(1)
-        assertEquals(noneSaved, vm.savedValues)
+        assertEquals(empty, vm.savedValues)
 
         // clear with only one
         saveResult(vm, 5)
         vm.clearSavedValueAtIndex(1)
         assertEquals(listOf(5, null), vm.savedValues)
         vm.clearSavedValueAtIndex(0)
-        assertEquals(noneSaved, vm.savedValues)
+        assertEquals(empty, vm.savedValues)
 
         // clear out of order
         saveResult(vm, -1)
@@ -126,7 +136,7 @@ class AddOnesViewModelTest {
         vm.clearSavedValueAtIndex(0)
         assertEquals(listOf(null, 0), vm.savedValues)
         vm.clearSavedValueAtIndex(1)
-        assertEquals(noneSaved, vm.savedValues)
+        assertEquals(empty, vm.savedValues)
     }
 
     @Test
@@ -136,7 +146,29 @@ class AddOnesViewModelTest {
 
     @Test
     fun testBackspaceComputeText() {
+        // empty
+        var vm = AddOnesViewModel()
+        vm.backspaceComputeText()
+        checkBlank(vm)
 
+        // no saved values
+        appendText(vm, "1")
+        vm.backspaceComputeText()
+        checkBlank(vm)
+
+        appendText(vm, "1+2--")
+        vm.backspaceComputeText()
+        assertEquals(splitText("1+2-"), vm.calcData.computeText)
+        vm.backspaceComputeText()
+        assertEquals(splitText("1+2"), vm.calcData.computeText)
+        repeatBackspace(vm, 3)
+        checkBlank(vm)
+
+        // saved value
+
+        // computed value
+
+        // error
     }
 
     @Test
@@ -151,6 +183,11 @@ class AddOnesViewModelTest {
 
     private fun appendText(vm: AddOnesViewModel, text: String) {
         splitText(text).forEach { vm.appendComputeText(it) }
+    }
+
+    private fun checkBlank(vm: AddOnesViewModel) {
+        assertEquals(CalcData(), vm.calcData)
+        assertEquals(empty, vm.savedValues)
     }
 
     private fun repeatBackspace(vm: AddOnesViewModel, count: Int) = repeat(count) { vm.backspaceComputeText() }
