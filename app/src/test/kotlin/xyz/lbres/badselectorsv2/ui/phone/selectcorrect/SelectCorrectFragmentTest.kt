@@ -229,8 +229,6 @@ class SelectCorrectFragmentTest {
         return scenario
     }
 
-    private fun checkPhoneNumber(mockIndex: Int) = checkPhoneNumber(mockGeneratedValues[mockIndex])
-
     private fun mockGenerateNumber(mockValues: List<IntList> = mockGeneratedValues) {
         mockkConstructor(PhoneNumberGenerator::class)
         every { constructedWith<PhoneNumberGenerator>().generateNumber(false) } returnsMany mockValues
