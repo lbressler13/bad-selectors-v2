@@ -28,6 +28,8 @@
     <!-- Shuffle Circle -->
     <string name="title_shuffle_circle">Shuffle Circle</string>
 
+    <string name="russian_roulette">Russian roulette</string>
+
 
     <!-- Date -->
     <string name="appbar_title_date">Bad Date Selectors</string>

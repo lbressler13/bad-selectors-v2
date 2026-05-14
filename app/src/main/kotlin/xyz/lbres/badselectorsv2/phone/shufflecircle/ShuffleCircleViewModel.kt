@@ -36,7 +36,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
      * Guaranteed to never return null twice in a row.
      *
      * @param index [Int]: index to retrieve number for
-     * @return [Int]?: number at [index], with some probability of null if [nullable] is true
+     * @return [Int]?: number at [index], with some probability of null if [russianRoulette] is true
      */
     fun getGeneratedAtIndex(index: Int): Int? {
         val canUseNull = russianRoulette && currentIndex != 0 && generatedDigit != null && generatedDigit != -1
