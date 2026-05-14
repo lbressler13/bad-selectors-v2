@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.abstracts.SettingsDialog
 import xyz.lbres.badselectorsv2.databinding.DialogSelectCorrectSettingsBinding
 
+/**
+ * Dialog to update settings for the [SelectCorrectFragment]
+ */
 class SelectCorrectSettingsDialog : SettingsDialog<DialogSelectCorrectSettingsBinding>() {
     private lateinit var viewModel: SelectCorrectViewModel
 

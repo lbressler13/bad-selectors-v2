@@ -340,6 +340,10 @@ class PhoneNumberGeneratorTest {
         digitsRange.forEach { assertEquals(it in frozen, generator.frozenAtIndex(it)) }
         freeze(7)
         digitsRange.forEach { assertEquals(it in frozen, generator.frozenAtIndex(it)) }
+
+        // after reset
+        generator.reset()
+        digitsRange.forEach { assertFalse(generator.frozenAtIndex(it)) }
     }
 
     @Test

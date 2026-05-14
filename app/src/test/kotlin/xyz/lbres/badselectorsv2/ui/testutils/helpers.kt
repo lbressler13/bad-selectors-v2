@@ -54,6 +54,9 @@ fun navigateToSelector(groupName: String, selectorName: String) {
     onView(withText(selectorName)).perform(forceClick())
 }
 
+/**
+ * Open dialog through settings button
+ */
 fun openSettingsDialog() {
     onView(withId(R.id.settingsButton)).perform(forceClick())
 }

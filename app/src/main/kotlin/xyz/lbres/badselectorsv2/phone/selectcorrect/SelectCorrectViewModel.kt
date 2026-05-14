@@ -7,6 +7,9 @@ import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
  * ViewModel containing values that are specific to the phone select correct selector
  */
 class SelectCorrectViewModel : BasePhoneViewModel() {
+    /**
+     * If a new number should be generated each time that a digit is selected
+     */
     var singleSelect = false
 
     private val generator: PhoneNumberGenerator = PhoneNumberGenerator(allowRepeatDigits = false)

@@ -233,8 +233,6 @@ class SelectCorrectFragmentTest {
         mockkConstructor(PhoneNumberGenerator::class)
         every { constructedWith<PhoneNumberGenerator>().generateNumber(false) } returnsMany mockValues
         every { constructedWith<PhoneNumberGenerator>().reset() } answers { callOriginal() }
-        every { constructedWith<PhoneNumberGenerator>().freezeAtIndex(any()) } answers { callOriginal() }
-        every { constructedWith<PhoneNumberGenerator>().frozenAtIndex(any()) } answers { callOriginal() }
     }
 
     private fun checkInitialUi(phoneNumber: IntList) {
