@@ -360,7 +360,7 @@ class PhoneNumberGeneratorTest {
         generator.freezeAtIndex(2)
         generator.reset()
         // retries because there's a 10% chance of a match each time
-        runWithRetries(3) {
+        runWithRetries(5) {
             assertNotEquals(frozen, generator.generateNumber()[2])
         }
 
