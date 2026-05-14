@@ -21,7 +21,7 @@ abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
     /**
      * Request key to notify parent that dialog has closed. Defaults to null
      */
-    protected open var dialogClosedRequestKey: String? = null
+    protected open val dialogClosedRequestKey: String? = null
 
     /**
      * Initialize dialog
