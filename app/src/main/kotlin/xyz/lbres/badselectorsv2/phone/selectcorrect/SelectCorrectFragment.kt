@@ -35,6 +35,7 @@ class SelectCorrectFragment : BasePhoneFragment() {
         viewModel = ViewModelProvider(requireActivity())[SelectCorrectViewModel::class.java]
         binding = FragmentSelectCorrectBinding.inflate(layoutInflater, container, false)
 
+        initSettingsDialog()
         initDigitViews(binding.digitsLayout)
         initOnClicks()
         updateUi()
@@ -132,6 +133,16 @@ class SelectCorrectFragment : BasePhoneFragment() {
             getColorPrimary(requireContext())
         } else {
             getColorOnBackground(requireContext())
+        }
+    }
+
+    /**
+     * Initialize dialog to update settings
+     */
+    private fun initSettingsDialog() {
+        binding.settingsButton.root.setOnClickListener {
+            val settingsDialog = SelectCorrectSettingsDialog()
+            settingsDialog.show(childFragmentManager, SelectCorrectSettingsDialog.TAG)
         }
     }
 }
