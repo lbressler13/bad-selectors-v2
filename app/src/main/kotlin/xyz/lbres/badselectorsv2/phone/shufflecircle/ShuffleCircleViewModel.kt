@@ -41,7 +41,7 @@ class ShuffleCircleViewModel : BasePhoneViewModel() {
     fun getGeneratedAtIndex(index: Int): Int? {
         val canUseNull = russianRoulette && currentIndex != 0 && generatedDigit != null && generatedDigit != -1
 
-        val probabilityNull = 0.01f // 1 / 100
+        val probabilityNull = 0.001f // 1 / 1000
         val nextNull = createRandom().nextBoolean(probabilityNull)
         generatedDigit = simpleIf(canUseNull && nextNull, null, generatedNumber[index])
 
