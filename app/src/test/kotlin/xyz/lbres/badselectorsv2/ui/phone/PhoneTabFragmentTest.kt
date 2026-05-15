@@ -52,7 +52,7 @@ class PhoneTabFragmentTest {
     @Test
     fun tabs() {
         onView(withId(R.id.viewPager)).perform(swipeRight())
-        onView(withTab("Shuffle Circle")).check(matches(isCompletelyDisplayed()))
+        onView(withTab("Random Circle")).check(matches(isCompletelyDisplayed()))
     }
 
     @Test fun navigateToHome() = testNavigateToHome()

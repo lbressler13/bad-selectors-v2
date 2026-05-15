@@ -25,8 +25,8 @@
     <string name="generate_new_number">Generate New Number</string>
     <string name="single_select">Single select</string>
 
-    <!-- Shuffle Circle -->
-    <string name="title_shuffle_circle">Shuffle Circle</string>
+    <!-- Random Circle -->
+    <string name="title_random_circle">Random Circle</string>
 
     <string name="russian_roulette">Russian roulette</string>
 
