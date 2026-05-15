@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.ui.phone.shufflecircle
+package xyz.lbres.badselectorsv2.ui.phone.randomcircle
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.action.ViewActions.click
@@ -26,7 +26,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.openSettingsDialog
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
-class ShuffleCircleSettingsDialogTest {
+class RandomCircleSettingsDialogTest {
     private var scenario: ActivityScenario<BaseActivity>? = null
 
     private val russianRouletteSwitch = onViewInDialog(withId(R.id.russianRouletteSwitch))

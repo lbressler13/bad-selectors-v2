@@ -1,14 +1,14 @@
-package xyz.lbres.badselectorsv2.phone.shufflecircle
+package xyz.lbres.badselectorsv2.phone.randomcircle
 
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.abstracts.SettingsDialog
 import xyz.lbres.badselectorsv2.databinding.DialogShuffleCircleSettingsBinding
 
 /**
- * Dialog to update settings for the [ShuffleCircleFragment]
+ * Dialog to update settings for the [RandomCircleFragment]
  */
-class ShuffleCircleSettingsDialog : SettingsDialog<DialogShuffleCircleSettingsBinding>() {
-    private lateinit var viewModel: ShuffleCircleViewModel
+class RandomCircleSettingsDialog : SettingsDialog<DialogShuffleCircleSettingsBinding>() {
+    private lateinit var viewModel: RandomCircleViewModel
 
     override fun inflateLayout() = DialogShuffleCircleSettingsBinding.inflate(layoutInflater)
 
@@ -16,7 +16,7 @@ class ShuffleCircleSettingsDialog : SettingsDialog<DialogShuffleCircleSettingsBi
      * Update UI to show initial settings
      */
     override fun setInitialUi() {
-        viewModel = ViewModelProvider(requireActivity())[ShuffleCircleViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[RandomCircleViewModel::class.java]
         binding.russianRouletteSwitch.isChecked = viewModel.russianRoulette
     }
 

@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.ui.phone.shufflecircle
+package xyz.lbres.badselectorsv2.ui.phone.randomcircle
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.phone.shufflecircle.ShuffleCircleViewModel
+import xyz.lbres.badselectorsv2.phone.randomcircle.RandomCircleViewModel
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
@@ -39,7 +39,7 @@ import xyz.lbres.kotlinutils.list.listOfNulls
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
-class ShuffleCircleFragmentTest {
+class RandomCircleFragmentTest {
     private val selectButton = onView(withId(R.id.selectButton))
     private val restartButton = onView(withId(R.id.restartButton))
     private val currentDigit = onView(withId(R.id.currentDigit))
@@ -183,7 +183,7 @@ class ShuffleCircleFragmentTest {
         val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
         mockGetGenerated(returnValues)
         val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
-        every { constructedWith<ShuffleCircleViewModel>().generatedDigit } returnsMany digitPropValues
+        every { constructedWith<RandomCircleViewModel>().generatedDigit } returnsMany digitPropValues
 
         val scenario = launchFragment()
 
@@ -247,12 +247,12 @@ class ShuffleCircleFragmentTest {
         val groupedResults: Map<Int, List<Int?>> = turns.groupBy { it.first }
             .mapValues { kvp -> kvp.value.map { it.second } }
 
-        mockkConstructor(ShuffleCircleViewModel::class)
+        mockkConstructor(RandomCircleViewModel::class)
         groupedResults.forEach {
-            every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(it.key) } returnsMany it.value
+            every { constructedWith<RandomCircleViewModel>().getGeneratedAtIndex(it.key) } returnsMany it.value
         }
-        justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
-        every { constructedWith<ShuffleCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
+        justRun { constructedWith<RandomCircleViewModel>().updateDigits() }
+        every { constructedWith<RandomCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
 
         // mock generate call in incrementCurrentIndex
         mockkConstructor(PhoneNumberGenerator::class)
