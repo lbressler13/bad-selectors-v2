@@ -12,6 +12,8 @@ import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.phone.BasePhoneFragment
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
 
+// TODO remove restart
+
 class SelectIncorrectFragment : BasePhoneFragment() {
     private lateinit var viewModel: SelectIncorrectViewModel
     override val phoneViewModel: BasePhoneViewModel
