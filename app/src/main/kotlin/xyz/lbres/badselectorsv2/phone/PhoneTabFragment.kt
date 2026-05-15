@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
-import xyz.lbres.badselectorsv2.phone.selectcorrect.SelectCorrectFragment
 import xyz.lbres.badselectorsv2.phone.randomcircle.RandomCircleFragment
+import xyz.lbres.badselectorsv2.phone.selectcorrect.SelectCorrectFragment
 
 class PhoneTabFragment : TabFragment() {
     override var metadata = PhoneTabFragment.metadata
