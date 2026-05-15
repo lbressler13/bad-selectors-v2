@@ -8,6 +8,6 @@
 
 
     <!-- Phone -->
-    <!-- Shuffle Circle -->
+    <!-- Random Circle -->
     <integer name="phoneCircleNumChildren">10</integer>
 </resources>

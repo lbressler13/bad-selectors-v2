@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.phone.shufflecircle
+package xyz.lbres.badselectorsv2.phone.randomcircle
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
-import xyz.lbres.badselectorsv2.databinding.FragmentPhoneShuffleCircleBinding
+import xyz.lbres.badselectorsv2.databinding.FragmentRandomCircleBinding
 import xyz.lbres.badselectorsv2.ext.view.disable
 import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.badselectorsv2.ext.view.gone
@@ -21,9 +21,9 @@ import xyz.lbres.badselectorsv2.phone.utils.numDigits
  * Fragment that displays an unlabelled button circle layout, where values are shuffled when a user selects a value.
  * Shuffling is not guaranteed to happen every time a button is pressed.
  */
-class ShuffleCircleFragment : BasePhoneFragment() {
-    private lateinit var binding: FragmentPhoneShuffleCircleBinding
-    private lateinit var viewModel: ShuffleCircleViewModel
+class RandomCircleFragment : BasePhoneFragment() {
+    private lateinit var binding: FragmentRandomCircleBinding
+    private lateinit var viewModel: RandomCircleViewModel
     override val phoneViewModel: BasePhoneViewModel
         get() = viewModel
 
@@ -35,8 +35,8 @@ class ShuffleCircleFragment : BasePhoneFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = FragmentPhoneShuffleCircleBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(requireActivity())[ShuffleCircleViewModel::class.java]
+        binding = FragmentRandomCircleBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(requireActivity())[RandomCircleViewModel::class.java]
 
         initSettingsDialog()
         initDigitViews(binding.digitsLayout)
@@ -120,8 +120,8 @@ class ShuffleCircleFragment : BasePhoneFragment() {
      */
     private fun initSettingsDialog() {
         binding.settingsButton.root.setOnClickListener {
-            val settingsDialog = ShuffleCircleSettingsDialog()
-            settingsDialog.show(childFragmentManager, ShuffleCircleSettingsDialog.TAG)
+            val settingsDialog = RandomCircleSettingsDialog()
+            settingsDialog.show(childFragmentManager, RandomCircleSettingsDialog.TAG)
         }
     }
 }

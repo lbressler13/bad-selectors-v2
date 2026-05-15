@@ -9,7 +9,7 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
 import xyz.lbres.badselectorsv2.phone.selectcorrect.SelectCorrectFragment
-import xyz.lbres.badselectorsv2.phone.shufflecircle.ShuffleCircleFragment
+import xyz.lbres.badselectorsv2.phone.randomcircle.RandomCircleFragment
 
 class PhoneTabFragment : TabFragment() {
     override var metadata = PhoneTabFragment.metadata
@@ -21,7 +21,7 @@ class PhoneTabFragment : TabFragment() {
     override var navToOtpResId: Int? = R.id.navigatePhoneToOtp
 
     private val selectCorrectFragment: SelectCorrectFragment by lazy { SelectCorrectFragment() }
-    private val shuffleCircleFragment: ShuffleCircleFragment by lazy { ShuffleCircleFragment() }
+    private val randomCircleFragment: RandomCircleFragment by lazy { RandomCircleFragment() }
 
     override lateinit var binding: TabFragmentBinding
 
@@ -41,15 +41,15 @@ class PhoneTabFragment : TabFragment() {
     override fun getFragmentFromPosition(position: Int): Fragment {
         return when (position) {
             0 -> selectCorrectFragment
-            1 -> shuffleCircleFragment
-            else -> shuffleCircleFragment
+            1 -> randomCircleFragment
+            else -> randomCircleFragment
         }
     }
 
     companion object {
         val metadata = Metadata(
             R.string.title_phone,
-            listOf(R.string.title_select_correct, R.string.title_shuffle_circle),
+            listOf(R.string.title_select_correct, R.string.title_random_circle),
             R.id.navigateHomeToPhone,
         )
     }

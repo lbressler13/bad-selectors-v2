@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.phone.shufflecircle
+package xyz.lbres.badselectorsv2.phone.randomcircle
 
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
@@ -8,7 +8,7 @@ import xyz.lbres.kotlinutils.general.simpleIf
 import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.random.ext.nextBoolean
 
-class ShuffleCircleViewModel : BasePhoneViewModel() {
+class RandomCircleViewModel : BasePhoneViewModel() {
     var russianRoulette = false
 
     private val generator = PhoneNumberGenerator(1..3)
