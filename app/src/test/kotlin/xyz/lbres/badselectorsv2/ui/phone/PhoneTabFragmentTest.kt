@@ -45,14 +45,16 @@ class PhoneTabFragmentTest {
     @Test
     fun initialUi() {
         actionBar.check(matches(withTitle("Bad Phone Selectors")))
-        onView(withTab("Select Correct")).check(matches(isCompletelyDisplayed()))
+        onView(withTab("Shuffle Circle")).check(matches(isCompletelyDisplayed()))
         testNavbarUi(R.id.navigationPhone, "Phone")
     }
 
     @Test
     fun tabs() {
         onView(withId(R.id.viewPager)).perform(swipeRight())
-        onView(withTab("Shuffle Circle")).check(matches(isCompletelyDisplayed()))
+        onView(withTab("Select Correct")).check(matches(isCompletelyDisplayed()))
+        onView(withId(R.id.viewPager)).perform(swipeRight())
+        onView(withTab("Select Incorrect")).check(matches(isCompletelyDisplayed()))
     }
 
     @Test fun navigateToHome() = testNavigateToHome()

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import xyz.lbres.badselectorsv2.databinding.ComponentPhoneNumberBinding
 import xyz.lbres.badselectorsv2.databinding.FragmentSelectCorrectBinding
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
@@ -22,6 +23,8 @@ class SelectCorrectFragment : BasePhoneFragment() {
         get() = viewModel
 
     private lateinit var binding: FragmentSelectCorrectBinding
+    override val digitsLayout: ComponentPhoneNumberBinding
+        get() = binding.digitsLayout
     override var underlineDigits: Boolean = false
 
     /**
@@ -36,7 +39,6 @@ class SelectCorrectFragment : BasePhoneFragment() {
         binding = FragmentSelectCorrectBinding.inflate(layoutInflater, container, false)
 
         initSettingsDialog()
-        initDigitViews(binding.digitsLayout)
         initOnClicks()
         updateUi()
 
@@ -48,12 +50,12 @@ class SelectCorrectFragment : BasePhoneFragment() {
      */
     private fun updateUi() {
         if (viewModel.generatedNumber.any { it == -1 }) {
-            digitViews.forEach {
+            getDigitViews().forEach {
                 it.text = emptyDigit
                 it.setTextColor(getTextColor(false))
             }
         } else {
-            digitViews.indices.forEach { updateSingleDigitUi(it) }
+            getDigitViews().indices.forEach { updateSingleDigitUi(it) }
             binding.digitsLayout.phoneDivider0.setTextColor(getTextColor(false))
             binding.digitsLayout.phoneDivider1.setTextColor(getTextColor(false))
         }
@@ -70,7 +72,7 @@ class SelectCorrectFragment : BasePhoneFragment() {
      * @param index [Int]: of view to update
      */
     private fun updateSingleDigitUi(index: Int) {
-        val view = digitViews[index]
+        val view = getDigitViews()[index]
         val textColor = getTextColor(viewModel.digits[index] != null)
 
         view.setTextColor(textColor)
@@ -114,7 +116,7 @@ class SelectCorrectFragment : BasePhoneFragment() {
         }
 
         // digits
-        digitViews.forEachIndexed { index, view ->
+        getDigitViews().forEachIndexed { index, view ->
             view.setOnClickListener {
                 viewModel.setDigitAt(index)
                 updateUi()

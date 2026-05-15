@@ -15,12 +15,14 @@ import io.mockk.unmockkAll
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.core.AllOf.allOf
 import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.phone.selectincorrect.SelectIncorrectViewModel
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
@@ -53,6 +55,11 @@ class SelectCorrectFragmentTest {
     private val markCorrectMessage = onView(withId(R.id.markCorrectText))
     private val restartButton = onView(withId(R.id.restartButton))
     private val singleSelectSwitch = onViewInDialog(withId(R.id.singleSelectSwitch))
+
+    @Before
+    fun setupTest() {
+        mockkConstructor(SelectIncorrectViewModel::class)
+    }
 
     @After
     fun cleanupTest() {

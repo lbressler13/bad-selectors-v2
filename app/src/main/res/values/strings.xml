@@ -22,8 +22,11 @@
     <string name="title_select_correct">Select Correct</string>
 
     <string name="mark_correct">Tap digits to mark as correct</string>
-    <string name="generate_new_number">Generate New Number</string>
+    <string name="generate_new_number">Generate New Number</string> <!-- TODO move this to shared -->
     <string name="single_select">Single select</string>
+
+    <!-- Select Incorrect -->
+    <string name="title_select_incorrect">Select Incorrect</string>
 
     <!-- Shuffle Circle -->
     <string name="title_shuffle_circle">Shuffle Circle</string>

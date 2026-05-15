@@ -78,6 +78,7 @@ class PhoneNumberGenerator(
      * @return [IntList]: new generated number
      */
     fun generateNumber(forceRegenerate: Boolean = false): IntList {
+        println("Generate called")
         if (forceRegenerate || repeatsRemaining <= 0) {
             generatedNumber.mapInPlaceIndexed { index, _ ->
                 val remaining = remainingValues[index]

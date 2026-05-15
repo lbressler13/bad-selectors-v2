@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
+import xyz.lbres.badselectorsv2.databinding.ComponentPhoneNumberBinding
 import xyz.lbres.badselectorsv2.databinding.FragmentPhoneShuffleCircleBinding
 import xyz.lbres.badselectorsv2.ext.view.disable
 import xyz.lbres.badselectorsv2.ext.view.enable
@@ -23,6 +24,8 @@ import xyz.lbres.badselectorsv2.phone.utils.numDigits
  */
 class ShuffleCircleFragment : BasePhoneFragment() {
     private lateinit var binding: FragmentPhoneShuffleCircleBinding
+    override val digitsLayout: ComponentPhoneNumberBinding
+        get() = binding.digitsLayout
     private lateinit var viewModel: ShuffleCircleViewModel
     override val phoneViewModel: BasePhoneViewModel
         get() = viewModel
@@ -39,7 +42,6 @@ class ShuffleCircleFragment : BasePhoneFragment() {
         viewModel = ViewModelProvider(requireActivity())[ShuffleCircleViewModel::class.java]
 
         initSettingsDialog()
-        initDigitViews(binding.digitsLayout)
         initButtonCircle()
 
         binding.selectButton.setOnClickListener { selectDigit() }
@@ -47,6 +49,7 @@ class ShuffleCircleFragment : BasePhoneFragment() {
         if (viewModel.currentIndex > maxDigit) {
             setRestartUi()
         }
+        displayPhoneNumber()
 
         return binding.root
     }
