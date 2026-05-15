@@ -268,7 +268,7 @@ class RandomCircleFragmentTest {
     // cannot launch scenario in before block due to mocking requirements
     private fun launchFragment(): ActivityScenario<BaseActivity> {
         val scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        navigateToSelector("Phone", "Shuffle Circle")
+        navigateToSelector("Phone", "Random Circle")
         return scenario
     }
 

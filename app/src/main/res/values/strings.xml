@@ -30,6 +30,9 @@
 
     <string name="russian_roulette">Russian roulette</string>
 
+    <!-- Shuffle Digits -->
+    <string name="title_shuffle_digits">Shuffle Digits</string>
+
 
     <!-- Date -->
     <string name="appbar_title_date">Bad Date Selectors</string>

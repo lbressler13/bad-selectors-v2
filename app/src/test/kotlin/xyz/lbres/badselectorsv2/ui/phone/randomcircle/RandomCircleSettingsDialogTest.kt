@@ -35,7 +35,7 @@ class RandomCircleSettingsDialogTest {
     @Before
     fun setupTest() {
         scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        navigateToSelector("Phone", "Shuffle Circle")
+        navigateToSelector("Phone", "Random Circle")
         openSettingsDialog()
     }
 
