@@ -29,7 +29,6 @@ const val chevronDownUrl = "https://www.flaticon.com/premium-icon/down-chevron_1
 const val chevronLeftUrl = "https://www.flaticon.com/premium-icon/left-chevron_1633718"
 const val chevronRightUrl = "https://www.flaticon.com/premium-icon/right-chevron_1633719"
 const val chevronUpUrl = "https://www.flaticon.com/premium-icon/up-chevron_1633717"
-const val closeUrl = "https://www.flaticon.com/premium-icon/cross_4421536"
 const val divideUrl = "https://www.flaticon.com/free-icon/divide_9345134"
 const val downloadUrl = "https://www.flaticon.com/free-icon/download_724933"
 const val equalsUrl = "https://www.flaticon.com/free-icon/equal_56751"
