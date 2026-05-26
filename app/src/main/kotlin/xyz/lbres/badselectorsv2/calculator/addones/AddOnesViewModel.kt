@@ -82,10 +82,15 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
     fun saveComputedValue() {
         val computed = calcData.computedValue
         val index = savedValues.indexOfFirst { it == null }
-        if (index == -1) {
-            Log.e(null, "Unable to save value $computed, no spots available")
-        } else if (computed != null) {
-            _savedValues[index] = computed
+        var warning: String? = null
+        when {
+            index == -1 -> warning = "Unable to save computed value $computed, no spots available"
+            computed == null -> warning = "Unable to save computed value, no value to save"
+            else -> _savedValues[index] = computed
+        }
+
+        if (warning != null) {
+            Log.w(null, warning)
         }
     }
 
