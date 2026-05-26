@@ -6,10 +6,13 @@ import io.mockk.verify
 import xyz.lbres.badselectorsv2.calculator.splitText
 import xyz.lbres.badselectorsv2.calculator.utils.CalcData
 import xyz.lbres.badselectorsv2.testutils.mockLog
+import xyz.lbres.kotlinutils.array.arrayOfValue
+import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfValue
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.expect
 
 class AddOnesViewModelTest {
     private val empty: List<Int?> = listOf(null, null)
@@ -142,53 +145,50 @@ class AddOnesViewModelTest {
     @Test
     fun testSavedValueMetadata() {
         val vm = AddOnesViewModel()
-        val emptyMetadata = Pair(null, false)
+        val emptyMetadata: Pair<Int?, Boolean> = Pair(null, false)
+        val expectedValues = mutableListOfValue(2, emptyMetadata)
+        val actualValues = { (0..1).map { vm.savedValueMetadata(it) } }
 
         // initial
-        assertEquals(emptyMetadata, vm.savedValueMetadata(0))
-        assertEquals(emptyMetadata, vm.savedValueMetadata(1))
+        assertEquals(expectedValues, actualValues())
 
         // saved
         vm.setResult(5, null)
         vm.saveComputedValue()
-        var expected0 = Pair(5, false)
-        assertEquals(expected0, vm.savedValueMetadata(0))
-        assertEquals(emptyMetadata, vm.savedValueMetadata(1))
+        expectedValues[0] = Pair(5, false)
+        assertEquals(expectedValues, actualValues())
 
         vm.setResult(14, null)
         vm.saveComputedValue()
-        var expected1 = Pair(14, false)
-        assertEquals(expected0, vm.savedValueMetadata(0))
-        assertEquals(expected1, vm.savedValueMetadata(1))
+        expectedValues[1] = Pair(14, false)
+        assertEquals(expectedValues, actualValues())
 
         // used
         vm.appendSavedValueAtIndex(1)
-        expected1 = Pair(14, true)
-        assertEquals(expected0, vm.savedValueMetadata(0))
-        assertEquals(expected1, vm.savedValueMetadata(1))
+        expectedValues[1] = Pair(14, true)
+        assertEquals(expectedValues, actualValues())
 
         appendText(vm, "+2-")
         vm.appendSavedValueAtIndex(0)
-        expected0 = Pair(5, true)
-        assertEquals(expected0, vm.savedValueMetadata(0))
-        assertEquals(expected1, vm.savedValueMetadata(1))
+        expectedValues[0] = Pair(5, true)
+        assertEquals(expectedValues, actualValues())
 
         // changed
         vm.setResult(2, null)
         vm.clearSavedValueAtIndex(0)
         vm.saveComputedValue()
-        expected0 = Pair(2, false)
-        expected1 = Pair(14, false)
-        assertEquals(expected0, vm.savedValueMetadata(0))
-        assertEquals(expected1, vm.savedValueMetadata(1))
+        expectedValues[0] = Pair(2, false)
+        expectedValues[1] = Pair(14, false)
+        assertEquals(expectedValues, actualValues())
 
         // cleared
         vm.clearSavedValueAtIndex(1)
-        assertEquals(expected0, vm.savedValueMetadata(0))
+        expectedValues[1] = emptyMetadata
+        assertEquals(expectedValues, actualValues())
         assertEquals(emptyMetadata, vm.savedValueMetadata(1))
         vm.clearSavedValueAtIndex(0)
-        assertEquals(emptyMetadata, vm.savedValueMetadata(0))
-        assertEquals(emptyMetadata, vm.savedValueMetadata(1))
+        expectedValues[0] = emptyMetadata
+        assertEquals(expectedValues, actualValues())
     }
 
     @Test
