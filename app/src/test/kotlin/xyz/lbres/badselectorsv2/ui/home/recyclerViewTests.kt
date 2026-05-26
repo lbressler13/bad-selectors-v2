@@ -55,7 +55,7 @@ fun testExpansionsPersistedOnLeave() {
 
 fun testNavigateWithPhoneSelectors() {
     expandCollapseGroup("Phone")
-    runSingleSelectorNavigationTest("Shuffle Circle")
+    runSingleSelectorNavigationTest("Random Circle")
 }
 
 fun testNavigateWithDateSelectors() {

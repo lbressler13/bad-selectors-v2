@@ -154,6 +154,15 @@ class SelectCorrectFragmentTest {
     }
 
     @Test
+    fun restart() {
+        mockGenerateNumber()
+        launchFragment()
+        digitViews.forEach { it.perform(forceClick()) }
+        restartButton.perform(forceClick())
+        checkInitialUi(mockGeneratedValues[1])
+    }
+
+    @Test
     fun settingsDialog() {
         mockGenerateNumber()
         launchFragment()
@@ -168,15 +177,6 @@ class SelectCorrectFragmentTest {
         closeDialog()
         checkPhoneNumber(mockGeneratedValues[0])
         checkDigitColors(setOf(3))
-    }
-
-    @Test
-    fun restart() {
-        mockGenerateNumber()
-        launchFragment()
-        digitViews.forEach { it.perform(forceClick()) }
-        restartButton.perform(forceClick())
-        checkInitialUi(mockGeneratedValues[1])
     }
 
     @Test

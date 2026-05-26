@@ -64,7 +64,7 @@ abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
     /**
      * Save changes to settings
      */
-    protected open fun saveUpdatedSettings() {}
+    protected abstract fun saveUpdatedSettings()
 
     /**
      * Close fragment and save settings

@@ -1,7 +1,8 @@
-package xyz.lbres.badselectorsv2.ui.phone.shufflecircle
+package xyz.lbres.badselectorsv2.ui.phone.randomcircle
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
@@ -22,24 +23,29 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.phone.shufflecircle.ShuffleCircleViewModel
+import xyz.lbres.badselectorsv2.phone.randomcircle.RandomCircleViewModel
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
+import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
+import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
 import xyz.lbres.badselectorsv2.ui.testutils.isDisabled
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
+import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
+import xyz.lbres.badselectorsv2.ui.testutils.openSettingsDialog
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.listOfNulls
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
-class ShuffleCircleFragmentTest {
+class RandomCircleFragmentTest {
     private val selectButton = onView(withId(R.id.selectButton))
     private val restartButton = onView(withId(R.id.restartButton))
     private val currentDigit = onView(withId(R.id.currentDigit))
     private val circleButton = { idx: Int -> onView(atIndex(withId(R.id.circleLayout), idx)) }
+
+    private val russianRouletteSwitch = onViewInDialog(withId(R.id.russianRouletteSwitch))
 
     @After
     fun cleanupTest() {
@@ -96,8 +102,50 @@ class ShuffleCircleFragmentTest {
     }
 
     @Test
+    fun russianRoulette() {
+        val returnValues = listOf(0, 1, 2, null, 4, 5, 6, 7, 8, 9)
+        mockGetGenerated(returnValues)
+        launchFragment()
+
+        // enable russian roulette
+        openSettingsDialog()
+        russianRouletteSwitch.perform(click())
+        closeDialog()
+
+        // select digits
+        circleButton(0).perform(forceClick()) // 0
+        currentDigit.check(matches(withText("0")))
+        selectButton.perform(forceClick())
+        circleButton(0).perform(forceClick()) // 1
+        currentDigit.check(matches(withText("1")))
+        circleButton(0).perform(forceClick()) // 2
+        currentDigit.check(matches(withText("2")))
+        checkPhoneNumber(listOf(0) + listOfNulls(9))
+
+        circleButton(0).perform(forceClick()) // 3
+        currentDigit.check(matches(withText("")))
+        checkPhoneNumber(listOfNulls(10))
+
+        // disable russian roulette
+        openSettingsDialog()
+        russianRouletteSwitch.perform(forceClick())
+        closeDialog()
+
+        // select digits again
+        circleButton(0).perform(forceClick()) // 4
+        currentDigit.check(matches(withText("4")))
+        selectButton.perform(forceClick())
+        circleButton(0).perform(forceClick()) // 5
+        currentDigit.check(matches(withText("5")))
+        circleButton(0).perform(forceClick()) // 6
+        currentDigit.check(matches(withText("6")))
+        selectButton.perform(forceClick())
+        checkPhoneNumber(listOf(4, 6) + listOfNulls(8))
+    }
+
+    @Test
     fun restart() {
-        val returnValues = (0..9).toList()
+        val returnValues = digitsRange.toList()
         mockGetGenerated(returnValues)
         launchFragment()
         repeat(10) {
@@ -111,12 +159,31 @@ class ShuffleCircleFragmentTest {
     }
 
     @Test
+    fun settingsDialog() {
+        mockGetGenerated(digitsRange.toList())
+        launchFragment()
+        circleButton(0).perform(forceClick())
+        selectButton.perform(forceClick())
+        circleButton(0).perform(forceClick())
+
+        // open dialog
+        openSettingsDialog()
+        onViewInDialog(withText("Settings")).check(matches(isDisplayed()))
+        russianRouletteSwitch.check(matches(isDisplayed()))
+
+        // close and validate that ui didn't change
+        closeDialog()
+        checkPhoneNumber(listOf(0) + listOfNulls(9))
+        currentDigit.check(matches(withText("1")))
+    }
+
+    @Test
     fun recreate() {
         val phoneNumber = (0..9).toList()
         val returnValues = phoneNumber.subList(0, 2) + listOf(0) + phoneNumber.subList(2, 10)
         mockGetGenerated(returnValues)
         val digitPropValues = listOf(-1, -1, 0, 3, -1) // initial value + one for each recreate
-        every { constructedWith<ShuffleCircleViewModel>().generatedDigit } returnsMany digitPropValues
+        every { constructedWith<RandomCircleViewModel>().generatedDigit } returnsMany digitPropValues
 
         val scenario = launchFragment()
 
@@ -175,17 +242,17 @@ class ShuffleCircleFragmentTest {
     }
 
     // mock digit generation in view model
-    private fun mockGetGenerated(turns: List<Pair<Int, Int>>) {
+    private fun mockGetGenerated(turns: List<Pair<Int, Int?>>) {
         // group mock returns by index
-        val groupedResults: Map<Int, IntList> = turns.groupBy { it.first }
+        val groupedResults: Map<Int, List<Int?>> = turns.groupBy { it.first }
             .mapValues { kvp -> kvp.value.map { it.second } }
 
-        mockkConstructor(ShuffleCircleViewModel::class)
+        mockkConstructor(RandomCircleViewModel::class)
         groupedResults.forEach {
-            every { constructedWith<ShuffleCircleViewModel>().getGeneratedAtIndex(it.key) } returnsMany it.value
+            every { constructedWith<RandomCircleViewModel>().getGeneratedAtIndex(it.key) } returnsMany it.value
         }
-        justRun { constructedWith<ShuffleCircleViewModel>().updateDigits() }
-        every { constructedWith<ShuffleCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
+        justRun { constructedWith<RandomCircleViewModel>().updateDigits() }
+        every { constructedWith<RandomCircleViewModel>().incrementCurrentIndex() } answers { callOriginal() }
 
         // mock generate call in incrementCurrentIndex
         mockkConstructor(PhoneNumberGenerator::class)
@@ -194,12 +261,14 @@ class ShuffleCircleFragmentTest {
     }
 
     @JvmName("mockGetGeneratedIntList")
-    private fun mockGetGenerated(returnValues: IntList) = mockGetGenerated(returnValues.map { 0 to it })
+    private fun mockGetGenerated(returnValues: List<Int?>) {
+        mockGetGenerated(returnValues.map { 0 to it })
+    }
 
     // cannot launch scenario in before block due to mocking requirements
     private fun launchFragment(): ActivityScenario<BaseActivity> {
         val scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-        navigateToSelector("Phone", "Shuffle Circle")
+        navigateToSelector("Phone", "Random Circle")
         return scenario
     }
 

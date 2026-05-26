@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.phone.shufflecircle
+package xyz.lbres.badselectorsv2.phone.randomcircle
 
 import io.mockk.EqMatcher
 import io.mockk.every
@@ -23,7 +23,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
-class ShuffleCircleViewModelTest {
+class RandomCircleViewModelTest {
     private val shuffledDigits = listOf(7, 4, 0, 2, 5, 6, 8, 1, 3, 9)
 
     @BeforeTest
@@ -38,7 +38,7 @@ class ShuffleCircleViewModelTest {
 
     @Test
     fun testInit() {
-        val vm = ShuffleCircleViewModel()
+        val vm = RandomCircleViewModel()
         assertEquals(-1, vm.generatedDigit)
         digitsRange.forEach { vm.getGeneratedAtIndex(it) in digitsRange }
     }
@@ -46,7 +46,7 @@ class ShuffleCircleViewModelTest {
     @Test
     fun testGetAndSetDigit() {
         setupGeneratorMocks(listOf(shuffledDigits), listOf(shuffledDigits))
-        val vm = ShuffleCircleViewModel()
+        val vm = RandomCircleViewModel()
 
         assertEquals(listOfNulls<Int?>(numDigits), vm.digits)
 
@@ -68,7 +68,7 @@ class ShuffleCircleViewModelTest {
     @Test
     fun testGetGeneratedAtIndex() {
         setupGeneratorMocks(listOf(shuffledDigits))
-        val vm = ShuffleCircleViewModel()
+        val vm = RandomCircleViewModel()
         repeat(10) {
             val result = vm.getGeneratedAtIndex(it)
             assertEquals(shuffledDigits[it], result)
@@ -83,7 +83,7 @@ class ShuffleCircleViewModelTest {
 
     @Test
     fun testGetGeneratedAtIndexOob() {
-        val vm = ShuffleCircleViewModel()
+        val vm = RandomCircleViewModel()
         assertFailsWith<IndexOutOfBoundsException> { vm.getGeneratedAtIndex(10) }
         assertFailsWith<IndexOutOfBoundsException> { vm.getGeneratedAtIndex(-1) }
     }
@@ -104,7 +104,7 @@ class ShuffleCircleViewModelTest {
         )
         setupGeneratorMocks(listOf(shuffledDigits), digitsValues)
 
-        val vm = ShuffleCircleViewModel()
+        val vm = RandomCircleViewModel()
         repeat(10) {
             vm.incrementCurrentIndex()
             assertEquals(it + 1, vm.currentIndex)
@@ -123,7 +123,7 @@ class ShuffleCircleViewModelTest {
         }
 
         setupGeneratorMocks(listOf(shuffledDigits), listOf(shuffledDigits))
-        val vm = ShuffleCircleViewModel()
+        val vm = RandomCircleViewModel()
         vm.russianRoulette = true
 
         // first index, true is ignored
@@ -174,7 +174,7 @@ class ShuffleCircleViewModelTest {
         )
         setupGeneratorMocks(digitsValues)
 
-        val vm = ShuffleCircleViewModel()
+        val vm = RandomCircleViewModel()
         val updateDigitsAndCheck = { idx: Int ->
             vm.updateDigits()
             checkDigits(vm, digitsValues[idx])
@@ -196,7 +196,7 @@ class ShuffleCircleViewModelTest {
         val forceDigitsValues = listOf((0..9).toList())
         setupGeneratorMocks(digitsValues, forceDigitsValues)
 
-        val vm = ShuffleCircleViewModel()
+        val vm = RandomCircleViewModel()
         checkDigits(vm, digitsValues[0])
 
         // change digits and current index
@@ -226,7 +226,7 @@ class ShuffleCircleViewModelTest {
         every { constructedWith<PhoneNumberGenerator>(paramMatcher).reset() } answers { callOriginal() }
     }
 
-    private fun checkDigits(vm: ShuffleCircleViewModel, expected: List<Int>) {
+    private fun checkDigits(vm: RandomCircleViewModel, expected: List<Int>) {
         val actual = List(numDigits) { vm.getGeneratedAtIndex(it) }
         assertEquals(expected, actual)
     }
