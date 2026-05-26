@@ -89,6 +89,11 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
         }
     }
 
+    override fun setResult(computedValue: Int?, error: String?) {
+        super.setResult(computedValue, error)
+        savedValueIndices.setAllValues(null)
+    }
+
     /**
      * Reset data, including saved value indices. Saved values are not changed.
      */

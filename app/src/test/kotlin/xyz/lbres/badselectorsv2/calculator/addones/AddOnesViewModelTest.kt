@@ -141,7 +141,54 @@ class AddOnesViewModelTest {
 
     @Test
     fun testSavedValueMetadata() {
+        val vm = AddOnesViewModel()
+        val emptyMetadata = Pair(null, false)
 
+        // initial
+        assertEquals(emptyMetadata, vm.savedValueMetadata(0))
+        assertEquals(emptyMetadata, vm.savedValueMetadata(1))
+
+        // saved
+        vm.setResult(5, null)
+        vm.saveComputedValue()
+        var expected0 = Pair(5, false)
+        assertEquals(expected0, vm.savedValueMetadata(0))
+        assertEquals(emptyMetadata, vm.savedValueMetadata(1))
+
+        vm.setResult(14, null)
+        vm.saveComputedValue()
+        var expected1 = Pair(14, false)
+        assertEquals(expected0, vm.savedValueMetadata(0))
+        assertEquals(expected1, vm.savedValueMetadata(1))
+
+        // used
+        vm.appendSavedValueAtIndex(1)
+        expected1 = Pair(14, true)
+        assertEquals(expected0, vm.savedValueMetadata(0))
+        assertEquals(expected1, vm.savedValueMetadata(1))
+
+        appendText(vm, "+2-")
+        vm.appendSavedValueAtIndex(0)
+        expected0 = Pair(5, true)
+        assertEquals(expected0, vm.savedValueMetadata(0))
+        assertEquals(expected1, vm.savedValueMetadata(1))
+
+        // changed
+        vm.setResult(2, null)
+        vm.clearSavedValueAtIndex(0)
+        vm.saveComputedValue()
+        expected0 = Pair(2, false)
+        expected1 = Pair(14, false)
+        assertEquals(expected0, vm.savedValueMetadata(0))
+        assertEquals(expected1, vm.savedValueMetadata(1))
+
+        // cleared
+        vm.clearSavedValueAtIndex(1)
+        assertEquals(expected0, vm.savedValueMetadata(0))
+        assertEquals(emptyMetadata, vm.savedValueMetadata(1))
+        vm.clearSavedValueAtIndex(0)
+        assertEquals(emptyMetadata, vm.savedValueMetadata(0))
+        assertEquals(emptyMetadata, vm.savedValueMetadata(1))
     }
 
     @Test
