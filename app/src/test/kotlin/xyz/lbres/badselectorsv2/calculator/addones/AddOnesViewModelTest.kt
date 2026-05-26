@@ -41,8 +41,8 @@ class AddOnesViewModelTest {
         // check with error
     }
 
-    @Test
     // TODO this test is way too long
+    @Test
     fun testAppendSavedValueAtIndex() {
         var vm = AddOnesViewModel()
 
@@ -141,7 +141,6 @@ class AddOnesViewModelTest {
 
     @Test
     fun testSavedValueMetadata() {
-
     }
 
     @Test
