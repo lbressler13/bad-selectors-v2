@@ -67,7 +67,7 @@ private fun checkSavedValues(
     enabledUnused: Boolean = true,
 ) {
     savedValues.forEachIndexed { index, value ->
-        val text = savedValueToText(value)
+        val text = value?.toString() ?: ""
         val enabled = value != null && index !in inUse
         val textEnabledMatcher = enabledMatcher(enabled && enabledUnused)
         savedTexts[index].check(matches(allOf(textEnabledMatcher, withText(text))))
@@ -123,8 +123,6 @@ fun typeContent(content: List<Any>) {
         }
     }
 }
-
-private fun savedValueToText(value: Int?) = value?.toString() ?: ""
 
 fun repeatBackspace(iterations: Int) {
     repeat(iterations) {

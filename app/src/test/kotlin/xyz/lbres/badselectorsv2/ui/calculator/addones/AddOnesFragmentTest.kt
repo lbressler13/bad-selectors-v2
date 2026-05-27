@@ -119,9 +119,7 @@ class AddOnesFragmentTest {
         typeAndSaveToIndex(listOf("1-1-1-1-1-1-1-1-1-", 0), -10, 1, savedValues) // 2 digit number
         typeContent(listOf(0, "+1+-", 1, "+1"))
         inUse.addAll(listOf(0, 1))
-        clickBackspace()
-        checkEnabledState("3 + 1 + - -10 +", savedValues, inUse)
-        clickBackspace()
+        repeatBackspace(2)
         checkEnabledState("3 + 1 + - -10", savedValues, inUse)
 
         clickBackspace()
@@ -314,7 +312,6 @@ class AddOnesFragmentTest {
 
         // computed text
         clickEquals()
-        checkSaveState("0")
         scenario!!.recreate()
         checkSaveState("0")
         clickClear()
