@@ -37,9 +37,9 @@ class AddOnesViewModelTest {
     @Test
     fun testSaveComputedValue() {
         val expectedValues: MutableList<Int?> = mutableListOfValue(2, null)
+        val vm = AddOnesViewModel()
 
         // save values
-        val vm = AddOnesViewModel()
         saveResult(vm, 1)
         expectedValues[0] = 1
         assertEquals(expectedValues, vm.savedValues)
@@ -212,8 +212,11 @@ class AddOnesViewModelTest {
 
     @Test
     fun testBackspaceComputeText() {
+        val vm = AddOnesViewModel()
+        val expectedValues = listOf(7, 4)
+        val inUse: MutableSet<Int> = mutableSetOf()
+
         // empty
-        var vm = AddOnesViewModel()
         vm.backspaceComputeText()
         checkBlank(vm)
 
@@ -230,12 +233,53 @@ class AddOnesViewModelTest {
         repeatBackspace(vm, 3)
         checkBlank(vm)
 
+        // saved but not used
+        expectedValues.forEach { saveResult(vm, it) }
+        appendText(vm, "1+1+1")
+        checkMetadata(vm, expectedValues, inUse)
+        repeatBackspace(vm, 5)
+        assertEquals(emptyList(), vm.calcData.computeText)
+        checkMetadata(vm, expectedValues, inUse)
+
         // saved value
+        expectedValues.forEach { saveResult(vm, it) }
+        appendText(vm, "1+")
+        vm.appendSavedValueAtIndex(1)
+        inUse.add(1)
+        appendText(vm, "-1-1-")
+        vm.appendSavedValueAtIndex(0)
+        inUse.add(0)
+        appendText(vm, "+")
+        var expectedText = splitText("1+4-1-1-7+")
+        assertEquals(expectedText, vm.calcData.computeText)
+        checkMetadata(vm, expectedValues, inUse)
 
-        // computed value
+        vm.backspaceComputeText()
+        expectedText = splitText("1+4-1-1-7")
+        assertEquals(expectedText, vm.calcData.computeText)
+        checkMetadata(vm, expectedValues, inUse)
 
-        // error
-        // TODO
+        vm.backspaceComputeText()
+        expectedText = splitText("1+4-1-1-")
+        inUse.remove(0)
+        assertEquals(expectedText, vm.calcData.computeText)
+        checkMetadata(vm, expectedValues, inUse)
+
+        repeatBackspace(vm, 5)
+        expectedText = splitText("1+4")
+        assertEquals(expectedText, vm.calcData.computeText)
+        checkMetadata(vm, expectedValues, inUse)
+
+        vm.backspaceComputeText()
+        expectedText = splitText("1+")
+        inUse.remove(1)
+        assertEquals(expectedText, vm.calcData.computeText)
+        checkMetadata(vm, expectedValues, inUse)
+
+        repeatBackspace(vm, 2)
+        expectedText = emptyList()
+        assertEquals(expectedText, vm.calcData.computeText)
+        checkMetadata(vm, expectedValues, inUse)
     }
 
     @Test
@@ -286,7 +330,7 @@ class AddOnesViewModelTest {
 
     private fun checkBlank(vm: AddOnesViewModel) {
         assertEquals(CalcData(), vm.calcData)
-        assertEquals(empty, vm.savedValues)
+        checkMetadata(vm, empty)
     }
 
     private fun checkMetadata(vm: AddOnesViewModel, expectedValues: List<Int?>, inUse: Set<Int> = emptySet()) {
