@@ -19,7 +19,6 @@ import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
 import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
 import xyz.lbres.badselectorsv2.ui.calculator.typeText
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
-import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.kotlinutils.list.listOfNulls
 import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfNulls
 
@@ -69,8 +68,7 @@ class AddOnesFragmentTest {
         clickClear()
 
         // saved values
-        typeAndSave("1+1+1")
-        savedValues[0] = 3
+        typeAndSaveToIndex("1+1+1", 3, 0, savedValues)
         typeContent(listOf("1+1+", 0, "-1"))
         clickEquals()
         checkSaveState("4", savedValues)
@@ -83,7 +81,7 @@ class AddOnesFragmentTest {
 
     @Test
     fun clear() {
-        val savedValues = listOf(2, -1)
+        val savedValues: MutableList<Int?> = mutableListOf(2, -1)
         fun typeAndCheckClear(content: List<Any>, withEquals: Boolean = false) {
             typeContent(content)
             if (withEquals) {
@@ -99,8 +97,8 @@ class AddOnesFragmentTest {
         checkEnabledState("")
 
         // saved values
-        typeAndSave("1+1")
-        typeAndSave("1-1-1")
+        typeAndSaveToIndex("1+1", savedValues[0]!!, 0, savedValues)
+        typeAndSaveToIndex("1-1-1", savedValues[1]!!, 1, savedValues)
         typeAndCheckClear(listOf(0, "+1-", 1))
 
         // computed value
@@ -141,8 +139,7 @@ class AddOnesFragmentTest {
         clickClear()
 
         // delete unused
-        deleteButtons[1].perform(click())
-        savedValues[1] = null
+        deleteAtIndex(1, savedValues)
 
         typeText("1+1+1")
         clickEquals()
@@ -155,10 +152,8 @@ class AddOnesFragmentTest {
         typeText("1-1")
         clickEquals()
 
-        deleteButtons[0].perform(click())
-        savedValues[0] = null
-        deleteButtons[1].perform(click())
-        savedValues[1] = null
+        deleteAtIndex(0, savedValues)
+        deleteAtIndex(1, savedValues)
         checkSaveState("0")
 
         saveButton.perform(click())
@@ -177,10 +172,8 @@ class AddOnesFragmentTest {
         typeContent(listOf(0, 1))
         clickEquals()
         checkErrorState(savedValues)
-        deleteButtons[0].perform(click())
-        savedValues[0] = null
-        deleteButtons[1].perform(click())
-        savedValues[1] = null
+        deleteAtIndex(0, savedValues)
+        deleteAtIndex(1, savedValues)
         checkErrorState()
     }
 
@@ -199,12 +192,10 @@ class AddOnesFragmentTest {
         typeAndCheckError(listOf("1+11"))
 
         // saved values
-        typeAndSave("1+1+1")
-        savedValues[0] = 3
+        typeAndSaveToIndex("1+1+1", 3, 0, savedValues)
         typeAndCheckError(listOf("1", 0), savedValues)
 
-        typeAndSave("1-1")
-        savedValues[1] = 0
+        typeAndSaveToIndex("1-1", 0, 1, savedValues)
         typeAndCheckError(listOf(0, 1), savedValues)
 
         typeAndCheckError(listOf(1, "+1--"), savedValues)
@@ -212,11 +203,9 @@ class AddOnesFragmentTest {
         // delete values in error state
         typeContent(listOf(0, "-"))
         clickEquals()
-        deleteButtons[0].perform(forceClick())
-        savedValues[0] = null
+        deleteAtIndex(0, savedValues)
         checkErrorState(savedValues)
-        deleteButtons[1].perform(forceClick())
-        savedValues[1] = null
+        deleteAtIndex(1, savedValues)
         checkErrorState(savedValues)
     }
 

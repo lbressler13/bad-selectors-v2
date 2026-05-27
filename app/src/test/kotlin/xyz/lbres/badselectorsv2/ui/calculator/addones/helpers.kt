@@ -96,13 +96,21 @@ private fun checkButtons(
     }
 }
 
-fun typeAndSave(text: String) = typeAndSave(listOf(text))
+fun typeAndSaveToIndex(text: String, value: Int, index: Int, savedValues: MutableList<Int?>) {
+    typeAndSaveToIndex(listOf(text), value, index, savedValues)
+}
 
-fun typeAndSave(content: List<Any>) {
+fun typeAndSaveToIndex(content: List<Any>, value: Int, index: Int, savedValues: MutableList<Int?>) {
     typeContent(content)
     clickEquals()
     saveButton.perform(click())
     clickClear()
+    savedValues[index] = value
+}
+
+fun deleteAtIndex(index: Int, savedValues: MutableList<Int?>) {
+    deleteButtons[index].perform(click())
+    savedValues[index] = null
 }
 
 fun typeContent(content: List<Any>) {
