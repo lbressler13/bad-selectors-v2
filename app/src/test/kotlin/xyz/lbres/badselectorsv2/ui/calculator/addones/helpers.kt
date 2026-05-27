@@ -11,12 +11,15 @@ import org.hamcrest.Matchers.allOf
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.calculator.backspaceButton
 import xyz.lbres.badselectorsv2.ui.calculator.clearButton
+import xyz.lbres.badselectorsv2.ui.calculator.clickClear
+import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
 import xyz.lbres.badselectorsv2.ui.calculator.equalsButton
 import xyz.lbres.badselectorsv2.ui.calculator.mainText
 import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
 import xyz.lbres.badselectorsv2.ui.calculator.typeText
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.isShown
+import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 import xyz.lbres.kotlinutils.list.listOfNulls
 
@@ -39,7 +42,8 @@ fun checkSaveState(text: String, savedValues: List<Int?> = listOfNulls(2)) {
     checkState(text, savedValues, emptySet(), saveView = true, errorView = false)
 }
 
-fun checkErrorState(text: String, savedValues: List<Int?> = listOfNulls(2)) {
+fun checkErrorState(savedValues: List<Int?> = listOfNulls(2)) {
+    val text = "Err: Syntax Error"
     checkState(text, savedValues, emptySet(), saveView = false, errorView = true)
 }
 
@@ -85,12 +89,20 @@ private fun checkButtons(
     }
 }
 
-private fun addContent(content: List<Any>) {
+fun typeAndSave(text: String) = typeAndSave(listOf(text))
+
+fun typeAndSave(content: List<Any>) {
+    typeContent(content)
+    clickEquals()
+    saveButton.perform(click())
+    clickClear()
+}
+
+fun typeContent(content: List<Any>) {
     content.forEach {
         when (it) {
             is String -> typeText(it)
-            // is Int -> savedTexts[it].perform(forceClick())
-            is Int -> savedTexts[it].perform(click())
+            is Int -> savedTexts[it].perform(forceClick())
             else -> throw IllegalArgumentException("Cannot add value of type ${it::class.java}")
         }
     }
