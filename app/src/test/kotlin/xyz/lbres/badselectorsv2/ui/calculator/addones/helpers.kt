@@ -11,6 +11,7 @@ import org.hamcrest.Matchers.allOf
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.calculator.backspaceButton
 import xyz.lbres.badselectorsv2.ui.calculator.clearButton
+import xyz.lbres.badselectorsv2.ui.calculator.clickBackspace
 import xyz.lbres.badselectorsv2.ui.calculator.clickClear
 import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
 import xyz.lbres.badselectorsv2.ui.calculator.equalsButton
@@ -124,3 +125,9 @@ fun typeContent(content: List<Any>) {
 }
 
 private fun savedValueToText(value: Int?) = value?.toString() ?: ""
+
+fun repeatBackspace(iterations: Int) {
+    repeat(iterations) {
+        clickBackspace()
+    }
+}

@@ -14,6 +14,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.ui.calculator.clickBackspace
 import xyz.lbres.badselectorsv2.ui.calculator.clickClear
 import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
 import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
@@ -76,7 +77,68 @@ class AddOnesFragmentTest {
 
     @Test
     fun backspace() {
-        // TODO
+        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val inUse: MutableSet<Int> = mutableSetOf()
+
+        // can't use with saved values, need to check when they get deleted
+        fun typeAndBackspace(text: String, spacedText: String) {
+            typeText(text)
+            val split = spacedText.split(" ")
+            repeat(split.size) {
+                clickBackspace()
+                val joinedText = split.subList(0, split.lastIndex - it).joinToString(" ")
+                checkEnabledState(joinedText, savedValues, inUse)
+            }
+            checkEnabledState("", savedValues, inUse)
+        }
+
+        // no saved values
+        clickBackspace()
+        checkEnabledState("")
+
+        typeAndBackspace("1+1+1", "1 + 1 + 1")
+
+        // saved values not used
+        typeAndSaveToIndex("1+1+1", 3, 0, savedValues)
+        typeAndBackspace("1-11+1", "1 - 1 1 + 1")
+
+        // saved values
+        typeContent(listOf(0))
+        clickBackspace()
+        checkEnabledState("", savedValues)
+
+        typeContent(listOf("1+", 0, "-1-"))
+        inUse.add(0)
+        repeatBackspace(3)
+        checkEnabledState("1 + 3", savedValues, inUse)
+        clickBackspace()
+        inUse.remove(0)
+        checkEnabledState("1 +", savedValues, inUse)
+        repeatBackspace(2)
+
+        typeAndSaveToIndex(listOf("1-1-1-1-1-1-1-1-1-", 0), -10, 1, savedValues) // 2 digit number
+        typeContent(listOf(0, "+1+-", 1, "+1"))
+        inUse.addAll(listOf(0, 1))
+        clickBackspace()
+        checkEnabledState("3 + 1 + - -10 +", savedValues, inUse)
+        clickBackspace()
+        checkEnabledState("3 + 1 + - -10", savedValues, inUse)
+
+        clickBackspace()
+        inUse.remove(1)
+        checkEnabledState("3 + 1 + -", savedValues, inUse)
+        // add back and delete again
+        typeContent(listOf(1, "+1"))
+        inUse.add(1)
+        checkEnabledState("3 + 1 + - -10 + 1", savedValues, inUse)
+        repeatBackspace(3)
+        inUse.remove(1)
+        checkEnabledState("3 + 1 + -", savedValues, inUse)
+        repeatBackspace(4)
+        checkEnabledState("3", savedValues, inUse)
+        clickBackspace()
+        inUse.remove(0)
+        checkEnabledState("", savedValues, inUse)
     }
 
     @Test
@@ -168,11 +230,16 @@ class AddOnesFragmentTest {
         savedValues[1] = -1
         checkEnabledState("", savedValues)
 
+        // after backspace
+        typeContent(listOf("1+", 0, "-1"))
+        repeatBackspace(3)
+        deleteAtIndex(0, savedValues)
+        checkEnabledState("1 +", savedValues)
+
         // delete in error view
-        typeContent(listOf(0, 1))
+        typeContent(listOf(1, "1"))
         clickEquals()
         checkErrorState(savedValues)
-        deleteAtIndex(0, savedValues)
         deleteAtIndex(1, savedValues)
         checkErrorState()
     }
