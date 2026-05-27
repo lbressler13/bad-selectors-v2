@@ -175,62 +175,32 @@ class AddOnesFragmentTest {
     fun compute() {
         val savedValues: MutableList<Int?> = mutableListOfNulls(2)
 
-        // TODO this is so unnecessary
-        typeText("1")
-        clickEquals()
-        checkSaveState("1", savedValues)
-        clickClear()
+        fun typeAndSave(content: List<Any>, result: Int, indexToDelete: Int? = null, indexToSave: Int? = null) {
+            typeContent(content)
+            clickEquals()
+            checkSaveState(result.toString(), savedValues)
 
-        typeText("1+1+1+1+1+1+1-1+1+1+1+1")
-        clickEquals()
-        checkSaveState("10", savedValues)
-        saveButton.perform(click())
-        savedValues[0] = 10
+            if (indexToDelete != null) {
+                deleteAtIndex(indexToDelete, savedValues)
+            }
+            if (indexToSave != null) {
+                saveButton.perform(click())
+                savedValues[indexToSave] = result
+            } else {
+                clickClear()
+            }
+        }
 
-        typeContent(listOf(0, "+1+1+1+1+1+1"))
-        clickEquals()
-        checkSaveState("16", savedValues)
-        saveButton.perform(click())
-        savedValues[1] = 16
+        typeAndSave(listOf("1"), 1)
 
-        typeContent(listOf(0, "+", 1))
-        clickEquals()
-        checkSaveState("26", savedValues)
-        deleteAtIndex(0, savedValues)
-        saveButton.perform(click())
-        savedValues[0] = 26
-
-        typeContent(listOf(0, "+", 1, "+1+1+1"))
-        clickEquals()
-        checkSaveState("45", savedValues)
-        deleteAtIndex(1, savedValues)
-        saveButton.perform(click())
-        savedValues[1] = 45
-
-        typeContent(listOf(0, "+", 1))
-        clickEquals()
-        checkSaveState("71", savedValues)
-        deleteAtIndex(0, savedValues)
-        saveButton.perform(click())
-        savedValues[0] = 71
-
-        typeContent(listOf(0, "+", 1))
-        clickEquals()
-        checkSaveState("116", savedValues)
-        deleteAtIndex(0, savedValues)
-        saveButton.perform(click())
-        savedValues[0] = 116
-
-        typeContent(listOf("1-", 0))
-        clickEquals()
-        checkSaveState("-115", savedValues)
-        deleteAtIndex(1, savedValues)
-        saveButton.perform(click())
-        savedValues[1] = -115
-
-        typeContent(listOf(0, "-", 1))
-        clickEquals()
-        checkSaveState("231", savedValues)
+        typeAndSave(listOf("1+1+1+1+1+1+1-1+1+1+1+1"), 10, indexToSave = 0)
+        typeAndSave(listOf(0, "+1+1+1+1+1+1"), 16, indexToSave = 1)
+        typeAndSave(listOf(0, "+", 1), 26, 0, 0)
+        typeAndSave(listOf(0, "+", 1, "+1+1+1"), 45, 1, 1)
+        typeAndSave(listOf(0, "+", 1), 71, 0, 0)
+        typeAndSave(listOf(0, "+", 1), 116, 0, 0)
+        typeAndSave(listOf("1-", 0), -115, 1, 1)
+        typeAndSave(listOf(0, "-", 1), 231)
     }
 
     @Test
