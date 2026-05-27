@@ -50,7 +50,13 @@ fun checkErrorState(savedValues: List<Int?> = listOfNulls(2)) {
 private fun checkState(text: String, savedValues: List<Int?>, inUse: Set<Int>, saveView: Boolean, errorView: Boolean) {
     val enabledView = !saveView && !errorView
     mainText.check(matches(withText(text)))
-    checkButtons(primaryEnabled = enabledView, saveDisplayed = saveView, equalsEnabled = enabledView)
+    val saveEnabled = savedValues.any { it == null }
+    checkButtons(
+        primaryEnabled = enabledView,
+        saveDisplayed = saveView,
+        equalsEnabled = enabledView,
+        saveEnabled = saveEnabled,
+    )
     checkSavedValues(savedValues, inUse, enabledView)
 }
 
@@ -72,6 +78,7 @@ private fun checkButtons(
     primaryEnabled: Boolean = true,
     saveDisplayed: Boolean = false,
     equalsEnabled: Boolean = true,
+    saveEnabled: Boolean = true,
 ) {
     clearButton.check(matches(isEnabled()))
 
@@ -81,7 +88,7 @@ private fun checkButtons(
     backspaceButton.check(matches(enabledMatcher(primaryEnabled)))
 
     if (saveDisplayed) {
-        saveButton.check(matches(allOf(isShown(), isEnabled())))
+        saveButton.check(matches(allOf(isShown(), enabledMatcher(saveEnabled))))
         equalsButton.check(isNotPresented())
     } else {
         equalsButton.check(matches(allOf(isShown(), enabledMatcher(equalsEnabled))))
