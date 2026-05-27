@@ -173,9 +173,64 @@ class AddOnesFragmentTest {
 
     @Test
     fun compute() {
-        // TODO
+        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
 
-        // cannot delete values in use
+        // TODO this is so unnecessary
+        typeText("1")
+        clickEquals()
+        checkSaveState("1", savedValues)
+        clickClear()
+
+        typeText("1+1+1+1+1+1+1-1+1+1+1+1")
+        clickEquals()
+        checkSaveState("10", savedValues)
+        saveButton.perform(click())
+        savedValues[0] = 10
+
+        typeContent(listOf(0, "+1+1+1+1+1+1"))
+        clickEquals()
+        checkSaveState("16", savedValues)
+        saveButton.perform(click())
+        savedValues[1] = 16
+
+        typeContent(listOf(0, "+", 1))
+        clickEquals()
+        checkSaveState("26", savedValues)
+        deleteAtIndex(0, savedValues)
+        saveButton.perform(click())
+        savedValues[0] = 26
+
+        typeContent(listOf(0, "+", 1, "+1+1+1"))
+        clickEquals()
+        checkSaveState("45", savedValues)
+        deleteAtIndex(1, savedValues)
+        saveButton.perform(click())
+        savedValues[1] = 45
+
+        typeContent(listOf(0, "+", 1))
+        clickEquals()
+        checkSaveState("71", savedValues)
+        deleteAtIndex(0, savedValues)
+        saveButton.perform(click())
+        savedValues[0] = 71
+
+        typeContent(listOf(0, "+", 1))
+        clickEquals()
+        checkSaveState("116", savedValues)
+        deleteAtIndex(0, savedValues)
+        saveButton.perform(click())
+        savedValues[0] = 116
+
+        typeContent(listOf("1-", 0))
+        clickEquals()
+        checkSaveState("-115", savedValues)
+        deleteAtIndex(1, savedValues)
+        saveButton.perform(click())
+        savedValues[1] = -115
+
+        typeContent(listOf(0, "-", 1))
+        clickEquals()
+        checkSaveState("231", savedValues)
     }
 
     @Test
@@ -279,15 +334,47 @@ class AddOnesFragmentTest {
     @Test
     fun recreate() {
         // blank
+        scenario!!.recreate()
+        checkEnabledState("")
 
         // text
+        typeText("1-1")
+        scenario!!.recreate()
+        checkEnabledState("1 - 1")
 
-        // complete text view
+        // computed text
+        clickEquals()
+        checkSaveState("0")
+        scenario!!.recreate()
+        checkSaveState("0")
+        clickClear()
 
         // error
+        typeText("+")
+        clickEquals()
+        scenario!!.recreate()
+        checkErrorState()
 
         // saved values
+        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val inUse: MutableSet<Int> = mutableSetOf()
 
-        // TODO
+        typeAndSaveToIndex("1+1+1", 3, 0, savedValues)
+        scenario!!.recreate()
+        checkEnabledState("", savedValues)
+
+        typeContent(listOf("1-", 0, "-1"))
+        inUse.add(0)
+        scenario!!.recreate()
+        checkEnabledState("1 - 3 - 1", savedValues, inUse)
+
+        clickEquals()
+        scenario!!.recreate()
+        checkSaveState("-3", savedValues)
+
+        saveButton.perform(click())
+        savedValues[1] = -3
+        deleteAtIndex(0, savedValues)
+        checkEnabledState("", savedValues, inUse)
     }
 }

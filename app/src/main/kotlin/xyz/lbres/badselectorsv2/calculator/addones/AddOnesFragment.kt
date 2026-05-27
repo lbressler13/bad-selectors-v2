@@ -57,6 +57,12 @@ class AddOnesFragment : BaseCalculatorFragment() {
         initMainText()
         initSavedViews()
 
+        if (viewModel.calcData.computedValue != null) {
+            showComputedUi()
+        } else if (viewModel.calcData.error != null) {
+            showErrorUi()
+        }
+
         return binding.root
     }
 
