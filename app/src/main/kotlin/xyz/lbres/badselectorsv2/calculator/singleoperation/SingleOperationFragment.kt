@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.runComputation
-import xyz.lbres.badselectorsv2.databinding.FragmentSingleOperationBinding
+import xyz.lbres.badselectorsv2.databinding.FragmentCalcSingleOperationBinding
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.kotlinutils.general.simpleIf
@@ -24,7 +24,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
     override val calculatorViewModel: BaseCalculatorViewModel
         get() = viewModel
 
-    private lateinit var binding: FragmentSingleOperationBinding
+    private lateinit var binding: FragmentCalcSingleOperationBinding
     override val rootView: View
         get() = binding.root
 
@@ -36,7 +36,7 @@ class SingleOperationFragment : BaseCalculatorFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentSingleOperationBinding.inflate(layoutInflater, container, false)
+        binding = FragmentCalcSingleOperationBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(requireActivity())[SingleOperationViewModel::class.java]
 
         // init UI

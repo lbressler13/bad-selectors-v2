@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.runComputation
-import xyz.lbres.badselectorsv2.databinding.FragmentRandomEnabledBinding
+import xyz.lbres.badselectorsv2.databinding.FragmentCalcRandomEnabledBinding
 import xyz.lbres.kotlinutils.general.simpleIf
 
 /**
@@ -19,7 +19,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
     override val calculatorViewModel: BaseCalculatorViewModel
         get() = viewModel
 
-    private lateinit var binding: FragmentRandomEnabledBinding
+    private lateinit var binding: FragmentCalcRandomEnabledBinding
     override val rootView: View
         get() = binding.root
 
@@ -32,7 +32,7 @@ class RandomEnabledFragment : BaseCalculatorFragment() {
         savedInstanceState: Bundle?,
     ): View {
         viewModel = ViewModelProvider(requireActivity())[RandomEnabledViewModel::class.java]
-        binding = FragmentRandomEnabledBinding.inflate(layoutInflater, container, false)
+        binding = FragmentCalcRandomEnabledBinding.inflate(layoutInflater, container, false)
 
         initKeypad()
         initMainText()

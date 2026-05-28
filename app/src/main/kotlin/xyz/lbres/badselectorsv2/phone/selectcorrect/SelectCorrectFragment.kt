@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import xyz.lbres.badselectorsv2.databinding.FragmentSelectCorrectBinding
+import xyz.lbres.badselectorsv2.databinding.FragmentPhoneSelectCorrectBinding
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.phone.BasePhoneFragment
@@ -21,7 +21,7 @@ class SelectCorrectFragment : BasePhoneFragment() {
     override val phoneViewModel: BasePhoneViewModel
         get() = viewModel
 
-    private lateinit var binding: FragmentSelectCorrectBinding
+    private lateinit var binding: FragmentPhoneSelectCorrectBinding
     override var underlineDigits: Boolean = false
 
     /**
@@ -33,7 +33,7 @@ class SelectCorrectFragment : BasePhoneFragment() {
         savedInstanceState: Bundle?,
     ): View {
         viewModel = ViewModelProvider(requireActivity())[SelectCorrectViewModel::class.java]
-        binding = FragmentSelectCorrectBinding.inflate(layoutInflater, container, false)
+        binding = FragmentPhoneSelectCorrectBinding.inflate(layoutInflater, container, false)
 
         initSettingsDialog()
         initDigitViews(binding.digitsLayout)

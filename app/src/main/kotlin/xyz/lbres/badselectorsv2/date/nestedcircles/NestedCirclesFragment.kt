@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.databinding.ComponentDateNumbersBinding
-import xyz.lbres.badselectorsv2.databinding.FragmentNestedCirclesBinding
+import xyz.lbres.badselectorsv2.databinding.FragmentDateNestedCirclesBinding
 import xyz.lbres.badselectorsv2.date.BaseDateFragment
 import xyz.lbres.badselectorsv2.date.BaseDateViewModel
 import xyz.lbres.badselectorsv2.ext.view.disable
@@ -26,7 +26,7 @@ class NestedCirclesFragment : BaseDateFragment() {
     override val dateViewModel: BaseDateViewModel
         get() = viewModel
 
-    private lateinit var binding: FragmentNestedCirclesBinding
+    private lateinit var binding: FragmentDateNestedCirclesBinding
     override val dateNumbersLayout: ComponentDateNumbersBinding
         get() = binding.dateNumbersLayout
 
@@ -39,7 +39,7 @@ class NestedCirclesFragment : BaseDateFragment() {
         savedInstanceState: Bundle?,
     ): View {
         viewModel = ViewModelProvider(requireActivity())[NestedCirclesViewModel::class.java]
-        binding = FragmentNestedCirclesBinding.inflate(inflater, container, false)
+        binding = FragmentDateNestedCirclesBinding.inflate(inflater, container, false)
 
         // initialize UI
         populateCircleLayouts()
