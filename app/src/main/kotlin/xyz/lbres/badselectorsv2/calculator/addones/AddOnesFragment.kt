@@ -11,7 +11,7 @@ import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.runComputation
 import xyz.lbres.badselectorsv2.databinding.ComponentCalcSavedValueBinding
-import xyz.lbres.badselectorsv2.databinding.FragmentAddOnesBinding
+import xyz.lbres.badselectorsv2.databinding.FragmentCalcAddOnesBinding
 import xyz.lbres.badselectorsv2.ext.view.disable
 import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.badselectorsv2.ext.view.fullOpacity
@@ -32,7 +32,7 @@ class AddOnesFragment : BaseCalculatorFragment() {
     override val calculatorViewModel: BaseCalculatorViewModel
         get() = viewModel
 
-    private lateinit var binding: FragmentAddOnesBinding
+    private lateinit var binding: FragmentCalcAddOnesBinding
     override val rootView: View
         get() = binding.root
 
@@ -49,7 +49,7 @@ class AddOnesFragment : BaseCalculatorFragment() {
         savedInstanceState: Bundle?,
     ): View {
         viewModel = ViewModelProvider(requireActivity())[AddOnesViewModel::class.java]
-        binding = FragmentAddOnesBinding.inflate(layoutInflater, container, false)
+        binding = FragmentCalcAddOnesBinding.inflate(layoutInflater, container, false)
         savedValueViews = listOf(binding.savedValueText1, binding.savedValueText2)
 
         // init UI
