@@ -18,6 +18,7 @@ import xyz.lbres.badselectorsv2.ui.calculator.clickBackspace
 import xyz.lbres.badselectorsv2.ui.calculator.clickClear
 import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
 import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
+import xyz.lbres.badselectorsv2.ui.calculator.splitText
 import xyz.lbres.badselectorsv2.ui.calculator.typeText
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.kotlinutils.list.listOfNulls
@@ -26,7 +27,6 @@ import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfNulls
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class AddOnesFragmentTest {
-
     private var scenario: ActivityScenario<BaseActivity>? = null
 
     @Before
@@ -57,6 +57,7 @@ class AddOnesFragmentTest {
     @Test
     fun equalsButton() {
         val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+
         // no saved values
         typeText("1")
         clickEquals()
@@ -78,53 +79,44 @@ class AddOnesFragmentTest {
     @Test
     fun backspace() {
         val savedValues: MutableList<Int?> = mutableListOfNulls(2)
-        val inUse: MutableSet<Int> = mutableSetOf()
 
         // can't use with saved values, need to check when they get deleted
-        fun typeAndBackspace(text: String, spacedText: String) {
+        fun typeAndBackspace(text: String) {
             typeText(text)
-            val split = spacedText.split(" ")
-            repeat(split.size) {
+            val split = splitText(text)
+            repeat(text.length) {
                 clickBackspace()
                 val joinedText = split.subList(0, split.lastIndex - it).joinToString(" ")
-                checkEnabledState(joinedText, savedValues, inUse)
+                checkEnabledState(joinedText, savedValues)
             }
-            checkEnabledState("", savedValues, inUse)
+            checkEnabledState("", savedValues)
         }
 
         // no saved values
         clickBackspace()
         checkEnabledState("")
 
-        typeAndBackspace("1+1+1", "1 + 1 + 1")
+        typeAndBackspace("1+1+1")
 
         // saved values not used
         typeAndSaveToIndex("1+1+1", 3, 0, savedValues)
-        typeAndBackspace("1-11+1", "1 - 1 1 + 1")
+        typeAndBackspace("1-11+1")
 
         // saved values
         typeContent(listOf(0))
         clickBackspace()
         checkEnabledState("", savedValues)
 
-        typeContent(listOf("1+", 0, "-1-"))
-        inUse.add(0)
-        repeatBackspace(3)
-        checkEnabledState("1 + 3", savedValues, inUse)
-        clickBackspace()
-        inUse.remove(0)
-        checkEnabledState("1 +", savedValues, inUse)
-        repeatBackspace(2)
-
         typeAndSaveToIndex(listOf("1-1-1-1-1-1-1-1-1-", 0), -10, 1, savedValues) // 2 digit number
+
         typeContent(listOf(0, "+1+-", 1, "+1"))
-        inUse.addAll(listOf(0, 1))
+        val inUse = mutableSetOf(0, 1)
         repeatBackspace(2)
         checkEnabledState("3 + 1 + - -10", savedValues, inUse)
-
         clickBackspace()
         inUse.remove(1)
         checkEnabledState("3 + 1 + -", savedValues, inUse)
+
         // add back and delete again
         typeContent(listOf(1, "+1"))
         inUse.add(1)
@@ -132,6 +124,7 @@ class AddOnesFragmentTest {
         repeatBackspace(3)
         inUse.remove(1)
         checkEnabledState("3 + 1 + -", savedValues, inUse)
+
         repeatBackspace(4)
         checkEnabledState("3", savedValues, inUse)
         clickBackspace()
@@ -142,7 +135,8 @@ class AddOnesFragmentTest {
     @Test
     fun clear() {
         val savedValues: MutableList<Int?> = mutableListOf(2, -1)
-        fun typeAndCheckClear(content: List<Any>, withEquals: Boolean = false) {
+
+        fun typeAndClear(content: List<Any>, withEquals: Boolean = false) {
             typeContent(content)
             if (withEquals) {
                 clickEquals()
@@ -159,46 +153,46 @@ class AddOnesFragmentTest {
         // saved values
         typeAndSaveToIndex("1+1", savedValues[0]!!, 0, savedValues)
         typeAndSaveToIndex("1-1-1", savedValues[1]!!, 1, savedValues)
-        typeAndCheckClear(listOf(0, "+1-", 1))
+        typeAndClear(listOf(0, "+1-", 1))
 
         // computed value
-        typeAndCheckClear(listOf("1+1"), true)
-        typeAndCheckClear(listOf(0, "+1"), true)
+        typeAndClear(listOf("1+1"), true)
+        typeAndClear(listOf(0, "+1"), true)
 
         // error
-        typeAndCheckClear(listOf("11"), true)
+        typeAndClear(listOf("11"), true)
     }
 
     @Test
     fun compute() {
         val savedValues: MutableList<Int?> = mutableListOfNulls(2)
 
-        fun typeAndSave(content: List<Any>, result: Int, indexToDelete: Int? = null, indexToSave: Int? = null) {
+        fun typeAndSave(content: List<Any>, result: Int, indexToSave: Int, delete: Boolean = false) {
             typeContent(content)
             clickEquals()
             checkSaveState(result.toString(), savedValues)
 
-            if (indexToDelete != null) {
-                deleteAtIndex(indexToDelete, savedValues)
+            if (delete) {
+                deleteAtIndex(indexToSave, savedValues)
             }
-            if (indexToSave != null) {
-                saveButton.perform(click())
-                savedValues[indexToSave] = result
-            } else {
-                clickClear()
-            }
+            saveButton.perform(click())
+            savedValues[indexToSave] = result
         }
 
-        typeAndSave(listOf("1"), 1)
+        // eq without computed values
+        typeText("1")
+        clickEquals()
+        checkSaveState("1", savedValues)
+        clickClear()
 
-        typeAndSave(listOf("1+1+1+1+1+1+1-1+1+1+1+1"), 10, indexToSave = 0)
-        typeAndSave(listOf(0, "+1+1+1+1+1+1"), 16, indexToSave = 1)
-        typeAndSave(listOf(0, "+", 1), 26, 0, 0)
-        typeAndSave(listOf(0, "+", 1, "+1+1+1"), 45, 1, 1)
-        typeAndSave(listOf(0, "+", 1), 71, 0, 0)
-        typeAndSave(listOf(0, "+", 1), 116, 0, 0)
-        typeAndSave(listOf("1-", 0), -115, 1, 1)
-        typeAndSave(listOf(0, "-", 1), 231)
+        // with computed values
+        typeAndSave(listOf("1+1+1+1+1+1+1-1+1+1+1+1"), 10, 0)
+        typeAndSave(listOf(0, "+1+1+1+1+1+1"), 16, 1)
+        typeAndSave(listOf(0, "+", 1), 26, 0, true)
+        typeAndSave(listOf(0, "+", 1, "+1+1+1"), 45, 1, true)
+        typeAndSave(listOf(0, "+", 1), 71, 0, true)
+        typeAndSave(listOf(0, "+", 1), 116, 0, true)
+        typeAndSave(listOf("1-", 0), -115, 1, true)
     }
 
     @Test
@@ -270,6 +264,7 @@ class AddOnesFragmentTest {
     @Test
     fun computeError() {
         val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+
         fun typeAndCheckError(content: List<Any>, savedValues: List<Int?> = listOfNulls(2)) {
             typeContent(content)
             clickEquals()

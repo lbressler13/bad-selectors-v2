@@ -6,7 +6,7 @@ import xyz.lbres.badselectorsv2.calculator.utils.CalcData
 import xyz.lbres.kotlinutils.array.ext.setAllValues
 
 /**
- * ViewModel containing values that are specific to the plus-one calculator.
+ * ViewModel containing values that are specific to the add-ones calculator.
  */
 class AddOnesViewModel : BaseCalculatorViewModel() {
     /**
@@ -34,7 +34,7 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
 
         if (computeText.isNotEmpty()) {
             // check if a saved value is being removed
-            val matchedIndex = savedValueIndices.indexOfFirst { computeText.lastIndex == it }
+            val matchedIndex = savedValueIndices.indexOf(computeText.lastIndex)
 
             if (matchedIndex != -1) {
                 savedValueIndices[matchedIndex] = null
@@ -51,10 +51,10 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
      * @param index [Int]: index of saved value to add
      */
     fun appendSavedValueAtIndex(index: Int) {
-        val baseError = "Unable to append saved value at $index"
+        val baseMessage = "Unable to append saved value at $index"
         when {
-            savedValues[index] == null -> Log.e(null, "$baseError, value is null")
-            savedValueIndices[index] != null -> Log.e(null, "$baseError, value already added")
+            savedValues[index] == null -> Log.w(null, "$baseMessage, value is null")
+            savedValueIndices[index] != null -> Log.w(null, "$baseMessage, value already added")
             else -> {
                 val position = calcData.computeText.size
                 savedValueIndices[index] = position
@@ -72,7 +72,14 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
         _savedValues[index] = null
     }
 
-    fun savedValueMetadata(index: Int): Pair<Int?, Boolean> {
+    /**
+     * Get information about saved value at a given index
+     *
+     * @param index [Int]: index to check
+     * @return [Pair]<Int?, Boolean>: pair where first value is the value at the index,
+     * and the second value indicates if the value at this index is in use
+     */
+    fun getSavedValueMetadata(index: Int): Pair<Int?, Boolean> {
         return Pair(savedValues[index], savedValueIndices[index] != null)
     }
 
@@ -94,6 +101,9 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
         }
     }
 
+    /**
+     * Update most recent computed value or error
+     */
     override fun setResult(computedValue: Int?, error: String?) {
         super.setResult(computedValue, error)
         savedValueIndices.setAllValues(null)

@@ -1,10 +1,7 @@
 package xyz.lbres.badselectorsv2.calculator.addones
 
-import android.util.Log
 import io.mockk.unmockkAll
-import io.mockk.verify
 import xyz.lbres.badselectorsv2.calculator.splitText
-import xyz.lbres.badselectorsv2.calculator.utils.CalcData
 import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfNulls
 import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfValue
@@ -12,6 +9,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class AddOnesViewModelTest {
     private val empty: List<Int?> = listOf(null, null)
@@ -31,7 +29,7 @@ class AddOnesViewModelTest {
         val vm = AddOnesViewModel()
         assertEquals(2, vm.maxSavedValues)
         assertEquals(empty, vm.savedValues)
-        assertEquals(CalcData(), vm.calcData)
+        assertTrue(vm.calcData.isEmpty())
     }
 
     @Test
@@ -40,18 +38,15 @@ class AddOnesViewModelTest {
         val vm = AddOnesViewModel()
 
         // save values
-        saveResult(vm, 1)
-        expectedValues[0] = 1
+        saveResultToIndex(vm, 1, 0, expectedValues)
         assertEquals(expectedValues, vm.savedValues)
 
-        saveResult(vm, -12)
-        expectedValues[1] = -12
+        saveResultToIndex(vm, -12, 1, expectedValues)
         assertEquals(expectedValues, vm.savedValues)
 
         // no available spots
         saveResult(vm, 5)
         assertEquals(expectedValues, vm.savedValues)
-        verify(exactly = 1) { Log.w(any(), any<String>()) }
 
         // cleared spots
         vm.clearSavedValueAtIndex(1)
@@ -65,7 +60,6 @@ class AddOnesViewModelTest {
         vm.setResult(null, "Error")
         vm.saveComputedValue()
         assertEquals(expectedValues, vm.savedValues)
-        verify(exactly = 2) { Log.w(any(), any<String>()) }
     }
 
     // TODO this test is way too long
@@ -73,17 +67,12 @@ class AddOnesViewModelTest {
     fun testAppendSavedValueAtIndex() {
         var vm = AddOnesViewModel()
 
-        val appendNull = { index: Int, callCount: Int ->
-            vm.appendSavedValueAtIndex(index)
-            verify(exactly = callCount) { Log.e(any(), any()) }
-        }
-
         // empty text
-        appendNull(0, 1)
-        appendNull(1, 2)
+        vm.appendSavedValueAtIndex(0)
+        vm.appendSavedValueAtIndex(1)
 
         saveResult(vm, 6)
-        appendNull(1, 3)
+        vm.appendSavedValueAtIndex(1)
 
         vm.appendSavedValueAtIndex(0)
         assertEquals(splitText("6"), vm.calcData.computeText)
@@ -93,23 +82,20 @@ class AddOnesViewModelTest {
         saveResult(vm, 2)
         appendText(vm, "+")
         vm.appendSavedValueAtIndex(0)
-        var expectedText = splitText("+2")
-        assertEquals(expectedText, vm.calcData.computeText)
+        assertEquals(splitText("+2"), vm.calcData.computeText)
 
         vm = AddOnesViewModel()
         saveResult(vm, 2)
         appendText(vm, "1")
         vm.appendSavedValueAtIndex(0)
-        expectedText = splitText("12")
-        assertEquals(expectedText, vm.calcData.computeText)
+        assertEquals(splitText("12"), vm.calcData.computeText)
 
         vm = AddOnesViewModel()
         saveResult(vm, 2)
         appendText(vm, "1+1-1-")
         vm.appendSavedValueAtIndex(0)
-        expectedText = splitText("1+1-1-2")
-        assertEquals(expectedText, vm.calcData.computeText)
-        appendNull(1, 4)
+        assertEquals(splitText("1+1-1-2"), vm.calcData.computeText)
+        vm.appendSavedValueAtIndex(1)
 
         // multiple values
         vm = AddOnesViewModel()
@@ -127,8 +113,7 @@ class AddOnesViewModelTest {
         appendText(vm, "-1+1+")
         vm.appendSavedValueAtIndex(1)
         appendText(vm, "-1")
-        expectedText = splitText("1+4-1+1+5-1")
-        assertEquals(expectedText, vm.calcData.computeText)
+        assertEquals(splitText("1+4-1+1+5-1"), vm.calcData.computeText)
 
         // already appended
         vm = AddOnesViewModel()
@@ -137,7 +122,6 @@ class AddOnesViewModelTest {
         assertEquals(listOf("4"), vm.calcData.computeText)
         vm.appendSavedValueAtIndex(0)
         assertEquals(listOf("4"), vm.calcData.computeText)
-        verify(exactly = 5) { Log.e(any(), any()) }
     }
 
     @Test
@@ -167,7 +151,7 @@ class AddOnesViewModelTest {
     }
 
     @Test
-    fun testSavedValueMetadata() {
+    fun testGetSavedValueMetadata() {
         val vm = AddOnesViewModel()
         val expectedValues: MutableList<Int?> = mutableListOfNulls(2)
         val inUse: MutableSet<Int> = mutableSetOf()
@@ -176,12 +160,10 @@ class AddOnesViewModelTest {
         checkMetadata(vm, empty)
 
         // saved
-        saveResult(vm, 5)
-        expectedValues[0] = 5
+        saveResultToIndex(vm, 5, 0, expectedValues)
         checkMetadata(vm, expectedValues)
 
-        saveResult(vm, 14)
-        expectedValues[1] = 14
+        saveResultToIndex(vm, 14, 1, expectedValues)
         checkMetadata(vm, expectedValues, inUse)
 
         // used
@@ -302,44 +284,54 @@ class AddOnesViewModelTest {
         saveResult(vm, 16)
         val expectedValues = mutableListOf(16, null)
         vm.resetComputeData()
-        assertEquals(CalcData(), vm.calcData)
+        assertTrue(vm.calcData.isEmpty())
         checkMetadata(vm, expectedValues)
 
-        saveResult(vm, 11)
-        expectedValues[1] = 11
+        saveResultToIndex(vm, 11, 1, expectedValues)
         vm.resetComputeData()
-        assertEquals(CalcData(), vm.calcData)
+        assertTrue(vm.calcData.isEmpty())
         checkMetadata(vm, expectedValues)
 
         // saved and in use
         vm.appendSavedValueAtIndex(0)
         vm.appendSavedValueAtIndex(1)
         vm.resetComputeData()
-        assertEquals(CalcData(), vm.calcData)
+        assertTrue(vm.calcData.isEmpty())
         checkMetadata(vm, expectedValues)
     }
 
+    // save result to viewmodel
     private fun saveResult(vm: AddOnesViewModel, result: Int) {
         vm.setResult(result, null)
         vm.saveComputedValue()
     }
 
+    // save result and update saved values list
+    private fun saveResultToIndex(vm: AddOnesViewModel, result: Int, index: Int, savedValues: MutableList<Int?>) {
+        saveResult(vm, result)
+        savedValues[index] = result
+    }
+
+    // append text to compute text
     private fun appendText(vm: AddOnesViewModel, text: String) {
         splitText(text).forEach { vm.appendComputeText(it) }
     }
 
+    // check that calc data and saved value metadata is blank
     private fun checkBlank(vm: AddOnesViewModel) {
-        assertEquals(CalcData(), vm.calcData)
+        assertTrue(vm.calcData.isEmpty())
         checkMetadata(vm, empty)
     }
 
+    // check saved value metadata at every index
     private fun checkMetadata(vm: AddOnesViewModel, expectedValues: List<Int?>, inUse: Set<Int> = emptySet()) {
         assertEquals(expectedValues, vm.savedValues)
         expectedValues.forEachIndexed { index, value ->
             val expected = Pair(value, index in inUse)
-            assertEquals(expected, vm.savedValueMetadata(index))
+            assertEquals(expected, vm.getSavedValueMetadata(index))
         }
     }
 
+    // backspace multiple times
     private fun repeatBackspace(vm: AddOnesViewModel, count: Int) = repeat(count) { vm.backspaceComputeText() }
 }

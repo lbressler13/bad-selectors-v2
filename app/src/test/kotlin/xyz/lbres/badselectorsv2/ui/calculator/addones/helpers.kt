@@ -35,19 +35,23 @@ val deleteButtons = listOf(R.id.savedValueText1, R.id.savedValueText2).map {
     onView(allOf(withId(R.id.deleteButton), isDescendantOfA(withId(it))))
 }
 
+// check values and buttons in enabled state
 fun checkEnabledState(text: String, savedValues: List<Int?> = listOfNulls(2), inUse: Set<Int> = emptySet()) {
     checkState(text, savedValues, inUse, saveView = false, errorView = false)
 }
 
+// check values and buttons in save state
 fun checkSaveState(text: String, savedValues: List<Int?> = listOfNulls(2)) {
     checkState(text, savedValues, emptySet(), saveView = true, errorView = false)
 }
 
+// check values and buttons in error state
 fun checkErrorState(savedValues: List<Int?> = listOfNulls(2)) {
     val text = "Err: Syntax Error"
     checkState(text, savedValues, emptySet(), saveView = false, errorView = true)
 }
 
+// shared helper for checking enabled, save, or error states
 private fun checkState(text: String, savedValues: List<Int?>, inUse: Set<Int>, saveView: Boolean, errorView: Boolean) {
     val enabledView = !saveView && !errorView
     mainText.check(matches(withText(text)))
@@ -61,6 +65,7 @@ private fun checkState(text: String, savedValues: List<Int?>, inUse: Set<Int>, s
     checkSavedValues(savedValues, inUse, enabledView)
 }
 
+// check the text and enabled state of each saved value view
 private fun checkSavedValues(
     savedValues: List<Int?> = listOfNulls(2),
     inUse: Set<Int> = emptySet(),
@@ -75,6 +80,7 @@ private fun checkSavedValues(
     }
 }
 
+// check state of all buttons, including top buttons, bottom buttons, and save button
 private fun checkButtons(
     primaryEnabled: Boolean = true,
     saveDisplayed: Boolean = false,
@@ -97,10 +103,7 @@ private fun checkButtons(
     }
 }
 
-fun typeAndSaveToIndex(text: String, value: Int, index: Int, savedValues: MutableList<Int?>) {
-    typeAndSaveToIndex(listOf(text), value, index, savedValues)
-}
-
+// type content, save result, and update saved values list
 fun typeAndSaveToIndex(content: List<Any>, value: Int, index: Int, savedValues: MutableList<Int?>) {
     typeContent(content)
     clickEquals()
@@ -109,11 +112,17 @@ fun typeAndSaveToIndex(content: List<Any>, value: Int, index: Int, savedValues: 
     savedValues[index] = value
 }
 
+fun typeAndSaveToIndex(text: String, value: Int, index: Int, savedValues: MutableList<Int?>) {
+    typeAndSaveToIndex(listOf(text), value, index, savedValues)
+}
+
+// delete saved value and update saved values list
 fun deleteAtIndex(index: Int, savedValues: MutableList<Int?>) {
     deleteButtons[index].perform(click())
     savedValues[index] = null
 }
 
+// type strings and add saved values
 fun typeContent(content: List<Any>) {
     content.forEach {
         when (it) {
@@ -124,8 +133,5 @@ fun typeContent(content: List<Any>) {
     }
 }
 
-fun repeatBackspace(iterations: Int) {
-    repeat(iterations) {
-        clickBackspace()
-    }
-}
+// backspace multiple times
+fun repeatBackspace(count: Int) = repeat(count) { clickBackspace() }

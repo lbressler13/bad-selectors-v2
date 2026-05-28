@@ -25,14 +25,16 @@ import xyz.lbres.kotlinutils.collection.ext.countNotNull
 
 /**
  * Fragment with calculator that contains buttons for adding, subtracting, and one, as well as several saved values.
- * At most 4 computed values can be stored at a time, and can be present at most once in the compute text.
+ * At most 2 computed values can be stored at a time, and each value can be present at most once in the compute text.
  */
 class AddOnesFragment : BaseCalculatorFragment() {
     private lateinit var viewModel: AddOnesViewModel
     override val calculatorViewModel: BaseCalculatorViewModel
         get() = viewModel
+
     private lateinit var binding: FragmentAddOnesBinding
-    override lateinit var rootView: View
+    override val rootView: View
+        get() = binding.root
 
     override var computeSeparator: String = " "
 
@@ -48,8 +50,6 @@ class AddOnesFragment : BaseCalculatorFragment() {
     ): View {
         viewModel = ViewModelProvider(requireActivity())[AddOnesViewModel::class.java]
         binding = FragmentAddOnesBinding.inflate(layoutInflater, container, false)
-        rootView = binding.root
-
         savedValueViews = listOf(binding.savedValueText1, binding.savedValueText2)
 
         // init UI
@@ -89,7 +89,7 @@ class AddOnesFragment : BaseCalculatorFragment() {
      * Update UI to display the computed value and show buttons to save a value
      */
     private fun showComputedUi() {
-        disableAllButClear() // doesn't include save
+        disableAllButClear() // doesn't disable save
         updateSavedViews()
 
         binding.equalsButton.gone()
@@ -133,12 +133,11 @@ class AddOnesFragment : BaseCalculatorFragment() {
 
     /**
      * Enable/disable the textview and closed button of a single saved value view depending on usage and current result state.
-     * Does not include logic for showing/hiding the saved value.
      *
      * @param position [Int]: position of view to update
      */
     private fun updateSingleSavedView(position: Int) {
-        val (value, inUse) = viewModel.savedValueMetadata(position)
+        val (value, inUse) = viewModel.getSavedValueMetadata(position)
         val computationComplete = viewModel.calcData.computedValue != null || viewModel.calcData.error != null
 
         val textview: TextView = savedValueViews[position].valueText
@@ -146,9 +145,11 @@ class AddOnesFragment : BaseCalculatorFragment() {
 
         textview.text = value?.toString() ?: ""
         if (value != null && !inUse && !computationComplete) {
-            textview.enableAndBrighten()
+            textview.enable()
+            textview.fullOpacity()
         } else {
-            textview.disableAndDim()
+            textview.disable()
+            textview.halfOpacity()
         }
 
         deleteButton.isEnabled = value != null && (!inUse || computationComplete)
@@ -183,7 +184,7 @@ class AddOnesFragment : BaseCalculatorFragment() {
      */
     private fun canSaveValue(): Boolean {
         val currentUsed = viewModel.savedValues.countNotNull()
-        return viewModel.calcData.error == null && currentUsed < viewModel.maxSavedValues
+        return viewModel.calcData.computedValue != null && currentUsed < viewModel.maxSavedValues
     }
 
     /**
@@ -218,21 +219,5 @@ class AddOnesFragment : BaseCalculatorFragment() {
 
         // display initial values
         updateSavedViews()
-    }
-
-    /**
-     * Enable a view and set to full opacity
-     */
-    private fun View.enableAndBrighten() {
-        enable()
-        fullOpacity()
-    }
-
-    /**
-     * Enable a view and set to half opacity
-     */
-    private fun View.disableAndDim() {
-        disable()
-        halfOpacity()
     }
 }
