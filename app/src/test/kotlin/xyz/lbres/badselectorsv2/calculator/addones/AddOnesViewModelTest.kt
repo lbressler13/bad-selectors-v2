@@ -63,38 +63,36 @@ class AddOnesViewModelTest {
         assertEquals(expectedValues, vm.savedValues)
     }
 
-    // TODO this test is way too long
     @Test
     fun testAppendSavedValueAtIndex() {
         var vm = AddOnesViewModel()
 
+        val append = { content: List<Any> ->
+            content.forEach {
+                when (it) {
+                    is String -> appendText(vm, it)
+                    is Int -> vm.appendSavedValueAtIndex(it)
+                }
+            }
+        }
+
         // empty text
-        vm.appendSavedValueAtIndex(0)
-        vm.appendSavedValueAtIndex(1)
+        append(listOf(0, 1))
+        checkBlank(vm)
 
         saveResult(vm, 6)
-        vm.appendSavedValueAtIndex(1)
-
-        vm.appendSavedValueAtIndex(0)
+        append(listOf(1, 0))
         assertEquals(splitText("6"), vm.calcData.computeText)
 
         // with text
         vm = AddOnesViewModel()
         saveResult(vm, 2)
-        appendText(vm, "+")
-        vm.appendSavedValueAtIndex(0)
-        assertEquals(splitText("+2"), vm.calcData.computeText)
-
-        vm = AddOnesViewModel()
-        saveResult(vm, 2)
-        appendText(vm, "1")
-        vm.appendSavedValueAtIndex(0)
+        append(listOf("1", 0))
         assertEquals(splitText("12"), vm.calcData.computeText)
 
         vm = AddOnesViewModel()
         saveResult(vm, 2)
-        appendText(vm, "1+1-1-")
-        vm.appendSavedValueAtIndex(0)
+        append(listOf("1+1-1-", 0))
         assertEquals(splitText("1+1-1-2"), vm.calcData.computeText)
         vm.appendSavedValueAtIndex(1)
 
@@ -102,18 +100,13 @@ class AddOnesViewModelTest {
         vm = AddOnesViewModel()
         saveResult(vm, 4)
         saveResult(vm, 5)
-        vm.appendSavedValueAtIndex(1)
-        vm.appendSavedValueAtIndex(0)
+        append(listOf(1, 0))
         assertEquals(listOf("5", "4"), vm.calcData.computeText)
 
         vm = AddOnesViewModel()
         saveResult(vm, 4)
         saveResult(vm, 5)
-        appendText(vm, "1+")
-        vm.appendSavedValueAtIndex(0)
-        appendText(vm, "-1+1+")
-        vm.appendSavedValueAtIndex(1)
-        appendText(vm, "-1")
+        append(listOf("1+", 0, "-1+1+", 1, "-1"))
         assertEquals(splitText("1+4-1+1+5-1"), vm.calcData.computeText)
 
         // already appended
