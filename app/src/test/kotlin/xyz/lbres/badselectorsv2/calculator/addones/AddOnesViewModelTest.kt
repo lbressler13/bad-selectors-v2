@@ -3,8 +3,8 @@ package xyz.lbres.badselectorsv2.calculator.addones
 import io.mockk.unmockkAll
 import xyz.lbres.badselectorsv2.calculator.splitText
 import xyz.lbres.badselectorsv2.testutils.mockLog
+import xyz.lbres.kotlinutils.list.listOfNulls
 import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfNulls
-import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfValue
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -12,7 +12,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class AddOnesViewModelTest {
-    private val empty: List<Int?> = listOf(null, null)
+    private val maxSavedValues = 2
+    private val empty: List<Int?> = listOfNulls(maxSavedValues)
 
     @BeforeTest
     fun setupTest() {
@@ -27,14 +28,14 @@ class AddOnesViewModelTest {
     @Test
     fun testInit() {
         val vm = AddOnesViewModel()
-        assertEquals(2, vm.maxSavedValues)
+        assertEquals(maxSavedValues, vm.maxSavedValues)
         assertEquals(empty, vm.savedValues)
         assertTrue(vm.calcData.isEmpty())
     }
 
     @Test
     fun testSaveComputedValue() {
-        val expectedValues: MutableList<Int?> = mutableListOfValue(2, null)
+        val expectedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
         val vm = AddOnesViewModel()
 
         // save values
@@ -153,7 +154,7 @@ class AddOnesViewModelTest {
     @Test
     fun testGetSavedValueMetadata() {
         val vm = AddOnesViewModel()
-        val expectedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val expectedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
         val inUse: MutableSet<Int> = mutableSetOf()
 
         // initial

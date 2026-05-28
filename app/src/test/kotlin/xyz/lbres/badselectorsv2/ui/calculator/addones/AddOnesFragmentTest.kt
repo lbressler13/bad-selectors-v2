@@ -21,7 +21,6 @@ import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
 import xyz.lbres.badselectorsv2.ui.calculator.splitText
 import xyz.lbres.badselectorsv2.ui.calculator.typeText
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
-import xyz.lbres.kotlinutils.list.listOfNulls
 import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfNulls
 
 @Category(Robolectric::class)
@@ -56,7 +55,7 @@ class AddOnesFragmentTest {
 
     @Test
     fun equalsButton() {
-        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val savedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
 
         // no saved values
         typeText("1")
@@ -78,7 +77,7 @@ class AddOnesFragmentTest {
 
     @Test
     fun backspace() {
-        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val savedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
 
         // can't use with saved values, need to check when they get deleted
         fun typeAndBackspace(text: String) {
@@ -165,7 +164,7 @@ class AddOnesFragmentTest {
 
     @Test
     fun compute() {
-        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val savedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
 
         fun typeAndSave(content: List<Any>, result: Int, indexToSave: Int, delete: Boolean = false) {
             typeContent(content)
@@ -197,7 +196,7 @@ class AddOnesFragmentTest {
 
     @Test
     fun saveAndDeleteValues() {
-        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val savedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
 
         // save
         typeText("1+1+1+1+1+1")
@@ -263,9 +262,9 @@ class AddOnesFragmentTest {
 
     @Test
     fun computeError() {
-        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val savedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
 
-        fun typeAndCheckError(content: List<Any>, savedValues: List<Int?> = listOfNulls(2)) {
+        fun typeAndCheckError(content: List<Any>, savedValues: List<Int?> = defaultSaved) {
             typeContent(content)
             clickEquals()
             checkErrorState(savedValues)
@@ -318,7 +317,7 @@ class AddOnesFragmentTest {
         checkErrorState()
 
         // saved values
-        val savedValues: MutableList<Int?> = mutableListOfNulls(2)
+        val savedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
         val inUse: MutableSet<Int> = mutableSetOf()
 
         typeAndSaveToIndex("1+1+1", 3, 0, savedValues)

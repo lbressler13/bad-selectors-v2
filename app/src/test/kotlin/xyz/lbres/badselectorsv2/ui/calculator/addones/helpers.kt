@@ -35,18 +35,21 @@ val deleteButtons = listOf(R.id.savedValueText1, R.id.savedValueText2).map {
     onView(allOf(withId(R.id.deleteButton), isDescendantOfA(withId(it))))
 }
 
+val maxSavedValues = 2
+val defaultSaved: List<Int?> = listOfNulls(maxSavedValues)
+
 // check values and buttons in enabled state
-fun checkEnabledState(text: String, savedValues: List<Int?> = listOfNulls(2), inUse: Set<Int> = emptySet()) {
+fun checkEnabledState(text: String, savedValues: List<Int?> = defaultSaved, inUse: Set<Int> = emptySet()) {
     checkState(text, savedValues, inUse, saveView = false, errorView = false)
 }
 
 // check values and buttons in save state
-fun checkSaveState(text: String, savedValues: List<Int?> = listOfNulls(2)) {
+fun checkSaveState(text: String, savedValues: List<Int?> = defaultSaved) {
     checkState(text, savedValues, emptySet(), saveView = true, errorView = false)
 }
 
 // check values and buttons in error state
-fun checkErrorState(savedValues: List<Int?> = listOfNulls(2)) {
+fun checkErrorState(savedValues: List<Int?> = defaultSaved) {
     val text = "Err: Syntax Error"
     checkState(text, savedValues, emptySet(), saveView = false, errorView = true)
 }
@@ -67,7 +70,7 @@ private fun checkState(text: String, savedValues: List<Int?>, inUse: Set<Int>, s
 
 // check the text and enabled state of each saved value view
 private fun checkSavedValues(
-    savedValues: List<Int?> = listOfNulls(2),
+    savedValues: List<Int?> = defaultSaved,
     inUse: Set<Int> = emptySet(),
     enabledUnused: Boolean = true,
 ) {
