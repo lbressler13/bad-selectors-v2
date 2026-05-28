@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
-import xyz.lbres.badselectorsv2.databinding.FragmentRandomCircleBinding
+import xyz.lbres.badselectorsv2.databinding.FragmentPhoneRandomCircleBinding
 import xyz.lbres.badselectorsv2.ext.view.disable
 import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.badselectorsv2.ext.view.gone
@@ -22,7 +22,7 @@ import xyz.lbres.badselectorsv2.phone.utils.numDigits
  * Shuffling is not guaranteed to happen every time a button is pressed.
  */
 class RandomCircleFragment : BasePhoneFragment() {
-    private lateinit var binding: FragmentRandomCircleBinding
+    private lateinit var binding: FragmentPhoneRandomCircleBinding
     private lateinit var viewModel: RandomCircleViewModel
     override val phoneViewModel: BasePhoneViewModel
         get() = viewModel
@@ -35,7 +35,7 @@ class RandomCircleFragment : BasePhoneFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = FragmentRandomCircleBinding.inflate(layoutInflater)
+        binding = FragmentPhoneRandomCircleBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(requireActivity())[RandomCircleViewModel::class.java]
 
         initSettingsDialog()
