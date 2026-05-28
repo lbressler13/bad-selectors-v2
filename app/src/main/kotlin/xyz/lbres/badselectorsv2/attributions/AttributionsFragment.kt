@@ -63,7 +63,7 @@ class AttributionsFragment : AppScreenFragment() {
     private fun initializeAttributionsRecycler() {
         val recycler: RecyclerView = binding.attributionsRecycler
         val adapter = AuthorAttributionAdapter(authorAttributions, viewModel)
-        val divider = AppCompatResources.getDrawable(requireContext(), R.drawable.divider_2p)
+        val divider = AppCompatResources.getDrawable(requireContext(), R.drawable.attributions_divider_2p)
         val itemDecoration = HorizontalDividerDecoration(divider!!)
 
         recycler.adapter = adapter
