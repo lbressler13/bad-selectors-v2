@@ -5,7 +5,7 @@ import xyz.lbres.kotlinutils.list.listOfNulls
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-private val maxSavedValues = 2
+private val maxSavedValues = 4
 private val empty: List<Int?> = listOfNulls(maxSavedValues)
 
 // save result to viewmodel
