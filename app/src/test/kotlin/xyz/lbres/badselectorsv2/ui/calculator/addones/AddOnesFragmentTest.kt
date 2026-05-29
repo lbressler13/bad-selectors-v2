@@ -4,7 +4,10 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.After
 import org.junit.Before
@@ -21,6 +24,8 @@ import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
 import xyz.lbres.badselectorsv2.ui.calculator.splitText
 import xyz.lbres.badselectorsv2.ui.calculator.typeText
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
+import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
+import xyz.lbres.badselectorsv2.ui.testutils.openSettingsDialog
 import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfNulls
 
 @Category(Robolectric::class)
@@ -342,5 +347,13 @@ class AddOnesFragmentTest {
         savedValues[1] = -3
         deleteAtIndex(0, savedValues)
         checkEnabledState("", savedValues, inUse)
+    }
+
+    @Test
+    fun settingsDialog() {
+        // open dialog
+        openSettingsDialog()
+        onViewInDialog(withText("Settings")).check(matches(isDisplayed()))
+        onView(withId(R.id.numSavedValuesSeekbar)).check(matches(isDisplayed()))
     }
 }
