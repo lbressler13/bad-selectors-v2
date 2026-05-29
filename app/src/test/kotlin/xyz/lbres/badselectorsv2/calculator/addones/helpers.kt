@@ -1,7 +1,6 @@
 package xyz.lbres.badselectorsv2.calculator.addones
 
 import xyz.lbres.badselectorsv2.calculator.splitText
-import xyz.lbres.kotlinutils.list.IntList
 import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.listOfNulls
 import kotlin.test.assertEquals
@@ -27,7 +26,13 @@ fun saveResults(vm: AddOnesViewModel, results: List<Int>) {
     results.forEach { saveResult(vm, it) }
 }
 
-fun saveResultsToIndices(vm: AddOnesViewModel, results: List<Int>, indices: List<Int>, savedValues: MutableList<Int?>, validate: Boolean = false) {
+fun saveResultsToIndices(
+    vm: AddOnesViewModel,
+    results: List<Int>,
+    indices: List<Int>,
+    savedValues: MutableList<Int?>,
+    validate: Boolean = false,
+) {
     results.indices.forEach {
         saveResultToIndex(vm, results[it], indices[it], savedValues)
         if (validate) {
@@ -42,7 +47,12 @@ fun clearAtIndex(vm: AddOnesViewModel, index: Int, savedValues: MutableList<Int?
     savedValues[index] = null
 }
 
-fun clearAtIndices(vm: AddOnesViewModel, indices: List<Int>, savedValues: MutableList<Int?>, validate: Boolean = false) {
+fun clearAtIndices(
+    vm: AddOnesViewModel,
+    indices: List<Int>,
+    savedValues: MutableList<Int?>,
+    validate: Boolean = false,
+) {
     indices.forEach {
         clearAtIndex(vm, it, savedValues)
         if (validate) {
@@ -71,7 +81,13 @@ fun checkMetadata(vm: AddOnesViewModel, expectedValues: List<Int?>, inUse: Set<I
     }
 }
 
-fun backspaceAndValidate(vm: AddOnesViewModel, backspaceCount: Int, expectedText: StringList, expectedValues: List<Int?>, inUse: Set<Int>) {
+fun backspaceAndValidate(
+    vm: AddOnesViewModel,
+    backspaceCount: Int,
+    expectedText: StringList,
+    expectedValues: List<Int?>,
+    inUse: Set<Int>,
+) {
     repeatBackspace(vm, backspaceCount)
     assertEquals(expectedText, vm.calcData.computeText)
     checkMetadata(vm, expectedValues, inUse)
