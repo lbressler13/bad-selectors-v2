@@ -107,6 +107,8 @@ class AddOnesFragmentTest {
         checkEnabledState("", savedValues)
 
         typeAndSaveToIndex(listOf("1-1-1-1-1-1-1-1-1-", 0), -10, 1, savedValues) // 2 digit number
+        typeAndSaveToIndex(listOf("1+1+", 0), 5, 2, savedValues)
+        typeAndSaveToIndex(listOf("1-", 1), 11, 3, savedValues)
 
         typeContent(listOf(0, "+1+-", 1, "+1"))
         val inUse = mutableSetOf(0, 1)
@@ -133,7 +135,7 @@ class AddOnesFragmentTest {
 
     @Test
     fun clear() {
-        val savedValues: MutableList<Int?> = mutableListOf(2, -1)
+        val savedValues: MutableList<Int?> = mutableListOf(2, -1, 5, 0)
 
         fun typeAndClear(content: List<Any>, withEquals: Boolean = false) {
             typeContent(content)
@@ -152,11 +154,13 @@ class AddOnesFragmentTest {
         // saved values
         typeAndSaveToIndex("1+1", savedValues[0]!!, 0, savedValues)
         typeAndSaveToIndex("1-1-1", savedValues[1]!!, 1, savedValues)
-        typeAndClear(listOf(0, "+1-", 1))
+        typeAndSaveToIndex("1+1+1+1+1", savedValues[2]!!, 2, savedValues)
+        typeAndSaveToIndex("1-1", savedValues[3]!!, 3, savedValues)
+        typeAndClear(listOf(0, "+1-", 3))
 
         // computed value
         typeAndClear(listOf("1+1"), true)
-        typeAndClear(listOf(0, "+1"), true)
+        typeAndClear(listOf(1, "+1"), true)
 
         // error
         typeAndClear(listOf("11"), true)
@@ -188,14 +192,15 @@ class AddOnesFragmentTest {
         typeAndSave(listOf("1+1+1+1+1+1+1-1+1+1+1+1"), 10, 0)
         typeAndSave(listOf(0, "+1+1+1+1+1+1"), 16, 1)
         typeAndSave(listOf(0, "+", 1), 26, 0, true)
-        typeAndSave(listOf(0, "+", 1, "+1+1+1"), 45, 1, true)
-        typeAndSave(listOf(0, "+", 1), 71, 0, true)
-        typeAndSave(listOf(0, "+", 1), 116, 0, true)
-        typeAndSave(listOf("1-", 0), -115, 1, true)
+        typeAndSave(listOf(0, "+", 1, "+1+1+1"), 45, 2)
+        typeAndSave(listOf(0, "+", 1, "+", 2), 87, 3)
+        typeAndSave(listOf(0, "+", 1, "+", 2, "+", 3), 174, 3, true)
+        typeAndSave(listOf("1-", 3, "+", 0), -147, 1, true)
     }
 
     @Test
     fun saveAndDeleteValues() {
+        // TODO update this
         val savedValues: MutableList<Int?> = mutableListOfNulls(maxSavedValues)
 
         // save

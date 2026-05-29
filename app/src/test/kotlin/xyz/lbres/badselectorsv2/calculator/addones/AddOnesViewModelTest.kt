@@ -13,6 +13,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+// TODO check that values go into the earlier slots, even when later are available
+
 class AddOnesViewModelTest {
     private val maxSavedValues = 4
     private val empty: List<Int?> = listOfNulls(maxSavedValues)

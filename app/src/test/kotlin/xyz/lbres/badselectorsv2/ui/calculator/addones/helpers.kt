@@ -28,14 +28,16 @@ val saveButton = onView(withId(R.id.saveButton))
 val plusButton = onView(withId(R.id.plusButton))
 val oneButton = numberButtons[1]
 val minusButton = onView(withId(R.id.minusButton))
-val savedTexts = listOf(R.id.savedValueText1, R.id.savedValueText2).map {
+
+private val savedIds = listOf(R.id.savedValueText1, R.id.savedValueText2, R.id.savedValueText3, R.id.savedValueText4)
+val savedTexts = savedIds.map {
     onView(allOf(withId(R.id.valueText), isDescendantOfA(withId(it))))
 }
-val deleteButtons = listOf(R.id.savedValueText1, R.id.savedValueText2).map {
+val deleteButtons = savedIds.map {
     onView(allOf(withId(R.id.deleteButton), isDescendantOfA(withId(it))))
 }
 
-val maxSavedValues = 2
+val maxSavedValues = 4
 val defaultSaved: List<Int?> = listOfNulls(maxSavedValues)
 
 // check values and buttons in enabled state
@@ -121,7 +123,7 @@ fun typeAndSaveToIndex(text: String, value: Int, index: Int, savedValues: Mutabl
 
 // delete saved value and update saved values list
 fun deleteAtIndex(index: Int, savedValues: MutableList<Int?>) {
-    deleteButtons[index].perform(click())
+    deleteButtons[index].perform(forceClick())
     savedValues[index] = null
 }
 
