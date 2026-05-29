@@ -1,6 +1,8 @@
 package xyz.lbres.badselectorsv2.calculator.addones
 
 import xyz.lbres.badselectorsv2.calculator.splitText
+import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.list.StringList
 import xyz.lbres.kotlinutils.list.listOfNulls
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -67,6 +69,12 @@ fun checkMetadata(vm: AddOnesViewModel, expectedValues: List<Int?>, inUse: Set<I
         val expected = Pair(value, index in inUse)
         assertEquals(expected, vm.getSavedValueMetadata(index))
     }
+}
+
+fun backspaceAndValidate(vm: AddOnesViewModel, backspaceCount: Int, expectedText: StringList, expectedValues: List<Int?>, inUse: Set<Int>) {
+    repeatBackspace(vm, backspaceCount)
+    assertEquals(expectedText, vm.calcData.computeText)
+    checkMetadata(vm, expectedValues, inUse)
 }
 
 // backspace multiple times

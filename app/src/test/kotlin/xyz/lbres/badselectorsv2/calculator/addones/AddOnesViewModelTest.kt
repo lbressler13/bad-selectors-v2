@@ -233,66 +233,49 @@ class AddOnesViewModelTest {
         checkBlank(vm)
 
         appendText(vm, "1+2--")
-        vm.backspaceComputeText()
-        assertEquals(splitText("1+2-"), vm.calcData.computeText)
-        vm.backspaceComputeText()
-        assertEquals(splitText("1+2"), vm.calcData.computeText)
-        repeatBackspace(vm, 3)
-        checkBlank(vm)
+        var expectedText = splitText("1+2-")
+        backspaceAndValidate(vm, 1, expectedText, empty, inUse)
+        expectedText = splitText("1+2")
+        backspaceAndValidate(vm, 1, expectedText, empty, inUse)
+        backspaceAndValidate(vm, 3, emptyList(), empty, inUse)
 
         // saved but not used
         saveResults(vm, expectedValues)
         appendText(vm, "1+1+1")
         checkMetadata(vm, expectedValues, inUse)
-        repeatBackspace(vm, 5)
-        assertEquals(emptyList(), vm.calcData.computeText)
-        checkMetadata(vm, expectedValues, inUse)
+        backspaceAndValidate(vm, 5, emptyList(), expectedValues, inUse)
 
         // saved value
         saveResults(vm, expectedValues)
         append(listOf("1+", 1, "-1-1-", 0, 3, "+", 2, "-"))
-        var expectedText = splitText("1+4-1-1-72+5-")
+        expectedText = splitText("1+4-1-1-72+5-")
         assertEquals(expectedText, vm.calcData.computeText)
         checkMetadata(vm, expectedValues, inUse)
 
-        vm.backspaceComputeText()
         expectedText = splitText("1+4-1-1-72+5")
-        assertEquals(expectedText, vm.calcData.computeText)
-        checkMetadata(vm, expectedValues, inUse)
+        backspaceAndValidate(vm, 1, expectedText, expectedValues, inUse)
 
-        vm.backspaceComputeText()
         expectedText = splitText("1+4-1-1-72+")
         inUse.remove(2)
-        assertEquals(expectedText, vm.calcData.computeText)
-        checkMetadata(vm, expectedValues, inUse)
+        backspaceAndValidate(vm, 1, expectedText, expectedValues, inUse)
 
-        repeatBackspace(vm, 2)
         expectedText = splitText("1+4-1-1-7")
         inUse.remove(3)
-        assertEquals(expectedText, vm.calcData.computeText)
-        checkMetadata(vm, expectedValues, inUse)
+        backspaceAndValidate(vm, 2, expectedText, expectedValues, inUse)
 
-        vm.backspaceComputeText()
         expectedText = splitText("1+4-1-1-")
         inUse.remove(0)
-        assertEquals(expectedText, vm.calcData.computeText)
-        checkMetadata(vm, expectedValues, inUse)
+        backspaceAndValidate(vm, 1, expectedText, expectedValues, inUse)
 
-        repeatBackspace(vm, 5)
         expectedText = splitText("1+4")
-        assertEquals(expectedText, vm.calcData.computeText)
-        checkMetadata(vm, expectedValues, inUse)
+        backspaceAndValidate(vm, 5, expectedText, expectedValues, inUse)
 
-        vm.backspaceComputeText()
         expectedText = splitText("1+")
         inUse.remove(1)
-        assertEquals(expectedText, vm.calcData.computeText)
-        checkMetadata(vm, expectedValues, inUse)
+        backspaceAndValidate(vm, 1, expectedText, expectedValues, inUse)
 
-        repeatBackspace(vm, 2)
         expectedText = emptyList()
-        assertEquals(expectedText, vm.calcData.computeText)
-        checkMetadata(vm, expectedValues, inUse)
+        backspaceAndValidate(vm, 2, expectedText, expectedValues, inUse)
     }
 
     @Test
