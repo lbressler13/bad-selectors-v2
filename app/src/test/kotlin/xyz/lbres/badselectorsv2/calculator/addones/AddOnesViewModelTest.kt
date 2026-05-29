@@ -41,31 +41,20 @@ class AddOnesViewModelTest {
         val vm = AddOnesViewModel()
 
         // save values
-        saveResultToIndex(vm, 1, 0, expectedValues)
-        assertEquals(expectedValues, vm.savedValues)
-
-        saveResultToIndex(vm, -12, 1, expectedValues)
-        assertEquals(expectedValues, vm.savedValues)
-
-        saveResultToIndex(vm, 0, 2, expectedValues)
-        assertEquals(expectedValues, vm.savedValues)
-
-        saveResultToIndex(vm, 6, 3, expectedValues)
-        assertEquals(expectedValues, vm.savedValues)
+        saveResultsToIndices(vm, listOf(1, -12, 0, 6), listOf(0, 1, 2, 3), expectedValues, true)
 
         // no available spots
         saveResult(vm, 5)
         assertEquals(expectedValues, vm.savedValues)
 
         // cleared spots
-        vm.clearSavedValueAtIndex(1)
+        clearAtIndex(vm, 1, expectedValues)
         vm.saveComputedValue()
         expectedValues[1] = 5
         assertEquals(expectedValues, vm.savedValues)
 
         // with error
-        vm.clearSavedValueAtIndex(0)
-        expectedValues[0] = null
+        clearAtIndex(vm, 0, expectedValues)
         vm.setResult(null, "Error")
         vm.saveComputedValue()
         assertEquals(expectedValues, vm.savedValues)
@@ -155,18 +144,7 @@ class AddOnesViewModelTest {
         var savedValues: MutableList<Int?> = mutableListOf(-1, 0, 6, 23)
         @Suppress("UNCHECKED_CAST")
         saveResults(vm, savedValues as List<Int>)
-        vm.clearSavedValueAtIndex(0)
-        savedValues[0] = null
-        assertEquals(savedValues, vm.savedValues)
-        vm.clearSavedValueAtIndex(1)
-        savedValues[1] = null
-        assertEquals(savedValues, vm.savedValues)
-        vm.clearSavedValueAtIndex(3)
-        savedValues[3] = null
-        assertEquals(savedValues, vm.savedValues)
-        vm.clearSavedValueAtIndex(2)
-        savedValues[2] = null
-        assertEquals(empty, vm.savedValues)
+        clearAtIndices(vm, listOf(0, 1, 3, 2), savedValues, true)
 
         // index out of bounds
         savedValues = mutableListOf(-1, 0, 7, 7)
@@ -217,12 +195,9 @@ class AddOnesViewModelTest {
         checkMetadata(vm, expectedValues, inUse)
 
         // cleared
-        // TODO clear at index helper
-        vm.clearSavedValueAtIndex(2)
-        expectedValues[2] = null
+        clearAtIndex(vm, 2, expectedValues)
         checkMetadata(vm, expectedValues, inUse)
-        vm.clearSavedValueAtIndex(0)
-        expectedValues[0] = null
+        clearAtIndex(vm, 0, expectedValues)
 
         // index out of bounds
         val result = vm.getSavedValueMetadata(5)
@@ -344,9 +319,7 @@ class AddOnesViewModelTest {
         assertTrue(vm.calcData.isEmpty())
         checkMetadata(vm, expectedValues)
 
-        saveResultToIndex(vm, 11, 1, expectedValues)
-        saveResultToIndex(vm, 12, 2, expectedValues)
-        saveResultToIndex(vm, 13, 3, expectedValues)
+        saveResultsToIndices(vm, listOf(11, 12, 13), listOf(1, 2, 3), expectedValues)
         vm.resetComputeData()
         assertTrue(vm.calcData.isEmpty())
         checkMetadata(vm, expectedValues)

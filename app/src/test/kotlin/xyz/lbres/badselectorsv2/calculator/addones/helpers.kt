@@ -25,6 +25,30 @@ fun saveResults(vm: AddOnesViewModel, results: List<Int>) {
     results.forEach { saveResult(vm, it) }
 }
 
+fun saveResultsToIndices(vm: AddOnesViewModel, results: List<Int>, indices: List<Int>, savedValues: MutableList<Int?>, validate: Boolean = false) {
+    results.indices.forEach {
+        saveResultToIndex(vm, results[it], indices[it], savedValues)
+        if (validate) {
+            assertEquals(savedValues, vm.savedValues)
+        }
+    }
+}
+
+// clear value at index and update saved values list
+fun clearAtIndex(vm: AddOnesViewModel, index: Int, savedValues: MutableList<Int?>) {
+    vm.clearSavedValueAtIndex(index)
+    savedValues[index] = null
+}
+
+fun clearAtIndices(vm: AddOnesViewModel, indices: List<Int>, savedValues: MutableList<Int?>, validate: Boolean = false) {
+    indices.forEach {
+        clearAtIndex(vm, it, savedValues)
+        if (validate) {
+            assertEquals(savedValues, vm.savedValues)
+        }
+    }
+}
+
 // append text to compute text
 fun appendText(vm: AddOnesViewModel, text: String) {
     splitText(text).forEach { vm.appendComputeText(it) }
