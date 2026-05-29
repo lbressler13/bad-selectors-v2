@@ -1,6 +1,8 @@
 package xyz.lbres.badselectorsv2.calculator.addones
 
+import android.util.Log
 import io.mockk.unmockkAll
+import io.mockk.verify
 import xyz.lbres.badselectorsv2.calculator.splitText
 import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.kotlinutils.list.listOfNulls
@@ -98,14 +100,12 @@ class AddOnesViewModelTest {
 
         // multiple values
         vm = AddOnesViewModel()
-        saveResult(vm, 4)
-        saveResult(vm, 5)
+        saveResults(vm, listOf(4, 5))
         append(listOf(1, 0))
         assertEquals(listOf("5", "4"), vm.calcData.computeText)
 
         vm = AddOnesViewModel()
-        saveResult(vm, 4)
-        saveResult(vm, 5)
+        saveResults(vm, listOf(4, 5))
         append(listOf("1+", 0, "-1+1+", 1, "-1"))
         assertEquals(splitText("1+4-1+1+5-1"), vm.calcData.computeText)
 
@@ -116,6 +116,11 @@ class AddOnesViewModelTest {
         assertEquals(listOf("4"), vm.calcData.computeText)
         vm.appendSavedValueAtIndex(0)
         assertEquals(listOf("4"), vm.calcData.computeText)
+
+        // index out of bounds
+        vm.appendSavedValueAtIndex(2)
+        assertEquals(listOf("4"), vm.calcData.computeText)
+        verify(exactly = 1) { Log.e(any(), any()) }
     }
 
     @Test
@@ -136,12 +141,17 @@ class AddOnesViewModelTest {
         assertEquals(empty, vm.savedValues)
 
         // clear out of order
-        saveResult(vm, -1)
-        saveResult(vm, 0)
+        saveResults(vm, listOf(-1, 0))
         vm.clearSavedValueAtIndex(0)
         assertEquals(listOf(null, 0), vm.savedValues)
         vm.clearSavedValueAtIndex(1)
         assertEquals(empty, vm.savedValues)
+
+        // index out of bounds
+        saveResults(vm, listOf(-1, 0))
+        vm.clearSavedValueAtIndex(2)
+        verify(exactly = 1) { Log.e(any(), any()) }
+        assertEquals(listOf(-1, 0), vm.savedValues)
     }
 
     @Test
@@ -184,6 +194,11 @@ class AddOnesViewModelTest {
         checkMetadata(vm, expectedValues, inUse)
         vm.clearSavedValueAtIndex(0)
         expectedValues[0] = null
+
+        // index out of bounds
+        val result = vm.getSavedValueMetadata(2)
+        assertEquals(Pair(null, true), result)
+        verify(exactly = 1) { Log.e(any(), any()) }
     }
 
     @Test
@@ -210,7 +225,7 @@ class AddOnesViewModelTest {
         checkBlank(vm)
 
         // saved but not used
-        expectedValues.forEach { saveResult(vm, it) }
+        saveResults(vm, expectedValues)
         appendText(vm, "1+1+1")
         checkMetadata(vm, expectedValues, inUse)
         repeatBackspace(vm, 5)
@@ -218,7 +233,7 @@ class AddOnesViewModelTest {
         checkMetadata(vm, expectedValues, inUse)
 
         // saved value
-        expectedValues.forEach { saveResult(vm, it) }
+        saveResults(vm, expectedValues)
         appendText(vm, "1+")
         vm.appendSavedValueAtIndex(1)
         inUse.add(1)
@@ -293,39 +308,4 @@ class AddOnesViewModelTest {
         assertTrue(vm.calcData.isEmpty())
         checkMetadata(vm, expectedValues)
     }
-
-    // save result to viewmodel
-    private fun saveResult(vm: AddOnesViewModel, result: Int) {
-        vm.setResult(result, null)
-        vm.saveComputedValue()
-    }
-
-    // save result and update saved values list
-    private fun saveResultToIndex(vm: AddOnesViewModel, result: Int, index: Int, savedValues: MutableList<Int?>) {
-        saveResult(vm, result)
-        savedValues[index] = result
-    }
-
-    // append text to compute text
-    private fun appendText(vm: AddOnesViewModel, text: String) {
-        splitText(text).forEach { vm.appendComputeText(it) }
-    }
-
-    // check that calc data and saved value metadata is blank
-    private fun checkBlank(vm: AddOnesViewModel) {
-        assertTrue(vm.calcData.isEmpty())
-        checkMetadata(vm, empty)
-    }
-
-    // check saved value metadata at every index
-    private fun checkMetadata(vm: AddOnesViewModel, expectedValues: List<Int?>, inUse: Set<Int> = emptySet()) {
-        assertEquals(expectedValues, vm.savedValues)
-        expectedValues.forEachIndexed { index, value ->
-            val expected = Pair(value, index in inUse)
-            assertEquals(expected, vm.getSavedValueMetadata(index))
-        }
-    }
-
-    // backspace multiple times
-    private fun repeatBackspace(vm: AddOnesViewModel, count: Int) = repeat(count) { vm.backspaceComputeText() }
 }

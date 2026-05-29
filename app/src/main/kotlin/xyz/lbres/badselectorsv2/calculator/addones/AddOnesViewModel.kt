@@ -27,7 +27,7 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
     private val savedValueIndices: Array<Int?> = arrayOfNulls(maxSavedValues)
 
     /**
-     * Delete last value from list, and updates [savedValueIndices] if the most recent value is a saved value.
+     * Delete last value from list, and update [savedValueIndices] if the last value is a saved value.
      */
     override fun backspaceComputeText() {
         val computeText = calcData.computeText
@@ -53,6 +53,7 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
     fun appendSavedValueAtIndex(index: Int) {
         val baseMessage = "Unable to append saved value at $index"
         when {
+            index >= maxSavedValues -> Log.e(null, "$baseMessage, index out of bounds")
             savedValues[index] == null -> Log.w(null, "$baseMessage, value is null")
             savedValueIndices[index] != null -> Log.w(null, "$baseMessage, value already added")
             else -> {
@@ -69,7 +70,11 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
      * @param index [Int]: index of saved value to delete
      */
     fun clearSavedValueAtIndex(index: Int) {
-        _savedValues[index] = null
+        if (index < maxSavedValues) {
+            _savedValues[index] = null
+        } else {
+            Log.e(null, "Unable to delete saved value at $index, index out of bounds")
+        }
     }
 
     /**
@@ -80,7 +85,12 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
      * and the second value indicates if the value at this index is in use
      */
     fun getSavedValueMetadata(index: Int): Pair<Int?, Boolean> {
-        return Pair(savedValues[index], savedValueIndices[index] != null)
+        return if (index < maxSavedValues) {
+            Pair(savedValues[index], savedValueIndices[index] != null)
+        } else {
+            Log.e(null, "Unable to fetch metadata at $index, index out of bounds")
+            Pair(null, true) // indicates no value/unusable value
+        }
     }
 
     /**

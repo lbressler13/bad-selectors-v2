@@ -36,9 +36,9 @@ class AddOnesFragment : BaseCalculatorFragment() {
     override val rootView: View
         get() = binding.root
 
-    override var computeSeparator: String = " "
-
     private lateinit var savedValueViews: List<ComponentCalcSavedValueBinding>
+
+    override var computeSeparator: String = " "
 
     /**
      * Initialize fragment
@@ -86,7 +86,7 @@ class AddOnesFragment : BaseCalculatorFragment() {
     }
 
     /**
-     * Update UI to display the computed value and show buttons to save a value
+     * Update UI to display the computed value and show save button
      */
     private fun showComputedUi() {
         disableAllButClear() // doesn't disable save
