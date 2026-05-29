@@ -6,7 +6,11 @@ import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 
-private class HasProgressMatcher(private val progress: Int): BoundedMatcher<View, AppCompatSeekBar>(AppCompatSeekBar::class.java) {
+/**
+ * [Matcher] to match a seekbar with the given progress.
+ */
+private class HasProgressMatcher(private val progress: Int) :
+    BoundedMatcher<View, AppCompatSeekBar>(AppCompatSeekBar::class.java) {
     override fun describeTo(description: Description?) {
         description?.appendText("match seekbar with progress: $progress")
     }
@@ -16,4 +20,7 @@ private class HasProgressMatcher(private val progress: Int): BoundedMatcher<View
     }
 }
 
+/**
+ * [Matcher] to match a seekbar with the given progress.
+ */
 fun hasProgress(progress: Int): Matcher<View> = HasProgressMatcher(progress)
