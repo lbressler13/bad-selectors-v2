@@ -68,6 +68,8 @@
     <!-- Add One -->
     <string name="title_add_ones">Add Ones</string>
 
+    <string name="num_saved_values">Number of saved values</string>
+
 
     <!-- OTP -->
     <string name="appbar_title_otp">Bad OTP Receivers</string>

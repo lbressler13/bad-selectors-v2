@@ -61,6 +61,7 @@ class AddOnesFragment : BaseCalculatorFragment() {
         initKeypad()
         initMainText()
         initSavedViews()
+        initSettingsDialog()
 
         if (viewModel.calcData.computedValue != null) {
             showComputedUi()
@@ -224,5 +225,20 @@ class AddOnesFragment : BaseCalculatorFragment() {
 
         // display initial values
         updateSavedViews()
+    }
+
+    /**
+     * Initialize dialog to update settings
+     */
+    private fun initSettingsDialog() {
+        binding.settingsButton.root.setOnClickListener {
+            val settingsDialog = AddOnesSettingsDialog()
+            settingsDialog.show(childFragmentManager, AddOnesSettingsDialog.TAG)
+        }
+
+        val requestKey = AddOnesSettingsDialog.CLOSED_REQUEST_KEY
+        childFragmentManager.setFragmentResultListener(requestKey, this) { _, _ ->
+            updateSavedViews()
+        }
     }
 }

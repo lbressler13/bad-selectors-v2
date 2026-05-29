@@ -28,6 +28,6 @@ class RandomCircleSettingsDialog : SettingsDialog<DialogPhoneRandomCircleSetting
     }
 
     companion object {
-        val TAG = "RandomCircleSettings"
+        const val TAG = "RandomCircleSettingsDialog"
     }
 }
