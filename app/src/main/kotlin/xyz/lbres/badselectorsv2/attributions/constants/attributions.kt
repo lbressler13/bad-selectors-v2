@@ -22,6 +22,7 @@ private val freepikImages = listOf(
     ImageAttribution(R.drawable.ic_plus, R.string.plus_cd, plusUrl),
     ImageAttribution(R.drawable.ic_restart, R.string.restart_cd, restartUrl),
     ImageAttribution(R.drawable.ic_settings, R.string.settings_cd, settingsUrl),
+    ImageAttribution(R.drawable.ic_times, R.string.times_cd, timesUrl),
 )
 
 private val iconSmartImages = listOf(
@@ -30,14 +31,14 @@ private val iconSmartImages = listOf(
 
 private val ilhamFitrotulHayatImages = listOf(
     ImageAttribution(R.drawable.ic_arrow_left, R.string.backspace_cd, arrowLeftUrl),
-    ImageAttribution(R.drawable.ic_close, R.string.close_cd, closeUrl),
     ImageAttribution(R.drawable.ic_phone, R.string.phone_cd, phoneUrl),
+    ImageAttribution(R.drawable.ic_x, R.string.close_cd, xUrl),
 )
 
 private val pixelPerfectImages = listOf(
+    ImageAttribution(R.drawable.ic_download, R.string.store_cd, downloadUrl),
     ImageAttribution(R.drawable.ic_minus_circle, R.string.minus_cd, minusCircleUrl),
     ImageAttribution(R.drawable.ic_plus_circle, R.string.plus_cd, plusCircleUrl),
-    ImageAttribution(R.drawable.ic_times, R.string.times_cd, timesUrl),
 )
 
 private val prosymbolsPremiumImages = listOf(

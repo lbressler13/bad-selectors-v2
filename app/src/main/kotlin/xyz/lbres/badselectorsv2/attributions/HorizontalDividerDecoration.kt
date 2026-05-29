@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.utils
+package xyz.lbres.badselectorsv2.attributions
 
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable

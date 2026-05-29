@@ -1,5 +1,6 @@
 package xyz.lbres.badselectorsv2.calculator.utils
 
+import xyz.lbres.badselectorsv2.calculator.splitText
 import xyz.lbres.badselectorsv2.testutils.assertFailsWithMessage
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -154,6 +155,4 @@ class RunComputationTest {
         text = splitText("1+10")
         assertFailsWithMessage<Exception>(expectedError) { runComputation(text, false) }
     }
-
-    private fun splitText(text: String): List<String> = text.toList().map(Char::toString)
 }

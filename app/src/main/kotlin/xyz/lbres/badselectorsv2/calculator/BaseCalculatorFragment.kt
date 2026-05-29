@@ -92,7 +92,7 @@ abstract class BaseCalculatorFragment : Fragment() {
 
         // clear button
         rootView.findViewById<View>(R.id.clearButton)?.setOnClickListener {
-            if (calculatorViewModel.calcData.computeText.isNotEmpty()) {
+            if (!calculatorViewModel.calcData.isEmpty()) {
                 handleClear()
                 updateMainText()
             }

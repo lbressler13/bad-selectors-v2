@@ -45,12 +45,14 @@ class CalculatorTabFragmentTest {
     @Test
     fun initialUi() {
         actionBar.check(matches(withTitle("Bad Calculators")))
-        onView(withTab("Single Operation")).check(matches(isCompletelyDisplayed()))
+        onView(withTab("Add Ones")).check(matches(isCompletelyDisplayed()))
         testNavbarUi(R.id.navigationCalc, "Calculator")
     }
 
     @Test
     fun tabs() {
+        onView(withId(R.id.viewPager)).perform(swipeRight())
+        onView(withTab("Single Operation")).check(matches(isCompletelyDisplayed()))
         onView(withId(R.id.viewPager)).perform(swipeRight())
         onView(withTab("Random Enabled")).check(matches(isCompletelyDisplayed()))
     }

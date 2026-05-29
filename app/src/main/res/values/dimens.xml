@@ -8,4 +8,8 @@
     <dimen name="corner_icon_padding">10dp</dimen>
     <dimen name="settings_dialog_horizontal_padding">25dp</dimen>
     <dimen name="settings_dialog_top_padding">5dp</dimen>
+
+
+    <!-- Calculator -->
+    <dimen name="calc_saved_value_margin">18dp</dimen>
 </resources>

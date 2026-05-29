@@ -6,7 +6,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
-import xyz.lbres.badselectorsv2.testutils.mockkLog
+import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.badselectorsv2.testutils.runWithRetries
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.kotlinutils.array.ext.setAllValues
@@ -22,7 +22,7 @@ import kotlin.test.assertTrue
 class PhoneNumberGeneratorTest {
     @BeforeTest
     fun setupTests() {
-        mockkLog()
+        mockLog()
     }
 
     @AfterTest

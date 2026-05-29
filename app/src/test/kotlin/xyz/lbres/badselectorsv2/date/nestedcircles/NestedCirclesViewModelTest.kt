@@ -3,7 +3,7 @@ package xyz.lbres.badselectorsv2.date.nestedcircles
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import xyz.lbres.badselectorsv2.testutils.mockkLog
+import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.kotlinutils.list.IntList
 import java.time.LocalDate
@@ -23,7 +23,7 @@ class NestedCirclesViewModelTest {
     fun setupTest() {
         mockkStatic(LocalDate::class)
         every { LocalDate.now() } returns mockDate
-        mockkLog()
+        mockLog()
     }
 
     @AfterTest

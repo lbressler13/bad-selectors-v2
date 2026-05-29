@@ -37,8 +37,8 @@ abstract class BaseCalculatorViewModel : ViewModel() {
     /**
      * Update most recent computed value or error
      */
-    fun setResult(computedValue: Int?, error: String?) {
-        calcData = CalcData(calcData.computeText, computedValue, error)
+    open fun setResult(computedValue: Int?, error: String?) {
+        calcData = CalcData(emptyList(), computedValue, error)
     }
 
     /**
