@@ -12,7 +12,7 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
     /**
      * Maximum number of values that can be saved
      */
-    val maxSavedValues: Int = 2
+    val maxSavedValues: Int = 4
 
     /**
      * Values stored after computation

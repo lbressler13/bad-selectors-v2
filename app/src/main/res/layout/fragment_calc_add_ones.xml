@@ -81,6 +81,14 @@
             android:id="@+id/savedValueText2"
             layout="@layout/component_calc_saved_value" />
 
+        <include
+            android:id="@+id/savedValueText3"
+            layout="@layout/component_calc_saved_value" />
+
+        <include
+            android:id="@+id/savedValueText4"
+            layout="@layout/component_calc_saved_value" />
+
     </LinearLayout>
 
     <LinearLayout

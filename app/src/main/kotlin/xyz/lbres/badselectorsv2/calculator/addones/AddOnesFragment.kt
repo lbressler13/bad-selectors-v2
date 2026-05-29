@@ -25,7 +25,7 @@ import xyz.lbres.kotlinutils.collection.ext.countNotNull
 
 /**
  * Fragment with calculator that contains buttons for adding, subtracting, and one, as well as several saved values.
- * At most 2 computed values can be stored at a time, and each value can be present at most once in the compute text.
+ * At most 4 computed values can be stored at a time, and each value can be present at most once in the compute text.
  */
 class AddOnesFragment : BaseCalculatorFragment() {
     private lateinit var viewModel: AddOnesViewModel
@@ -50,7 +50,12 @@ class AddOnesFragment : BaseCalculatorFragment() {
     ): View {
         viewModel = ViewModelProvider(requireActivity())[AddOnesViewModel::class.java]
         binding = FragmentCalcAddOnesBinding.inflate(layoutInflater, container, false)
-        savedValueViews = listOf(binding.savedValueText1, binding.savedValueText2)
+        savedValueViews = listOf(
+            binding.savedValueText1,
+            binding.savedValueText2,
+            binding.savedValueText3,
+            binding.savedValueText4,
+        )
 
         // init UI
         initKeypad()
