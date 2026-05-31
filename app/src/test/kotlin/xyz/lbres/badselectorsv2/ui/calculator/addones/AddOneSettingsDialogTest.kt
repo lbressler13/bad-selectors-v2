@@ -23,6 +23,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.matchers.hasProgress
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 import xyz.lbres.badselectorsv2.ui.testutils.openSettingsDialog
+import xyz.lbres.badselectorsv2.ui.testutils.viewactions.setProgress
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 
 @Category(Robolectric::class)
@@ -62,5 +63,39 @@ class AddOneSettingsDialogTest {
         doneButton.perform(click())
         val dialog = ShadowDialog.getLatestDialog()
         assertFalse(dialog.isShowing)
+    }
+
+    @Test
+    fun interactWithUi() {
+        setAndCheckProgress(0)
+        setAndCheckProgress(1)
+        setAndCheckProgress(2)
+        setAndCheckProgress(3)
+    }
+
+    @Test
+    fun interactWithUiWithSavedValues() {
+        val warning = { savedCount: Int, setCount: Int ->
+            if (savedCount == 1) {
+                "Cannot set number of values to 0 when 1 value is saved"
+            } else {
+                "Cannot set number of values to $setCount when $savedCount values are saved"
+            }
+        }
+
+        doneButton.perform(click())
+        typeAndSave("1+1")
+        setAndCheckProgress(0, warning(1, 0))
+    }
+
+    private fun setAndCheckProgress(progress: Int, warning: String? = null) {
+        seekbar.perform(setProgress(progress))
+            .check(matches(hasProgress(progress)))
+
+        if (warning == null) {
+            warningLabel.check(isNotPresented())
+        } else {
+            warningLabel.check(matches(allOf(isDisplayed(), withText(warning))))
+        }
     }
 }

@@ -236,8 +236,8 @@ class AddOnesFragment : BaseCalculatorFragment() {
             settingsDialog.show(childFragmentManager, AddOnesSettingsDialog.TAG)
         }
 
-        val requestKey = AddOnesSettingsDialog.CLOSED_REQUEST_KEY
-        childFragmentManager.setFragmentResultListener(requestKey, this) { _, _ ->
+        val closedRequestKey = AddOnesSettingsDialog.CLOSED_REQUEST_KEY
+        childFragmentManager.setFragmentResultListener(closedRequestKey, this) { _, _ ->
             updateSavedViews()
         }
     }

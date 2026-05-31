@@ -12,7 +12,6 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.calculator.backspaceButton
 import xyz.lbres.badselectorsv2.ui.calculator.clearButton
 import xyz.lbres.badselectorsv2.ui.calculator.clickBackspace
-import xyz.lbres.badselectorsv2.ui.calculator.clickClear
 import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
 import xyz.lbres.badselectorsv2.ui.calculator.equalsButton
 import xyz.lbres.badselectorsv2.ui.calculator.mainText
@@ -108,12 +107,18 @@ private fun checkButtons(
     }
 }
 
-// type content, save result, and update saved values list
-fun typeAndSaveToIndex(content: List<Any>, value: Int, index: Int, savedValues: MutableList<Int?>) {
+fun typeAndSave(content: List<Any>) {
     typeContent(content)
     clickEquals()
     saveButton.perform(click())
-    clickClear()
+    // clickClear()
+}
+
+fun typeAndSave(text: String) = typeAndSave(listOf(text))
+
+// type content, save result, and update saved values list
+fun typeAndSaveToIndex(content: List<Any>, value: Int, index: Int, savedValues: MutableList<Int?>) {
+    typeAndSave(content)
     savedValues[index] = value
 }
 

@@ -28,6 +28,6 @@ class SelectCorrectSettingsDialog : SettingsDialog<DialogPhoneSelectCorrectSetti
     }
 
     companion object {
-        val TAG = "SelectCorrectSettings"
+        const val TAG = "SelectCorrectSettings"
     }
 }
