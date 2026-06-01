@@ -1,12 +1,12 @@
 package xyz.lbres.badselectorsv2.attributions
 
 import android.content.Intent
-import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ClickableSpan
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 
 /**
  * Implementation of ClickableSpan, where the clicked text opens a link
@@ -18,7 +18,7 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
      * Open the specified url in a browser window
      */
     override fun onClick(view: View) {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        val browserIntent = Intent(Intent.ACTION_VIEW, url.toUri())
         ContextCompat.startActivity(view.context, browserIntent, null)
     }
 

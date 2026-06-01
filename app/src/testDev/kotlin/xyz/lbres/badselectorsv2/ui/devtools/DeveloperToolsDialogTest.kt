@@ -61,8 +61,7 @@ class DeveloperToolsDialogTest {
 
     @Test fun interactWithHideDevToolsSpinner() = testInteractWithHideDevToolsSpinner()
 
-    // TODO fix issues with shadow looper
-    // @Test fun hideDevTools() = testHideDevTools()
+    @Test fun hideDevTools() = testHideDevTools()
 
     @Test fun attributionsFragment() = testForFragment(R.id.infoButton)
     @Test fun phoneFragment() = testForFragment(R.id.navigationPhone)

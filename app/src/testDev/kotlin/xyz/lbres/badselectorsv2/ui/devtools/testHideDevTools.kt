@@ -11,36 +11,41 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withSpinnerText
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import junit.framework.TestCase.assertFalse
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
+import org.junit.Assert.assertFalse
 import org.robolectric.shadows.ShadowDialog
 import org.robolectric.shadows.ShadowLooper
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
 import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 import xyz.lbres.badselectorsv2.ui.testutils.openDevTools
+import java.util.concurrent.TimeUnit
 
 private val spinner = onViewInDialog(withId(R.id.devToolsTimeSpinner))
 private val hideDevToolsButton = onViewInDialog(withId(R.id.hideDevToolsButton))
 private val devToolsButton = onView(withId(R.id.devToolsButton))
 
+private val hideTimes = listOf(5000L, 10000L, 30000L, 60000L)
+
 fun testHideDevToolsOptionsDisplayed() {
     openDevTools()
 
-    spinner.check(matches(withSpinnerText("5000ms"))).perform(click())
+    spinner.check(matches(withSpinnerText("${hideTimes.first()}ms"))).perform(click())
 
-    spinnerItemAt(0).check(matches(allOf(isDisplayed(), withText("5000ms"))))
-    spinnerItemAt(1).check(matches(allOf(isDisplayed(), withText("10000ms"))))
-    spinnerItemAt(2).check(matches(allOf(isDisplayed(), withText("30000ms"))))
-    spinnerItemAt(3).check(matches(allOf(isDisplayed(), withText("60000ms"))))
+    hideTimes.forEachIndexed { index, time ->
+        runWithFailMessage("Checking text at index $index") {
+            spinnerItemAt(index).check(matches(allOf(isDisplayed(), withText("${time}ms"))))
+        }
+    }
 
     var performException = false
     try {
-        spinnerItemAt(4).check(matches(isDisplayed()))
-    } catch (e: PerformException) {
+        spinnerItemAt(hideTimes.size).check(matches(isDisplayed()))
+    } catch (_: PerformException) {
         performException = true
     }
 
@@ -54,80 +59,45 @@ fun testHideDevToolsOptionsDisplayed() {
 fun testInteractWithHideDevToolsSpinner() {
     openDevTools()
 
-    spinner.perform(click())
-    spinnerItemAt(1).perform(click())
-    spinner.check(matches(withSpinnerText("10000ms")))
-
-    spinner.perform(click())
-    spinnerItemAt(0).perform(click())
-    spinner.check(matches(withSpinnerText("5000ms")))
-
-    spinner.perform(click())
-    spinnerItemAt(2).perform(click())
-    spinner.check(matches(withSpinnerText("30000ms")))
-
-    spinner.perform(click())
-    spinnerItemAt(3).perform(click())
-    spinner.check(matches(withSpinnerText("60000ms")))
+    val checkOrder = listOf(1, 0, 2, 3)
+    checkOrder.forEach {
+        runWithFailMessage("Interacting with index $it") {
+            spinner.perform(click())
+            spinnerItemAt(it).perform(click())
+            val time = hideTimes[it]
+            spinner.check(matches(withSpinnerText("${time}ms")))
+        }
+    }
 
     // close and re-open dialog
     closeDialog()
     openDevTools()
-    spinner.check(matches(withSpinnerText("60000ms")))
+    spinner.check(matches(withSpinnerText("${hideTimes.last()}ms")))
 }
 
 fun testHideDevTools() {
-    devToolsButton.check(matches(isDisplayed()))
-    openDevTools()
+    val buffer = 500L
 
-    // 5 seconds
-    spinner.check(matches(withSpinnerText("5000ms")))
-    hideDevToolsButton.perform(click())
-    checkDevToolsHidden(5000)
+    hideTimes.forEachIndexed { index, time ->
+        runWithFailMessage("Hiding for duration $time at index $index") {
+            openDevTools()
+            spinner.perform(click())
+            spinnerItemAt(index).perform(click())
+            spinner.check(matches(withSpinnerText("${time}ms")))
+            hideDevToolsButton.perform(click())
 
-    openDevTools()
+            // check that dialog is not showing
+            val dialog = ShadowDialog.getLatestDialog()
+            assertFalse(dialog.isShowing)
 
-    // 10 seconds
-    spinner.perform(click())
-    spinnerItemAt(1).perform(click())
-    spinner.check(matches(withSpinnerText("10000ms")))
-    hideDevToolsButton.perform(click())
-    checkDevToolsHidden(10000)
-
-    openDevTools()
-
-    // 30 seconds
-    spinner.perform(click())
-    spinnerItemAt(2).perform(click())
-    spinner.check(matches(withSpinnerText("30000ms")))
-    hideDevToolsButton.perform(click())
-    checkDevToolsHidden(30000)
-
-    openDevTools()
-
-    // 60 seconds
-    spinner.perform(click())
-    spinnerItemAt(3).perform(click())
-    spinner.check(matches(withSpinnerText("60000ms")))
-    hideDevToolsButton.perform(click())
-    checkDevToolsHidden(60000)
-}
-
-/**
- * Check that the dev tools button is hidden and remains hidden for a certain amount of time.
- * One second buffer in either direction to account for time needed to check if views are visible.
- *
- * @param hideTime [Long]: the expected time for the button to be hidden, in ms
- */
-private fun checkDevToolsHidden(hideTime: Long) {
-    val dialog = ShadowDialog.getLatestDialog()
-    assertFalse(dialog.isShowing)
-    ShadowLooper.runMainLooperToNextTask()
-    devToolsButton.check(matches(not(isDisplayed())))
-    Thread.sleep(hideTime - 2000)
-    devToolsButton.check(matches(not(isDisplayed())))
-    Thread.sleep(4000)
-    devToolsButton.check(matches(isDisplayed()))
+            val shadowLooper = ShadowLooper.shadowMainLooper()
+            devToolsButton.check(matches(not(isDisplayed())))
+            shadowLooper.idleFor(time - buffer, TimeUnit.MILLISECONDS)
+            devToolsButton.check(matches(not(isDisplayed())))
+            shadowLooper.idleFor(buffer * 2, TimeUnit.MILLISECONDS)
+            devToolsButton.check(matches(isDisplayed()))
+        }
+    }
 }
 
 /**
