@@ -67,7 +67,6 @@ To run linting without fixing issues, run the following command in the terminal 
 │   ├── workflows   <-- workflow files to run in GitHub actions
 ├── app
 │   ├── src
-│   │   ├── androidTestDev    <-- UI tests that are specific to dev product flavor
 │   │   ├── dev               <-- code and resources that are specific to dev product flavor
 │   │   ├── final             <-- code and resources that are specific to final product flavor
 │   │   ├── main
