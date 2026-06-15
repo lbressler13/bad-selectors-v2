@@ -11,7 +11,7 @@ import xyz.lbres.badselectorsv2.calculator.utils.runComputation
 import xyz.lbres.badselectorsv2.databinding.FragmentCalcSingleOperationBinding
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
-import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.utils.simpleIf
 import kotlin.Exception
 
 /**

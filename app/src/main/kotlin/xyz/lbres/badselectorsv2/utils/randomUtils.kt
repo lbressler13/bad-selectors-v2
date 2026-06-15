@@ -1,6 +1,6 @@
 package xyz.lbres.badselectorsv2.utils
 
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.collection.list.IntList
 import java.util.Date
 import kotlin.random.Random
 

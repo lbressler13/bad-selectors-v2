@@ -2,7 +2,7 @@ package xyz.lbres.badselectorsv2.phone
 
 import androidx.lifecycle.ViewModel
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
-import xyz.lbres.kotlinutils.array.ext.setAllValues
+import xyz.lbres.kotlinutils.array.setAllValues
 
 /**
  * ViewModel containing values needed for all phone selectors

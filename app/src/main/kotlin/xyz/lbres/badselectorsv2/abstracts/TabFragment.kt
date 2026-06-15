@@ -12,7 +12,7 @@ import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.otp.OTPTabFragment
 import xyz.lbres.badselectorsv2.phone.PhoneTabFragment
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.collection.list.IntList
 
 /**
  * Abstract fragment to handle common functionality for fragments that contain a tab layout.

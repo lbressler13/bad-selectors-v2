@@ -2,13 +2,12 @@ package xyz.lbres.badselectorsv2.phone.utils
 
 import android.util.Log
 import xyz.lbres.badselectorsv2.utils.seededRandom
-import xyz.lbres.kotlinutils.array.ext.setAllValues
-import xyz.lbres.kotlinutils.closedrange.intrange.ext.size
-import xyz.lbres.kotlinutils.intarray.ext.mapInPlaceIndexed
-import xyz.lbres.kotlinutils.intarray.ext.setAllValues
-import xyz.lbres.kotlinutils.intarray.intArrayOfValue
-import xyz.lbres.kotlinutils.list.IntList
-import xyz.lbres.kotlinutils.set.mutableset.ext.popRandom
+import xyz.lbres.kotlinutils.array.setAllValues
+import xyz.lbres.kotlinutils.closedrange.size
+import xyz.lbres.kotlinutils.array.mapInPlaceIndexed
+import xyz.lbres.kotlinutils.array.intArrayOfValue
+import xyz.lbres.kotlinutils.collection.list.IntList
+import xyz.lbres.kotlinutils.collection.popRandom
 
 /**
  * Generator for creating a randomized phone number

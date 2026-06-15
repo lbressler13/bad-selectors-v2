@@ -23,7 +23,7 @@ import xyz.lbres.badselectorsv2.ui.calculator.operatorButtons
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.utils.simpleIf
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)

@@ -1,6 +1,6 @@
 package xyz.lbres.badselectorsv2.calculator.utils
 
-import xyz.lbres.kotlinutils.list.StringList
+import xyz.lbres.kotlinutils.collection.list.StringList
 
 /**
  * All data about the current state of a calculation.

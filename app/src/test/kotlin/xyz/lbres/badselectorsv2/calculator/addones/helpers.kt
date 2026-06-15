@@ -1,7 +1,7 @@
 package xyz.lbres.badselectorsv2.calculator.addones
 
 import xyz.lbres.badselectorsv2.calculator.splitText
-import xyz.lbres.kotlinutils.list.listOfNulls
+import xyz.lbres.kotlinutils.collection.list.listOfNulls
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

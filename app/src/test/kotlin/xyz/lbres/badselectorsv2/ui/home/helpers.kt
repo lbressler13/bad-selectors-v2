@@ -22,7 +22,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.matchers.matchesAtPosition
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.collection.list.IntList
 
 // private aliases for ViewActions that require the vh class
 private typealias SVH = SelectorViewHolder

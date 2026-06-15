@@ -9,8 +9,8 @@ import io.mockk.verify
 import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.badselectorsv2.testutils.runWithRetries
 import xyz.lbres.badselectorsv2.utils.seededRandom
-import xyz.lbres.kotlinutils.array.ext.setAllValues
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.array.setAllValues
+import xyz.lbres.kotlinutils.collection.list.IntList
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test

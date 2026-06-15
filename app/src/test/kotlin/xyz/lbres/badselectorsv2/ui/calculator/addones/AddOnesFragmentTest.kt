@@ -21,7 +21,7 @@ import xyz.lbres.badselectorsv2.ui.calculator.numberButtons
 import xyz.lbres.badselectorsv2.ui.calculator.splitText
 import xyz.lbres.badselectorsv2.ui.calculator.typeText
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
-import xyz.lbres.kotlinutils.list.mutablelist.mutableListOfNulls
+import xyz.lbres.kotlinutils.collection.list.mutableListOfNulls
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
