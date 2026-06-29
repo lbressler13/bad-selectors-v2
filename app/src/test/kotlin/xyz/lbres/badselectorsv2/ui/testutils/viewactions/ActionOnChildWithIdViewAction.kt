@@ -8,7 +8,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.util.HumanReadables
 import org.hamcrest.Matcher
-import xyz.lbres.kotlinutils.generic.ext.ifNull
+import xyz.lbres.kotlinutils.generic.ifNull
 
 /**
  * [ViewAction] to perform an action on a child view with a given ID

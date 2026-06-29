@@ -35,7 +35,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 import xyz.lbres.badselectorsv2.ui.testutils.openSettingsDialog
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.collection.list.IntList
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
@@ -259,7 +259,7 @@ class SelectCorrectFragmentTest {
 
     private fun checkDigitColors(selectedDigits: Set<Int>, dividersSelected: Boolean = false) {
         val hasStandardColor = hasThemeTextColor(com.google.android.material.R.attr.colorOnBackground)
-        val hasSelectedColor = hasThemeTextColor(com.google.android.material.R.attr.colorPrimary)
+        val hasSelectedColor = hasThemeTextColor(androidx.appcompat.R.attr.colorPrimary)
 
         digitViews.forEachIndexed { index, view ->
             if (index in selectedDigits) {

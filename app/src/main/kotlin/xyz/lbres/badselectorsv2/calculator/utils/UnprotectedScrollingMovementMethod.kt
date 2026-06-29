@@ -3,7 +3,7 @@ package xyz.lbres.badselectorsv2.calculator.utils
 import android.text.Spannable
 import android.text.method.ScrollingMovementMethod
 import android.widget.TextView
-import xyz.lbres.kotlinutils.general.tryOrDefault
+import xyz.lbres.kotlinutils.utils.tryOrDefault
 
 /**
  * Extends [ScrollingMovementMethod] to expose the protected functionality

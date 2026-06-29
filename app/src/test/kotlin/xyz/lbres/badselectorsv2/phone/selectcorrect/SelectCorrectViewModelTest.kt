@@ -6,8 +6,8 @@ import io.mockk.unmockkAll
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
-import xyz.lbres.kotlinutils.list.IntList
-import xyz.lbres.kotlinutils.list.listOfNulls
+import xyz.lbres.kotlinutils.collection.list.IntList
+import xyz.lbres.kotlinutils.collection.list.listOfNulls
 import kotlin.collections.listOf
 import kotlin.test.AfterTest
 import kotlin.test.Test

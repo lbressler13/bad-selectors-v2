@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.badselectorsv2.databinding.ViewHolderSelectorBinding
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.collection.list.IntList
 
 /**
  * Adapter for list of selectors for the RecyclerView in selector group

@@ -35,7 +35,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 import xyz.lbres.badselectorsv2.ui.testutils.openSettingsDialog
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.kotlinutils.list.listOfNulls
+import xyz.lbres.kotlinutils.collection.list.listOfNulls
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)

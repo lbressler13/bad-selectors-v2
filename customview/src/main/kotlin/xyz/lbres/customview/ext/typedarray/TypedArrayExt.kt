@@ -6,7 +6,7 @@ import androidx.core.content.res.getDimensionPixelSizeOrThrow
 import androidx.core.content.res.getFloatOrThrow
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
-import xyz.lbres.kotlinutils.general.tryOrDefault
+import xyz.lbres.kotlinutils.utils.tryOrDefault
 
 /**
  * Retrieve the integer value for the attribute at [index] or return `null` if it is not defined.

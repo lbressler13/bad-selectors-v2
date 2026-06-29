@@ -5,7 +5,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.collection.list.IntList
 import java.time.LocalDate
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest

@@ -1,8 +1,8 @@
 package xyz.lbres.badselectorsv2.calculator.utils
 
-import xyz.lbres.kotlinutils.list.StringList
-import xyz.lbres.kotlinutils.list.ext.isSingleValue
-import xyz.lbres.kotlinutils.string.ext.isInt
+import xyz.lbres.kotlinutils.collection.list.StringList
+import xyz.lbres.kotlinutils.collection.list.isSingleValue
+import xyz.lbres.kotlinutils.string.isInt
 import kotlin.NumberFormatException
 
 /**

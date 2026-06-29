@@ -15,7 +15,7 @@ import xyz.lbres.badselectorsv2.ext.view.enable
 import xyz.lbres.badselectorsv2.ext.view.fullOpacity
 import xyz.lbres.badselectorsv2.ext.view.halfOpacity
 import xyz.lbres.badselectorsv2.ext.viewgroup.setChildOnClickListener
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.collection.list.IntList
 
 /**
  * Fragment that displays 3 concentric, unlabelled circles of buttons, corresponding to year, day, and month.

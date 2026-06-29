@@ -9,7 +9,7 @@ import xyz.lbres.badselectorsv2.calculator.BaseCalculatorFragment
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.runComputation
 import xyz.lbres.badselectorsv2.databinding.FragmentCalcRandomEnabledBinding
-import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.utils.simpleIf
 
 /**
  * Fragment with a calculator that randomly enables and disables operator and number buttons when any button is pressed.
