@@ -259,7 +259,7 @@ class SelectCorrectFragmentTest {
 
     private fun checkDigitColors(selectedDigits: Set<Int>, dividersSelected: Boolean = false) {
         val hasStandardColor = hasThemeTextColor(com.google.android.material.R.attr.colorOnBackground)
-        val hasSelectedColor = hasThemeTextColor(com.google.android.material.R.attr.colorPrimary)
+        val hasSelectedColor = hasThemeTextColor(androidx.appcompat.R.attr.colorPrimary)
 
         digitViews.forEachIndexed { index, view ->
             if (index in selectedDigits) {

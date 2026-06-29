@@ -1,12 +1,12 @@
 @file:Suppress("unused")
 
 // main dependencies
-val androidxCoreVersion by extra { "1.13.1" }
-val appCompatVersion by extra { "1.7.0" }
+val androidxCoreVersion by extra { "1.18.0" } // 1.19.0 requires API 37
+val appCompatVersion by extra { "1.7.1" }
 val constraintLayoutVersion by extra { "2.2.1" }
 val kotlinUtilsVersion by extra { "2.1.0" }
 val lifecycleVersion by extra { "2.11.0" }
-val materialVersion by extra { "1.12.0" }
+val materialVersion by extra { "1.14.0" }
 val navigationVersion by extra { "2.9.8" }
 
 // test dependencies
@@ -19,7 +19,7 @@ val mockkVersion by extra { "1.14.9" }
 val robolectricVersion by extra { "4.16.1" }
 
 // android configurations
-val androidCompileSdk by extra { 35 }
+val androidCompileSdk by extra { 36 }
 val androidJavaVersion by extra { JavaVersion.VERSION_11 }
 val androidJvmTarget by extra { "11" }
 val androidMinSdk by extra { 34 }
