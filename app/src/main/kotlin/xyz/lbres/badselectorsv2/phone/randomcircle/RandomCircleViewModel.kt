@@ -4,9 +4,9 @@ import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.utils.createRandom
-import xyz.lbres.kotlinutils.utils.simpleIf
 import xyz.lbres.kotlinutils.collection.list.IntList
 import xyz.lbres.kotlinutils.random.nextBoolean
+import xyz.lbres.kotlinutils.utils.simpleIf
 
 class RandomCircleViewModel : BasePhoneViewModel() {
     var russianRoulette = false
