@@ -91,7 +91,7 @@ jobs:
 
       - name: Tests
         run: |
-          ./gradlew :app:test -PtestType="unit" --stacktrace
+          ./gradlew :app:test -PtestType="unit" --stacktrace --info
 
   app-integration-tests:
     name: "Integration Tests (app)"
@@ -118,7 +118,7 @@ jobs:
 
       - name: Tests
         run: |
-          ./gradlew :app:test -PtestType="robolectric" --stacktrace
+          ./gradlew :app:test -PtestType="robolectric" --stacktrace --info
 
   customview-tests:
     name: "Tests (customview)"
