@@ -3,11 +3,11 @@
 // main dependencies
 val androidxCoreVersion by extra { "1.13.1" }
 val appCompatVersion by extra { "1.7.0" }
-val constraintLayoutVersion by extra { "2.1.4" }
+val constraintLayoutVersion by extra { "2.2.1" }
 val kotlinUtilsVersion by extra { "2.1.0" }
-val lifecycleVersion by extra { "2.8.6" }
+val lifecycleVersion by extra { "2.11.0" }
 val materialVersion by extra { "1.12.0" }
-val navigationVersion by extra { "2.8.3" }
+val navigationVersion by extra { "2.9.8" }
 
 // test dependencies
 // test dependency versions: https://developer.android.com/jetpack/androidx/releases/test

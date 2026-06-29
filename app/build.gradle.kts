@@ -103,7 +103,6 @@ dependencies {
     val navigationVersion: String by rootProject.extra
 
     val androidxJunitVersion: String by rootProject.extra
-    val androidxTestRulesVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
     val mockkVersion: String by rootProject.extra
     val robolectricVersion: String by rootProject.extra
