@@ -1,7 +1,7 @@
 package xyz.lbres.badselectorsv2.home.selectorgroup
 
+import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.lbres.badselectorsv2.BaseActivity
@@ -64,7 +64,8 @@ class SelectorGroupViewHolder(
         val tabKey = activity.getString(R.string.tab_index_key)
 
         val fragmentOnClick: (Int) -> Unit = { tabIndex ->
-            activity.runNavAction(metadata.navActionFromHomeId, bundleOf(tabKey to tabIndex))
+            val args = Bundle().apply { putInt(tabKey, tabIndex) }
+            activity.runNavAction(metadata.navActionFromHomeId, args)
         }
         val adapter = SelectorAdapter(metadata.tabTitleResIds, fragmentOnClick, activity)
         itemRecycler.adapter = adapter

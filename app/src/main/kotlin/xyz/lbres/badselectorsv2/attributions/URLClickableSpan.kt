@@ -5,7 +5,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ClickableSpan
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 
 /**
@@ -19,7 +18,7 @@ class URLClickableSpan(private val url: String) : ClickableSpan() {
      */
     override fun onClick(view: View) {
         val browserIntent = Intent(Intent.ACTION_VIEW, url.toUri())
-        ContextCompat.startActivity(view.context, browserIntent, null)
+        view.context.startActivity(browserIntent, null)
     }
 
     companion object {
