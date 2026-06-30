@@ -31,8 +31,8 @@ import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
 class AddOneSettingsDialogTest {
     private var scenario: ActivityScenario<BaseActivity>? = null
 
-    private val seekbar = onView(withId(R.id.numSavedValuesSeekbar))
-    private val warningLabel = onView(withId(R.id.cannotDisableText))
+    private val seekbar = onViewInDialog(withId(R.id.numSavedValuesSeekbar))
+    private val warningLabel = onViewInDialog(withId(R.id.cannotDisableText))
     private val doneButton = onViewInDialog(withText("Done"))
 
     @Before
@@ -89,6 +89,7 @@ class AddOneSettingsDialogTest {
     }
 
     private fun setAndCheckProgress(progress: Int, warning: String? = null) {
+        openSettingsDialog()
         seekbar.perform(setProgress(progress))
             .check(matches(hasProgress(progress)))
 

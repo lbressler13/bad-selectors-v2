@@ -32,7 +32,7 @@ class AddOnesSettingsDialog : SettingsDialog<DialogCalcAddOnesSettingsBinding>()
             binding.numSavedValuesSeekbar.progress = viewModel.maxSavedValues
         }
 
-        binding.numSavedValuesSeekbar.setOnSeekBarChangeListener(seekbarChangeListener)
+        binding.numSavedValuesSeekbar.setOnSeekBarChangeListener(getSeekbarChangeListener())
         binding.cannotDisableText.text = ""
         binding.cannotDisableText.gone()
     }
@@ -51,14 +51,20 @@ class AddOnesSettingsDialog : SettingsDialog<DialogCalcAddOnesSettingsBinding>()
     /**
      * Listener for value change in seekbar. Shows and hides warning about invalid selection.
      */
-    private val seekbarChangeListener: SeekBar.OnSeekBarChangeListener =
-        object : SeekBar.OnSeekBarChangeListener {
+    private fun getSeekbarChangeListener(): SeekBar.OnSeekBarChangeListener {
+        return object : SeekBar.OnSeekBarChangeListener {
             val savedCount = viewModel.savedValues.countNotNull()
 
-            override fun onProgressChanged(seekbar: SeekBar?, progress: Int, fromUser: Boolean) {
+            override fun onProgressChanged(
+                seekbar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean,
+            ) {
                 if (progress < savedCount) {
-                    val savedValuesText = if (savedCount == 1) "value is saved" else "values are saved"
-                    val warningText = "Cannot set number of values to $progress when $savedCount $savedValuesText"
+                    val savedValuesText =
+                        if (savedCount == 1) "value is saved" else "values are saved"
+                    val warningText =
+                        "Cannot set number of values to $progress when $savedCount $savedValuesText"
 
                     binding.cannotDisableText.text = warningText
                     binding.cannotDisableText.visible()
@@ -71,6 +77,7 @@ class AddOnesSettingsDialog : SettingsDialog<DialogCalcAddOnesSettingsBinding>()
             override fun onStartTrackingTouch(seekbar: SeekBar?) {}
             override fun onStopTrackingTouch(seekbar: SeekBar?) {}
         }
+    }
 
     companion object {
         const val TAG = "AddOnesSettingsDialog"
