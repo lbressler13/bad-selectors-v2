@@ -21,7 +21,7 @@ import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.utils.getColorOnPrimary
 import xyz.lbres.badselectorsv2.utils.getDisabledForeground
 import xyz.lbres.badselectorsv2.utils.setImageButtonTint
-import xyz.lbres.kotlinutils.collection.ext.countNotNull
+import xyz.lbres.kotlinutils.collection.countNotNull
 
 /**
  * Fragment with calculator that contains buttons for adding, subtracting, and one, as well as several saved values.

@@ -6,7 +6,7 @@ import xyz.lbres.badselectorsv2.abstracts.SettingsDialog
 import xyz.lbres.badselectorsv2.databinding.DialogCalcAddOnesSettingsBinding
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
-import xyz.lbres.kotlinutils.collection.ext.countNotNull
+import xyz.lbres.kotlinutils.collection.countNotNull
 
 /**
  * Dialog to update settings for the [AddOnesFragment]

@@ -16,7 +16,7 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.home.selectorgroup.SelectorGroupViewHolder
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.actionOnChildWithId
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
-import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.utils.simpleIf
 
 private typealias VH = SelectorGroupViewHolder
 

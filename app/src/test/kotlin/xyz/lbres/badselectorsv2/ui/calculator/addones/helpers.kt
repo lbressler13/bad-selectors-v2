@@ -21,7 +21,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.isShown
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
-import xyz.lbres.kotlinutils.list.listOfNulls
+import xyz.lbres.kotlinutils.collection.list.listOfNulls
 
 val saveButton = onView(withId(R.id.saveButton))
 val plusButton = onView(withId(R.id.plusButton))

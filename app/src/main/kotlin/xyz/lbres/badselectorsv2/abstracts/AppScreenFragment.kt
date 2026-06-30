@@ -1,8 +1,8 @@
 package xyz.lbres.badselectorsv2.abstracts
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
@@ -82,8 +82,12 @@ abstract class AppScreenFragment : NavHostFragment() {
      * @param tabFragment [Boolean]: `true` if the destination fragment is a tab fragment, `false` otherwise
      */
     private fun addNavOnClick(button: View, actionResId: Int?, tabFragment: Boolean) {
-        val tabKey = getString(R.string.tab_index_key)
-        val args = if (tabFragment) bundleOf(tabKey to 0) else null
+        val args = if (tabFragment) {
+            val tabKey = getString(R.string.tab_index_key)
+            Bundle().apply { putInt(tabKey, 0) }
+        } else {
+            null
+        }
 
         button.setOnClickListener {
             if (actionResId != null) {

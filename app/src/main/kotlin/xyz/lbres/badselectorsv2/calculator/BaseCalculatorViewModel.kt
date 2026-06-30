@@ -2,7 +2,7 @@ package xyz.lbres.badselectorsv2.calculator
 
 import androidx.lifecycle.ViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.CalcData
-import xyz.lbres.kotlinutils.list.ext.copyWithoutLast
+import xyz.lbres.kotlinutils.collection.list.withoutLast
 
 /**
  * ViewModel containing values needed for all calculators
@@ -29,7 +29,7 @@ abstract class BaseCalculatorViewModel : ViewModel() {
      */
     open fun backspaceComputeText() {
         if (calcData.computeText.isNotEmpty()) {
-            val newText = calcData.computeText.copyWithoutLast()
+            val newText = calcData.computeText.withoutLast()
             calcData = calcData.withText(newText)
         }
     }

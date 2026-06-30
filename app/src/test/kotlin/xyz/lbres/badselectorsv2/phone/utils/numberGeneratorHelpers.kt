@@ -5,7 +5,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import xyz.lbres.badselectorsv2.utils.seededRandom
-import xyz.lbres.kotlinutils.list.IntList
+import xyz.lbres.kotlinutils.collection.list.IntList
 import kotlin.collections.forEach
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

@@ -47,10 +47,6 @@ Tests can be run with the following commands:
 
 Tests can also be run by build type and variant, such as `./gradlew testDevDebugUnitTest -PtestType=robolectric`
 
-Note: Tests for hiding the dev tools button have not been moved to Robolectric due to issues with the looper. However, all other tests should be run with Robolectric.
-The tests for hiding the button can be run with the following command:
-```./gradlew connectedCheck```
-
 See the Android docs for more information on testing with [Espresso](https://developer.android.com/training/testing/espresso) and [Robolectric](https://developer.android.com/training/testing/local-tests/robolectric).
 
 ## Linting
@@ -71,7 +67,6 @@ To run linting without fixing issues, run the following command in the terminal 
 │   ├── workflows   <-- workflow files to run in GitHub actions
 ├── app
 │   ├── src
-│   │   ├── androidTestDev    <-- UI tests that are specific to dev product flavor
 │   │   ├── dev               <-- code and resources that are specific to dev product flavor
 │   │   ├── final             <-- code and resources that are specific to final product flavor
 │   │   ├── main

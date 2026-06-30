@@ -1,12 +1,12 @@
 package xyz.lbres.badselectorsv2.calculator.addones
 
 import xyz.lbres.badselectorsv2.calculator.splitText
-import xyz.lbres.kotlinutils.list.StringList
-import xyz.lbres.kotlinutils.list.listOfNulls
+import xyz.lbres.kotlinutils.collection.list.StringList
+import xyz.lbres.kotlinutils.collection.list.listOfNulls
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-private val maxSavedValues = 4
+private const val maxSavedValues = 4
 private val empty: List<Int?> = listOfNulls(maxSavedValues)
 
 // save result to viewmodel

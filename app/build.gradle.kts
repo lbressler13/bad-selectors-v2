@@ -6,11 +6,6 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
-fun getEspressoRetries(): Int {
-    val espressoRetries: String? by project
-    return espressoRetries?.toIntOrNull() ?: 0
-}
-
 android {
     val androidCompileSdk: Int by rootProject.extra
     val androidJavaVersion: JavaVersion by rootProject.extra
@@ -26,8 +21,6 @@ android {
         targetSdk = androidCompileSdk
         versionCode = 1
         versionName = "1.0.0"
-
-        buildConfigField("int", "ESPRESSO_RETRIES", getEspressoRetries().toString())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
@@ -55,42 +48,6 @@ android {
             dimension = "type"
             versionNameSuffix = "-final"
         }
-    }
-
-    sourceSets.getByName("main") {
-        java.setSrcDirs(listOf("src/main/kotlin"))
-    }
-
-    sourceSets.getByName("dev") {
-        java.setSrcDirs(listOf("src/dev/kotlin"))
-    }
-
-    sourceSets.getByName("final") {
-        java.setSrcDirs(listOf("src/final/kotlin"))
-    }
-
-    sourceSets.getByName("test") {
-        java.setSrcDirs(listOf("src/test/kotlin"))
-    }
-
-    sourceSets.getByName("testDev") {
-        java.setSrcDirs(listOf("src/testDev/kotlin"))
-    }
-
-    sourceSets.getByName("testFinal") {
-        java.setSrcDirs(listOf("src/testFinal/kotlin"))
-    }
-
-    sourceSets.getByName("androidTest") {
-        java.setSrcDirs(listOf("src/androidTest/kotlin"))
-    }
-
-    sourceSets.getByName("androidTestDev") {
-        java.setSrcDirs(listOf("src/androidTestDev/kotlin"))
-    }
-
-    sourceSets.getByName("androidTestFinal") {
-        java.setSrcDirs(listOf("src/androidTestFinal/kotlin"))
     }
 
     buildFeatures {
@@ -146,7 +103,6 @@ dependencies {
     val navigationVersion: String by rootProject.extra
 
     val androidxJunitVersion: String by rootProject.extra
-    val androidxTestRulesVersion: String by rootProject.extra
     val espressoVersion: String by rootProject.extra
     val mockkVersion: String by rootProject.extra
     val robolectricVersion: String by rootProject.extra
@@ -172,9 +128,6 @@ dependencies {
     testImplementation("androidx.test.ext:junit-ktx:$androidxJunitVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("org.robolectric:robolectric:$robolectricVersion")
-    androidTestImplementation("androidx.test.ext:junit:$androidxJunitVersion")
-    androidTestImplementation("androidx.test:rules:$androidxTestRulesVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {

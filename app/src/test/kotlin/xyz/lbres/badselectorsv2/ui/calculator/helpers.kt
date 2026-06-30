@@ -5,7 +5,7 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
-import xyz.lbres.kotlinutils.string.ext.isInt
+import xyz.lbres.kotlinutils.string.isInt
 
 // all numbers
 val numberButtons: List<ViewInteraction> = listOf(

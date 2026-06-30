@@ -3,7 +3,7 @@ package xyz.lbres.badselectorsv2.calculator.randomenabled
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
-import xyz.lbres.kotlinutils.booleanarray.booleanArrayOfValue
+import xyz.lbres.kotlinutils.array.booleanArrayOfValue
 
 /**
  * ViewModel containing values that are specific to the random enabled calculator.

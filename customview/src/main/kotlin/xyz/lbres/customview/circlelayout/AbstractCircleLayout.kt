@@ -12,7 +12,7 @@ import xyz.lbres.customview.circlelayout.CircleLayout.RadiusMode
 import xyz.lbres.customview.ext.typedarray.getDimensionPixelSizeOrNull
 import xyz.lbres.customview.ext.typedarray.getFloatOrNull
 import xyz.lbres.customview.ext.typedarray.getRadiansOrNull
-import xyz.lbres.kotlinutils.general.simpleIf
+import xyz.lbres.kotlinutils.utils.simpleIf
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max

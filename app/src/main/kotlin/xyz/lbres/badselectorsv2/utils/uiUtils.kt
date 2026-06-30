@@ -41,7 +41,7 @@ fun setImageButtonTint(button: View, color: Int) {
  * @param context [Context]
  * @return [Int]: the color value
  */
-fun getColorPrimary(context: Context) = getThemeColor(context, com.google.android.material.R.attr.colorPrimary)
+fun getColorPrimary(context: Context) = getThemeColor(context, androidx.appcompat.R.attr.colorPrimary)
 
 /**
  * Get theme colorOnPrimary color value.

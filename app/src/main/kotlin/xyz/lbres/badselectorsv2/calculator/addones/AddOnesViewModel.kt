@@ -3,7 +3,7 @@ package xyz.lbres.badselectorsv2.calculator.addones
 import android.util.Log
 import xyz.lbres.badselectorsv2.calculator.BaseCalculatorViewModel
 import xyz.lbres.badselectorsv2.calculator.utils.CalcData
-import xyz.lbres.kotlinutils.array.ext.setAllValues
+import xyz.lbres.kotlinutils.array.setAllValues
 
 /**
  * ViewModel containing values that are specific to the add-ones calculator.
