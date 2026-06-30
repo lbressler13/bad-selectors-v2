@@ -9,22 +9,26 @@ import xyz.lbres.kotlinutils.array.setAllValues
  * ViewModel containing values that are specific to the add-ones calculator.
  */
 class AddOnesViewModel : BaseCalculatorViewModel() {
+    val absoluteMaxSavedValues: Int = 4
+
     /**
      * Maximum number of values that can be saved
      */
-    val maxSavedValues: Int = 4
+    private var _maxSavedValues: Int = 2
+    val maxSavedValues: Int
+        get() = _maxSavedValues
 
     /**
      * Values stored after computation
      */
-    private val _savedValues: Array<Int?> = arrayOfNulls(maxSavedValues)
+    private val _savedValues: Array<Int?> = arrayOfNulls(absoluteMaxSavedValues)
     val savedValues: List<Int?>
         get() = _savedValues.toList()
 
     /**
      * Indices of saved values in computeText, if being used
      */
-    private val savedValueIndices: Array<Int?> = arrayOfNulls(maxSavedValues)
+    private val savedValueIndices: Array<Int?> = arrayOfNulls(absoluteMaxSavedValues)
 
     /**
      * Delete last value from list, and update [savedValueIndices] if the last value is a saved value.
@@ -109,6 +113,30 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
         if (warning != null) {
             Log.w(null, warning)
         }
+    }
+
+    fun updateMaxSavedValues(newMax: Int) {
+        val oldMax = maxSavedValues
+        Log.e(null, "Max saved value update: $oldMax, $newMax")
+        // move values into blank spaces
+        if (newMax < oldMax) {
+            val blankIndices = savedValues.indices.filter { it < newMax && savedValues[it] == null }
+            val leftoverIndices = savedValues.indices.filter { it > newMax && savedValues[it] != null }
+
+            var blankIndicesIndex = 0
+            for (leftoverIndex in leftoverIndices) {
+                val blankIndex = blankIndices[blankIndicesIndex]
+                _savedValues[blankIndex] = savedValues[leftoverIndex]
+                savedValueIndices[blankIndex] = savedValueIndices[leftoverIndex]
+                blankIndicesIndex++
+            }
+
+            for (i in newMax until absoluteMaxSavedValues) {
+                _savedValues[i] = null
+                savedValueIndices[i] = null
+            }
+        }
+        _maxSavedValues = newMax
     }
 
     /**

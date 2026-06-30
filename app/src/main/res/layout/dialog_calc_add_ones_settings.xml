@@ -18,8 +18,6 @@
         android:id="@+id/numSavedValuesSeekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="4"
-        android:min="0"
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
         android:thumbOffset="0dp"

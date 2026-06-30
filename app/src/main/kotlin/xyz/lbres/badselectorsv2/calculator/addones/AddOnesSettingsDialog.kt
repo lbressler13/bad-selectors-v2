@@ -27,12 +27,15 @@ class AddOnesSettingsDialog : SettingsDialog<DialogCalcAddOnesSettingsBinding>()
     override fun setInitialUi() {
         viewModel = ViewModelProvider(requireActivity())[AddOnesViewModel::class.java]
 
-        val sliderRange: IntRange = binding.numSavedValuesSeekbar.min..binding.numSavedValuesSeekbar.max
-        if (viewModel.maxSavedValues in sliderRange) {
-            binding.numSavedValuesSeekbar.progress = viewModel.maxSavedValues
+        val seekbar = binding.numSavedValuesSeekbar
+        val seekbarRange: IntRange = 0..viewModel.absoluteMaxSavedValues
+        seekbar.min = seekbarRange.first
+        seekbar.max = seekbarRange.last
+        if (viewModel.maxSavedValues in seekbarRange) {
+            seekbar.progress = viewModel.maxSavedValues
         }
 
-        binding.numSavedValuesSeekbar.setOnSeekBarChangeListener(getSeekbarChangeListener())
+        seekbar.setOnSeekBarChangeListener(getSeekbarChangeListener())
         binding.cannotDisableText.text = ""
         binding.cannotDisableText.gone()
     }
@@ -44,7 +47,7 @@ class AddOnesSettingsDialog : SettingsDialog<DialogCalcAddOnesSettingsBinding>()
         val seekbarPosition = binding.numSavedValuesSeekbar.progress
         val savedCount = viewModel.savedValues.countNotNull()
         if (savedCount <= seekbarPosition) {
-            // viewModel.maxSavedValues = savedCount
+            viewModel.updateMaxSavedValues(seekbarPosition)
         }
     }
 

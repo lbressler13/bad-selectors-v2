@@ -57,7 +57,7 @@ class AddOnesViewModelTest {
         clearAtIndex(vm, 1, expectedValues)
         clearAtIndex(vm, 3, expectedValues)
         saveResult(vm, -1)
-        expectedValues[1] = -1  // stored in earliest blank
+        expectedValues[1] = -1 // stored in earliest blank
         assertEquals(expectedValues, vm.savedValues)
 
         // with error
