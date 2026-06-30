@@ -1,7 +1,6 @@
 package xyz.lbres.badselectorsv2.ui.calculator.addones
 
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -68,9 +67,9 @@ class AddOneSettingsDialogTest {
     @Test
     fun interactWithUi() {
         setAndCheckProgress(0)
-        setAndCheckProgress(1)
-        setAndCheckProgress(2)
-        setAndCheckProgress(3)
+        setAndCheckProgress(1, openDialog = false)
+        setAndCheckProgress(2, openDialog = false)
+        setAndCheckProgress(3, openDialog = false)
     }
 
     @Test
@@ -88,8 +87,10 @@ class AddOneSettingsDialogTest {
         setAndCheckProgress(0, warning(1, 0))
     }
 
-    private fun setAndCheckProgress(progress: Int, warning: String? = null) {
-        openSettingsDialog()
+    private fun setAndCheckProgress(progress: Int, warning: String? = null, openDialog: Boolean = true) {
+        if (openDialog) {
+            openSettingsDialog()
+        }
         seekbar.perform(setProgress(progress))
             .check(matches(hasProgress(progress)))
 
