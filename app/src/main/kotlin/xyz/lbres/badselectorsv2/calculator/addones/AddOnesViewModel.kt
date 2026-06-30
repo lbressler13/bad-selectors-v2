@@ -117,11 +117,10 @@ class AddOnesViewModel : BaseCalculatorViewModel() {
 
     fun updateMaxSavedValues(newMax: Int) {
         val oldMax = maxSavedValues
-        Log.e(null, "Max saved value update: $oldMax, $newMax")
         // move values into blank spaces
         if (newMax < oldMax) {
             val blankIndices = savedValues.indices.filter { it < newMax && savedValues[it] == null }
-            val leftoverIndices = savedValues.indices.filter { it > newMax && savedValues[it] != null }
+            val leftoverIndices = savedValues.indices.filter { it >= newMax && savedValues[it] != null }
 
             var blankIndicesIndex = 0
             for (leftoverIndex in leftoverIndices) {
