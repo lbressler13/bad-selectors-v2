@@ -13,8 +13,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-// TODO check that values go into the earlier slots, even when later are available
-
 class AddOnesViewModelTest {
     private val maxSavedValues = 4
     private val empty: List<Int?> = listOfNulls(maxSavedValues)
@@ -53,6 +51,13 @@ class AddOnesViewModelTest {
         clearAtIndex(vm, 1, expectedValues)
         vm.saveComputedValue()
         expectedValues[1] = 5
+        assertEquals(expectedValues, vm.savedValues)
+
+        // multiple blanks
+        clearAtIndex(vm, 1, expectedValues)
+        clearAtIndex(vm, 3, expectedValues)
+        saveResult(vm, -1)
+        expectedValues[1] = -1  // stored in earliest blank
         assertEquals(expectedValues, vm.savedValues)
 
         // with error
