@@ -47,8 +47,13 @@ class TypeDigitsViewModelTest {
             }
 
             // update a digit
-            val result = vm.selectValue(0, 0)
+            var result = vm.selectValue(0, 0)
             expectedDigits[0] = digitsOrder[0]
+            assertEquals(expectedDigits[0], result)
+            assertEquals(expectedDigits, vm.digits)
+
+            // doesn't change repeat value
+            result = vm.selectValue(0, digitsOrder[0])
             assertEquals(expectedDigits[0], result)
             assertEquals(expectedDigits, vm.digits)
 

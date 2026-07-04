@@ -14,6 +14,9 @@ class TypeDigitsViewModel : BasePhoneViewModel() {
             return null
         }
 
+        if (_digits[index] == value) {
+            return value
+        }
         val result = digitsOrder[value]
         _digits[index] = result
         return result
