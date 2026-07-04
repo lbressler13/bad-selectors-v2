@@ -1,6 +1,7 @@
 package xyz.lbres.badselectorsv2.ui.phone
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -44,3 +45,6 @@ fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: List<Int> = (0..
 fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: IntRange) {
     checkPhoneNumber(expectedNumber, digitsToCheck.toList())
 }
+
+// TODO use in select correct
+fun clickDigit(index: Int) = digitViews[index].perform(click())

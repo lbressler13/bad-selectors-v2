@@ -22,6 +22,7 @@ import xyz.lbres.badselectorsv2.phone.typedigits.TypeDigitsSetDigitDialog
 import xyz.lbres.badselectorsv2.phone.typedigits.TypeDigitsViewModel
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.testutils.mockLog
+import xyz.lbres.badselectorsv2.ui.phone.clickDigit
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
 import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
@@ -45,7 +46,7 @@ class TypeDigitsSetDigitDialogTest {
     @Test
     fun testInitialUi() {
         launchTypeDigitsFragment()
-        openDialog()
+        clickDigit(0)
         radioButtons.forEach { it.check(matches(allOf(isEnabled(), isNotChecked()))) }
         onViewInDialog(withText("Select Digit Value")).check(matches(isDisplayed()))
     }
@@ -53,7 +54,7 @@ class TypeDigitsSetDigitDialogTest {
     @Test
     fun testCloseDialog() {
         launchTypeDigitsFragment()
-        openDialog()
+        clickDigit(0)
         doneButton.perform(click())
         val dialog = ShadowDialog.getLatestDialog()
         assertFalse(dialog.isShowing)
@@ -62,9 +63,9 @@ class TypeDigitsSetDigitDialogTest {
     @Test
     fun testInteractWithUi() {
         launchTypeDigitsFragment()
-        openDialog()
+        clickDigit(0)
         radioButtons.forEachIndexed { index, view ->
-            view.perform(click())
+            clickRadioButton(index)
             checkSelectedButton(index)
         }
     }
@@ -73,20 +74,19 @@ class TypeDigitsSetDigitDialogTest {
     fun testValuesPersisted() {
         withMockedDigitsOrder(digitsRange.toList()) {
             launchTypeDigitsFragment()
-            openDialog()
             val digit = digitViews[3]
 
             digit.perform(click())
-            radioButtons[0].perform(click())
+            clickRadioButton(0)
             closeDialog()
-            digit.check(matches(withText(0)))
+            digit.check(matches(withText("0")))
 
             digit.perform(click())
             checkSelectedButton(0)
 
-            radioButtons[6].perform(click())
+            clickRadioButton(6)
             closeDialog()
-            digit.check(matches(withText(6)))
+            digit.check(matches(withText("6")))
 
             digit.perform(click())
             checkSelectedButton(6)
@@ -113,6 +113,4 @@ class TypeDigitsSetDigitDialogTest {
             }
         }
     }
-
-    private fun openDialog(index: Int = 0) = digitViews[index].perform(click())
 }
