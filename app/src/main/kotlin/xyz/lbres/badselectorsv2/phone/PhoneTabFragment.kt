@@ -45,7 +45,7 @@ class PhoneTabFragment : TabFragment() {
             0 -> selectCorrectFragment
             1 -> randomCircleFragment
             2 -> typeDigitsFragment
-            else -> randomCircleFragment // TODO default to select correct
+            else -> selectCorrectFragment
         }
     }
 

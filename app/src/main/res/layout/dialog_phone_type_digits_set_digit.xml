@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- TODO make buttons scrollable -->
+    <RadioGroup
+        android:id="@+id/buttonsGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/SettingsSwitch">
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/zeroButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/zero" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/oneButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/one" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/twoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/two" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/threeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/three" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/fourButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/four" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/fiveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/five" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sixButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/six" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/sevenButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/seven" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/eightButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/eight" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/nineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nine" />
+
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

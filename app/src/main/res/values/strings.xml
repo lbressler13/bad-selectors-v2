@@ -17,6 +17,7 @@
     <string name="title_phone">Phone</string>
 
     <string name="phone_separator">-</string>
+    <string name="blank_digit">_</string>
 
     <!-- Select Correct -->
     <string name="title_select_correct">Select Correct</string>
@@ -32,6 +33,9 @@
 
     <!-- Type Digits -->
     <string name="title_type_digits">Type Digits</string>
+    <string name="title_type_digits_dialog">Select Digit Value</string>
+
+    <string name="tap_to_select">Tap digits to set values</string>
 
 
     <!-- Date -->

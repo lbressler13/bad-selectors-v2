@@ -2,7 +2,6 @@
 
 <!-- Item displayed in open dropdown -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
     style="@style/SpinnerItem"
     android:paddingHorizontal="10dp"
     android:paddingVertical="15dp"

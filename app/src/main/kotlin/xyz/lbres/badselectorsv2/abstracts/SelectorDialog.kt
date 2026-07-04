@@ -13,15 +13,17 @@ import androidx.viewbinding.ViewBinding
 import xyz.lbres.badselectorsv2.R
 
 /**
- * Abstract dialog to handle common functionality between settings dialogs, including init, dismiss, and setting up ViewModel
+ * Abstract dialog to handle common functionality between dialogs, including init, dismiss, and setting up ViewModel
  */
-abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
+abstract class SelectorDialog<T : ViewBinding> : DialogFragment() {
     protected lateinit var binding: T
 
     /**
      * Request key to notify parent that dialog has closed. Defaults to null
      */
     protected open val dialogClosedRequestKey: String? = null
+
+    protected open val titleResId: Int = R.string.title_settings
 
     /**
      * Initialize dialog
@@ -30,7 +32,7 @@ abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
         binding = inflateLayout()
 
         val doneText = getString(R.string.done)
-        val title = getString(R.string.title_settings)
+        val title = getString(titleResId)
 
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -57,21 +59,21 @@ abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
     protected abstract fun inflateLayout(): T
 
     /**
-     * Update UI to show initial settings
+     * Update UI to show initial values
      */
     protected abstract fun setInitialUi()
 
     /**
-     * Save changes to settings
+     * Save changes
      */
-    protected abstract fun saveUpdatedSettings()
+    protected abstract fun saveChanges()
 
     /**
-     * Close fragment and save settings
+     * Close fragment and save changes
      */
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        saveUpdatedSettings()
+        saveChanges()
 
         // notify parent fragment that dialog has closed
         if (dialogClosedRequestKey != null) {

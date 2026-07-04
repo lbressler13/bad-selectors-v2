@@ -26,6 +26,22 @@ class TypeDigitsFragment : BasePhoneFragment() {
     ): View {
         viewModel = ViewModelProvider(requireActivity())[TypeDigitsViewModel::class.java]
         binding = FragmentPhoneTypeDigitsBinding.inflate(inflater)
+        initDigitViews(binding.digitsLayout)
+        initDigitDialogs()
         return binding.root
+    }
+
+    private fun initDigitDialogs() {
+        digitViews.forEachIndexed { index, view ->
+            view.setOnClickListener {
+                val dialog = TypeDigitsSetDigitDialog(index)
+                dialog.show(childFragmentManager, TypeDigitsSetDigitDialog.TAG)
+            }
+        }
+
+        val requestKey = TypeDigitsSetDigitDialog.CLOSED_KEY
+        childFragmentManager.setFragmentResultListener(requestKey, this) { _, _ ->
+            displayPhoneNumber()
+        }
     }
 }
