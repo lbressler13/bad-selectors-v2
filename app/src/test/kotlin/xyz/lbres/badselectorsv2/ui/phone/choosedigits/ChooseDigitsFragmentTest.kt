@@ -1,7 +1,6 @@
 package xyz.lbres.badselectorsv2.ui.phone.choosedigits
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isClickable
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -13,6 +12,7 @@ import org.junit.Test
 import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
+import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.clickDigit
@@ -43,8 +43,8 @@ class ChooseDigitsFragmentTest {
     @Test
     fun openDialog() {
         launchChooseDigitsFragment()
-        digitViews.forEach {
-            it.perform(click())
+        digitsRange.forEach {
+            clickDigit(it)
             onViewInDialog(withText("Select Digit Value")).check(matches(isDisplayed()))
             closeDialog()
         }

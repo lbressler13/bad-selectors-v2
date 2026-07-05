@@ -47,7 +47,6 @@ fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: IntRange) {
     checkPhoneNumber(expectedNumber, digitsToCheck.toList())
 }
 
-// TODO use in select correct
 /**
  * Click the digit view at the given index
  *

@@ -25,6 +25,7 @@ import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
+import xyz.lbres.badselectorsv2.ui.phone.clickDigit
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.phone.dividerViews
 import xyz.lbres.badselectorsv2.ui.testutils.TextSaver
@@ -75,7 +76,7 @@ class SelectCorrectFragmentTest {
             generateButton.perform(forceClick())
             checkPhoneNumber(mockGeneratedValues[i])
         }
-        digitViews.forEach { it.perform(forceClick()) }
+        digitsRange.forEach(::clickDigit)
         checkRestartUi(mockGeneratedValues.last())
     }
 
@@ -109,7 +110,7 @@ class SelectCorrectFragmentTest {
 
             // add each digit
             digits.forEach {
-                digitViews[it].perform(forceClick())
+                clickDigit(it)
                 selectedDigits.add(it)
                 checkDigitColors(selectedDigits, selectedDigits.size == numDigits)
             }
@@ -130,16 +131,16 @@ class SelectCorrectFragmentTest {
         closeDialog()
 
         // click single digit
-        digitViews[4].perform(forceClick())
+        clickDigit(4)
         checkPhoneNumber(mockGeneratedValues[1])
-        digitViews[6].perform(forceClick())
+        clickDigit(6)
         checkPhoneNumber(mockGeneratedValues[2])
 
         // generate normally
         generateButton.perform(forceClick())
         checkPhoneNumber(mockGeneratedValues[3])
 
-        digitViews[9].perform(forceClick())
+        clickDigit(9)
         checkPhoneNumber(mockGeneratedValues[4])
 
         // change back
@@ -148,8 +149,8 @@ class SelectCorrectFragmentTest {
         closeDialog()
         checkPhoneNumber(mockGeneratedValues[4])
 
-        digitViews[0].perform(click())
-        digitViews[7].perform(click())
+        clickDigit(0)
+        clickDigit(7)
         checkPhoneNumber(mockGeneratedValues[4])
     }
 
@@ -157,7 +158,7 @@ class SelectCorrectFragmentTest {
     fun restart() {
         mockGenerateNumber()
         launchFragment()
-        digitViews.forEach { it.perform(forceClick()) }
+        digitsRange.forEach(::clickDigit)
         restartButton.perform(forceClick())
         checkInitialUi(mockGeneratedValues[1])
     }
@@ -166,7 +167,7 @@ class SelectCorrectFragmentTest {
     fun settingsDialog() {
         mockGenerateNumber()
         launchFragment()
-        digitViews[3].perform(forceClick())
+        clickDigit(3)
 
         // open dialog
         openSettingsDialog()
@@ -197,21 +198,21 @@ class SelectCorrectFragmentTest {
         checkDigitColors(emptySet())
         checkPhoneNumber(mockGeneratedValues[1])
 
-        digitViews[3].perform(forceClick())
-        digitViews[7].perform(forceClick())
+        clickDigit(3)
+        clickDigit(7)
         checkDigitColors(setOf(3, 7))
         scenario.recreate()
         checkDigitColors(setOf(3, 7))
         checkPhoneNumber(mockGeneratedValues[1])
 
-        digitViews[2].perform(forceClick())
+        clickDigit(2)
         checkDigitColors(setOf(2, 3, 7))
         scenario.recreate()
         checkDigitColors(setOf(2, 3, 7))
         checkPhoneNumber(mockGeneratedValues[1])
 
         // completed number
-        digitViews.forEach { it.perform(forceClick()) }
+        digitsRange.forEach(::clickDigit)
         checkRestartUi(mockGeneratedValues[1])
         scenario.recreate()
         checkRestartUi(mockGeneratedValues[1])
