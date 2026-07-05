@@ -19,30 +19,23 @@ import xyz.lbres.badselectorsv2.ui.calculator.clickClear
 import xyz.lbres.badselectorsv2.ui.calculator.clickEquals
 import xyz.lbres.badselectorsv2.ui.calculator.typeText
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
+import xyz.lbres.kotlinutils.collection.list.times
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
 class RandomEnabledFragmentTest {
     private val numbersLists = listOf(
-        listOf(true, true, false, false, true, false, true, false, false, true),
-        listOf(true, false, false, false, false, false, true, true, false, false),
-        listOf(false, true, true, true, false, false, false, true, true, true),
-        listOf(false, true, false, true, false, true, false, true, true, false),
-        listOf(false, false, true, true, true, true, true, true, false, true),
-        listOf(true, false, true, false, true, true, true, false, false, true),
-        listOf(false, false, true, false, true, true, true, false, false, true),
-        listOf(false, false, false, false, true, false, true, true, false, true),
-    )
-    private val operatorsLists = listOf(
-        listOf(false, false, true, true),
-        listOf(true, false, true, true),
-        listOf(false, true, false, true),
-        listOf(true, true, true, false),
-        listOf(false, true, true, false),
-        listOf(false, true, true, true),
-        listOf(false, true, false, true),
-        listOf(true, true, true, false),
-    )
+        "ttfftftfft",
+        "tfffffttff",
+        "ftttfffttt",
+        "ftftftfttf",
+        "ffttttttft",
+        "tftftttfft",
+        "fftftttfft",
+        "fffftfttft",
+    ).map(::stringToBoolList)
+    private val operatorsLists = listOf("fftt", "tftt", "ftft", "tttf", "fttf", "fttt", "ftft", "tttf")
+        .map(::stringToBoolList)
 
     // number of times that the digit shuffler update function has been called during the test
     private var updateCounter: Int = 0
@@ -353,6 +346,5 @@ class RandomEnabledFragmentTest {
         updateCounter++
     }
 
-    // TODO move to kotlin-utils
-    private operator fun <T> List<T>.times(other: Int) = List(other) { this }.flatten()
+    private fun stringToBoolList(string: String): List<Boolean> = string.map { it == 't' }
 }
