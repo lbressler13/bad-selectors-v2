@@ -32,6 +32,7 @@ class TypeDigitsSetDigitDialog(private val index: Int) : SelectorDialog<DialogPh
         if (index !in digitsRange) {
             Log.e(null, "Invalid index for set digit dialog: $index")
             dismiss()
+            return
         }
         viewModel = ViewModelProvider(requireActivity())[TypeDigitsViewModel::class.java]
         val initialValue = viewModel.digits[index]

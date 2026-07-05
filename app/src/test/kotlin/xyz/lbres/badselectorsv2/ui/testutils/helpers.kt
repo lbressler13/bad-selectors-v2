@@ -65,5 +65,5 @@ fun openSettingsDialog() {
  * Close dialog
  */
 fun closeDialog() {
-    onView(withText("Done")).perform(click())
+    onViewInDialog(withText("Done")).perform(click())
 }

@@ -8,8 +8,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.mockk.every
-import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import org.hamcrest.Matchers.allOf
 import org.junit.After
@@ -18,8 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.shadows.ShadowDialog
-import xyz.lbres.badselectorsv2.phone.typedigits.TypeDigitsSetDigitDialog
-import xyz.lbres.badselectorsv2.phone.typedigits.TypeDigitsViewModel
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.badselectorsv2.ui.phone.clickDigit
@@ -91,17 +87,6 @@ class TypeDigitsSetDigitDialogTest {
             digit.perform(click())
             checkSelectedButton(6)
         }
-    }
-
-    @Test
-    fun testInvalidIndex() {
-        mockkConstructor(TypeDigitsViewModel::class)
-        every { constructedWith<TypeDigitsViewModel>().selectValue(any(), any()) } returns 0
-        val scenario = launchTypeDigitsFragment()
-
-        val dialog = TypeDigitsSetDigitDialog(-1)
-
-        // TODO
     }
 
     private fun checkSelectedButton(selectedIndex: Int) {
