@@ -75,6 +75,7 @@ android {
                         "robolectric" -> includeCategories("org.robolectric.Robolectric")
                     }
                 }
+                test.maxHeapSize = "1024m"
             }
         }
     }

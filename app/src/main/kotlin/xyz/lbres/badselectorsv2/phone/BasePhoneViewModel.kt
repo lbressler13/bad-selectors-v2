@@ -18,7 +18,7 @@ abstract class BasePhoneViewModel : ViewModel() {
     /**
      * Current index being assigned to
      */
-    var currentIndex = 0
+    open var currentIndex = 0
         protected set
 
     /**
@@ -26,7 +26,7 @@ abstract class BasePhoneViewModel : ViewModel() {
      *
      * @param value [Int]: new value of digit
      */
-    fun setCurrentDigit(value: Int) {
+    open fun setCurrentDigit(value: Int) {
         _digits[currentIndex] = value
     }
 

@@ -10,12 +10,13 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
+import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 
 /**
- * Abstract dialog to handle common functionality between settings dialogs, including init, dismiss, and setting up ViewModel
+ * Abstract dialog to handle common functionality in a dialog, including init, dismiss, and saving changes
  */
-abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
+abstract class BaseDialog<T : ViewBinding> : DialogFragment() {
     protected lateinit var binding: T
 
     /**
@@ -24,13 +25,18 @@ abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
     protected open val dialogClosedRequestKey: String? = null
 
     /**
+     * Resource id for dialog title
+     */
+    protected open val titleResId: Int = R.string.title_settings
+
+    /**
      * Initialize dialog
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = inflateLayout()
 
         val doneText = getString(R.string.done)
-        val title = getString(R.string.title_settings)
+        val title = getString(titleResId)
 
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -40,7 +46,7 @@ abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
     }
 
     /**
-     * Initialize ViewModel when view is created, as lifecycle owner can't be accessed until view exists
+     * Set initial UI
      */
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,21 +63,26 @@ abstract class SettingsDialog<T : ViewBinding> : DialogFragment() {
     protected abstract fun inflateLayout(): T
 
     /**
-     * Update UI to show initial settings
+     * Update UI to show initial state
      */
     protected abstract fun setInitialUi()
 
     /**
-     * Save changes to settings
+     * Save changes made in dialog
      */
-    protected abstract fun saveUpdatedSettings()
+    protected open fun saveChanges() {}
 
     /**
-     * Close fragment and save settings
+     * Get current activity as [BaseActivity]
+     */
+    protected fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
+
+    /**
+     * Close fragment and save changes
      */
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        saveUpdatedSettings()
+        saveChanges()
 
         // notify parent fragment that dialog has closed
         if (dialogClosedRequestKey != null) {

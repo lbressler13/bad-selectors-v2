@@ -1,18 +1,11 @@
 package xyz.lbres.badselectorsv2.devtools
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.fragment.app.DialogFragment
-import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
+import xyz.lbres.badselectorsv2.abstracts.BaseDialog
 import xyz.lbres.badselectorsv2.databinding.DialogDeveloperToolsBinding
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
@@ -20,39 +13,17 @@ import xyz.lbres.badselectorsv2.ext.view.visible
 /**
  * Dialog with various developer tools, only available in dev build flavor
  */
-class DeveloperToolsDialog : DialogFragment() {
-    private lateinit var binding: DialogDeveloperToolsBinding
+class DeveloperToolsDialog : BaseDialog<DialogDeveloperToolsBinding>() {
+    override val titleResId: Int = R.string.title_dev_tools
+
+    override fun inflateLayout(): DialogDeveloperToolsBinding = DialogDeveloperToolsBinding.inflate(layoutInflater)
 
     /**
-     * Build dialog. Comes before onCreateView, so dialog is not connected to context
+     * Set up dialog buttons
      */
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogDeveloperToolsBinding.inflate(layoutInflater)
-
-        val doneText = requireContext().getString(R.string.done)
-        val title = requireContext().getString(R.string.title_dev_tools)
-
-        return AlertDialog.Builder(requireContext())
-            .setView(binding.root)
-            .setMessage(title)
-            .setPositiveButton(doneText) { _, _ -> }
-            .create()
-    }
-
-    /**
-     * Continue initialization after view is connected to context
-     */
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-
+    override fun setInitialUi() {
         binding.refreshUIButton.setOnClickListener { requireActivity().recreate() }
         initHideDevTools()
-
-        return binding.root
     }
 
     /**
@@ -93,13 +64,6 @@ class DeveloperToolsDialog : DialogFragment() {
 
         dismiss()
     }
-
-    /**
-     * Get current activity as [BaseActivity].
-     *
-     * @return [BaseActivity]
-     */
-    private fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
 
     companion object {
         // tag is required when showing dialog
