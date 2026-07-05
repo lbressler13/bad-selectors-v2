@@ -26,6 +26,12 @@ val radioButtons = listOf(
     R.id.nineButton,
 ).map { onViewInDialog(withId(it)) }
 
+/**
+ * Mock the digits order returned by [seededShuffled] and run test
+ *
+ * @param digitsOrder [List]<Int>: order to use in mock
+ * @param test () -> Unit: test to run
+ */
 fun withMockedDigitsOrder(digitsOrder: List<Int>, test: () -> Unit) {
     mockkStatic(IntRange::seededShuffled)
     with(mockk<IntRange>()) {
@@ -34,13 +40,18 @@ fun withMockedDigitsOrder(digitsOrder: List<Int>, test: () -> Unit) {
     }
 }
 
-// cannot launch scenario in before block due to mocking requirements
+/**
+ * Click the radio button at the given index
+ */
+fun clickRadioButton(index: Int) {
+    radioButtons[index].perform(scrollTo(), click())
+}
+
+/**
+ * Launch app and navigate to the Choose Digits selector
+ */
 fun launchChooseDigitsFragment(): ActivityScenario<BaseActivity> {
     val scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
     navigateToSelector("Phone", "Choose Digits")
     return scenario
-}
-
-fun clickRadioButton(index: Int) {
-    radioButtons[index].perform(scrollTo(), click())
 }

@@ -8,6 +8,8 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.isNotChecked
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.every
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import org.hamcrest.Matchers.allOf
 import org.junit.After
@@ -15,11 +17,15 @@ import org.junit.Assert.assertFalse
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.shadows.ShadowDialog
+import xyz.lbres.badselectorsv2.phone.choosedigits.ChooseDigitsViewModel
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
+import xyz.lbres.badselectorsv2.phone.utils.numDigits
+import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.clickDigit
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
 import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
+import xyz.lbres.kotlinutils.collection.list.listOfNulls
 
 @RunWith(AndroidJUnit4::class)
 class ChooseDigitsSetDigitDialogTest {
@@ -79,8 +85,21 @@ class ChooseDigitsSetDigitDialogTest {
 
             digit.perform(click())
             checkSelectedButton(6)
+            closeDialog()
         }
-        closeDialog()
+    }
+
+    @Test
+    fun testInvalidIndex() {
+        mockkConstructor(ChooseDigitsViewModel::class)
+        every { constructedWith<ChooseDigitsViewModel>().currentIndex } returns -1
+
+        launchChooseDigitsFragment()
+        clickDigit(0)
+
+        val dialog = ShadowDialog.getLatestDialog()
+        assertFalse(dialog.isShowing)
+        checkPhoneNumber(listOfNulls(numDigits))
     }
 
     // check which radio button is selected

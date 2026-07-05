@@ -27,8 +27,6 @@ import xyz.lbres.kotlinutils.collection.list.mutableListOfNulls
 class ChooseDigitsFragmentTest {
     private val digitsOrder = listOf(6, 3, 0, 1, 9, 4, 2, 8, 7, 5)
 
-    private val doneButton = onViewInDialog(withText("Done"))
-
     @After
     fun cleanupTest() {
         unmockkAll()
@@ -48,7 +46,7 @@ class ChooseDigitsFragmentTest {
         digitViews.forEach {
             it.perform(click())
             onViewInDialog(withText("Select Digit Value")).check(matches(isDisplayed()))
-            doneButton.perform(click())
+            closeDialog()
         }
     }
 
@@ -69,16 +67,10 @@ class ChooseDigitsFragmentTest {
             }
 
             // change
-            clickDigit(4)
-            clickRadioButton(0)
-            closeDialog()
-            expectedNumber[4] = digitsOrder[0]
+            selectValue(4, 0, expectedNumber)
             checkPhoneNumber(expectedNumber)
 
-            clickDigit(9)
-            clickRadioButton(9)
-            closeDialog()
-            expectedNumber[9] = digitsOrder[9]
+            selectValue(9, 9, expectedNumber)
             checkPhoneNumber(expectedNumber)
 
             // open without changing
@@ -134,6 +126,7 @@ class ChooseDigitsFragmentTest {
         }
     }
 
+    // click digit, select radio button, and update expected values
     private fun selectValue(digit: Int, radioButton: Int, expectedNumber: MutableList<Int?>) {
         clickDigit(digit)
         clickRadioButton(radioButton)

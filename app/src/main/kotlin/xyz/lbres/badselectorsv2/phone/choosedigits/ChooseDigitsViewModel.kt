@@ -5,6 +5,9 @@ import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.utils.seededShuffled
 
+/**
+ * ViewModel containing values that are specific to the phone choose digits selector
+ */
 class ChooseDigitsViewModel : BasePhoneViewModel() {
     private var digitsOrder = digitsRange.seededShuffled()
     // override for public set
@@ -27,8 +30,12 @@ class ChooseDigitsViewModel : BasePhoneViewModel() {
         }
     }
 
+    /**
+     * Clear all data related to digits and update the digits order
+     */
     override fun resetData() {
         super.resetData()
+        currentIndex = -1
         digitsOrder = digitsRange.seededShuffled()
     }
 }

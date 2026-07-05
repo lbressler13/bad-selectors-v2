@@ -9,6 +9,9 @@ import xyz.lbres.badselectorsv2.databinding.FragmentPhoneChooseDigitsBinding
 import xyz.lbres.badselectorsv2.phone.BasePhoneFragment
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
 
+/**
+ * Fragment that uses dialogs to select each digit value, using a randomized order to set values based on user selections
+ */
 class ChooseDigitsFragment : BasePhoneFragment() {
     private lateinit var viewModel: ChooseDigitsViewModel
     override val phoneViewModel: BasePhoneViewModel
@@ -31,6 +34,9 @@ class ChooseDigitsFragment : BasePhoneFragment() {
         return binding.root
     }
 
+    /**
+     * Initialize on clicks for digits and handle response from dialog
+     */
     private fun initDigitDialogs() {
         digitViews.forEachIndexed { index, view ->
             view.setOnClickListener {

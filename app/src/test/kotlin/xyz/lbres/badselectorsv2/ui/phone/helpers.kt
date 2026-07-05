@@ -42,9 +42,15 @@ fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: List<Int> = (0..
     }
 }
 
+// wrapper for checkPhoneNumber using int range instead of list
 fun checkPhoneNumber(expectedNumber: List<Int?>, digitsToCheck: IntRange) {
     checkPhoneNumber(expectedNumber, digitsToCheck.toList())
 }
 
 // TODO use in select correct
+/**
+ * Click the digit view at the given index
+ *
+ * @param index [Int]: index of digit to click
+ */
 fun clickDigit(index: Int) = digitViews[index].perform(click())

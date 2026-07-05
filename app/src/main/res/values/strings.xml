@@ -17,7 +17,6 @@
     <string name="title_phone">Phone</string>
 
     <string name="phone_separator">-</string>
-    <string name="blank_digit">_</string>
 
     <!-- Select Correct -->
     <string name="title_select_correct">Select Correct</string>

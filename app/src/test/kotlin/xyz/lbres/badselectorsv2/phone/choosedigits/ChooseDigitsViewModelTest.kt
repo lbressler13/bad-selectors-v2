@@ -71,6 +71,8 @@ class ChooseDigitsViewModelTest {
             }
 
             vm.resetData()
+
+            assertEquals(-1, vm.currentIndex)
             val expectedDigits: MutableList<Int?> = mutableListOfNulls(10)
             repeat(10) {
                 vm.currentIndex = it
@@ -81,6 +83,7 @@ class ChooseDigitsViewModelTest {
         }
     }
 
+    // update current index, set value, and update expected values
     private fun selectValue(vm: ChooseDigitsViewModel, index: Int, value: Int, expected: MutableList<Int?>? = null) {
         vm.currentIndex = index
         vm.setCurrentDigit(value)

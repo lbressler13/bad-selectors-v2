@@ -7,6 +7,9 @@ import xyz.lbres.badselectorsv2.abstracts.BaseDialog
 import xyz.lbres.badselectorsv2.databinding.DialogPhoneChooseDigitsSetDigitBinding
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 
+/**
+ * Dialog to update value at current index for the [ChooseDigitsFragment] selector
+ */
 class ChooseDigitsSetDigitDialog() : BaseDialog<DialogPhoneChooseDigitsSetDigitBinding>() {
     override val titleResId: Int = R.string.title_choose_digits_dialog
     override val dialogClosedRequestKey: String? = CLOSED_KEY
