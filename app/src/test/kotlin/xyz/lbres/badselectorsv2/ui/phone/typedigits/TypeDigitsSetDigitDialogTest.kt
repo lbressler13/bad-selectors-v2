@@ -12,12 +12,10 @@ import io.mockk.unmockkAll
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertFalse
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.shadows.ShadowDialog
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
-import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.badselectorsv2.ui.phone.clickDigit
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
@@ -25,14 +23,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 
 @RunWith(AndroidJUnit4::class)
 class TypeDigitsSetDigitDialogTest {
-    private val digitsOrder = listOf(6, 3, 0, 1, 9, 4, 2, 8, 7, 5)
-
     private val doneButton = onViewInDialog(withText("Done"))
-
-    @Before
-    fun setupTest() {
-        mockLog()
-    }
 
     @After
     fun cleanupTest() {
@@ -45,6 +36,7 @@ class TypeDigitsSetDigitDialogTest {
         clickDigit(0)
         radioButtons.forEach { it.check(matches(allOf(isEnabled(), isNotChecked()))) }
         onViewInDialog(withText("Select Digit Value")).check(matches(isDisplayed()))
+        closeDialog()
     }
 
     @Test
@@ -64,6 +56,7 @@ class TypeDigitsSetDigitDialogTest {
             clickRadioButton(index)
             checkSelectedButton(index)
         }
+        closeDialog()
     }
 
     @Test
@@ -87,8 +80,10 @@ class TypeDigitsSetDigitDialogTest {
             digit.perform(click())
             checkSelectedButton(6)
         }
+        closeDialog()
     }
 
+    // check which radio button is selected
     private fun checkSelectedButton(selectedIndex: Int) {
         radioButtons.forEachIndexed { index, view ->
             if (index == selectedIndex) {
