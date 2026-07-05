@@ -28,6 +28,9 @@ class TypeDigitsSetDigitDialog() : BaseDialog<DialogPhoneTypeDigitsSetDigitBindi
 
     override fun inflateLayout() = DialogPhoneTypeDigitsSetDigitBinding.inflate(layoutInflater)
 
+    /**
+     * Display initial UI
+     */
     override fun setInitialUi() {
         viewModel = ViewModelProvider(requireActivity())[TypeDigitsViewModel::class.java]
         val index = viewModel.currentIndex
@@ -42,14 +45,12 @@ class TypeDigitsSetDigitDialog() : BaseDialog<DialogPhoneTypeDigitsSetDigitBindi
         }
     }
 
+    /**
+     * Save updated value
+     */
     override fun saveChanges() {
-        val index = viewModel.currentIndex
-        if (index in digitsRange) {
-            val checkedId = binding.buttonsGroup.checkedRadioButtonId
-            viewModel.selectValue(index, buttonIds.indexOf(checkedId))
-        } else {
-            Log.w(null, "Index not set, closing dialog without saving changes")
-        }
+        val checkedId = binding.buttonsGroup.checkedRadioButtonId
+        viewModel.setCurrentDigit(buttonIds.indexOf(checkedId))
     }
 
     companion object {

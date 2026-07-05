@@ -10,18 +10,21 @@ class TypeDigitsViewModel : BasePhoneViewModel() {
     // override for public set
     public override var currentIndex = -1
 
-    fun selectValue(index: Int, value: Int): Int? {
-        if (index !in digitsRange || value !in digitsRange) {
-            Log.w(null, "Unable to select '$value' at '$index'")
-            return null
+    /**
+     * Update value of the digit at [currentIndex]
+     *
+     * @param value [Int]: index into digits order to set new value of digit
+     */
+    override fun setCurrentDigit(value: Int) {
+        // invalid index
+        if (currentIndex !in digitsRange || value !in digitsRange) {
+            Log.w(null, "Unable to select '$value' at '$currentIndex'")
         }
-
-        if (_digits[index] == value) {
-            return value
+        // skip update if value hasn't changed
+        else if (_digits[currentIndex] != value) {
+            val result = digitsOrder[value]
+            _digits[currentIndex] = result
         }
-        val result = digitsOrder[value]
-        _digits[index] = result
-        return result
     }
 
     override fun resetData() {

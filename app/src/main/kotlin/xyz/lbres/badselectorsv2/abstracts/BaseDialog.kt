@@ -24,6 +24,9 @@ abstract class BaseDialog<T : ViewBinding> : DialogFragment() {
      */
     protected open val dialogClosedRequestKey: String? = null
 
+    /**
+     * Resource id for dialog title
+     */
     protected open val titleResId: Int = R.string.title_settings
 
     /**
@@ -43,7 +46,7 @@ abstract class BaseDialog<T : ViewBinding> : DialogFragment() {
     }
 
     /**
-     * Initialize ViewModel when view is created, as lifecycle owner can't be accessed until view exists
+     * Set initial UI
      */
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,12 +63,12 @@ abstract class BaseDialog<T : ViewBinding> : DialogFragment() {
     protected abstract fun inflateLayout(): T
 
     /**
-     * Update UI to show initial values
+     * Update UI to show initial state
      */
     protected abstract fun setInitialUi()
 
     /**
-     * Save changes
+     * Save changes made in dialog
      */
     protected open fun saveChanges() {}
 
