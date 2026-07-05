@@ -7,7 +7,7 @@ import xyz.lbres.badselectorsv2.abstracts.BaseDialog
 import xyz.lbres.badselectorsv2.databinding.DialogPhoneTypeDigitsSetDigitBinding
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 
-class TypeDigitsSetDigitDialog(private val index: Int) : BaseDialog<DialogPhoneTypeDigitsSetDigitBinding>() {
+class TypeDigitsSetDigitDialog() : BaseDialog<DialogPhoneTypeDigitsSetDigitBinding>() {
     override val titleResId: Int = R.string.title_type_digits_dialog
     override val dialogClosedRequestKey: String? = CLOSED_KEY
 
@@ -29,12 +29,13 @@ class TypeDigitsSetDigitDialog(private val index: Int) : BaseDialog<DialogPhoneT
     override fun inflateLayout() = DialogPhoneTypeDigitsSetDigitBinding.inflate(layoutInflater)
 
     override fun setInitialUi() {
+        viewModel = ViewModelProvider(requireActivity())[TypeDigitsViewModel::class.java]
+        val index = viewModel.currentIndex
         if (index !in digitsRange) {
             Log.e(null, "Invalid index for set digit dialog: $index")
             dismiss()
             return
         }
-        viewModel = ViewModelProvider(requireActivity())[TypeDigitsViewModel::class.java]
         val initialValue = viewModel.digits[index]
         if (initialValue != null) {
             binding.buttonsGroup.check(buttonIds[initialValue])
@@ -42,6 +43,7 @@ class TypeDigitsSetDigitDialog(private val index: Int) : BaseDialog<DialogPhoneT
     }
 
     override fun saveChanges() {
+        val index = viewModel.currentIndex
         if (index in digitsRange) {
             val checkedId = binding.buttonsGroup.checkedRadioButtonId
             viewModel.selectValue(index, buttonIds.indexOf(checkedId))

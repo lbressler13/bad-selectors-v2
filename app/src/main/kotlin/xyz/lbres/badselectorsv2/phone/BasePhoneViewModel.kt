@@ -18,7 +18,7 @@ abstract class BasePhoneViewModel : ViewModel() {
     /**
      * Current index being assigned to
      */
-    var currentIndex = 0
+    open var currentIndex = 0
         protected set
 
     /**

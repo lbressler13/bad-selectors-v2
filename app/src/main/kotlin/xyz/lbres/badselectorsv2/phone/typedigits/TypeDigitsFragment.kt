@@ -32,15 +32,17 @@ class TypeDigitsFragment : BasePhoneFragment() {
     }
 
     private fun initDigitDialogs() {
+        val dialog = TypeDigitsSetDigitDialog()
         digitViews.forEachIndexed { index, view ->
             view.setOnClickListener {
-                val dialog = TypeDigitsSetDigitDialog(index)
+                viewModel.currentIndex = index
                 dialog.show(childFragmentManager, TypeDigitsSetDigitDialog.TAG)
             }
         }
 
         val requestKey = TypeDigitsSetDigitDialog.CLOSED_KEY
         childFragmentManager.setFragmentResultListener(requestKey, this) { _, _ ->
+            viewModel.currentIndex = -1
             displayPhoneNumber()
         }
     }

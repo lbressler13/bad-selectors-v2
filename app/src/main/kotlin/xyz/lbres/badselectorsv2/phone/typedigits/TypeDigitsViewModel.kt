@@ -7,6 +7,8 @@ import xyz.lbres.badselectorsv2.utils.seededShuffled
 
 class TypeDigitsViewModel : BasePhoneViewModel() {
     private var digitsOrder = digitsRange.seededShuffled()
+    // override for public set
+    public override var currentIndex = -1
 
     fun selectValue(index: Int, value: Int): Int? {
         if (index !in digitsRange || value !in digitsRange) {
