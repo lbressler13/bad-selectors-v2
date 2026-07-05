@@ -11,7 +11,6 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class TypeDigitsViewModelTest {
     private val digitsOrder = listOf(6, 3, 0, 1, 9, 4, 2, 8, 7, 5)
@@ -40,16 +39,12 @@ class TypeDigitsViewModelTest {
             // set all 10 digits
             repeat(10) { digitIndex ->
                 val selectIndex = selectOrder[digitIndex]
-                vm.currentIndex = selectIndex
-                vm.setCurrentDigit(digitIndex)
-                expectedDigits[selectIndex] = digitsOrder[digitIndex]
+                selectValue(vm, selectIndex, digitIndex, expectedDigits)
                 assertEquals(expectedDigits, vm.digits)
             }
 
             // update a digit
-            vm.currentIndex = 0
-            vm.setCurrentDigit(0)
-            expectedDigits[0] = digitsOrder[0]
+            selectValue(vm, 0, 0, expectedDigits)
             assertEquals(expectedDigits, vm.digits)
 
             // doesn't change repeat value
@@ -57,17 +52,10 @@ class TypeDigitsViewModelTest {
             assertEquals(expectedDigits, vm.digits)
 
             // errors
-            vm.currentIndex = -1
-            vm.setCurrentDigit(7)
-
-            vm.currentIndex = 10
-            vm.setCurrentDigit(7)
-
-            vm.currentIndex = 5
-            vm.setCurrentDigit(-1)
-
-            vm.currentIndex = 5
-            vm.setCurrentDigit(10)
+            selectValue(vm, -1, 7)
+            selectValue(vm, 10, 7)
+            selectValue(vm, 5, -1)
+            selectValue(vm, 5, 10)
         }
     }
 
@@ -79,8 +67,7 @@ class TypeDigitsViewModelTest {
             every { IntRange(0, 9).seededShuffled() } returnsMany listOf(digitsOrder, newOrder)
             val vm = TypeDigitsViewModel()
             repeat(10) {
-                vm.currentIndex = it
-                vm.setCurrentDigit(it)
+                selectValue(vm, it, it)
             }
 
             vm.resetData()
@@ -91,6 +78,14 @@ class TypeDigitsViewModelTest {
                 expectedDigits[it] = newOrder[it]
                 assertEquals(expectedDigits, vm.digits)
             }
+        }
+    }
+
+    private fun selectValue(vm: TypeDigitsViewModel, index: Int, value: Int, expected: MutableList<Int?>? = null) {
+        vm.currentIndex = index
+        vm.setCurrentDigit(value)
+        if (expected != null) {
+            expected[index] = digitsOrder[value]
         }
     }
 }
