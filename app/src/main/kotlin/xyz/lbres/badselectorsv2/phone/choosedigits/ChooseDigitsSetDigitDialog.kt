@@ -43,7 +43,7 @@ class ChooseDigitsSetDigitDialog() : BaseDialog<DialogPhoneChooseDigitsSetDigitB
             return
         }
         val initialValue = viewModel.digits[index]
-        if (initialValue != null) {
+        if (initialValue != null && buttonIds.getOrNull(initialValue) != null) {
             binding.buttonsGroup.check(buttonIds[initialValue])
         }
     }
@@ -53,7 +53,9 @@ class ChooseDigitsSetDigitDialog() : BaseDialog<DialogPhoneChooseDigitsSetDigitB
      */
     override fun saveChanges() {
         val checkedId = binding.buttonsGroup.checkedRadioButtonId
-        viewModel.setCurrentDigit(buttonIds.indexOf(checkedId))
+        if (viewModel.currentIndex in digitsRange) {
+            viewModel.setCurrentDigit(buttonIds.indexOf(checkedId))
+        }
     }
 
     companion object {

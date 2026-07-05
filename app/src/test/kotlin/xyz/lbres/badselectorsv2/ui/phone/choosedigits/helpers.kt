@@ -7,6 +7,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
@@ -38,6 +39,7 @@ fun withMockedDigitsOrder(digitsOrder: List<Int>, test: () -> Unit) {
         every { IntRange(0, 9).seededShuffled() } returns digitsOrder
         test()
     }
+    unmockkStatic(IntRange::seededShuffled)
 }
 
 /**

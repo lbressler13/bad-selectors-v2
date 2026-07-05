@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -26,6 +27,7 @@ import xyz.lbres.badselectorsv2.ui.phone.digitViews
 import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
 import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 import xyz.lbres.kotlinutils.collection.list.listOfNulls
+import xyz.lbres.kotlinutils.utils.simpleIf
 
 @RunWith(AndroidJUnit4::class)
 class ChooseDigitsSetDigitDialogTest {
@@ -42,6 +44,7 @@ class ChooseDigitsSetDigitDialogTest {
         clickDigit(0)
         radioButtons.forEach { it.check(matches(allOf(isEnabled(), isNotChecked()))) }
         onViewInDialog(withText("Select Digit Value")).check(matches(isDisplayed()))
+        doneButton.check(matches(isDisplayed()))
         closeDialog()
     }
 
@@ -58,9 +61,9 @@ class ChooseDigitsSetDigitDialogTest {
     fun testInteractWithUi() {
         launchChooseDigitsFragment()
         clickDigit(0)
-        radioButtons.forEachIndexed { index, view ->
-            clickRadioButton(index)
-            checkSelectedButton(index)
+        digitsRange.forEach {
+            clickRadioButton(it)
+            checkSelectedButton(it)
         }
         closeDialog()
     }
@@ -97,19 +100,18 @@ class ChooseDigitsSetDigitDialogTest {
         launchChooseDigitsFragment()
         clickDigit(0)
 
+        // dialog should close immediately
         val dialog = ShadowDialog.getLatestDialog()
         assertFalse(dialog.isShowing)
         checkPhoneNumber(listOfNulls(numDigits))
+        verify(exactly = 0) { anyConstructed<ChooseDigitsViewModel>().setCurrentDigit(any()) }
     }
 
     // check which radio button is selected
     private fun checkSelectedButton(selectedIndex: Int) {
         radioButtons.forEachIndexed { index, view ->
-            if (index == selectedIndex) {
-                view.check(matches(isChecked()))
-            } else {
-                view.check(matches(isNotChecked()))
-            }
+            val matcher = simpleIf(index == selectedIndex, isChecked(), isNotChecked())
+            view.check(matches(matcher))
         }
     }
 }

@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import xyz.lbres.badselectorsv2.phone.utils.numDigits
 import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.badselectorsv2.utils.seededShuffled
 import xyz.lbres.kotlinutils.collection.list.mutableListOfNulls
@@ -34,10 +35,10 @@ class ChooseDigitsViewModelTest {
             every { IntRange(0, 9).seededShuffled() } returns digitsOrder
 
             val vm = ChooseDigitsViewModel()
-            val expectedDigits: MutableList<Int?> = mutableListOfNulls(10)
+            val expectedDigits: MutableList<Int?> = mutableListOfNulls(numDigits)
 
             // set all 10 digits
-            repeat(10) { digitIndex ->
+            repeat(numDigits) { digitIndex ->
                 val selectIndex = selectOrder[digitIndex]
                 selectValue(vm, selectIndex, digitIndex, expectedDigits)
                 assertEquals(expectedDigits, vm.digits)
@@ -52,10 +53,15 @@ class ChooseDigitsViewModelTest {
             assertEquals(expectedDigits, vm.digits)
 
             // errors
+            val fixedDigits = expectedDigits.toList()
             selectValue(vm, -1, 7)
+            assertEquals(fixedDigits, vm.digits)
             selectValue(vm, 10, 7)
+            assertEquals(fixedDigits, vm.digits)
             selectValue(vm, 5, -1)
+            assertEquals(fixedDigits, vm.digits)
             selectValue(vm, 5, 10)
+            assertEquals(fixedDigits, vm.digits)
         }
     }
 
@@ -66,29 +72,33 @@ class ChooseDigitsViewModelTest {
         with(mockk<IntRange>()) {
             every { IntRange(0, 9).seededShuffled() } returnsMany listOf(digitsOrder, newOrder)
             val vm = ChooseDigitsViewModel()
-            repeat(10) {
+            repeat(numDigits) {
                 selectValue(vm, it, it)
             }
 
             vm.resetData()
 
             assertEquals(-1, vm.currentIndex)
-            val expectedDigits: MutableList<Int?> = mutableListOfNulls(10)
-            repeat(10) {
-                vm.currentIndex = it
-                vm.setCurrentDigit(it)
-                expectedDigits[it] = newOrder[it]
+            val expectedDigits: MutableList<Int?> = mutableListOfNulls(numDigits)
+            repeat(numDigits) {
+                selectValue(vm, it, it, expectedDigits, newOrder)
                 assertEquals(expectedDigits, vm.digits)
             }
         }
     }
 
     // update current index, set value, and update expected values
-    private fun selectValue(vm: ChooseDigitsViewModel, index: Int, value: Int, expected: MutableList<Int?>? = null) {
+    private fun selectValue(
+        vm: ChooseDigitsViewModel,
+        index: Int,
+        value: Int,
+        expected: MutableList<Int?>? = null,
+        order: List<Int> = digitsOrder,
+    ) {
         vm.currentIndex = index
         vm.setCurrentDigit(value)
         if (expected != null) {
-            expected[index] = digitsOrder[value]
+            expected[index] = order[value]
         }
     }
 }
