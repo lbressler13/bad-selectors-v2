@@ -52,17 +52,14 @@ class ChooseDigitsFragmentTest {
 
     @Test
     fun setNumber() {
-        val setDigitsOrder = listOf(1, 6, 0, 8, 9, 7, 2, 4, 5, 3)
-        val selectOrder = listOf(7, 4, 1, 9, 0, 2, 3, 6, 5, 8)
+        val selections = listOf(1 to 7, 6 to 4, 0 to 1, 8 to 9, 9 to 0, 7 to 2, 2 to 3, 4 to 6, 5 to 5, 3 to 8)
         val expectedNumber: MutableList<Int?> = mutableListOfNulls(10)
 
         withMockedDigitsOrder(digitsOrder) {
             launchChooseDigitsFragment()
             // set full number
-            repeat(10) {
-                val digitIndex = setDigitsOrder[it]
-                val selectValue = selectOrder[it]
-                selectValue(digitIndex, selectValue, expectedNumber)
+            selections.forEach { (digitIndex, selectIndex) ->
+                selectValue(digitIndex, selectIndex, expectedNumber)
                 checkPhoneNumber(expectedNumber)
             }
 
@@ -92,27 +89,26 @@ class ChooseDigitsFragmentTest {
         withMockedDigitsOrder(digitsOrder) {
             val scenario = launchChooseDigitsFragment()
             val expectedNumber: MutableList<Int?> = mutableListOfNulls(10)
+            val selections = listOf(4 to 5, 7 to 3, 2 to 3, 0 to 0, 1 to 5, 3 to 2, 5 to 4, 6 to 4, 8 to 2, 9 to 1)
 
             // blank
             scenario.recreate()
             checkPhoneNumber(expectedNumber)
 
             // partial number
-            selectValue(4, 5, expectedNumber)
-            selectValue(7, 3, expectedNumber)
-            selectValue(2, 3, expectedNumber)
+            repeat(3) {
+                val selection = selections[it]
+                selectValue(selection.first, selection.second, expectedNumber)
+            }
 
             scenario.recreate()
             checkPhoneNumber(expectedNumber)
 
             // full number
-            selectValue(0, 0, expectedNumber)
-            selectValue(1, 5, expectedNumber)
-            selectValue(3, 2, expectedNumber)
-            selectValue(5, 4, expectedNumber)
-            selectValue(6, 4, expectedNumber)
-            selectValue(8, 2, expectedNumber)
-            selectValue(9, 1, expectedNumber)
+            repeat(7) {
+                val selection = selections[it + 3]
+                selectValue(selection.first, selection.second, expectedNumber)
+            }
 
             scenario.recreate()
             checkPhoneNumber(expectedNumber)
