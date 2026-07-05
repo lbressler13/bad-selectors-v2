@@ -10,12 +10,13 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
+import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 
 /**
- * Abstract dialog to handle common functionality between dialogs, including init, dismiss, and setting up ViewModel
+ * Abstract dialog to handle common functionality in a dialog, including init, dismiss, and saving changes
  */
-abstract class SelectorDialog<T : ViewBinding> : DialogFragment() {
+abstract class BaseDialog<T : ViewBinding> : DialogFragment() {
     protected lateinit var binding: T
 
     /**
@@ -66,7 +67,12 @@ abstract class SelectorDialog<T : ViewBinding> : DialogFragment() {
     /**
      * Save changes
      */
-    protected abstract fun saveChanges()
+    protected open fun saveChanges() {}
+
+    /**
+     * Get current activity as [BaseActivity]
+     */
+    protected fun requireBaseActivity(): BaseActivity = requireActivity() as BaseActivity
 
     /**
      * Close fragment and save changes

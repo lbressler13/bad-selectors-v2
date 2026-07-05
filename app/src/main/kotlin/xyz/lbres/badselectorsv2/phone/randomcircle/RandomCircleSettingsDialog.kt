@@ -1,13 +1,13 @@
 package xyz.lbres.badselectorsv2.phone.randomcircle
 
 import androidx.lifecycle.ViewModelProvider
-import xyz.lbres.badselectorsv2.abstracts.SelectorDialog
+import xyz.lbres.badselectorsv2.abstracts.BaseDialog
 import xyz.lbres.badselectorsv2.databinding.DialogPhoneRandomCircleSettingsBinding
 
 /**
  * Dialog to update settings for the [RandomCircleFragment]
  */
-class RandomCircleSettingsDialog : SelectorDialog<DialogPhoneRandomCircleSettingsBinding>() {
+class RandomCircleSettingsDialog : BaseDialog<DialogPhoneRandomCircleSettingsBinding>() {
     private lateinit var viewModel: RandomCircleViewModel
 
     override fun inflateLayout() = DialogPhoneRandomCircleSettingsBinding.inflate(layoutInflater)

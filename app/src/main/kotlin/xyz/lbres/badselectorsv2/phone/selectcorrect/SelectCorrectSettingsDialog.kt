@@ -1,13 +1,13 @@
 package xyz.lbres.badselectorsv2.phone.selectcorrect
 
 import androidx.lifecycle.ViewModelProvider
-import xyz.lbres.badselectorsv2.abstracts.SelectorDialog
+import xyz.lbres.badselectorsv2.abstracts.BaseDialog
 import xyz.lbres.badselectorsv2.databinding.DialogPhoneSelectCorrectSettingsBinding
 
 /**
  * Dialog to update settings for the [SelectCorrectFragment]
  */
-class SelectCorrectSettingsDialog : SelectorDialog<DialogPhoneSelectCorrectSettingsBinding>() {
+class SelectCorrectSettingsDialog : BaseDialog<DialogPhoneSelectCorrectSettingsBinding>() {
     private lateinit var viewModel: SelectCorrectViewModel
 
     override fun inflateLayout() = DialogPhoneSelectCorrectSettingsBinding.inflate(layoutInflater)

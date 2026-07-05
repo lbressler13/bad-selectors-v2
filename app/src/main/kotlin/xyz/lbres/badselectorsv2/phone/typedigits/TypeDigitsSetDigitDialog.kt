@@ -3,11 +3,11 @@ package xyz.lbres.badselectorsv2.phone.typedigits
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.abstracts.SelectorDialog
+import xyz.lbres.badselectorsv2.abstracts.BaseDialog
 import xyz.lbres.badselectorsv2.databinding.DialogPhoneTypeDigitsSetDigitBinding
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 
-class TypeDigitsSetDigitDialog(private val index: Int) : SelectorDialog<DialogPhoneTypeDigitsSetDigitBinding>() {
+class TypeDigitsSetDigitDialog(private val index: Int) : BaseDialog<DialogPhoneTypeDigitsSetDigitBinding>() {
     override val titleResId: Int = R.string.title_type_digits_dialog
     override val dialogClosedRequestKey: String? = CLOSED_KEY
 
