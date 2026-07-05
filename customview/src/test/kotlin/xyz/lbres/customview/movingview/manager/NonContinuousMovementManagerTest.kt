@@ -6,9 +6,13 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.testutils.mockLog
+import xyz.lbres.customview.testutils.runWithFailMessage
 import xyz.lbres.customview.utils.createRandom
+import kotlin.math.max
 import kotlin.random.Random
 import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -18,6 +22,18 @@ class NonContinuousMovementManagerTest {
     private val parentWidth = 100.0
     private val parentHeight = 200.0
     private val parentDimens = Dimensions(parentWidth.toInt(), parentHeight.toInt())
+
+    private val positions = listOf(
+        Position(1.0, 3.0),
+        Position(0.6, 12.0),
+        Position(100.0, 194.00000045),
+        Position(0.0, 0.05),
+    )
+
+    @BeforeTest
+    fun setupTest() {
+        mockLog()
+    }
 
     @AfterTest
     fun cleanupTest() {
@@ -69,67 +85,114 @@ class NonContinuousMovementManagerTest {
 
     @Test
     fun testUpdatePosition() {
-        val positions = listOf(
-            Position(1.0, 3.0),
-            Position(0.6, 12.0),
-            Position(100.0, 194.00000045),
-            Position(0.0, 0.05),
-            Position(0.12345, 0.54321),
-        )
-
-        mockkStatic(::createRandom)
-        every { createRandom() } returns mockk<Random> {
-            every { nextDouble(0.0, parentWidth) } returnsMany positions.map { it.x }
-            every { nextDouble(0.0, parentHeight) } returnsMany positions.map { it.y }
-        }
+        mockRandom(positions)
         val manager = NonContinuousMovementManager(true)
+        val history: MutableList<Position<Int>> = mutableListOf()
+        manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
+
+        val updateAndCheck: (Int) -> Unit = {
+            val result = manager.updatePosition(parentDimens)
+            checkPosition(manager, positions[it])
+            assertEquals(positions[it], result)
+            val expectedHistory = positions.subList(0, it + 1).map { Position(it.x.toInt(), it.y.toInt()) }
+            assertEquals(expectedHistory, history)
+        }
 
         // paused
-        var result = manager.updatePosition(parentDimens)
+        val result = manager.updatePosition(parentDimens)
         checkPosition(manager, 0.0, 0.0)
         assertEquals(Position(0.0, 0.0), result)
 
         // not paused
         manager.paused = false
-        result = manager.updatePosition(parentDimens)
-        checkPosition(manager, positions[0])
-        assertEquals(positions[0], result)
-
-        result = manager.updatePosition(parentDimens)
-        checkPosition(manager, positions[1])
-        assertEquals(positions[1], result)
-
-        result = manager.updatePosition(parentDimens)
-        checkPosition(manager, positions[2])
-        assertEquals(positions[2], result)
+        updateAndCheck(0)
+        updateAndCheck(1)
+        updateAndCheck(2)
 
         // re-paused
         manager.paused = true
-        result = manager.updatePosition(parentDimens)
-        checkPosition(manager, positions[2])
-        assertEquals(positions[2], result)
+        updateAndCheck(2)
 
         // unpaused
         manager.paused = false
-        result = manager.updatePosition(parentDimens)
-        checkPosition(manager, positions[3])
-        assertEquals(positions[3], result)
+        updateAndCheck(3)
+
+        // repeat value
+        updateAndCheck(3)
     }
 
     @Test
     fun testForcePosition() {
+        val manager = NonContinuousMovementManager(false)
+        val history: MutableList<Position<Int>> = mutableListOf()
+        manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
+
+        val forceAndCheck: (Int) -> Unit = {
+            val result = manager.forcePosition(parentDimens, positions[it])
+            checkPosition(manager, positions[it])
+            assertTrue(result)
+            val expectedHistory = positions.subList(0, it + 1).map { Position(it.x.toInt(), it.y.toInt()) }
+            assertEquals(expectedHistory, history)
+        }
+
         // valid position
+        forceAndCheck(0)
+        forceAndCheck(1)
 
         // invalid position
+        val invalidPositions = listOf(
+            Position(1.0, 201.0),
+            Position(100.1, 2.0),
+            Position(-0.5, 2.0),
+            Position(1.0, -2.0),
+        )
+        invalidPositions.forEach {
+            runWithFailMessage("Checking invalid position $it") {
+                val result = manager.forcePosition(parentDimens, it)
+                checkPosition(manager, positions[1])
+                assertFalse(result)
+            }
+        }
 
         // paused
+        manager.paused = true
+        forceAndCheck(2)
 
-        // TODO
+        // repeat
+        forceAndCheck(2)
     }
 
     @Test
     fun testSetOnMoveCallback() {
-        // TODO
+        val mockPositions = listOf(
+            Position(1.0, 2.0),
+            Position(3.0, 2.1),
+            Position(0.7, 1.0),
+            Position(0.7, 1.0), // repeat value
+            Position(5.0, 1.0),
+        )
+        mockRandom(mockPositions)
+        val manager = NonContinuousMovementManager(false)
+
+        // regular movement
+        var total = 0
+        manager.setOnMoveCallback { x, y -> total += x * y }
+        repeat(3) { manager.updatePosition(parentDimens) }
+        assertEquals(8, total)
+
+        // repeat value
+        manager.updatePosition(parentDimens)
+        assertEquals(8, total)
+
+        // forced change
+        total = 0
+        manager.setOnMoveCallback { x, y -> total += max(x, y) }
+        repeat(3) { manager.forcePosition(parentDimens, mockPositions[it]) }
+        assertEquals(6, total)
+
+        // no error on null
+        manager.setOnMoveCallback(null)
+        manager.forcePosition(parentDimens, Position(0.0, 0.0))
     }
 
     @Test
@@ -149,5 +212,13 @@ class NonContinuousMovementManagerTest {
         manager.setOnPauseChangedCallback { calls.add(it) }
         repeat(5) { manager.paused = !manager.paused }
         assertEquals(listOf(true, false, true, false, true), calls)
+    }
+
+    private fun mockRandom(mockPositions: List<Position<Double>>) {
+        mockkStatic(::createRandom)
+        every { createRandom() } returns mockk<Random> {
+            every { nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
+            every { nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
+        }
     }
 }
