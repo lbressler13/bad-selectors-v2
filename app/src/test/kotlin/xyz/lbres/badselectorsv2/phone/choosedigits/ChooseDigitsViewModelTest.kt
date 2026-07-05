@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.phone.typedigits
+package xyz.lbres.badselectorsv2.phone.choosedigits
 
 import io.mockk.every
 import io.mockk.mockk
@@ -12,7 +12,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TypeDigitsViewModelTest {
+class ChooseDigitsViewModelTest {
     private val digitsOrder = listOf(6, 3, 0, 1, 9, 4, 2, 8, 7, 5)
 
     @BeforeTest
@@ -33,7 +33,7 @@ class TypeDigitsViewModelTest {
         with(mockk<IntRange>()) {
             every { IntRange(0, 9).seededShuffled() } returns digitsOrder
 
-            val vm = TypeDigitsViewModel()
+            val vm = ChooseDigitsViewModel()
             val expectedDigits: MutableList<Int?> = mutableListOfNulls(10)
 
             // set all 10 digits
@@ -65,7 +65,7 @@ class TypeDigitsViewModelTest {
         mockkStatic(IntRange::seededShuffled)
         with(mockk<IntRange>()) {
             every { IntRange(0, 9).seededShuffled() } returnsMany listOf(digitsOrder, newOrder)
-            val vm = TypeDigitsViewModel()
+            val vm = ChooseDigitsViewModel()
             repeat(10) {
                 selectValue(vm, it, it)
             }
@@ -81,7 +81,7 @@ class TypeDigitsViewModelTest {
         }
     }
 
-    private fun selectValue(vm: TypeDigitsViewModel, index: Int, value: Int, expected: MutableList<Int?>? = null) {
+    private fun selectValue(vm: ChooseDigitsViewModel, index: Int, value: Int, expected: MutableList<Int?>? = null) {
         vm.currentIndex = index
         vm.setCurrentDigit(value)
         if (expected != null) {

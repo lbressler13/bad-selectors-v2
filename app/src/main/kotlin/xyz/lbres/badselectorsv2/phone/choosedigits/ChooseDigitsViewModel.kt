@@ -1,11 +1,11 @@
-package xyz.lbres.badselectorsv2.phone.typedigits
+package xyz.lbres.badselectorsv2.phone.choosedigits
 
 import android.util.Log
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.utils.seededShuffled
 
-class TypeDigitsViewModel : BasePhoneViewModel() {
+class ChooseDigitsViewModel : BasePhoneViewModel() {
     private var digitsOrder = digitsRange.seededShuffled()
     // override for public set
     public override var currentIndex = -1

@@ -31,9 +31,9 @@
 
     <string name="russian_roulette">Russian roulette</string>
 
-    <!-- Type Digits -->
-    <string name="title_type_digits">Type Digits</string>
-    <string name="title_type_digits_dialog">Select Digit Value</string>
+    <!-- Choose Digits -->
+    <string name="title_choose_digits">Choose Digits</string>
+    <string name="title_choose_digits_dialog">Select Digit Value</string>
 
     <string name="tap_to_select">Tap digits to set values</string>
 

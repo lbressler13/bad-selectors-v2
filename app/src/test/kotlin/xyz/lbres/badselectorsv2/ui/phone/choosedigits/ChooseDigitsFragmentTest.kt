@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.ui.phone.typedigits
+package xyz.lbres.badselectorsv2.ui.phone.choosedigits
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -24,7 +24,7 @@ import xyz.lbres.kotlinutils.collection.list.mutableListOfNulls
 
 @Category(Robolectric::class)
 @RunWith(AndroidJUnit4::class)
-class TypeDigitsFragmentTest {
+class ChooseDigitsFragmentTest {
     private val digitsOrder = listOf(6, 3, 0, 1, 9, 4, 2, 8, 7, 5)
 
     private val doneButton = onViewInDialog(withText("Done"))
@@ -36,7 +36,7 @@ class TypeDigitsFragmentTest {
 
     @Test
     fun initialUi() {
-        launchTypeDigitsFragment()
+        launchChooseDigitsFragment()
         checkPhoneNumber(listOfNulls(numDigits))
         onView(withText("Tap digits to set values")).check(matches(isDisplayed()))
         digitViews.forEach { it.check(matches(isClickable())) }
@@ -44,7 +44,7 @@ class TypeDigitsFragmentTest {
 
     @Test
     fun openDialog() {
-        launchTypeDigitsFragment()
+        launchChooseDigitsFragment()
         digitViews.forEach {
             it.perform(click())
             onViewInDialog(withText("Select Digit Value")).check(matches(isDisplayed()))
@@ -59,7 +59,7 @@ class TypeDigitsFragmentTest {
         val expectedNumber: MutableList<Int?> = mutableListOfNulls(10)
 
         withMockedDigitsOrder(digitsOrder) {
-            launchTypeDigitsFragment()
+            launchChooseDigitsFragment()
             // set full number
             repeat(10) {
                 val digitIndex = setDigitsOrder[it]
@@ -98,7 +98,7 @@ class TypeDigitsFragmentTest {
     @Test
     fun recreate() {
         withMockedDigitsOrder(digitsOrder) {
-            val scenario = launchTypeDigitsFragment()
+            val scenario = launchChooseDigitsFragment()
             val expectedNumber: MutableList<Int?> = mutableListOfNulls(10)
 
             // blank

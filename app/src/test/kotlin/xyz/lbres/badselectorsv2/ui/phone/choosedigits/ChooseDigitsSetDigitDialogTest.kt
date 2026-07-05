@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.ui.phone.typedigits
+package xyz.lbres.badselectorsv2.ui.phone.choosedigits
 
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -22,7 +22,7 @@ import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
 import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 
 @RunWith(AndroidJUnit4::class)
-class TypeDigitsSetDigitDialogTest {
+class ChooseDigitsSetDigitDialogTest {
     private val doneButton = onViewInDialog(withText("Done"))
 
     @After
@@ -32,7 +32,7 @@ class TypeDigitsSetDigitDialogTest {
 
     @Test
     fun testInitialUi() {
-        launchTypeDigitsFragment()
+        launchChooseDigitsFragment()
         clickDigit(0)
         radioButtons.forEach { it.check(matches(allOf(isEnabled(), isNotChecked()))) }
         onViewInDialog(withText("Select Digit Value")).check(matches(isDisplayed()))
@@ -41,7 +41,7 @@ class TypeDigitsSetDigitDialogTest {
 
     @Test
     fun testCloseDialog() {
-        launchTypeDigitsFragment()
+        launchChooseDigitsFragment()
         clickDigit(0)
         doneButton.perform(click())
         val dialog = ShadowDialog.getLatestDialog()
@@ -50,7 +50,7 @@ class TypeDigitsSetDigitDialogTest {
 
     @Test
     fun testInteractWithUi() {
-        launchTypeDigitsFragment()
+        launchChooseDigitsFragment()
         clickDigit(0)
         radioButtons.forEachIndexed { index, view ->
             clickRadioButton(index)
@@ -62,7 +62,7 @@ class TypeDigitsSetDigitDialogTest {
     @Test
     fun testValuesPersisted() {
         withMockedDigitsOrder(digitsRange.toList()) {
-            launchTypeDigitsFragment()
+            launchChooseDigitsFragment()
             val digit = digitViews[3]
 
             digit.perform(click())

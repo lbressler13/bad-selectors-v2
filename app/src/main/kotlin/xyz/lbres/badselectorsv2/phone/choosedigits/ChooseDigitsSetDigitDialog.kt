@@ -1,14 +1,14 @@
-package xyz.lbres.badselectorsv2.phone.typedigits
+package xyz.lbres.badselectorsv2.phone.choosedigits
 
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.BaseDialog
-import xyz.lbres.badselectorsv2.databinding.DialogPhoneTypeDigitsSetDigitBinding
+import xyz.lbres.badselectorsv2.databinding.DialogPhoneChooseDigitsSetDigitBinding
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 
-class TypeDigitsSetDigitDialog() : BaseDialog<DialogPhoneTypeDigitsSetDigitBinding>() {
-    override val titleResId: Int = R.string.title_type_digits_dialog
+class ChooseDigitsSetDigitDialog() : BaseDialog<DialogPhoneChooseDigitsSetDigitBinding>() {
+    override val titleResId: Int = R.string.title_choose_digits_dialog
     override val dialogClosedRequestKey: String? = CLOSED_KEY
 
     private val buttonIds = listOf(
@@ -24,15 +24,15 @@ class TypeDigitsSetDigitDialog() : BaseDialog<DialogPhoneTypeDigitsSetDigitBindi
         R.id.nineButton,
     )
 
-    private lateinit var viewModel: TypeDigitsViewModel
+    private lateinit var viewModel: ChooseDigitsViewModel
 
-    override fun inflateLayout() = DialogPhoneTypeDigitsSetDigitBinding.inflate(layoutInflater)
+    override fun inflateLayout() = DialogPhoneChooseDigitsSetDigitBinding.inflate(layoutInflater)
 
     /**
      * Display initial UI
      */
     override fun setInitialUi() {
-        viewModel = ViewModelProvider(requireActivity())[TypeDigitsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[ChooseDigitsViewModel::class.java]
         val index = viewModel.currentIndex
         if (index !in digitsRange) {
             Log.e(null, "Invalid index for set digit dialog: $index")
@@ -54,7 +54,7 @@ class TypeDigitsSetDigitDialog() : BaseDialog<DialogPhoneTypeDigitsSetDigitBindi
     }
 
     companion object {
-        val TAG = "TypeDigitsSetDigitDialog"
+        val TAG = "ChooseDigitsSetDigitDialog"
         val CLOSED_KEY = "${TAG}_Closed"
     }
 }

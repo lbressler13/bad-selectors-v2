@@ -1,4 +1,4 @@
-package xyz.lbres.badselectorsv2.ui.phone.typedigits
+package xyz.lbres.badselectorsv2.ui.phone.choosedigits
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.action.ViewActions.click
@@ -35,9 +35,9 @@ fun withMockedDigitsOrder(digitsOrder: List<Int>, test: () -> Unit) {
 }
 
 // cannot launch scenario in before block due to mocking requirements
-fun launchTypeDigitsFragment(): ActivityScenario<BaseActivity> {
+fun launchChooseDigitsFragment(): ActivityScenario<BaseActivity> {
     val scenario = ActivityScenario.launchActivityForResult(BaseActivity::class.java)
-    navigateToSelector("Phone", "Type Digits")
+    navigateToSelector("Phone", "Choose Digits")
     return scenario
 }
 

@@ -54,7 +54,7 @@ class PhoneTabFragmentTest {
         onView(withId(R.id.viewPager)).perform(swipeRight())
         onView(withTab("Random Circle")).check(matches(isCompletelyDisplayed()))
         onView(withId(R.id.viewPager)).perform(swipeRight())
-        onView(withTab("Type Digits")).check(matches(isCompletelyDisplayed()))
+        onView(withTab("Choose Digits")).check(matches(isCompletelyDisplayed()))
     }
 
     @Test fun navigateToHome() = testNavigateToHome()
