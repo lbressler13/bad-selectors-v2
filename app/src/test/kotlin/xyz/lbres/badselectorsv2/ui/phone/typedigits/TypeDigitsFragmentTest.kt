@@ -64,12 +64,7 @@ class TypeDigitsFragmentTest {
             repeat(10) {
                 val digitIndex = setDigitsOrder[it]
                 val selectValue = selectOrder[it]
-
-                clickDigit(digitIndex)
-                clickRadioButton(selectValue)
-                closeDialog()
-
-                expectedNumber[digitIndex] = digitsOrder[selectValue]
+                selectValue(digitIndex, selectValue, expectedNumber)
                 checkPhoneNumber(expectedNumber)
             }
 
@@ -104,15 +99,45 @@ class TypeDigitsFragmentTest {
     fun recreate() {
         withMockedDigitsOrder(digitsOrder) {
             val scenario = launchTypeDigitsFragment()
+            val expectedNumber: MutableList<Int?> = mutableListOfNulls(10)
 
             // blank
+            scenario.recreate()
+            checkPhoneNumber(expectedNumber)
 
             // partial number
+            selectValue(4, 5, expectedNumber)
+            selectValue(7, 3, expectedNumber)
+            selectValue(2, 3, expectedNumber)
+
+            scenario.recreate()
+            checkPhoneNumber(expectedNumber)
 
             // full number
+            selectValue(0, 0, expectedNumber)
+            selectValue(1, 5, expectedNumber)
+            selectValue(3, 2, expectedNumber)
+            selectValue(5, 4, expectedNumber)
+            selectValue(6, 4, expectedNumber)
+            selectValue(8, 2, expectedNumber)
+            selectValue(9, 1, expectedNumber)
+
+            scenario.recreate()
+            checkPhoneNumber(expectedNumber)
 
             // changed
+            selectValue(1, 0, expectedNumber)
+            selectValue(3, 2, expectedNumber)
+
+            scenario.recreate()
+            checkPhoneNumber(expectedNumber)
         }
-        // TODO
+    }
+
+    private fun selectValue(digit: Int, radioButton: Int, expectedNumber: MutableList<Int?>) {
+        clickDigit(digit)
+        clickRadioButton(radioButton)
+        closeDialog()
+        expectedNumber[digit] = digitsOrder[radioButton]
     }
 }
