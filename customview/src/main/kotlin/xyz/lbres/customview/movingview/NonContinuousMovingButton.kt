@@ -26,6 +26,8 @@ class NonContinuousMovingButton(context: Context, attrs: AttributeSet?, defStyle
     init {
         var attrPaused = false
 
+        println(R.styleable.Movement)
+        println(R.styleable.Movement_paused)
         context.withStyledAttributes(attrs, R.styleable.Movement) {
             attrPaused = getBoolean(R.styleable.Movement_paused, false)
         }
