@@ -1,6 +1,5 @@
 package xyz.lbres.customview.movingview
 
-import NonContinuousMovingView
 import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatButton
@@ -10,8 +9,12 @@ import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.movingview.manager.MovementManager
 import xyz.lbres.customview.movingview.manager.NonContinuousMovementManager
 
+/**
+ * Button with non-continuous movement, to be used as a child of a MotionLayout.
+ * See README for information about customizing view.
+ */
 class NonContinuousMovingButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-    AppCompatButton(context, attrs, defStyleAttr), NonContinuousMovingView {
+    AppCompatButton(context, attrs, defStyleAttr), IMovingView {
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, android.R.attr.buttonStyle)
     constructor(context: Context) : this(context, null)

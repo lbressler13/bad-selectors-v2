@@ -2,6 +2,9 @@ package xyz.lbres.customview.movingview
 
 import android.view.View
 
+/**
+ * Interface for all children of a MotionLayout
+ */
 sealed interface MovingView {
 
     /**

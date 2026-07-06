@@ -7,6 +7,9 @@ import xyz.lbres.customview.movingview.MovingView.OnPausedChangedListener
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
 
+/**
+ * Internal partial implementation of [MovingView]
+ */
 internal interface IMovingView : MovingView {
     val manager: MovementManager
 
