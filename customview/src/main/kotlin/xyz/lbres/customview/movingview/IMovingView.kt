@@ -60,7 +60,7 @@ internal interface IMovingView : MovingView {
      */
     override fun setOnPauseChangedListener(callback: (view: View, paused: Boolean) -> Unit) {
         this as View
-        (manager as BaseMovementManager).setOnPauseChangedCallback { callback(this, paused) }
+        (manager as BaseMovementManager).setOnPauseChangedCallback { value -> callback(this, value) }
     }
 
     /**
