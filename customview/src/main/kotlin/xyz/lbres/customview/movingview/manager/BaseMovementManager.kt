@@ -42,7 +42,7 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      * @param dimensions [Dimensions]: maximum allowed dimensions for position
      * @return [Position]: updated position
      */
-    fun updatePosition(dimensions: Dimensions<Int>): Position<Double> {
+    fun updatePosition(dimensions: Dimensions<Int>) {
         if (!paused) {
             val previousPosition = position
             doPositionUpdate(dimensions)
@@ -51,8 +51,6 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
                 callOnMove()
             }
         }
-
-        return position
     }
 
     /**
@@ -61,14 +59,13 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      * @param dimensions [Dimensions]: maximum allowed dimensions for position
      * @param forcedPosition [Double]: position to update to
      */
-    fun forcePosition(dimensions: Dimensions<Int>, forcedPosition: Position<Double>): Boolean {
+    fun forcePosition(dimensions: Dimensions<Int>, forcedPosition: Position<Double>) {
         val previousPosition = position
         doPositionUpdate(dimensions, forcedPosition)
 
         if (position != previousPosition) {
             callOnMove()
         }
-        return position == forcedPosition
     }
 
     /**

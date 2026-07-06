@@ -99,7 +99,7 @@ class NonContinuousMovingButtonTest {
 
     @Test
     fun testUpdatePosition() {
-        mockRandom(parentWidth, parentHeight, positions)
+        mockNextDouble(parentWidth, parentHeight, positions)
         val view = NonContinuousMovingButton(createMockContext(true))
         val history: MutableList<Position<Int>> = mutableListOf()
         view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
@@ -109,15 +109,14 @@ class NonContinuousMovingButtonTest {
         val height = parentHeight.toInt() + viewHeight
 
         val updateAndCheck: (Int) -> Unit = {
-            setViewPosition(view)
-            view.updatePosition(width, height)
-            checkPosition(view, positions[it])
+            setPositionAndUpdate(view)
+            checkViewPosition(view, positions[it])
             checkPositionHistory(positions, history, it + 1)
         }
 
         // paused
         view.updatePosition(width, height)
-        checkPosition(view, Position(0.0, 0.0))
+        checkViewPosition(view, Position(0.0, 0.0))
 
         // valid position
         view.paused = false
@@ -151,7 +150,7 @@ class NonContinuousMovingButtonTest {
             setViewPosition(view)
             val position = positions[it]
             view.forcePosition(width, height, position.x, position.y)
-            checkPosition(view, positions[it])
+            checkViewPosition(view, positions[it])
             checkPositionHistory(positions, history, it + 1)
         }
 
@@ -170,7 +169,7 @@ class NonContinuousMovingButtonTest {
         invalidPositions.forEach {
             runWithFailMessage("Checking invalid position $it") {
                 view.forcePosition(width, height, it.x, it.y)
-                checkPosition(view, positions[1])
+                checkViewPosition(view, positions[1])
                 checkPositionHistory(positions, history, 2)
             }
         }
@@ -199,7 +198,7 @@ class NonContinuousMovingButtonTest {
             Position(3.0, 2.1),
             Position(0.7, 1.0),
         )
-        mockRandom(parentWidth, parentHeight, mockPositions)
+        mockNextDouble(parentWidth, parentHeight, mockPositions)
         val view = NonContinuousMovingButton(createMockContext())
 
         val width = parentWidth.toInt() + viewWidth
@@ -208,10 +207,7 @@ class NonContinuousMovingButtonTest {
         // callback
         var total = 0
         view.setOnMoveListener { view, x, y -> total += x * y }
-        repeat(3) {
-            setViewPosition(view)
-            view.updatePosition(width, height)
-        }
+        repeat(3) { setPositionAndUpdate(view) }
         assertEquals(8, total)
 
         // repeat value
@@ -226,28 +222,19 @@ class NonContinuousMovingButtonTest {
                 total += min(x, y)
             }
         })
-        repeat(3) {
-            setViewPosition(view)
-            view.updatePosition(width, height)
-        }
+        repeat(3) { setPositionAndUpdate(view) }
         assertEquals(6, total)
 
         // null
         total = 0
         view.setOnMoveListener(null)
-        repeat(2) {
-            setViewPosition(view)
-            view.updatePosition(width, height)
-        }
+        repeat(2) { setPositionAndUpdate(view) }
         assertEquals(0, total)
     }
 
     @Test
     fun testSetOnPauseChangedListener() {
         val view = NonContinuousMovingButton(createMockContext())
-
-        val width = parentWidth.toInt() + viewWidth
-        val height = parentHeight.toInt() + viewHeight
 
         // callback
         var counter = 0
@@ -272,6 +259,9 @@ class NonContinuousMovingButtonTest {
         assertEquals(0, counter)
     }
 
+    /**
+     * Create mock context object which returns the given paused value in its attributes
+     */
     private fun createMockContext(paused: Boolean = false): Context {
         val mockArray = createMockTypedArray(setOf(R.styleable.Movement_paused))
         every { mockArray.getBoolean(R.styleable.Movement_paused, false) } returns paused
@@ -282,9 +272,11 @@ class NonContinuousMovingButtonTest {
         return context
     }
 
-    private fun checkPosition(view: NonContinuousMovingButton, position: Position<Double>) {
-        assertEquals(position.x.toInt(), view.left)
-        assertEquals(position.y.toInt(), view.top)
+    private fun setPositionAndUpdate(view: NonContinuousMovingButton) {
+        val width = parentWidth.toInt() + viewWidth
+        val height = parentHeight.toInt() + viewHeight
+        setViewPosition(view)
+        view.updatePosition(width, height)
     }
 
     private fun setViewPosition(view: NonContinuousMovingButton) {
