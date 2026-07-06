@@ -41,6 +41,9 @@ class NonContinuousMovingButton(context: Context, attrs: AttributeSet?, defStyle
      */
     override fun forcePosition(parentWidth: Int, parentHeight: Int, x: Double, y: Double) {
         _manager.forcePosition(getBounds(parentWidth, parentHeight), Position(x, y))
+
+        left = _manager.x.toInt()
+        top = _manager.y.toInt()
     }
 
     /**

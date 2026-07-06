@@ -1,16 +1,13 @@
 package xyz.lbres.customview.movingview.manager
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.movingview.checkPositionHistory
+import xyz.lbres.customview.movingview.mockRandom
 import xyz.lbres.customview.testutils.mockLog
 import xyz.lbres.customview.testutils.runWithFailMessage
-import xyz.lbres.customview.utils.createRandom
 import kotlin.math.max
-import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -85,7 +82,7 @@ class NonContinuousMovementManagerTest {
 
     @Test
     fun testUpdatePosition() {
-        mockRandom(positions)
+        mockRandom(parentWidth, parentHeight, positions)
         val manager = NonContinuousMovementManager(true)
         val history: MutableList<Position<Int>> = mutableListOf()
         manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
@@ -94,8 +91,7 @@ class NonContinuousMovementManagerTest {
             val result = manager.updatePosition(parentDimens)
             checkPosition(manager, positions[it])
             assertEquals(positions[it], result)
-            val expectedHistory = positions.subList(0, it + 1).map { Position(it.x.toInt(), it.y.toInt()) }
-            assertEquals(expectedHistory, history)
+            checkPositionHistory(positions, history, it + 1)
         }
 
         // paused
@@ -130,9 +126,9 @@ class NonContinuousMovementManagerTest {
         val forceAndCheck: (Int) -> Unit = {
             val result = manager.forcePosition(parentDimens, positions[it])
             checkPosition(manager, positions[it])
+            // TODO why does this return?
             assertTrue(result)
-            val expectedHistory = positions.subList(0, it + 1).map { Position(it.x.toInt(), it.y.toInt()) }
-            assertEquals(expectedHistory, history)
+            checkPositionHistory(positions, history, it + 1)
         }
 
         // valid position
@@ -171,7 +167,7 @@ class NonContinuousMovementManagerTest {
             Position(0.7, 1.0), // repeat value
             Position(5.0, 1.0),
         )
-        mockRandom(mockPositions)
+        mockRandom(parentWidth, parentHeight, mockPositions)
         val manager = NonContinuousMovementManager(false)
 
         // regular movement
@@ -212,13 +208,5 @@ class NonContinuousMovementManagerTest {
         manager.setOnPauseChangedCallback { calls.add(it) }
         repeat(5) { manager.paused = !manager.paused }
         assertEquals(listOf(true, false, true, false, true), calls)
-    }
-
-    private fun mockRandom(mockPositions: List<Position<Double>>) {
-        mockkStatic(::createRandom)
-        every { createRandom() } returns mockk<Random> {
-            every { nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
-            every { nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
-        }
     }
 }
