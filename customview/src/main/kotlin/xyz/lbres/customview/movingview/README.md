@@ -1,0 +1,145 @@
+# MovingView
+
+MovingView is an interface for views whose position changes.
+All children of MotionLayout must implement MovingView.
+
+A MovingView can have continuous or noncontinuous motion.
+Continuous motion means that each position update results generates a new position which is adjacent to the current position.
+Noncontinuous motion means that there is no relation between position updates.
+
+
+## XML Attributes
+
+### Summary
+
+| XML Attribute            | Summary                  | Type    | Required |
+|:-------------------------|:-------------------------|:--------|:---------|
+| [app:paused](#apppaused) | If view motion is paused | boolean | No       |
+
+### app:paused
+
+Boolean value indicating if position updates are paused.
+This value is assigned to the paused property.
+
+If the view has an attached OnPauseChangedListener, its callback will be invoked when the value of the attribute is changed.
+
+
+## Methods
+
+### updatePosition
+
+Update position based on size of parent layout.
+The position will not update if the paused property is true.
+
+If the view has an attached OnMoveListener, its callback will be invoked after the position update is complete.
+
+This method takes the following parameters, and returns Unit:
+
+| Parameter    | Summary               | Type |
+|:-------------|:----------------------|:-----|
+| parentWidth  | Width of parent view  | Int  |
+| parentHeight | Height of parent view | Int  |
+
+
+### forcePosition
+
+Force view to move to a specific position, even if motion is paused.
+
+If the view has an attached OnMoveListener, its callback will be invoked after the position update is complete.
+
+This method has 2 signatures, and returns Unit.
+
+Signature 1:
+
+| Parameter    | Summary               | Type   |
+|:-------------|:----------------------|:-------|
+| parentWidth  | Width of parent view  | Int    |
+| parentHeight | Height of parent view | Int    |
+| x            | New x value           | Double |
+| y            | New y value           | Double |
+
+Signature 2:
+
+| Parameter    | Summary               | Type |
+|:-------------|:----------------------|:-----|
+| parentWidth  | Width of parent view  | Int  |
+| parentHeight | Height of parent view | Int  |
+| x            | New x value           | Int  |
+| y            | New y value           | Int  |
+
+
+### setOnMoveListener
+
+Set listener to bind to position update events.
+
+The method has 2 signatures, and returns Unit.
+
+Signature 1:
+
+| Parameter | Summary                                            | Type                       |
+|:----------|:---------------------------------------------------|:---------------------------|
+| listener  | Listener to observe position updates. Can be null. | MovingView.OnMoveListener? |
+
+Signature 2:
+
+| Parameter | Summary                                   | Type                           |
+|:----------|:------------------------------------------|:-------------------------------|
+| callback  | Callback to invoke when position updates. | (View, Double, Double) -> Unit |
+
+
+### setOnPauseChangedListener
+
+Set listener to bind to paused state change events.
+
+The method has 2 signatures, and returns Unit.
+
+Signature 1:
+
+| Parameter | Summary                                                   | Type                               |
+|:----------|:----------------------------------------------------------|:-----------------------------------|
+| listener  | Listener to observe changes to paused state. Can be null. | MovingView.OnPauseChangedListener? |
+
+Second signSignature 2:
+
+| Parameter | Summary                                       | Type                    |
+|:----------|:----------------------------------------------|:------------------------|
+| callback  | Callback to invoke when paused state changes. | (View, Boolean) -> Unit |
+
+
+## Event Listeners
+
+### OnMoveListener
+
+Interface to bind to position update events.
+It can be attached to a MovingView using the [setOnMoveListener](#setonmovelistener) method.
+
+The interface consists of a single onMove function, which takes the following parameters and returns Unit:
+
+| Parameter | Summary                     | Type   |
+|:----------|:----------------------------|:-------|
+| view      | View whose position updated | View   |
+| x         | New position on the x axis  | Double |
+| y         | New position on the y axis  | Double |
+
+
+### OnPauseChangedListener
+
+Interface to bind to a paused state change events.
+It can be attached to a MovingView using the [setOnPauseChangedListener](#setonpausechangedlistener) method.
+
+The interface consists of a single onChange method, which takes the following parameters and returns Unit:
+
+| Parameter | Summary                         | Type    |
+|:----------|:--------------------------------|:--------|
+| view      | View whose paused state changed | View    |
+| paused    | New paused state of view        | Boolean |
+
+
+## Implementations
+
+### NoncontinuousMovingButton
+
+NonContinuousMovingButton extends the AppCompatButton class and implements the MovingView interface. It inherits all values, methods, and attributes from the class and interface.
+
+See the AppCompatButton documentation for more information about this class: https://developer.android.com/reference/androidx/appcompat/widget/AppCompatButton.
+
