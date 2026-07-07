@@ -4,7 +4,7 @@ MovingView is an interface for views whose position changes.
 All children of MotionLayout must implement MovingView.
 
 A MovingView can have continuous or noncontinuous motion.
-Continuous motion means that each position update results generates a new position which is adjacent to the current position.
+Continuous motion means that positions updates generate a new position which is adjacent to the current position.
 Noncontinuous motion means that there is no relation between position updates.
 
 
