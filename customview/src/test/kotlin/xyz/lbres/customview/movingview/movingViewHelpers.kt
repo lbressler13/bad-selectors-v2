@@ -31,7 +31,7 @@ internal fun checkViewPosition(view: View, position: Position<Double>) {
 /**
  * Check that the position history matches the list of positions up to the given index
  */
-internal fun checkPositionHistory(positions: List<Position<Double>>, history: List<Position<Int>>, index: Int) {
-    val expectedHistory = positions.subList(0, index).map { Position(it.x.toInt(), it.y.toInt()) }
+internal fun checkPositionHistory(positions: List<Position<Double>>, history: List<Position<Int>>) {
+    val expectedHistory = positions.map { Position(it.x.toInt(), it.y.toInt()) }
     assertEquals(expectedHistory, history)
 }

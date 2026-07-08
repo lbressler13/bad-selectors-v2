@@ -44,7 +44,7 @@ internal interface IMovingView : MovingView {
      */
     override fun forcePosition(parentWidth: Int, parentHeight: Int, x: Double, y: Double) {
         this as View
-        (manager as BaseMovementManager).forcePosition(getBounds(parentWidth, parentHeight), Position(x, y))
+        (manager as BaseMovementManager).updatePosition(getBounds(parentWidth, parentHeight), Position(x, y))
 
         left = (manager as BaseMovementManager).x.toInt()
         top = (manager as BaseMovementManager).y.toInt()

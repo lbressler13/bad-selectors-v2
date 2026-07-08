@@ -111,7 +111,7 @@ class NonContinuousMovingButtonTest {
         val updateAndCheck: (Int) -> Unit = {
             setPositionAndUpdate(view)
             checkViewPosition(view, positions[it])
-            checkPositionHistory(positions, history, it + 1)
+            checkPositionHistory(positions.subList(0, it + 1), history)
         }
 
         // paused
@@ -151,7 +151,7 @@ class NonContinuousMovingButtonTest {
             val position = positions[it]
             view.forcePosition(width, height, position.x, position.y)
             checkViewPosition(view, positions[it])
-            checkPositionHistory(positions, history, it + 1)
+            checkPositionHistory(positions.subList(0, it + 1), history)
         }
 
         // valid position
@@ -170,7 +170,7 @@ class NonContinuousMovingButtonTest {
             runWithFailMessage("Checking invalid position $it") {
                 view.forcePosition(width, height, it.x, it.y)
                 checkViewPosition(view, positions[1])
-                checkPositionHistory(positions, history, 2)
+                checkPositionHistory(positions.subList(0, 2), history)
             }
         }
 

@@ -37,30 +37,18 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
         get() = position.y
 
     /**
-     * Perform full position update if movement is not paused
+     * Perform full position update. If paused, position will not update unless [forcedPosition] is provided
      *
      * @param dimensions [Dimensions]: maximum allowed dimensions for position
+     * @param forcedPosition [Double]: position to force update, defaults to `null`
      */
-    fun updatePosition(dimensions: Dimensions<Int>) {
-        if (!paused) {
-            val previousPosition = position
-            doPositionUpdate(dimensions)
-
-            if (position != previousPosition) {
-                callOnMove()
-            }
-        }
-    }
-
-    /**
-     * Set position to specific values
-     *
-     * @param dimensions [Dimensions]: maximum allowed dimensions for position
-     * @param forcedPosition [Double]: position to update to
-     */
-    fun forcePosition(dimensions: Dimensions<Int>, forcedPosition: Position<Double>) {
+    fun updatePosition(dimensions: Dimensions<Int>, forcedPosition: Position<Double>? = null) {
         val previousPosition = position
-        doPositionUpdate(dimensions, forcedPosition)
+
+        when {
+            forcedPosition != null -> doPositionUpdate(dimensions, forcedPosition)
+            !paused -> doPositionUpdate(dimensions)
+        }
 
         if (position != previousPosition) {
             callOnMove()

@@ -87,10 +87,25 @@ class NonContinuousMovementManagerTest {
         val history: MutableList<Position<Int>> = mutableListOf()
         manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
 
-        val updateAndCheck: (Int) -> Unit = {
+        val forcedPositions = listOf(Position(99.99, 0.05), Position(2.0, 65.2))
+        // val expectedHistory = positions.subList(0, 2) + forcedPositions[0] + positions[3] + forcedPositions[1]
+        val expectedHistory: MutableList<Position<Double>> = mutableListOf()
+
+        fun updateAndCheck(index: Int, addToHistory: Boolean = true) {
             manager.updatePosition(parentDimens)
-            checkManagerPosition(manager, positions[it])
-            checkPositionHistory(positions, history, it + 1)
+            checkManagerPosition(manager, positions[index])
+            if (addToHistory) {
+                expectedHistory.add(positions[index])
+            }
+            checkPositionHistory(expectedHistory, history)
+        }
+        fun forceAndCheck(index: Int, addToHistory: Boolean = true) {
+            manager.updatePosition(parentDimens, forcedPositions[index])
+            checkManagerPosition(manager, forcedPositions[index])
+            if (addToHistory) {
+                expectedHistory.add(forcedPositions[index])
+            }
+            checkPositionHistory(expectedHistory, history)
         }
 
         // paused
@@ -105,52 +120,23 @@ class NonContinuousMovementManagerTest {
 
         // re-paused
         manager.paused = true
-        updateAndCheck(2)
+        updateAndCheck(2, addToHistory = false) // don't add because it's paused
+
+        // forced while paused
+        forceAndCheck(0)
 
         // unpaused
         manager.paused = false
         updateAndCheck(3)
 
         // repeat value
-        updateAndCheck(3)
-    }
+        updateAndCheck(3, addToHistory = false) // don't add because it's repeated
 
-    @Test
-    fun testForcePosition() {
-        val manager = NonContinuousMovementManager(false)
-        val history: MutableList<Position<Int>> = mutableListOf()
-        manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
-
-        val forceAndCheck: (Int) -> Unit = {
-            manager.forcePosition(parentDimens, positions[it])
-            checkManagerPosition(manager, positions[it])
-            checkPositionHistory(positions, history, it + 1)
-        }
-
-        // valid position
-        forceAndCheck(0)
+        // forced while unpaused
         forceAndCheck(1)
 
-        // invalid position
-        val invalidPositions = listOf(
-            Position(1.0, 201.0),
-            Position(100.1, 2.0),
-            Position(-0.5, 2.0),
-            Position(1.0, -2.0),
-        )
-        invalidPositions.forEach {
-            runWithFailMessage("Checking invalid position $it") {
-                manager.forcePosition(parentDimens, it)
-                checkManagerPosition(manager, positions[1])
-            }
-        }
-
-        // paused
-        manager.paused = true
-        forceAndCheck(2)
-
-        // repeat
-        forceAndCheck(2)
+        // forced repeat value
+        forceAndCheck(1, addToHistory = false) // don't add because it's repeated
     }
 
     @Test
@@ -178,12 +164,15 @@ class NonContinuousMovementManagerTest {
         // forced change
         total = 0
         manager.setOnMoveCallback { x, y -> total += max(x, y) }
-        repeat(3) { manager.forcePosition(parentDimens, mockPositions[it]) }
+        repeat(3) { manager.updatePosition(parentDimens, mockPositions[it]) }
         assertEquals(6, total)
 
         // no error on null
         manager.setOnMoveCallback(null)
-        manager.forcePosition(parentDimens, Position(0.0, 0.0))
+        manager.updatePosition(parentDimens, Position(0.0, 0.0))
+
+        manager.setOnMoveCallback(null)
+        manager.updatePosition(parentDimens)
     }
 
     @Test
