@@ -19,10 +19,10 @@ import org.junit.Assert.assertFalse
 import org.robolectric.shadows.ShadowDialog
 import org.robolectric.shadows.ShadowLooper
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.badselectorsv2.ui.testutils.closeDialog
 import xyz.lbres.badselectorsv2.ui.testutils.onViewInDialog
 import xyz.lbres.badselectorsv2.ui.testutils.openDevTools
+import xyz.lbres.testutils.runWithFailMessage
 import java.util.concurrent.TimeUnit
 
 private val spinner = onViewInDialog(withId(R.id.devToolsTimeSpinner))
