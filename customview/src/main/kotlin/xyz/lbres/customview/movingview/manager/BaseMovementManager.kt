@@ -40,7 +40,6 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      * Perform full position update if movement is not paused
      *
      * @param dimensions [Dimensions]: maximum allowed dimensions for position
-     * @return [Position]: updated position
      */
     fun updatePosition(dimensions: Dimensions<Int>) {
         if (!paused) {

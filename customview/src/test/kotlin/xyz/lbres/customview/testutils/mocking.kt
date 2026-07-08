@@ -4,6 +4,8 @@ import android.util.Log
 import io.mockk.every
 import io.mockk.mockkStatic
 
+// TODO shared testutils
+
 /**
  * Mock the Log class. Must be unmocked at the end of each test
  */

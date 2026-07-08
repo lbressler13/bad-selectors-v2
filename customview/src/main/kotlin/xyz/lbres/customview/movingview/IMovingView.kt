@@ -2,6 +2,7 @@ package xyz.lbres.customview.movingview
 
 import android.view.View
 import xyz.lbres.customview.data.Dimensions
+import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.movingview.MovingView.OnMoveListener
 import xyz.lbres.customview.movingview.MovingView.OnPausedChangedListener
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
@@ -19,6 +20,35 @@ internal interface IMovingView : MovingView {
     override var paused: Boolean
         get() = (manager as BaseMovementManager).paused
         set(value) { (manager as BaseMovementManager).paused = value }
+
+
+    /**
+     * Update the position of the view
+     *
+     * @param parentWidth [Int]: width of parent view
+     * @param parentHeight [Int]: height of parent view
+     */
+    override fun updatePosition(parentWidth: Int, parentHeight: Int) {
+        this as View
+        (manager as BaseMovementManager).updatePosition(getBounds(parentWidth, parentHeight))
+
+        left = (manager as BaseMovementManager).x.toInt()
+        top = (manager as BaseMovementManager).y.toInt()
+    }
+
+    /**
+     * Set position to specific values
+     *
+     * @param x [Double]: position on the x axis
+     * @param y [Double]: position on the y axis
+     */
+    override fun forcePosition(parentWidth: Int, parentHeight: Int, x: Double, y: Double) {
+        this as View
+        (manager as BaseMovementManager).forcePosition(getBounds(parentWidth, parentHeight), Position(x, y))
+
+        left = (manager as BaseMovementManager).x.toInt()
+        top = (manager as BaseMovementManager).y.toInt()
+    }
 
     /**
      * Set position to specific values
@@ -38,8 +68,9 @@ internal interface IMovingView : MovingView {
      * @param callback ([View], Int, Int) -> Unit: callback to call when view moves
      */
     override fun setOnMoveListener(callback: (view: View, x: Int, y: Int) -> Unit) {
-        this as View
-        (manager as BaseMovementManager).setOnMoveCallback { x, y -> callback(this, x, y) }
+        setOnMoveListener(object : OnMoveListener {
+            override fun onMove(view: View, x: Int, y: Int) = callback(view, x, y)
+        })
     }
 
     /**
@@ -62,8 +93,9 @@ internal interface IMovingView : MovingView {
      * @param callback ([View], Boolean) -> Unit: callback to call when paused state changes
      */
     override fun setOnPauseChangedListener(callback: (view: View, paused: Boolean) -> Unit) {
-        this as View
-        (manager as BaseMovementManager).setOnPauseChangedCallback { value -> callback(this, value) }
+        setOnPauseChangedListener(object : OnPausedChangedListener {
+            override fun onChange(view: View, paused: Boolean) = callback(view, paused)
+        })
     }
 
     /**
