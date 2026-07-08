@@ -1,14 +1,11 @@
 package xyz.lbres.badselectorsv2.phone.utils
 
 import android.util.Log
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.badselectorsv2.testutils.runWithRetries
-import xyz.lbres.badselectorsv2.utils.seededRandom
+import xyz.lbres.badselectorsv2.testutils.withMockedIntRange
 import xyz.lbres.kotlinutils.array.setAllValues
 import xyz.lbres.kotlinutils.collection.list.IntList
 import kotlin.test.AfterTest
@@ -33,7 +30,7 @@ class PhoneNumberGeneratorTest {
     @Test
     fun testAlternateConstructor() {
         val mockReturns = listOf(2, 3, 2, 4)
-        withMockedRange(2..4, mockReturns) {
+        withMockedIntRange(randomMocks = mapOf(2..4 to mockReturns)) {
             val previousGenerated: MutableSet<IntList> = mutableSetOf()
             val generator = PhoneNumberGenerator(2..4)
             mockReturns.forEach { testRepeatedNumber(generator, it, previousGenerated) }
@@ -108,7 +105,7 @@ class PhoneNumberGeneratorTest {
         val generator = PhoneNumberGenerator(false, 2..6)
         var previousGenerated: Set<IntList> = emptySet()
         val mockRandomValues = listOf(2, 5, 4, 3, 3, 6, 2, 5, 4, 2)
-        withMockedRange(2..6, mockRandomValues + mockRandomValues + mockRandomValues) {
+        withMockedIntRange(randomMocks = mapOf(2..6 to mockRandomValues + mockRandomValues + mockRandomValues)) {
             repeat(3) {
                 // generate numbers
                 val generatedNumbers: MutableSet<IntList> = mutableSetOf()
@@ -144,7 +141,7 @@ class PhoneNumberGeneratorTest {
         }
 
         // repeat full numbers
-        withMockedRange(2..4, listOf(4, 2, 3, 2)) {
+        withMockedIntRange(randomMocks = mapOf(2..4 to listOf(4, 2, 3, 2))) {
             generator = PhoneNumberGenerator(fullNumberRepeats = 2..4)
             generated = generator.generateNumber()
             assertEquals(generated, generator.generateNumber()) // 4
@@ -269,8 +266,7 @@ class PhoneNumberGeneratorTest {
         // full number repeats
         generator = PhoneNumberGenerator(false, 2..4)
         val mockRandomValues = listOf(2, 4, 3)
-        withMockedRange(2..4, mockRandomValues) {
-            every { IntRange(2, 4).seededRandom() } returnsMany mockRandomValues
+        withMockedIntRange(randomMocks = mapOf(2..4 to mockRandomValues)) {
             generate(1)
             freezeDigit(6) // freeze after 1 repeat
             generate(2)
@@ -387,29 +383,25 @@ class PhoneNumberGeneratorTest {
     fun testResetFullRepeats() {
         val generator = PhoneNumberGenerator(fullNumberRepeats = 2..4)
         val mockRandomValues = listOf(2, 4, 3, 2)
-        mockkStatic(IntRange::seededRandom) {
-            with(mockk<IntRange>()) {
-                every { IntRange(2, 4).seededRandom() } returnsMany mockRandomValues
+        withMockedIntRange(randomMocks = mapOf(2..4 to mockRandomValues)) {
+            // 2
+            testRepeatedNumber(generator, 2, add = false) // reset after 2 generations
 
-                // 2
-                testRepeatedNumber(generator, 2, add = false) // reset after 2 generations
+            // 4
+            var generated = testRepeatedNumber(generator, 2, add = false)
 
-                // 4
-                var generated = testRepeatedNumber(generator, 2, add = false)
+            // interrupt
+            generator.reset()
 
-                // interrupt
-                generator.reset()
+            // 3
+            var prevGenerated = generated
+            generated = testRepeatedNumber(generator, 3, add = false)
+            assertNotEquals(prevGenerated, generated)
 
-                // 3
-                var prevGenerated = generated
-                generated = testRepeatedNumber(generator, 3, add = false)
-                assertNotEquals(prevGenerated, generated)
-
-                // move to new number
-                prevGenerated = generated
-                generated = testRepeatedNumber(generator, 2, add = false)
-                assertNotEquals(prevGenerated, generated)
-            }
+            // move to new number
+            prevGenerated = generated
+            generated = testRepeatedNumber(generator, 2, add = false)
+            assertNotEquals(prevGenerated, generated)
         }
     }
 }

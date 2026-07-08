@@ -10,8 +10,6 @@ import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
 import xyz.lbres.badselectorsv2.utils.createRandom
-import xyz.lbres.badselectorsv2.utils.seededRandom
-import xyz.lbres.badselectorsv2.utils.seededShuffled
 import xyz.lbres.kotlinutils.collection.list.IntList
 import xyz.lbres.kotlinutils.collection.list.listOfNulls
 import xyz.lbres.kotlinutils.random.nextBoolean
@@ -115,7 +113,7 @@ class RandomCircleViewModelTest {
     @Test
     fun testGetGeneratedAtIndexRussianRoulette() {
         mockkStatic("xyz.lbres.kotlinutils.random.RandomExtKt")
-        mockkStatic(::createRandom, IntRange::seededRandom, IntRange::seededShuffled)
+        mockkStatic(::createRandom)
 
         val nextBoolValues = listOf(true, true, true, false, true, true, false, false, true)
         every { createRandom() } returns mockk {

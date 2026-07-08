@@ -14,6 +14,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
+import xyz.lbres.badselectorsv2.phone.withMockedPhoneRange
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.clickDigit
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
@@ -55,7 +56,7 @@ class ChooseDigitsFragmentTest {
         val selections = listOf(1 to 7, 6 to 4, 0 to 1, 8 to 9, 9 to 0, 7 to 2, 2 to 3, 4 to 6, 5 to 5, 3 to 8)
         val expectedNumber: MutableList<Int?> = mutableListOfNulls(10)
 
-        withMockedDigitsOrder(digitsOrder) {
+        withMockedPhoneRange(shuffledMocks = listOf(digitsOrder)) {
             launchChooseDigitsFragment()
             // set full number
             selections.forEach { (digitIndex, selectIndex) ->
@@ -86,7 +87,7 @@ class ChooseDigitsFragmentTest {
 
     @Test
     fun recreate() {
-        withMockedDigitsOrder(digitsOrder) {
+        withMockedPhoneRange(shuffledMocks = listOf(digitsOrder)) {
             val scenario = launchChooseDigitsFragment()
             val expectedNumber: MutableList<Int?> = mutableListOfNulls(10)
             val selections = listOf(4 to 5, 7 to 3, 2 to 3, 0 to 0, 1 to 5, 3 to 2, 5 to 4, 6 to 4, 8 to 2, 9 to 1)
