@@ -1,12 +1,7 @@
 package xyz.lbres.customview.testutils
 
 import android.view.View
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import xyz.lbres.customview.data.Position
-import xyz.lbres.customview.utils.createRandom
-import kotlin.random.Random
 import kotlin.test.assertEquals
 
 /**
