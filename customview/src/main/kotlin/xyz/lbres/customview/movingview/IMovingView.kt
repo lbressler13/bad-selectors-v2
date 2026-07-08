@@ -21,7 +21,6 @@ internal interface IMovingView : MovingView {
         get() = (manager as BaseMovementManager).paused
         set(value) { (manager as BaseMovementManager).paused = value }
 
-
     /**
      * Update the position of the view
      *

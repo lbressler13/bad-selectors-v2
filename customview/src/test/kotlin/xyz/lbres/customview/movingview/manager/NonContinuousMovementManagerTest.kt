@@ -6,7 +6,6 @@ import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.movingview.checkPositionHistory
 import xyz.lbres.customview.movingview.mockNextDouble
 import xyz.lbres.customview.testutils.mockLog
-import xyz.lbres.customview.testutils.runWithFailMessage
 import kotlin.math.max
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -88,24 +87,25 @@ class NonContinuousMovementManagerTest {
         manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
 
         val forcedPositions = listOf(Position(99.99, 0.05), Position(2.0, 65.2))
-        // val expectedHistory = positions.subList(0, 2) + forcedPositions[0] + positions[3] + forcedPositions[1]
         val expectedHistory: MutableList<Position<Double>> = mutableListOf()
 
-        fun updateAndCheck(index: Int, addToHistory: Boolean = true) {
-            manager.updatePosition(parentDimens)
-            checkManagerPosition(manager, positions[index])
+        // checks after position update
+        fun validateUpdate(position: Position<Double>, addToHistory: Boolean) {
+            checkManagerPosition(manager, position)
             if (addToHistory) {
-                expectedHistory.add(positions[index])
+                expectedHistory.add(position)
             }
             checkPositionHistory(expectedHistory, history)
         }
+        // non-forced update
+        fun updateAndCheck(index: Int, addToHistory: Boolean = true) {
+            manager.updatePosition(parentDimens)
+            validateUpdate(positions[index], addToHistory)
+        }
+        // forced update
         fun forceAndCheck(index: Int, addToHistory: Boolean = true) {
             manager.updatePosition(parentDimens, forcedPositions[index])
-            checkManagerPosition(manager, forcedPositions[index])
-            if (addToHistory) {
-                expectedHistory.add(forcedPositions[index])
-            }
-            checkPositionHistory(expectedHistory, history)
+            validateUpdate(forcedPositions[index], addToHistory)
         }
 
         // paused
