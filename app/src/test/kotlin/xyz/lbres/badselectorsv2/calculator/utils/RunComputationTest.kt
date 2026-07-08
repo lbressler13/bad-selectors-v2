@@ -1,7 +1,7 @@
 package xyz.lbres.badselectorsv2.calculator.utils
 
 import xyz.lbres.badselectorsv2.calculator.splitText
-import xyz.lbres.badselectorsv2.testutils.assertFailsWithMessage
+import xyz.lbres.testutils.assertFailsWithMessage
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -2,7 +2,6 @@ package xyz.lbres.badselectorsv2.ui.calculator.randomenabled
 
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import xyz.lbres.badselectorsv2.testutils.printErr
 import xyz.lbres.badselectorsv2.ui.calculator.backspaceButton
 import xyz.lbres.badselectorsv2.ui.calculator.clearButton
 import xyz.lbres.badselectorsv2.ui.calculator.equalsButton
@@ -12,6 +11,7 @@ import xyz.lbres.badselectorsv2.ui.calculator.operatorButtons
 import xyz.lbres.badselectorsv2.ui.calculator.operators
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.kotlinutils.collection.list.listOfValue
+import xyz.lbres.testutils.printErr
 
 /**
  * Check current state of fragment.

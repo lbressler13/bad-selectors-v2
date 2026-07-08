@@ -129,6 +129,8 @@ dependencies {
     testImplementation("androidx.test.ext:junit-ktx:$androidxJunitVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("org.robolectric:robolectric:$robolectricVersion")
+
+    testImplementation(project(":testutils"))
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {

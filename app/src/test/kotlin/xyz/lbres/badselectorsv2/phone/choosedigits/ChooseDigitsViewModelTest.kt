@@ -3,9 +3,9 @@ package xyz.lbres.badselectorsv2.phone.choosedigits
 import io.mockk.unmockkAll
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
 import xyz.lbres.badselectorsv2.phone.withMockedPhoneRange
-import xyz.lbres.badselectorsv2.testutils.mockLog
-import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.kotlinutils.collection.list.mutableListOfNulls
+import xyz.lbres.testutils.mockLog
+import xyz.lbres.testutils.runWithFailMessage
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test

@@ -4,9 +4,9 @@ import android.util.Log
 import io.mockk.unmockkAll
 import io.mockk.verify
 import xyz.lbres.badselectorsv2.calculator.splitText
-import xyz.lbres.badselectorsv2.testutils.mockLog
 import xyz.lbres.kotlinutils.collection.list.listOfNulls
 import xyz.lbres.kotlinutils.collection.list.mutableListOfNulls
+import xyz.lbres.testutils.mockLog
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test

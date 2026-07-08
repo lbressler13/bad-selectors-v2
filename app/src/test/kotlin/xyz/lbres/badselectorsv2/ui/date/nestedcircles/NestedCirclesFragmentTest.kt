@@ -20,13 +20,13 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
-import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.badselectorsv2.ui.date.checkDate
 import xyz.lbres.badselectorsv2.ui.date.formatDate
 import xyz.lbres.badselectorsv2.ui.testutils.enabledMatcher
 import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.viewactions.forceClick
+import xyz.lbres.testutils.runWithFailMessage
 import java.time.LocalDate
 
 @Category(Robolectric::class)

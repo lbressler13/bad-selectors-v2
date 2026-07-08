@@ -3,9 +3,9 @@ package xyz.lbres.badselectorsv2.date.nestedcircles
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import xyz.lbres.badselectorsv2.testutils.mockLog
-import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.kotlinutils.collection.list.IntList
+import xyz.lbres.testutils.mockLog
+import xyz.lbres.testutils.runWithFailMessage
 import java.time.LocalDate
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
