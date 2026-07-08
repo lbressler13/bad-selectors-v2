@@ -1,10 +1,6 @@
 package xyz.lbres.badselectorsv2.phone.utils
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
-import xyz.lbres.badselectorsv2.utils.seededRandom
+import xyz.lbres.badselectorsv2.testutils.withMockedIntRange
 import xyz.lbres.kotlinutils.collection.list.IntList
 import kotlin.collections.forEach
 import kotlin.test.assertEquals
@@ -58,22 +54,12 @@ fun testDefaultBehaviour(generator: PhoneNumberGenerator) {
  * Validate number generation given a repeats range
  */
 fun testMockedRangeRepeats(range: IntRange, mockReturns: IntList, initialRange: IntRange? = null) {
-    withMockedRange(range, mockReturns) {
+    withMockedIntRange(randomMocks = mapOf(range to mockReturns)) {
         val previousGenerated: MutableSet<IntList> = mutableSetOf()
         val generator = PhoneNumberGenerator(fullNumberRepeats = initialRange ?: range)
         mockReturns.forEach { testRepeatedNumber(generator, it, previousGenerated) }
         assertEquals(mockReturns.size, previousGenerated.size)
     }
-}
-
-fun withMockedRange(range: IntRange, mockReturns: IntList, block: () -> Unit) {
-    mockkStatic(IntRange::seededRandom) {
-        with(mockk<IntRange>()) {
-            every { IntRange(range.first, range.last).seededRandom() } returnsMany mockReturns
-            block()
-        }
-    }
-    unmockkStatic(IntRange::seededRandom)
 }
 
 /**

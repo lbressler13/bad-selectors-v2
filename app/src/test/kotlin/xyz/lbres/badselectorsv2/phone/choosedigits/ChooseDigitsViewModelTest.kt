@@ -1,12 +1,10 @@
 package xyz.lbres.badselectorsv2.phone.choosedigits
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
+import xyz.lbres.badselectorsv2.phone.withMockedPhoneRange
 import xyz.lbres.badselectorsv2.testutils.mockLog
-import xyz.lbres.badselectorsv2.utils.seededShuffled
+import xyz.lbres.badselectorsv2.testutils.runWithFailMessage
 import xyz.lbres.kotlinutils.collection.list.mutableListOfNulls
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -30,18 +28,17 @@ class ChooseDigitsViewModelTest {
     fun testSetCurrentDigit() {
         val selectOrder = listOf(7, 4, 1, 9, 0, 2, 3, 6, 5, 8)
 
-        mockkStatic(IntRange::seededShuffled)
-        with(mockk<IntRange>()) {
-            every { IntRange(0, 9).seededShuffled() } returns digitsOrder
-
+        withMockedPhoneRange(shuffledMocks = listOf(digitsOrder)) {
             val vm = ChooseDigitsViewModel()
             val expectedDigits: MutableList<Int?> = mutableListOfNulls(numDigits)
 
             // set all 10 digits
             repeat(numDigits) { digitIndex ->
-                val selectIndex = selectOrder[digitIndex]
-                selectValue(vm, selectIndex, digitIndex, expectedDigits)
-                assertEquals(expectedDigits, vm.digits)
+                runWithFailMessage("Testing digit index $digitIndex") {
+                    val selectIndex = selectOrder[digitIndex]
+                    selectValue(vm, selectIndex, digitIndex, expectedDigits)
+                    assertEquals(expectedDigits, vm.digits)
+                }
             }
 
             // update a digit
@@ -68,9 +65,7 @@ class ChooseDigitsViewModelTest {
     @Test
     fun testResetData() {
         val newOrder = listOf(1, 3, 9, 2, 4, 7, 0, 5, 6, 8)
-        mockkStatic(IntRange::seededShuffled)
-        with(mockk<IntRange>()) {
-            every { IntRange(0, 9).seededShuffled() } returnsMany listOf(digitsOrder, newOrder)
+        withMockedPhoneRange(shuffledMocks = listOf(digitsOrder, newOrder)) {
             val vm = ChooseDigitsViewModel()
             repeat(numDigits) {
                 selectValue(vm, it, it)

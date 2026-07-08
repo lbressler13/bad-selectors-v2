@@ -21,6 +21,7 @@ import org.robolectric.shadows.ShadowDialog
 import xyz.lbres.badselectorsv2.phone.choosedigits.ChooseDigitsViewModel
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
 import xyz.lbres.badselectorsv2.phone.utils.numDigits
+import xyz.lbres.badselectorsv2.phone.withMockedPhoneRange
 import xyz.lbres.badselectorsv2.ui.phone.checkPhoneNumber
 import xyz.lbres.badselectorsv2.ui.phone.clickDigit
 import xyz.lbres.badselectorsv2.ui.phone.digitViews
@@ -70,7 +71,7 @@ class ChooseDigitsSetDigitDialogTest {
 
     @Test
     fun testValuesPersisted() {
-        withMockedDigitsOrder(digitsRange.toList()) {
+        withMockedPhoneRange(shuffledMocks = listOf(digitsRange.toList())) {
             launchChooseDigitsFragment()
             val digit = digitViews[3]
 
