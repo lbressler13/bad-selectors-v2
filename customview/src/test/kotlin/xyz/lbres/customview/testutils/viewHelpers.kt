@@ -1,4 +1,4 @@
-package xyz.lbres.customview.movingview
+package xyz.lbres.customview.testutils
 
 import android.view.View
 import io.mockk.every
@@ -8,17 +8,6 @@ import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.utils.createRandom
 import kotlin.random.Random
 import kotlin.test.assertEquals
-
-/**
- * Mock nextDouble returns with given parent width/height
- */
-internal fun mockNextDouble(parentWidth: Double, parentHeight: Double, mockPositions: List<Position<Double>>) {
-    mockkStatic(::createRandom)
-    every { createRandom() } returns mockk<Random> {
-        every { nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
-        every { nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
-    }
-}
 
 /**
  * Check that the position of a view matches the given position

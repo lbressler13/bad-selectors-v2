@@ -3,8 +3,8 @@ package xyz.lbres.customview.movingview.manager
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
-import xyz.lbres.customview.movingview.checkPositionHistory
-import xyz.lbres.customview.movingview.mockNextDouble
+import xyz.lbres.customview.testutils.checkPositionHistory
+import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.customview.testutils.mockLog
 import kotlin.math.max
 import kotlin.test.AfterTest
@@ -81,62 +81,65 @@ class NonContinuousMovementManagerTest {
 
     @Test
     fun testUpdatePosition() {
-        mockNextDouble(parentWidth, parentHeight, positions)
-        val manager = NonContinuousMovementManager(true)
-        val history: MutableList<Position<Int>> = mutableListOf()
-        manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
+        withMockedNextDouble(parentWidth, parentHeight, positions) {
+            val manager = NonContinuousMovementManager(true)
+            val history: MutableList<Position<Int>> = mutableListOf()
+            manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
 
-        val forcedPositions = listOf(Position(99.99, 0.05), Position(2.0, 65.2))
-        val expectedHistory: MutableList<Position<Double>> = mutableListOf()
+            val forcedPositions = listOf(Position(99.99, 0.05), Position(2.0, 65.2))
+            val expectedHistory: MutableList<Position<Double>> = mutableListOf()
 
-        // checks after position update
-        fun validateUpdate(position: Position<Double>, addToHistory: Boolean) {
-            checkManagerPosition(manager, position)
-            if (addToHistory) {
-                expectedHistory.add(position)
+            // checks after position update
+            fun validateUpdate(position: Position<Double>, addToHistory: Boolean) {
+                checkManagerPosition(manager, position)
+                if (addToHistory) {
+                    expectedHistory.add(position)
+                }
+                checkPositionHistory(expectedHistory, history)
             }
-            checkPositionHistory(expectedHistory, history)
-        }
-        // non-forced update
-        fun updateAndCheck(index: Int, addToHistory: Boolean = true) {
+
+            // non-forced update
+            fun updateAndCheck(index: Int, addToHistory: Boolean = true) {
+                manager.updatePosition(parentDimens)
+                validateUpdate(positions[index], addToHistory)
+            }
+
+            // forced update
+            fun forceAndCheck(index: Int, addToHistory: Boolean = true) {
+                manager.updatePosition(parentDimens, forcedPositions[index])
+                validateUpdate(forcedPositions[index], addToHistory)
+            }
+
+            // paused
             manager.updatePosition(parentDimens)
-            validateUpdate(positions[index], addToHistory)
+            checkManagerPosition(manager, Position(0.0, 0.0))
+
+            // not paused
+            manager.paused = false
+            updateAndCheck(0)
+            updateAndCheck(1)
+            updateAndCheck(2)
+
+            // re-paused
+            manager.paused = true
+            updateAndCheck(2, addToHistory = false) // don't add because it's paused
+
+            // forced while paused
+            forceAndCheck(0)
+
+            // unpaused
+            manager.paused = false
+            updateAndCheck(3)
+
+            // repeat value
+            updateAndCheck(3, addToHistory = false) // don't add because it's repeated
+
+            // forced while unpaused
+            forceAndCheck(1)
+
+            // forced repeat value
+            forceAndCheck(1, addToHistory = false) // don't add because it's repeated
         }
-        // forced update
-        fun forceAndCheck(index: Int, addToHistory: Boolean = true) {
-            manager.updatePosition(parentDimens, forcedPositions[index])
-            validateUpdate(forcedPositions[index], addToHistory)
-        }
-
-        // paused
-        manager.updatePosition(parentDimens)
-        checkManagerPosition(manager, Position(0.0, 0.0))
-
-        // not paused
-        manager.paused = false
-        updateAndCheck(0)
-        updateAndCheck(1)
-        updateAndCheck(2)
-
-        // re-paused
-        manager.paused = true
-        updateAndCheck(2, addToHistory = false) // don't add because it's paused
-
-        // forced while paused
-        forceAndCheck(0)
-
-        // unpaused
-        manager.paused = false
-        updateAndCheck(3)
-
-        // repeat value
-        updateAndCheck(3, addToHistory = false) // don't add because it's repeated
-
-        // forced while unpaused
-        forceAndCheck(1)
-
-        // forced repeat value
-        forceAndCheck(1, addToHistory = false) // don't add because it's repeated
     }
 
     @Test
@@ -148,31 +151,32 @@ class NonContinuousMovementManagerTest {
             Position(0.7, 1.0), // repeat value
             Position(5.0, 1.0),
         )
-        mockNextDouble(parentWidth, parentHeight, mockPositions)
-        val manager = NonContinuousMovementManager(false)
+        withMockedNextDouble(parentWidth, parentHeight, mockPositions) {
+            val manager = NonContinuousMovementManager(false)
 
-        // regular movement
-        var total = 0
-        manager.setOnMoveCallback { x, y -> total += x * y }
-        repeat(3) { manager.updatePosition(parentDimens) }
-        assertEquals(8, total)
+            // regular movement
+            var total = 0
+            manager.setOnMoveCallback { x, y -> total += x * y }
+            repeat(3) { manager.updatePosition(parentDimens) }
+            assertEquals(8, total)
 
-        // repeat value
-        manager.updatePosition(parentDimens)
-        assertEquals(8, total)
+            // repeat value
+            manager.updatePosition(parentDimens)
+            assertEquals(8, total)
 
-        // forced change
-        total = 0
-        manager.setOnMoveCallback { x, y -> total += max(x, y) }
-        repeat(3) { manager.updatePosition(parentDimens, mockPositions[it]) }
-        assertEquals(6, total)
+            // forced change
+            total = 0
+            manager.setOnMoveCallback { x, y -> total += max(x, y) }
+            repeat(3) { manager.updatePosition(parentDimens, mockPositions[it]) }
+            assertEquals(6, total)
 
-        // no error on null
-        manager.setOnMoveCallback(null)
-        manager.updatePosition(parentDimens, Position(0.0, 0.0))
+            // no error on null
+            manager.setOnMoveCallback(null)
+            manager.updatePosition(parentDimens, Position(0.0, 0.0))
 
-        manager.setOnMoveCallback(null)
-        manager.updatePosition(parentDimens)
+            manager.setOnMoveCallback(null)
+            manager.updatePosition(parentDimens)
+        }
     }
 
     @Test

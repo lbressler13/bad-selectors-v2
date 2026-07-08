@@ -11,7 +11,10 @@ import io.mockk.unmockkAll
 import org.junit.runner.RunWith
 import xyz.lbres.customview.R
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.testutils.checkPositionHistory
+import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
+import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.customview.testutils.runWithFailMessage
 import kotlin.math.min
 import kotlin.test.AfterTest
@@ -99,41 +102,42 @@ class NonContinuousMovingButtonTest {
 
     @Test
     fun testUpdatePosition() {
-        mockNextDouble(parentWidth, parentHeight, positions)
-        val view = NonContinuousMovingButton(createMockContext(true))
-        val history: MutableList<Position<Int>> = mutableListOf()
-        view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
+        withMockedNextDouble(parentWidth, parentHeight, positions) {
+            val view = NonContinuousMovingButton(createMockContext(true))
+            val history: MutableList<Position<Int>> = mutableListOf()
+            view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
-        setViewPosition(view)
-        val width = parentWidth.toInt() + viewWidth
-        val height = parentHeight.toInt() + viewHeight
+            setViewPosition(view)
+            val width = parentWidth.toInt() + viewWidth
+            val height = parentHeight.toInt() + viewHeight
 
-        val updateAndCheck: (Int) -> Unit = {
-            setPositionAndUpdate(view)
-            checkViewPosition(view, positions[it])
-            checkPositionHistory(positions.subList(0, it + 1), history)
+            val updateAndCheck: (Int) -> Unit = {
+                setPositionAndUpdate(view)
+                checkViewPosition(view, positions[it])
+                checkPositionHistory(positions.subList(0, it + 1), history)
+            }
+
+            // paused
+            view.updatePosition(width, height)
+            checkViewPosition(view, Position(0.0, 0.0))
+
+            // valid position
+            view.paused = false
+            updateAndCheck(0)
+            updateAndCheck(1)
+            updateAndCheck(2)
+
+            // re-paused
+            view.paused = true
+            updateAndCheck(2)
+
+            // unpaused
+            view.paused = false
+            updateAndCheck(3)
+
+            // repeat value
+            updateAndCheck(3)
         }
-
-        // paused
-        view.updatePosition(width, height)
-        checkViewPosition(view, Position(0.0, 0.0))
-
-        // valid position
-        view.paused = false
-        updateAndCheck(0)
-        updateAndCheck(1)
-        updateAndCheck(2)
-
-        // re-paused
-        view.paused = true
-        updateAndCheck(2)
-
-        // unpaused
-        view.paused = false
-        updateAndCheck(3)
-
-        // repeat value
-        updateAndCheck(3)
     }
 
     @Test
@@ -198,38 +202,39 @@ class NonContinuousMovingButtonTest {
             Position(3.0, 2.1),
             Position(0.7, 1.0),
         )
-        mockNextDouble(parentWidth, parentHeight, mockPositions)
-        val view = NonContinuousMovingButton(createMockContext())
+        withMockedNextDouble(parentWidth, parentHeight, mockPositions) {
+            val view = NonContinuousMovingButton(createMockContext())
 
-        val width = parentWidth.toInt() + viewWidth
-        val height = parentHeight.toInt() + viewHeight
+            val width = parentWidth.toInt() + viewWidth
+            val height = parentHeight.toInt() + viewHeight
 
-        // callback
-        var total = 0
-        view.setOnMoveListener { view, x, y -> total += x * y }
-        repeat(3) { setPositionAndUpdate(view) }
-        assertEquals(8, total)
+            // callback
+            var total = 0
+            view.setOnMoveListener { view, x, y -> total += x * y }
+            repeat(3) { setPositionAndUpdate(view) }
+            assertEquals(8, total)
 
-        // repeat value
-        setViewPosition(view)
-        view.updatePosition(width, height)
-        assertEquals(8, total)
+            // repeat value
+            setViewPosition(view)
+            view.updatePosition(width, height)
+            assertEquals(8, total)
 
-        // object
-        total = 0
-        view.setOnMoveListener(object : MovingView.OnMoveListener {
-            override fun onMove(view: View, x: Int, y: Int) {
-                total += min(x, y)
-            }
-        })
-        repeat(3) { setPositionAndUpdate(view) }
-        assertEquals(6, total)
+            // object
+            total = 0
+            view.setOnMoveListener(object : MovingView.OnMoveListener {
+                override fun onMove(view: View, x: Int, y: Int) {
+                    total += min(x, y)
+                }
+            })
+            repeat(3) { setPositionAndUpdate(view) }
+            assertEquals(6, total)
 
-        // null
-        total = 0
-        view.setOnMoveListener(null)
-        repeat(2) { setPositionAndUpdate(view) }
-        assertEquals(0, total)
+            // null
+            total = 0
+            view.setOnMoveListener(null)
+            repeat(2) { setPositionAndUpdate(view) }
+            assertEquals(0, total)
+        }
     }
 
     @Test

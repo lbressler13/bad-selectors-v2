@@ -1,5 +1,6 @@
 package xyz.lbres.customview.movingview.manager
 
+import android.util.Log
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 
@@ -43,24 +44,33 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      * @param forcedPosition [Double]: position to force update, defaults to `null`
      */
     fun updatePosition(dimensions: Dimensions<Int>, forcedPosition: Position<Double>? = null) {
-        val previousPosition = position
+        val validForced = forcedPosition != null &&
+            forcedPosition.x in 0.0..dimensions.width.toDouble() &&
+            forcedPosition.y in 0.0..dimensions.height.toDouble()
 
-        when {
-            forcedPosition != null -> doPositionUpdate(dimensions, forcedPosition)
-            !paused -> doPositionUpdate(dimensions)
+        val newPosition = when {
+            validForced -> forcedPosition
+            forcedPosition != null -> {
+                Log.w(null, "Invalid forced position $forcedPosition, position not updated")
+                position
+            }
+            !paused -> getNewPosition(dimensions)
+            else -> position
         }
 
-        if (position != previousPosition) {
+        if (newPosition != position) {
+            position = newPosition
             callOnMove()
         }
     }
 
     /**
-     * Update the [position] variable
+     * Get the next position value
      *
      * @param dimensions [Dimensions]: maximum allowed dimensions for position
+     * @return Position<Double>: next position
      */
-    protected abstract fun doPositionUpdate(dimensions: Dimensions<Int>, forcedPosition: Position<Double>? = null)
+    protected abstract fun getNewPosition(dimensions: Dimensions<Int>): Position<Double>
 
     /**
      * Invoke onPauseChanged callback, if not null, and set new paused value
