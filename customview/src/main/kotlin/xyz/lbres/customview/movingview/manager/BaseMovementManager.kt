@@ -42,8 +42,13 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      *
      * @param dimensions [Dimensions]: maximum allowed dimensions for position
      * @param forcedPosition [Double]: position to force update, defaults to `null`
+     * @param forceUpdate [Boolean]: if the view position should be update even when paused. Defaults to `false`
      */
-    fun updatePosition(dimensions: Dimensions<Int>, forcedPosition: Position<Double>? = null) {
+    fun updatePosition(
+        dimensions: Dimensions<Int>,
+        forcedPosition: Position<Double>? = null,
+        forceUpdate: Boolean = false,
+    ) {
         val validForced = forcedPosition != null &&
             forcedPosition.x in 0.0..dimensions.width.toDouble() &&
             forcedPosition.y in 0.0..dimensions.height.toDouble()
@@ -54,7 +59,7 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
                 Log.w(null, "Invalid forced position $forcedPosition, position not updated")
                 position
             }
-            !paused -> getNewPosition(dimensions)
+            forceUpdate || !paused -> getNewPosition(dimensions)
             else -> position
         }
 

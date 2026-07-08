@@ -24,6 +24,7 @@ class NonContinuousMovementManagerTest {
         Position(0.6, 12.0),
         Position(100.0, 194.00000045),
         Position(0.0, 0.05),
+        Position(3.14, 15.0),
     )
 
     @BeforeTest
@@ -114,25 +115,29 @@ class NonContinuousMovementManagerTest {
             manager.updatePosition(parentDimens)
             checkManagerPosition(manager, Position(0.0, 0.0))
 
+            // force update
+            manager.updatePosition(parentDimens, forceUpdate = true)
+            validateUpdate(positions[0], true)
+
             // not paused
             manager.paused = false
-            updateAndCheck(0)
             updateAndCheck(1)
             updateAndCheck(2)
+            updateAndCheck(3)
 
             // re-paused
             manager.paused = true
-            updateAndCheck(2, addToHistory = false) // don't add because it's paused
+            updateAndCheck(3, addToHistory = false) // don't add because it's paused
 
             // forced while paused
             forceAndCheck(0)
 
             // unpaused
             manager.paused = false
-            updateAndCheck(3)
+            updateAndCheck(4)
 
             // repeat value
-            updateAndCheck(3, addToHistory = false) // don't add because it's repeated
+            updateAndCheck(4, addToHistory = false) // don't add because it's repeated
 
             // forced while unpaused
             forceAndCheck(1)

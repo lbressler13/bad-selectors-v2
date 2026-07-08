@@ -26,10 +26,12 @@ internal interface IMovingView : MovingView {
      *
      * @param parentWidth [Int]: width of parent view
      * @param parentHeight [Int]: height of parent view
+     * @param forceUpdate [Boolean]: if the view position should be update even when paused. Defaults to `false`
      */
-    override fun updatePosition(parentWidth: Int, parentHeight: Int) {
+    override fun updatePosition(parentWidth: Int, parentHeight: Int, forceUpdate: Boolean) {
         this as View
-        (manager as BaseMovementManager).updatePosition(getBounds(parentWidth, parentHeight))
+        val bounds = getBounds(parentWidth, parentHeight)
+        (manager as BaseMovementManager).updatePosition(bounds, forceUpdate = forceUpdate)
 
         left = (manager as BaseMovementManager).x.toInt()
         top = (manager as BaseMovementManager).y.toInt()
@@ -43,7 +45,8 @@ internal interface IMovingView : MovingView {
      */
     override fun forcePosition(parentWidth: Int, parentHeight: Int, x: Double, y: Double) {
         this as View
-        (manager as BaseMovementManager).updatePosition(getBounds(parentWidth, parentHeight), Position(x, y))
+        val bounds = getBounds(parentWidth, parentHeight)
+        (manager as BaseMovementManager).updatePosition(bounds, forcedPosition = Position(x, y))
 
         left = (manager as BaseMovementManager).x.toInt()
         top = (manager as BaseMovementManager).y.toInt()

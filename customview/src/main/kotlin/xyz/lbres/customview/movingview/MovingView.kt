@@ -17,8 +17,9 @@ sealed interface MovingView {
      *
      * @param parentWidth [Int]: width of parent view
      * @param parentHeight [Int]: height of parent view
+     * @param forceUpdate [Boolean]: if the view position should be update even when paused. Defaults to `false`
      */
-    fun updatePosition(parentWidth: Int, parentHeight: Int)
+    fun updatePosition(parentWidth: Int, parentHeight: Int, forceUpdate: Boolean = false)
 
     /**
      * Set position to specific values

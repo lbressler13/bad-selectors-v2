@@ -35,6 +35,7 @@ class NonContinuousMovingButtonTest {
         Position(0.6, 12.0),
         Position(100.0, 194.00000045),
         Position(0.0, 0.05),
+        Position(3.14, 15.0),
     )
 
     @AfterTest
@@ -121,22 +122,27 @@ class NonContinuousMovingButtonTest {
             view.updatePosition(width, height)
             checkViewPosition(view, Position(0.0, 0.0))
 
+            // force update
+            setPositionAndUpdate(view, true)
+            checkViewPosition(view, positions[0])
+            checkPositionHistory(positions.subList(0, 1), history)
+
             // valid position
             view.paused = false
-            updateAndCheck(0)
             updateAndCheck(1)
             updateAndCheck(2)
+            updateAndCheck(3)
 
             // re-paused
             view.paused = true
-            updateAndCheck(2)
+            updateAndCheck(3)
 
             // unpaused
             view.paused = false
-            updateAndCheck(3)
+            updateAndCheck(4)
 
             // repeat value
-            updateAndCheck(3)
+            updateAndCheck(4)
         }
     }
 
@@ -281,11 +287,11 @@ class NonContinuousMovingButtonTest {
         return context
     }
 
-    private fun setPositionAndUpdate(view: NonContinuousMovingButton) {
+    private fun setPositionAndUpdate(view: NonContinuousMovingButton, forced: Boolean = false) {
         val width = parentWidth.toInt() + viewWidth
         val height = parentHeight.toInt() + viewHeight
         setViewPosition(view)
-        view.updatePosition(width, height)
+        view.updatePosition(width, height, forceUpdate = forced)
     }
 
     private fun setViewPosition(view: NonContinuousMovingButton) {
