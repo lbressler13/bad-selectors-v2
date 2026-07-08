@@ -1,4 +1,4 @@
-package xyz.lbres.customview.testutils
+package xyz.lbres.testutils
 
 // https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 private const val yellow = "\u001b[33m"

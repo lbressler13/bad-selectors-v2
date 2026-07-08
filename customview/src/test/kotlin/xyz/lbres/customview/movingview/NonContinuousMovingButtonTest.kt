@@ -14,8 +14,8 @@ import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
-import xyz.lbres.customview.testutils.runWithFailMessage
 import xyz.lbres.customview.testutils.withMockedNextDouble
+import xyz.lbres.testutils.runWithFailMessage
 import kotlin.math.min
 import kotlin.test.AfterTest
 import kotlin.test.Test

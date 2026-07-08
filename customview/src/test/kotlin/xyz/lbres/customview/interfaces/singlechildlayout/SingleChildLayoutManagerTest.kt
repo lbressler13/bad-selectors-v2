@@ -9,7 +9,7 @@ import io.mockk.verify
 import xyz.lbres.customview.circlelayout.AbstractSingleChildCircleLayout
 import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
-import xyz.lbres.customview.testutils.assertFailsWithMessage
+import xyz.lbres.testutils.assertFailsWithMessage
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test

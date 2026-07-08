@@ -3,10 +3,10 @@ package xyz.lbres.badselectorsv2.calculator.randomenabled
 import io.mockk.unmockkAll
 import io.mockk.verify
 import junit.framework.TestCase.assertFalse
-import xyz.lbres.badselectorsv2.testutils.printErr
 import xyz.lbres.badselectorsv2.testutils.withMockedIntRange
 import xyz.lbres.badselectorsv2.utils.seededRandom
 import xyz.lbres.badselectorsv2.utils.seededShuffled
+import xyz.lbres.testutils.printErr
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -12,7 +12,7 @@ android {
     val androidJvmTarget: String by rootProject.extra
     val androidMinSdk: Int by rootProject.extra
 
-    namespace = "xyz.lbres.customview"
+    namespace = "xyz.lbres.testutils"
     compileSdk = androidCompileSdk
 
     defaultConfig {
@@ -45,29 +45,13 @@ android {
 dependencies {
     val kotlinVersion: String by rootProject.extra
 
-    val androidxCoreVersion: String by rootProject.extra
-    val appCompatVersion: String by rootProject.extra
     val kotlinUtilsVersion: String by rootProject.extra
-    val materialVersion: String by rootProject.extra
-
-    val androidxJunitVersion: String by rootProject.extra
-    val espressoVersion: String by rootProject.extra
     val mockkVersion: String by rootProject.extra
-    val robolectricVersion: String by rootProject.extra
 
-    implementation("androidx.core:core-ktx:$androidxCoreVersion")
-    implementation("androidx.appcompat:appcompat:$appCompatVersion")
-    implementation("com.google.android.material:material:$materialVersion")
+    implementation(kotlin("test"))
+    implementation("io.mockk:mockk:$mockkVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
     implementation("xyz.lbres:kotlin-utils:$kotlinUtilsVersion")
-
-    testImplementation(kotlin("test"))
-    testImplementation("androidx.test.ext:junit:$androidxJunitVersion")
-    testImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-    testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("org.robolectric:robolectric:$robolectricVersion")
-
-    testImplementation(project(":testutils"))
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {

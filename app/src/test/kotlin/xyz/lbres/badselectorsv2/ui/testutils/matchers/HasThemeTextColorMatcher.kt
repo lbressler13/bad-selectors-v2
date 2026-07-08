@@ -7,7 +7,7 @@ import android.widget.TextView
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
-import xyz.lbres.badselectorsv2.testutils.printErr
+import xyz.lbres.testutils.printErr
 
 private class HasThemeTextColorMatcher(private val themeAttrId: Int) : TypeSafeMatcher<View>() {
     override fun describeTo(description: Description?) {
