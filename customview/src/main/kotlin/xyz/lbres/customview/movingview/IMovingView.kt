@@ -18,8 +18,8 @@ internal interface IMovingView : MovingView {
      * If movement of view is paused
      */
     override var paused: Boolean
-        get() = (manager as BaseMovementManager).paused
-        set(value) { (manager as BaseMovementManager).paused = value }
+        get() = baseManager().paused
+        set(value) { baseManager().paused = value }
 
     /**
      * Update the position of the view
@@ -31,10 +31,10 @@ internal interface IMovingView : MovingView {
     override fun updatePosition(parentWidth: Int, parentHeight: Int, forceUpdate: Boolean) {
         this as View
         val bounds = getBounds(parentWidth, parentHeight)
-        (manager as BaseMovementManager).updatePosition(bounds, forceUpdate = forceUpdate)
+        baseManager().updatePosition(bounds, forceUpdate = forceUpdate)
 
-        left = (manager as BaseMovementManager).x.toInt()
-        top = (manager as BaseMovementManager).y.toInt()
+        left = baseManager().x.toInt()
+        top = baseManager().y.toInt()
     }
 
     /**
@@ -46,10 +46,10 @@ internal interface IMovingView : MovingView {
     override fun forcePosition(parentWidth: Int, parentHeight: Int, x: Double, y: Double) {
         this as View
         val bounds = getBounds(parentWidth, parentHeight)
-        (manager as BaseMovementManager).updatePosition(bounds, forcedPosition = Position(x, y))
+        baseManager().updatePosition(bounds, forcedPosition = Position(x, y))
 
-        left = (manager as BaseMovementManager).x.toInt()
-        top = (manager as BaseMovementManager).y.toInt()
+        left = baseManager().x.toInt()
+        top = baseManager().y.toInt()
     }
 
     /**
@@ -83,9 +83,9 @@ internal interface IMovingView : MovingView {
     override fun setOnMoveListener(listener: OnMoveListener?) {
         this as View
         if (listener == null) {
-            (manager as BaseMovementManager).setOnMoveCallback(null)
+            baseManager().setOnMoveCallback(null)
         } else {
-            (manager as BaseMovementManager).setOnMoveCallback { x, y -> listener.onMove(this, x, y) }
+            baseManager().setOnMoveCallback { x, y -> listener.onMove(this, x, y) }
         }
     }
 
@@ -108,9 +108,9 @@ internal interface IMovingView : MovingView {
     override fun setOnPauseChangedListener(listener: OnPausedChangedListener?) {
         this as View
         if (listener == null) {
-            (manager as BaseMovementManager).setOnPauseChangedCallback(null)
+            baseManager().setOnPauseChangedCallback(null)
         } else {
-            (manager as BaseMovementManager).setOnPauseChangedCallback { paused -> listener.onChange(this, paused) }
+            baseManager().setOnPauseChangedCallback { paused -> listener.onChange(this, paused) }
         }
     }
 
@@ -129,4 +129,9 @@ internal interface IMovingView : MovingView {
         val heightBound = parentHeight - height
         return Dimensions(widthBound, heightBound)
     }
+
+    /**
+     * Cast manager to BaseMovementManager for convenience
+     */
+    fun baseManager(): BaseMovementManager = manager as BaseMovementManager
 }

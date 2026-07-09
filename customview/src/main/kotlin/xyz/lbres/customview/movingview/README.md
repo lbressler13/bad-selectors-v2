@@ -1,6 +1,6 @@
 # MovingView
 
-MovingView is an interface for views whose position changes.
+MovingView is an interface for a view whose position changes.
 All children of MotionLayout must implement MovingView.
 
 A MovingView can have continuous or noncontinuous motion.
@@ -12,9 +12,9 @@ Noncontinuous motion means that there is no relation between position updates.
 
 ### Summary
 
-| XML Attribute            | Summary                  | Type    | Required |
-|:-------------------------|:-------------------------|:--------|:---------|
-| [app:paused](#apppaused) | If view motion is paused | boolean | No       |
+| XML Attribute            | Summary                  | Type    | Required | Default |
+|:-------------------------|:-------------------------|:--------|:---------|:--------|
+| [app:paused](#apppaused) | If view motion is paused | boolean | No       | false   |
 
 ### app:paused
 
@@ -29,16 +29,17 @@ If the view has an attached OnPauseChangedListener, its callback will be invoked
 ### updatePosition
 
 Update position based on size of parent layout.
-The position will not update if the paused property is true.
+The position will not update if the paused property is true, unless the forceUpdate parameter is provided.
 
 If the view has an attached OnMoveListener, its callback will be invoked after the position update is complete.
 
 This method takes the following parameters, and returns Unit:
 
-| Parameter    | Summary               | Type |
-|:-------------|:----------------------|:-----|
-| parentWidth  | Width of parent view  | Int  |
-| parentHeight | Height of parent view | Int  |
+| Parameter    | Summary                                                | Type    | Default |
+|:-------------|:-------------------------------------------------------|:--------|:--------|
+| parentWidth  | Width of parent view                                   | Int     |         |
+| parentHeight | Height of parent view                                  | Int     |         |
+| forceUpdate  | If the position should update even when paused is true | Boolean | false   |
 
 
 ### forcePosition
@@ -108,7 +109,7 @@ Second signSignature 2:
 
 ## Event Listeners
 
-### OnMoveListener
+### MovingView.OnMoveListener
 
 Interface to bind to position update events.
 It can be attached to a MovingView using the [setOnMoveListener](#setonmovelistener) method.
@@ -122,7 +123,7 @@ The interface consists of a single onMove function, which takes the following pa
 | y         | New position on the y axis  | Double |
 
 
-### OnPauseChangedListener
+### MovingView.OnPauseChangedListener
 
 Interface to bind to a paused state change events.
 It can be attached to a MovingView using the [setOnPauseChangedListener](#setonpausechangedlistener) method.

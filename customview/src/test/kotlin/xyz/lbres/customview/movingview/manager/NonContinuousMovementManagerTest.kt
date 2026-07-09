@@ -82,35 +82,35 @@ class NonContinuousMovementManagerTest {
 
     @Test
     fun testUpdatePosition() {
-        val manager = NonContinuousMovementManager(true)
-        val history: MutableList<Position<Int>> = mutableListOf()
-        manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
-
         val forcedPositions = listOf(Position(99.99, 0.05), Position(2.0, 65.2))
+        val history: MutableList<Position<Int>> = mutableListOf()
         val expectedHistory: MutableList<Position<Double>> = mutableListOf()
 
-        // checks after position update
-        fun validateUpdate(position: Position<Double>, addToHistory: Boolean) {
-            checkManagerPosition(manager, position)
-            if (addToHistory) {
-                expectedHistory.add(position)
-            }
-            checkPositionHistory(expectedHistory, history)
-        }
-
-        // non-forced update
-        fun updateAndCheck(index: Int, addToHistory: Boolean = true) {
-            manager.updatePosition(parentDimens)
-            validateUpdate(positions[index], addToHistory)
-        }
-
-        // forced update
-        fun forceAndCheck(index: Int, addToHistory: Boolean = true) {
-            manager.updatePosition(parentDimens, forcedPositions[index])
-            validateUpdate(forcedPositions[index], addToHistory)
-        }
-
         withMockedNextDouble(parentWidth, parentHeight, positions) {
+            val manager = NonContinuousMovementManager(true)
+            manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
+
+            // checks after position update
+            fun validateUpdate(position: Position<Double>, addToHistory: Boolean) {
+                checkManagerPosition(manager, position)
+                if (addToHistory) {
+                    expectedHistory.add(position)
+                }
+                checkPositionHistory(expectedHistory, history)
+            }
+
+            // non-forced update
+            fun updateAndCheck(index: Int, addToHistory: Boolean = true) {
+                manager.updatePosition(parentDimens)
+                validateUpdate(positions[index], addToHistory)
+            }
+
+            // forced update
+            fun forceAndCheck(index: Int, addToHistory: Boolean = true) {
+                manager.updatePosition(parentDimens, forcedPositions[index])
+                validateUpdate(forcedPositions[index], addToHistory)
+            }
+
             // paused
             manager.updatePosition(parentDimens)
             checkManagerPosition(manager, Position(0.0, 0.0))
@@ -149,8 +149,6 @@ class NonContinuousMovementManagerTest {
 
     @Test
     fun testSetOnMoveCallback() {
-        val manager = NonContinuousMovementManager(false)
-
         val mockPositions = listOf(
             Position(1.0, 2.0),
             Position(3.0, 2.1),
@@ -158,7 +156,10 @@ class NonContinuousMovementManagerTest {
             Position(0.7, 1.0), // repeat value
             Position(5.0, 1.0),
         )
+
         withMockedNextDouble(parentWidth, parentHeight, mockPositions) {
+            val manager = NonContinuousMovementManager(false)
+
             // regular movement
             var total = 0
             manager.setOnMoveCallback { x, y -> total += x * y }

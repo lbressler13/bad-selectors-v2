@@ -18,7 +18,7 @@ class NonContinuousMovingButton(context: Context, attrs: AttributeSet?, defStyle
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, android.R.attr.buttonStyle)
     constructor(context: Context) : this(context, null)
 
-    private var _manager: NonContinuousMovementManager
+    private val _manager: NonContinuousMovementManager
     override val manager: MovementManager
         get() = _manager
 

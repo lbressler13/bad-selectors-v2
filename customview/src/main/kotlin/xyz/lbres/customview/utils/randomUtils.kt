@@ -6,4 +6,4 @@ import kotlin.random.Random
 /**
  * Create a seeded [Random]
  */
-fun createRandom() = Random(Date().time)
+internal fun createRandom() = Random(Date().time)

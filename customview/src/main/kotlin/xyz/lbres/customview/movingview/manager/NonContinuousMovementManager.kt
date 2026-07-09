@@ -10,6 +10,8 @@ import xyz.lbres.customview.utils.createRandom
  * @param paused [Boolean]: if movement is initially paused
  */
 internal class NonContinuousMovementManager(paused: Boolean) : BaseMovementManager(paused) {
+    private val random = createRandom()
+
     /**
      * Get the next position value
      *
@@ -17,8 +19,8 @@ internal class NonContinuousMovementManager(paused: Boolean) : BaseMovementManag
      * @return Position<Double>: next position
      */
     override fun getNewPosition(dimensions: Dimensions<Int>): Position<Double> {
-        val newX = createRandom().nextDouble(0.0, dimensions.width.toDouble())
-        val newY = createRandom().nextDouble(0.0, dimensions.height.toDouble())
+        val newX = random.nextDouble(0.0, dimensions.width.toDouble())
+        val newY = random.nextDouble(0.0, dimensions.height.toDouble())
         return Position(newX, newY)
     }
 }

@@ -9,9 +9,6 @@ import xyz.lbres.customview.utils.createRandom
 import kotlin.random.Random
 
 /**
- * Mock nextDouble returns with given parent width/height
- */
-/**
  * Run a test with mocked Random.nextDouble with given parent width/height
  *
  * @param parentWidth [Double]

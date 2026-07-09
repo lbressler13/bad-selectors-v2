@@ -94,4 +94,5 @@ sealed interface MovingView {
          * @param paused [Boolean]: new value of paused attribute
          */
         fun onChange(view: View, paused: Boolean)
-    } }
+    }
+}
