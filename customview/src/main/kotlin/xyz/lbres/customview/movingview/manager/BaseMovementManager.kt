@@ -38,10 +38,10 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
         get() = position.y
 
     /**
-     * Perform full position update. If paused, position will not update unless [forcedPosition] is provided
+     * Update position. If paused, position will not update unless [forcedPosition] is provided or [forceUpdate] is `true`.
      *
      * @param dimensions [Dimensions]: maximum allowed dimensions for position
-     * @param forcedPosition [Double]: position to force update, defaults to `null`
+     * @param forcedPosition [Double]: position to update to, defaults to `null`
      * @param forceUpdate [Boolean]: if the view position should be update even when paused. Defaults to `false`
      */
     fun updatePosition(
