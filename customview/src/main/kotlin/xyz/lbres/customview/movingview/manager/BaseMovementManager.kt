@@ -3,6 +3,7 @@ package xyz.lbres.customview.movingview.manager
 import android.util.Log
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.utils.createRandom
 
 /**
  * Base functionality to track information about movement for a moving view
@@ -27,6 +28,8 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
     var paused: Boolean
         get() = _paused
         set(value) = updatePaused(value)
+
+    protected val random = createRandom()
 
     /**
      * Position on screen
@@ -76,6 +79,17 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      * @return Position<Double>: next position
      */
     protected abstract fun getNewPosition(dimensions: Dimensions<Int>): Position<Double>
+
+    /**
+     * Set initial position to a random position in parent bounds
+     *
+     * @param dimensions [Dimensions]: maximum allowed dimensions for position
+     */
+    fun setInitialPosition(dimensions: Dimensions<Int>) {
+        val newX = random.nextDouble(0.0, dimensions.width.toDouble())
+        val newY = random.nextDouble(0.0, dimensions.height.toDouble())
+        position = Position(newX, newY)
+    }
 
     /**
      * Invoke onPauseChanged callback, if not null, and set new paused value

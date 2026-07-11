@@ -42,6 +42,14 @@ sealed interface MovingView {
     fun forcePosition(parentWidth: Int, parentHeight: Int, x: Int, y: Int)
 
     /**
+     * Set initial position of view
+     *
+     * @param parentWidth [Int]: width of parent view
+     * @param parentHeight [Int]: height of parent view
+     */
+    fun setInitialPosition(parentWidth: Int, parentHeight: Int)
+
+    /**
      * Update onMove listener
      *
      * @param callback ([View], Int, Int) -> Unit: callback to call when view moves

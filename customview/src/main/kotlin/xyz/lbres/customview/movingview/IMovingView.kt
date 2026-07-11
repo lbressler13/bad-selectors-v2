@@ -65,6 +65,20 @@ internal interface IMovingView : MovingView {
     }
 
     /**
+     * Set initial position of view
+     *
+     * @param parentWidth [Int]: width of parent view
+     * @param parentHeight [Int]: height of parent view
+     */
+    override fun setInitialPosition(parentWidth: Int, parentHeight: Int) {
+        this as View
+        baseManager().setInitialPosition(Dimensions(parentWidth, parentHeight))
+
+        left = baseManager().x.toInt()
+        top = baseManager().y.toInt()
+    }
+
+    /**
      * Update onMove listener
      *
      * @param callback ([View], Int, Int) -> Unit: callback to call when view moves

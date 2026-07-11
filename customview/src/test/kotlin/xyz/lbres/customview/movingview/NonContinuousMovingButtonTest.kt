@@ -193,6 +193,21 @@ class NonContinuousMovingButtonTest {
     }
 
     @Test
+    fun testSetInitialPosition() {
+        withMockedNextDouble(parentWidth, parentHeight, positions) {
+            // not paused
+            var view = NonContinuousMovingButton(createMockContext(false))
+            view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
+            checkViewPosition(view, positions[0])
+
+            // paused
+            view = NonContinuousMovingButton(createMockContext(false))
+            view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
+            checkViewPosition(view, positions[1])
+        }
+    }
+
+    @Test
     fun testSetOnMoveListener() {
         val width = parentWidth.toInt() + viewWidth
         val height = parentHeight.toInt() + viewHeight

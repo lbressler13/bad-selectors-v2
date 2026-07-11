@@ -148,6 +148,21 @@ class NonContinuousMovementManagerTest {
     }
 
     @Test
+    fun testSetInitialPosition() {
+        withMockedNextDouble(parentWidth, parentHeight, positions) {
+            // not paused
+            var manager = NonContinuousMovementManager(false)
+            manager.setInitialPosition(parentDimens)
+            checkManagerPosition(manager, positions[0])
+
+            // paused
+            manager = NonContinuousMovementManager(true)
+            manager.setInitialPosition(parentDimens)
+            checkManagerPosition(manager, positions[1])
+        }
+    }
+
+    @Test
     fun testSetOnMoveCallback() {
         val mockPositions = listOf(
             Position(1.0, 2.0),
