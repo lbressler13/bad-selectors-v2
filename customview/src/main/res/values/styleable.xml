@@ -24,6 +24,10 @@
         <attr name="paused" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="ContinuousMovement">
+        <attr name="movementSize" format="integer" />
+    </declare-styleable>
+
     <!-- Single Child Layout -->
     <declare-styleable name="SingleChild">
         <attr name="childLayout" format="reference" />
