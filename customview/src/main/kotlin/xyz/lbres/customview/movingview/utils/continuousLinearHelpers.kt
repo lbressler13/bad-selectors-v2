@@ -3,8 +3,9 @@ package xyz.lbres.customview.movingview.utils
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 
-// TODO does this need to be a separate file? maybe best for testing
+// separate file for testing only
 
+// buffer of 10 degrees in each direction to prevent extremely shallow angles (boring)
 private val downAngles = (10..170).toSet()
 private val upAngles = (190..350).toSet()
 private val leftAngles = (100..260).toSet()
@@ -38,6 +39,7 @@ internal fun getAllowedAngles(position: Position<Double>, dimensions: Dimensions
 /**
  * TODO
  */
+// TODO delete this?
 internal fun validPosition(position: Position<Double>, dimensions: Dimensions<Int>): Boolean {
     val allowedAngles = getAllowedAngles(position, dimensions)
     val hasLeftAngles = (allowedAngles intersect leftAngles).isNotEmpty()

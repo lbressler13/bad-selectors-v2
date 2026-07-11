@@ -52,12 +52,9 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
         forcedPosition: Position<Double>? = null,
         forceUpdate: Boolean = false,
     ) {
-        val validForced = forcedPosition != null &&
-            forcedPosition.x in 0.0..dimensions.width.toDouble() &&
-            forcedPosition.y in 0.0..dimensions.height.toDouble()
 
         val newPosition = when {
-            validForced -> forcedPosition
+            isValidPosition(forcedPosition, dimensions) -> forcedPosition!!
             forcedPosition != null -> {
                 Log.w(null, "Invalid forced position $forcedPosition, position not updated")
                 position
@@ -124,5 +121,11 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      */
     fun setOnPauseChangedCallback(callback: ((Boolean) -> Unit)?) {
         onPauseChangedCallback = callback
+    }
+
+    protected fun isValidPosition(position: Position<Double>?, dimensions: Dimensions<Int>): Boolean {
+        return position != null
+                && position.x in 0.0..dimensions.width.toDouble()
+                && position.y in 0.0..dimensions.height.toDouble()
     }
 }

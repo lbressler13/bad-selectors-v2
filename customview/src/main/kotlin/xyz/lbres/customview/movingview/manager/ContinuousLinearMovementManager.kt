@@ -3,7 +3,6 @@ package xyz.lbres.customview.movingview.manager
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.movingview.utils.getAllowedAngles
-import xyz.lbres.customview.movingview.utils.validPosition
 import xyz.lbres.customview.utils.seededRandom
 import java.lang.Math.toRadians
 import kotlin.math.cos
@@ -31,10 +30,18 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
     private var dx: Double = 0.0
     private var dy: Double = 0.0
 
+    /**
+     * Get the next position value
+     *
+     * @param dimensions [Dimensions]: maximum allowed dimensions for position
+     * @return Position<Double>: next position
+     */
     override fun getNewPosition(dimensions: Dimensions<Int>): Position<Double> {
-        val newPosition = Position(position.x + dx, position.y + dy)
-        if (!validPosition(newPosition, dimensions) || (dx == 0.0 && dy == 0.0)) {
-            updateAngle(dimensions)
+        val newX = position.x + dx
+        val newY = position.y + dy
+        val newPosition = Position(newX, newY)
+        if (!isValidPosition(newPosition, dimensions) || (dx == 0.0 && dy == 0.0)) {
+            updateAngle(newPosition, dimensions)
         }
         return newPosition
     }
@@ -49,7 +56,7 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
      *
      * @param dimensions [Dimensions]: dimensions of allowed positions for child view
      */
-    private fun updateAngle(dimensions: Dimensions<Int>) {
+    private fun updateAngle(position: Position<Double>, dimensions: Dimensions<Int>) {
         val degrees: Int = getAllowedAngles(position, dimensions).seededRandom()
         angle = toRadians(degrees.toDouble())
         updateDxDy()
