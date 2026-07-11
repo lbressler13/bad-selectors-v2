@@ -13,11 +13,15 @@ import xyz.lbres.customview.movingview.manager.MovementManager
  * See README for information about customizing view.
  */
 class ContinuousLinearMovingTextView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-    AppCompatTextView(context, attrs, defStyleAttr), IMovingView {
+    AppCompatTextView(context, attrs, defStyleAttr), ContinuousLinearMovingView, IMovingView {
 
     private val _manager: ContinuousLinearMovementManager
     override val manager: MovementManager
         get() = _manager
+
+    override var movementSize: Int
+        get() = _manager.movementSize
+        set(value) { _manager.movementSize = value }
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, android.R.attr.buttonStyle)
     constructor(context: Context) : this(context, null)
