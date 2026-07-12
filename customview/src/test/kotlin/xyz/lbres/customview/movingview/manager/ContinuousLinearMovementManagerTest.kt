@@ -1,12 +1,11 @@
 package xyz.lbres.customview.movingview.manager
 
 import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.mockkStaticIntRange
 import xyz.lbres.customview.testutils.mockkStaticRandom
 import xyz.lbres.customview.testutils.withMockedDegrees
@@ -102,54 +101,68 @@ class ContinuousLinearMovementManagerTest {
             val manager = ContinuousLinearMovementManager(true, 5)
             manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
 
+            var dimens = parentDimens
+
+            // checks after position update
+            fun validateUpdate(position: Position<Double>, addToHistory: Boolean) {
+                checkManagerPosition(manager, position)
+                if (addToHistory) {
+                    expectedHistory.add(position)
+                }
+                checkPositionHistory(expectedHistory, history)
+            }
+
+            // non-forced update
+            fun updateAndCheck(position: Position<Double>, addToHistory: Boolean = true) {
+                manager.updatePosition(dimens)
+                validateUpdate(position, addToHistory)
+            }
+
+            // forced update
+            fun forceAndCheck(position: Position<Double>, addToHistory: Boolean = true) {
+                manager.updatePosition(dimens, forceUpdate = true)
+                validateUpdate(position, addToHistory)
+            }
+
+            // forced update
+            fun forcePositionAndCheck(position: Position<Double>, addToHistory: Boolean = true) {
+                manager.updatePosition(dimens, position)
+                validateUpdate(position, addToHistory)
+            }
+
             // paused
-            manager.updatePosition(parentDimens)
-            checkManagerPosition(manager, Position(0.0, 0.0))
+            updateAndCheck(Position(0.0, 0.0), false)
 
             // forced position
-            manager.updatePosition(parentDimens, initialPosition)
-            checkManagerPosition(manager, initialPosition)
+            forcePositionAndCheck(initialPosition)
 
             // forced while paused
-            manager.updatePosition(parentDimens, forceUpdate = true)
-            checkManagerPosition(manager, Position(40.0, 55.0))
-
-            manager.updatePosition(parentDimens, forceUpdate = true)
-            checkManagerPosition(manager, Position(40.0, 60.0))
+            forceAndCheck(Position(40.0, 55.0))
+            forceAndCheck(Position(40.0, 60.0))
 
             // not paused
             manager.paused = false
-            manager.updatePosition(parentDimens)
-            checkManagerPosition(manager, Position(40.0, 65.0))
+            updateAndCheck(Position(40.0, 65.0))
 
             // reaching edge
-            val newDimens = Dimensions(100, 70)
-            manager.updatePosition(newDimens)
-            manager.updatePosition(newDimens)
-            checkManagerPosition(manager, Position(40.0, 75.0))
+            dimens = Dimensions(100, 70)
+            updateAndCheck(Position(40.0, 70.0))
+            updateAndCheck(Position(40.0, 75.0))
 
-            manager.updatePosition(newDimens)
-            println(manager.y)
-            checkManagerPosition(manager, Position(43.53, 71.46))
-
-            manager.updatePosition(newDimens)
-            checkManagerPosition(manager, Position(47.07, 67.92))
+            updateAndCheck(Position(43.53, 71.4644))
+            updateAndCheck(Position(47.07, 67.92))
 
             // re-paused
             manager.paused = true
-            manager.updatePosition(newDimens)
-            checkManagerPosition(manager, Position(47.07, 67.92))
+            updateAndCheck(Position(47.07, 67.92), false)
 
             // forced while unpaused
-            manager.updatePosition(newDimens, forceUpdate = true)
-            checkManagerPosition(manager, Position(50.60, 64.39))
+            manager.paused = false
+            forceAndCheck(Position(50.60, 64.39))
 
             // forced repeat value
-            manager.updatePosition(newDimens, Position(manager.x, manager.y))
-            checkManagerPosition(manager, Position(50.60, 64.39))
+            forcePositionAndCheck(Position(manager.x, manager.y), false)
         }
-
-        // TODO check history
     }
 
     @Test
