@@ -3,7 +3,6 @@ package xyz.lbres.customview.testutils
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.utils.createRandom
 import xyz.lbres.customview.utils.seededRandom
@@ -23,14 +22,12 @@ internal fun withMockedNextDouble(
     mockPositions: List<Position<Double>>,
     test: () -> Unit,
 ) {
-    mockkStatic(::createRandom, IntRange::seededRandom)
-    with(mockk<IntRange>()) {
-        every { IntRange(0, 360).seededRandom() } returns 5
-        every { createRandom() } returns mockk<Random> {
-            every { nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
-            every { nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
-        }
-        test()
+    every { createRandom() } returns mockk<Random> {
+        every { nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
+        every { nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
     }
-    // unmockkStatic(::createRandom)
+    test()
 }
+
+internal fun mockkStaticIntRange() = mockkStatic(IntRange::seededRandom)
+internal fun mockkStaticRandom() = mockkStatic(::createRandom)

@@ -2,20 +2,18 @@ package xyz.lbres.customview.movingview.manager
 
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
-import xyz.lbres.customview.testutils.checkPositionHistory
+import xyz.lbres.customview.testutils.mockkStaticIntRange
+import xyz.lbres.customview.testutils.mockkStaticRandom
 import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.customview.utils.seededRandom
 import xyz.lbres.testutils.mockLog
-import kotlin.math.max
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ContinuousLinearMovementManagerTest {
@@ -91,7 +89,9 @@ class ContinuousLinearMovementManagerTest {
     @Test
     fun testSetInitialPosition() {
         val positions = listOf(Position(1.0, 5.0), Position(10.0, 4.0))
-        // withMockedDegrees(listOf(100)) {
+        mockkStaticIntRange()
+        mockkStaticRandom()
+        withMockedDegrees(listOf(100)) {
             withMockedNextDouble(parentWidth, parentHeight, positions) {
                 // not paused
                 var manager = ContinuousLinearMovementManager(false, 10)
@@ -102,7 +102,7 @@ class ContinuousLinearMovementManagerTest {
                 manager = ContinuousLinearMovementManager(true, 10)
                 manager.setInitialPosition(parentDimens)
                 checkManagerPosition(manager, positions[1])
-//            }
+            }
         }
     }
 
@@ -117,7 +117,6 @@ class ContinuousLinearMovementManagerTest {
     }
 
     private fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
-        mockkStatic(IntRange::seededRandom)
         with(mockk<IntRange>()) {
             every { IntRange(0, 360).seededRandom() } returnsMany mockDegrees
             test()
