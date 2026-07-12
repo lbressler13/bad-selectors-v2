@@ -4,8 +4,6 @@ import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class ContinuousLinearHelpersTest {
     private val downAngles = (10..170).toSet()
