@@ -1,6 +1,5 @@
 package xyz.lbres.customview.movingview.manager
 
-import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
@@ -94,8 +93,6 @@ class ContinuousLinearMovementManagerTest {
 
         val initialPosition = Position(40.0, 50.0)
         val angles = listOf(90, -45)
-
-        every { any<Set<Int>>().seededRandom() } returns -45
 
         withMockedDegrees(angles) {
             val manager = ContinuousLinearMovementManager(true, 5)

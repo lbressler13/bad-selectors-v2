@@ -30,8 +30,15 @@ internal fun withMockedNextDouble(
 }
 
 fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
+    val setValues = if (mockDegrees.size == 1) {
+        mockDegrees
+    } else {
+        mockDegrees.subList(1, mockDegrees.size)
+    }
+    every { any<Set<Int>>().seededRandom() } returnsMany setValues
+
     with(mockk<IntRange>()) {
-        every { IntRange(0, 360).seededRandom() } returnsMany mockDegrees
+        every { IntRange(0, 360).seededRandom() } returns mockDegrees[0]
         test()
     }
 }
