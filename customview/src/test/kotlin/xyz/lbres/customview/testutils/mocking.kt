@@ -29,5 +29,12 @@ internal fun withMockedNextDouble(
     test()
 }
 
+fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
+    with(mockk<IntRange>()) {
+        every { IntRange(0, 360).seededRandom() } returnsMany mockDegrees
+        test()
+    }
+}
+
 internal fun mockkStaticIntRange() = mockkStatic(IntRange::seededRandom)
 internal fun mockkStaticRandom() = mockkStatic(::createRandom)

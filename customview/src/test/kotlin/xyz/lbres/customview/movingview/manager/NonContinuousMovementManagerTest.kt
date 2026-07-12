@@ -144,6 +144,8 @@ class NonContinuousMovementManagerTest {
 
             // forced repeat value
             forceAndCheck(1, addToHistory = false) // don't add because it's repeated
+
+            // TODO add forced position
         }
     }
 

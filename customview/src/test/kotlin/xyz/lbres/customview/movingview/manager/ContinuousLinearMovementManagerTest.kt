@@ -2,11 +2,14 @@ package xyz.lbres.customview.movingview.manager
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.mockkStaticIntRange
 import xyz.lbres.customview.testutils.mockkStaticRandom
+import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.customview.utils.seededRandom
 import xyz.lbres.testutils.mockLog
@@ -46,7 +49,7 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testUpdatePaused() {
-        var manager = ContinuousLinearMovementManager(true, 5)
+        val manager = ContinuousLinearMovementManager(true, 5)
         val calls: MutableList<Boolean> = mutableListOf()
         manager.setOnPauseChangedCallback { calls.add(it) }
 
@@ -83,14 +86,78 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testUpdatePosition() {
-        // TODO
+        mockkStaticIntRange()
+        mockkStaticRandom()
+        mockkStatic(Set<Int>::seededRandom)
+
+        val history: MutableList<Position<Int>> = mutableListOf()
+        val expectedHistory: MutableList<Position<Double>> = mutableListOf()
+
+        val initialPosition = Position(40.0, 50.0)
+        val angles = listOf(90, -45)
+
+        every { any<Set<Int>>().seededRandom() } returns -45
+
+        withMockedDegrees(angles) {
+            val manager = ContinuousLinearMovementManager(true, 5)
+            manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
+
+            // paused
+            manager.updatePosition(parentDimens)
+            checkManagerPosition(manager, Position(0.0, 0.0))
+
+            // forced position
+            manager.updatePosition(parentDimens, initialPosition)
+            checkManagerPosition(manager, initialPosition)
+
+            // forced while paused
+            manager.updatePosition(parentDimens, forceUpdate = true)
+            checkManagerPosition(manager, Position(40.0, 55.0))
+
+            manager.updatePosition(parentDimens, forceUpdate = true)
+            checkManagerPosition(manager, Position(40.0, 60.0))
+
+            // not paused
+            manager.paused = false
+            manager.updatePosition(parentDimens)
+            checkManagerPosition(manager, Position(40.0, 65.0))
+
+            // reaching edge
+            val newDimens = Dimensions(100, 70)
+            manager.updatePosition(newDimens)
+            manager.updatePosition(newDimens)
+            checkManagerPosition(manager, Position(40.0, 75.0))
+
+            manager.updatePosition(newDimens)
+            println(manager.y)
+            checkManagerPosition(manager, Position(43.53, 71.46))
+
+            manager.updatePosition(newDimens)
+            checkManagerPosition(manager, Position(47.07, 67.92))
+
+            // re-paused
+            manager.paused = true
+            manager.updatePosition(newDimens)
+            checkManagerPosition(manager, Position(47.07, 67.92))
+
+            // forced while unpaused
+            manager.updatePosition(newDimens, forceUpdate = true)
+            checkManagerPosition(manager, Position(50.60, 64.39))
+
+            // forced repeat value
+            manager.updatePosition(newDimens, Position(manager.x, manager.y))
+            checkManagerPosition(manager, Position(50.60, 64.39))
+        }
+
+        // TODO check history
     }
 
     @Test
     fun testSetInitialPosition() {
-        val positions = listOf(Position(1.0, 5.0), Position(10.0, 4.0))
         mockkStaticIntRange()
         mockkStaticRandom()
+
+        val positions = listOf(Position(1.0, 5.0), Position(10.0, 4.0))
         withMockedDegrees(listOf(100)) {
             withMockedNextDouble(parentWidth, parentHeight, positions) {
                 // not paused
@@ -113,13 +180,20 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testSetOnPauseChangedCallback() {
-        // TODO
-    }
+        val manager = ContinuousLinearMovementManager(false, 10)
 
-    private fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
-        with(mockk<IntRange>()) {
-            every { IntRange(0, 360).seededRandom() } returnsMany mockDegrees
-            test()
-        }
+        var counter = 0
+        manager.setOnPauseChangedCallback { counter++ }
+        repeat(4) { manager.paused = !manager.paused }
+        assertEquals(4, counter)
+
+        manager.setOnPauseChangedCallback(null)
+        repeat(4) { manager.paused = !manager.paused }
+        assertEquals(4, counter)
+
+        val calls: MutableList<Boolean> = mutableListOf()
+        manager.setOnPauseChangedCallback { calls.add(it) }
+        repeat(5) { manager.paused = !manager.paused }
+        assertEquals(listOf(true, false, true, false, true), calls)
     }
 }

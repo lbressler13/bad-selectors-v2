@@ -30,6 +30,10 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
     private var dx: Double = 0.0
     private var dy: Double = 0.0
 
+    init {
+        updateDxDy()
+    }
+
     /**
      * Get the next position value
      *
@@ -58,6 +62,7 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
      */
     private fun updateAngle(position: Position<Double>, dimensions: Dimensions<Int>) {
         val degrees: Int = getAllowedAngles(position, dimensions).seededRandom()
+        println(degrees)
         angle = toRadians(degrees.toDouble())
         updateDxDy()
     }

@@ -84,7 +84,6 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
     fun setInitialPosition(dimensions: Dimensions<Int>) {
         val newX = random.nextDouble(0.0, dimensions.width.toDouble())
         val newY = random.nextDouble(0.0, dimensions.height.toDouble())
-        println("${dimensions.width}, ${dimensions.height}, $newX, $newY")
         position = Position(newX, newY)
     }
 
