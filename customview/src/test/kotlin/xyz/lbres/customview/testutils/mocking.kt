@@ -44,4 +44,5 @@ fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
 }
 
 internal fun mockkStaticIntRange() = mockkStatic(IntRange::seededRandom)
+internal fun mockkStaticIntSet() = mockkStatic(Set<Int>::seededRandom)
 internal fun mockkStaticRandom() = mockkStatic(::createRandom)

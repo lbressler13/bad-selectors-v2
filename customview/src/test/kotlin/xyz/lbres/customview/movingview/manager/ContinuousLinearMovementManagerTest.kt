@@ -1,16 +1,16 @@
 package xyz.lbres.customview.movingview.manager
 
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.mockkStaticIntRange
+import xyz.lbres.customview.testutils.mockkStaticIntSet
 import xyz.lbres.customview.testutils.mockkStaticRandom
 import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
-import xyz.lbres.customview.utils.seededRandom
 import xyz.lbres.testutils.mockLog
+import kotlin.math.max
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -79,14 +79,48 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testUpdateMovementSize() {
-        // TODO
+        mockkStaticIntRange()
+        mockkStaticIntSet()
+
+        val history: MutableList<Position<Int>> = mutableListOf()
+        val expectedHistory: MutableList<Position<Double>> = mutableListOf()
+
+        withMockedDegrees(listOf(90)) {
+            val manager = ContinuousLinearMovementManager(false, 10)
+            assertEquals(10, manager.movementSize)
+            manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
+
+            manager.updatePosition(parentDimens)
+            expectedHistory.add(Position(0.0, 10.0))
+            manager.updatePosition(parentDimens)
+            expectedHistory.add(Position(0.0, 20.0))
+            manager.updatePosition(parentDimens)
+            expectedHistory.add(Position(0.0, 30.0))
+
+            manager.movementSize = 2
+            assertEquals(2, manager.movementSize)
+            manager.updatePosition(parentDimens)
+            expectedHistory.add(Position(0.0, 32.0))
+
+            manager.movementSize = -1
+            assertEquals(2, manager.movementSize)
+            manager.updatePosition(parentDimens)
+            expectedHistory.add(Position(0.0, 34.0))
+
+            // do not add repeat position
+            manager.movementSize = 0
+            assertEquals(0, manager.movementSize)
+            manager.updatePosition(parentDimens)
+
+            checkPositionHistory(expectedHistory, history)
+        }
     }
 
     @Test
     fun testUpdatePosition() {
         mockkStaticIntRange()
+        mockkStaticIntSet()
         mockkStaticRandom()
-        mockkStatic(Set<Int>::seededRandom)
 
         val history: MutableList<Position<Int>> = mutableListOf()
         val expectedHistory: MutableList<Position<Double>> = mutableListOf()
@@ -165,6 +199,7 @@ class ContinuousLinearMovementManagerTest {
     @Test
     fun testSetInitialPosition() {
         mockkStaticIntRange()
+        mockkStaticIntSet()
         mockkStaticRandom()
 
         val positions = listOf(Position(1.0, 5.0), Position(10.0, 4.0))
@@ -185,7 +220,35 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testSetOnMoveCallback() {
-        // TODO
+        mockkStaticIntRange()
+        mockkStaticIntSet()
+
+        withMockedDegrees(listOf(90, -45)) {
+            val manager = ContinuousLinearMovementManager(false, 12)
+
+            // regular movement
+            var total = 0
+            manager.setOnMoveCallback { x, y -> total += max(x, y) }
+
+            manager.updatePosition(parentDimens, forcedPosition = Position(60.0, 180.0))
+            repeat(2) { manager.updatePosition(parentDimens) }
+            assertEquals(576, total) // 180, 192, 204
+
+            // repeat value
+            manager.updatePosition(parentDimens, forcedPosition = Position(manager.x, manager.y))
+            assertEquals(576, total)
+
+            // new angle
+            manager.updatePosition(parentDimens) // position is 68.485, 195.515
+            assertEquals(771, total) // add 195
+
+            // no error on null
+            manager.setOnMoveCallback(null)
+            manager.updatePosition(parentDimens, Position(0.0, 0.0))
+
+            manager.setOnMoveCallback(null)
+            manager.updatePosition(parentDimens)
+        }
     }
 
     @Test

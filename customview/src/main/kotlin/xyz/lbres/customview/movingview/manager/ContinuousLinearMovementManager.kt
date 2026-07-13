@@ -1,5 +1,6 @@
 package xyz.lbres.customview.movingview.manager
 
+import android.util.Log
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.movingview.utils.getAllowedAngles
@@ -51,8 +52,12 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
     }
 
     private fun updateMovementSize(newValue: Int) {
-        _movementSize = newValue
-        updateDxDy()
+        if (newValue >= 0) {
+            _movementSize = newValue
+            updateDxDy()
+        } else {
+            Log.w(null, "Cannot set movement size to $newValue. Movement size must be non-negative.")
+        }
     }
 
     /**
