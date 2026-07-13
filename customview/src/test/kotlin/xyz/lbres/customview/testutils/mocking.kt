@@ -2,7 +2,6 @@ package xyz.lbres.customview.testutils
 
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.utils.createRandom
 import xyz.lbres.customview.utils.seededRandom
@@ -42,7 +41,3 @@ fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
         test()
     }
 }
-
-internal fun mockkStaticIntRange() = mockkStatic(IntRange::seededRandom)
-internal fun mockkStaticIntSet() = mockkStatic(Set<Int>::seededRandom)
-internal fun mockkStaticRandom() = mockkStatic(::createRandom)

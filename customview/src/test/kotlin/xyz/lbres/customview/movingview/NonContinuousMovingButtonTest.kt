@@ -6,6 +6,7 @@ import android.view.View
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
+import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.junit.runner.RunWith
@@ -15,6 +16,7 @@ import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
 import xyz.lbres.customview.testutils.withMockedNextDouble
+import xyz.lbres.customview.utils.createRandom
 import xyz.lbres.testutils.runWithFailMessage
 import kotlin.math.min
 import kotlin.test.AfterTest
@@ -41,6 +43,7 @@ class NonContinuousMovingButtonTest {
     @AfterTest
     fun cleanupMockk() {
         unmockkAll()
+        mockkStatic(::createRandom)
     }
 
     @Test

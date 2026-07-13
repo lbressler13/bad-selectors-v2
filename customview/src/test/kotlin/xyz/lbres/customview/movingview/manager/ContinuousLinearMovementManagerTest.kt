@@ -1,14 +1,14 @@
 package xyz.lbres.customview.movingview.manager
 
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
-import xyz.lbres.customview.testutils.mockkStaticIntRange
-import xyz.lbres.customview.testutils.mockkStaticIntSet
-import xyz.lbres.customview.testutils.mockkStaticRandom
 import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
+import xyz.lbres.customview.utils.createRandom
+import xyz.lbres.customview.utils.seededRandom
 import xyz.lbres.testutils.mockLog
 import kotlin.math.max
 import kotlin.test.AfterTest
@@ -25,6 +25,7 @@ class ContinuousLinearMovementManagerTest {
     @BeforeTest
     fun setupTest() {
         mockLog()
+        mockkStatic(::createRandom, IntRange::seededRandom, Set<Int>::seededRandom)
     }
 
     @AfterTest
@@ -79,9 +80,6 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testUpdateMovementSize() {
-        mockkStaticIntRange()
-        mockkStaticIntSet()
-
         val history: MutableList<Position<Int>> = mutableListOf()
         val expectedHistory: MutableList<Position<Double>> = mutableListOf()
 
@@ -118,10 +116,6 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testUpdatePosition() {
-        mockkStaticIntRange()
-        mockkStaticIntSet()
-        mockkStaticRandom()
-
         val history: MutableList<Position<Int>> = mutableListOf()
         val expectedHistory: MutableList<Position<Double>> = mutableListOf()
 
@@ -198,10 +192,6 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testSetInitialPosition() {
-        mockkStaticIntRange()
-        mockkStaticIntSet()
-        mockkStaticRandom()
-
         val positions = listOf(Position(1.0, 5.0), Position(10.0, 4.0))
         withMockedDegrees(listOf(100)) {
             withMockedNextDouble(parentWidth, parentHeight, positions) {
@@ -220,9 +210,6 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testSetOnMoveCallback() {
-        mockkStaticIntRange()
-        mockkStaticIntSet()
-
         withMockedDegrees(listOf(90, -45)) {
             val manager = ContinuousLinearMovementManager(false, 12)
 
