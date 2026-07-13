@@ -14,7 +14,7 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
     /**
      * Size of each movement
      */
-    private var _movementSize: Int = movementSize
+    private var _movementSize: Int = 0
     var movementSize: Int
         get() = _movementSize
         set(value) = updateMovementSize(value)
@@ -32,6 +32,7 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
     private var dy: Double = 0.0
 
     init {
+        updateMovementSize(movementSize)
         updateDxDy()
     }
 

@@ -42,7 +42,7 @@ class ContinuousLinearMovementManagerTest {
 
         manager = ContinuousLinearMovementManager(true, -12)
         assertTrue(manager.paused)
-        assertEquals(manager.movementSize, -12)
+        assertEquals(manager.movementSize, 0)
         checkManagerPosition(manager, Position(0.0, 0.0))
     }
 
