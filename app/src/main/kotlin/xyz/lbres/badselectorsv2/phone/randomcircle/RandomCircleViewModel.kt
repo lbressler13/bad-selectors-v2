@@ -3,7 +3,7 @@ package xyz.lbres.badselectorsv2.phone.randomcircle
 import xyz.lbres.badselectorsv2.phone.BasePhoneViewModel
 import xyz.lbres.badselectorsv2.phone.utils.PhoneNumberGenerator
 import xyz.lbres.badselectorsv2.phone.utils.digitsRange
-import xyz.lbres.badselectorsv2.utils.createRandom
+import xyz.lbres.badselectorsv2.utils.random
 import xyz.lbres.kotlinutils.collection.list.IntList
 import xyz.lbres.kotlinutils.random.nextBoolean
 import xyz.lbres.kotlinutils.utils.simpleIf
@@ -42,7 +42,7 @@ class RandomCircleViewModel : BasePhoneViewModel() {
         val canUseNull = russianRoulette && currentIndex != 0 && generatedDigit != null && generatedDigit != -1
 
         val probabilityNull = 0.001f // 1 / 1000
-        val nextNull = createRandom().nextBoolean(probabilityNull)
+        val nextNull = random.nextBoolean(probabilityNull)
         generatedDigit = simpleIf(canUseNull && nextNull, null, generatedNumber[index])
 
         return generatedDigit

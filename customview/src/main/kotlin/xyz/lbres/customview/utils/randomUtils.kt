@@ -13,11 +13,11 @@ internal val random = Random(Date().time)
  *
  * @return [Int]: random value from range
  */
-fun IntRange.seededRandom(): Int = this.random(random)
+fun IntRange.seededRandom(): Int = random(random)
 
 /**
  * Get random value using common app random
  *
  * @return [Int]: random value from set
  */
-fun Set<Int>.seededRandom(): Int = this.random(random)
+fun Set<Int>.seededRandom(): Int = random(random)
