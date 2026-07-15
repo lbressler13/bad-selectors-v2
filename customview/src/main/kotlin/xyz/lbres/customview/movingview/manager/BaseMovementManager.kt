@@ -3,7 +3,7 @@ package xyz.lbres.customview.movingview.manager
 import android.util.Log
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
-import xyz.lbres.customview.utils.createRandom
+import xyz.lbres.customview.utils.random
 
 /**
  * Base functionality to track information about movement for a moving view
@@ -28,8 +28,6 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
     var paused: Boolean
         get() = _paused
         set(value) = updatePaused(value)
-
-    protected val random = createRandom()
 
     /**
      * Position on screen

@@ -2,6 +2,7 @@ package xyz.lbres.customview.movingview.manager
 
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.utils.random
 
 /**
  * Manage and update information about movement for a view whose position updates are not continuous

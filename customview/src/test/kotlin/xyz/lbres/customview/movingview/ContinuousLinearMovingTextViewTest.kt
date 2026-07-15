@@ -17,7 +17,7 @@ import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
 import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
-import xyz.lbres.customview.utils.createRandom
+import xyz.lbres.customview.utils.random
 import xyz.lbres.customview.utils.seededRandom
 import xyz.lbres.testutils.runWithFailMessage
 import kotlin.test.AfterTest
@@ -36,7 +36,8 @@ class ContinuousLinearMovingTextViewTest {
 
     @BeforeTest
     fun setupTest() {
-        mockkStatic(::createRandom, IntRange::seededRandom, Set<Int>::seededRandom)
+        mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+        mockkStatic(::random)
     }
 
     @AfterTest

@@ -7,7 +7,7 @@ import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
-import xyz.lbres.customview.utils.createRandom
+import xyz.lbres.customview.utils.random
 import xyz.lbres.customview.utils.seededRandom
 import xyz.lbres.testutils.mockLog
 import kotlin.math.max
@@ -25,7 +25,8 @@ class ContinuousLinearMovementManagerTest {
     @BeforeTest
     fun setupTest() {
         mockLog()
-        mockkStatic(::createRandom, IntRange::seededRandom, Set<Int>::seededRandom)
+        mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+        mockkStatic(::random)
     }
 
     @AfterTest
@@ -35,47 +36,51 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testInit() {
-        var manager = ContinuousLinearMovementManager(true, 5)
-        assertTrue(manager.paused)
-        assertEquals(manager.movementSize, 5)
-        checkManagerPosition(manager, Position(0.0, 0.0))
+        withMockedDegrees(listOf(90)) {
+            var manager = ContinuousLinearMovementManager(true, 5)
+            assertTrue(manager.paused)
+            assertEquals(manager.movementSize, 5)
+            checkManagerPosition(manager, Position(0.0, 0.0))
 
-        manager = ContinuousLinearMovementManager(true, -12)
-        assertTrue(manager.paused)
-        assertEquals(manager.movementSize, 0)
-        checkManagerPosition(manager, Position(0.0, 0.0))
+            manager = ContinuousLinearMovementManager(true, -12)
+            assertTrue(manager.paused)
+            assertEquals(manager.movementSize, 0)
+            checkManagerPosition(manager, Position(0.0, 0.0))
+        }
     }
 
     @Test
     fun testUpdatePaused() {
-        val manager = ContinuousLinearMovementManager(true, 5)
-        val calls: MutableList<Boolean> = mutableListOf()
-        manager.setOnPauseChangedCallback { calls.add(it) }
+        withMockedDegrees(listOf(90)) {
+            val manager = ContinuousLinearMovementManager(true, 5)
+            val calls: MutableList<Boolean> = mutableListOf()
+            manager.setOnPauseChangedCallback { calls.add(it) }
 
-        // invoked on change
-        manager.paused = false
-        manager.paused = true
-        var expected = listOf(false, true)
-        assertEquals(expected, calls)
+            // invoked on change
+            manager.paused = false
+            manager.paused = true
+            var expected = listOf(false, true)
+            assertEquals(expected, calls)
 
-        manager.paused = false
-        expected = listOf(false, true, false)
-        assertEquals(expected, calls)
+            manager.paused = false
+            expected = listOf(false, true, false)
+            assertEquals(expected, calls)
 
-        // not invoked when it stays the same
-        manager.paused = false
-        expected = listOf(false, true, false)
-        assertEquals(expected, calls)
+            // not invoked when it stays the same
+            manager.paused = false
+            expected = listOf(false, true, false)
+            assertEquals(expected, calls)
 
-        manager.paused = true
-        manager.paused = true
-        expected = listOf(false, true, false, true)
-        assertEquals(expected, calls)
+            manager.paused = true
+            manager.paused = true
+            expected = listOf(false, true, false, true)
+            assertEquals(expected, calls)
 
-        // no error when null
-        manager.setOnPauseChangedCallback(null)
-        manager.paused = false
-        manager.paused = true
+            // no error when null
+            manager.setOnPauseChangedCallback(null)
+            manager.paused = false
+            manager.paused = true
+        }
     }
 
     @Test
@@ -235,20 +240,22 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testSetOnPauseChangedCallback() {
-        val manager = ContinuousLinearMovementManager(false, 10)
+        withMockedDegrees(listOf(90)) {
+            val manager = ContinuousLinearMovementManager(false, 10)
 
-        var counter = 0
-        manager.setOnPauseChangedCallback { counter++ }
-        repeat(4) { manager.paused = !manager.paused }
-        assertEquals(4, counter)
+            var counter = 0
+            manager.setOnPauseChangedCallback { counter++ }
+            repeat(4) { manager.paused = !manager.paused }
+            assertEquals(4, counter)
 
-        manager.setOnPauseChangedCallback(null)
-        repeat(4) { manager.paused = !manager.paused }
-        assertEquals(4, counter)
+            manager.setOnPauseChangedCallback(null)
+            repeat(4) { manager.paused = !manager.paused }
+            assertEquals(4, counter)
 
-        val calls: MutableList<Boolean> = mutableListOf()
-        manager.setOnPauseChangedCallback { calls.add(it) }
-        repeat(5) { manager.paused = !manager.paused }
-        assertEquals(listOf(true, false, true, false, true), calls)
+            val calls: MutableList<Boolean> = mutableListOf()
+            manager.setOnPauseChangedCallback { calls.add(it) }
+            repeat(5) { manager.paused = !manager.paused }
+            assertEquals(listOf(true, false, true, false, true), calls)
+        }
     }
 }

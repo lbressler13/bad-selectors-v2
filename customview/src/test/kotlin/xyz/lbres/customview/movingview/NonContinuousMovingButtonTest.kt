@@ -16,7 +16,7 @@ import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
 import xyz.lbres.customview.testutils.withMockedNextDouble
-import xyz.lbres.customview.utils.createRandom
+import xyz.lbres.customview.utils.random
 import xyz.lbres.testutils.runWithFailMessage
 import kotlin.math.min
 import kotlin.test.AfterTest
@@ -43,7 +43,7 @@ class NonContinuousMovingButtonTest {
     @AfterTest
     fun cleanupMockk() {
         unmockkAll()
-        mockkStatic(::createRandom)
+        mockkStatic(::random)
     }
 
     @Test

@@ -4,20 +4,20 @@ import java.util.Date
 import kotlin.random.Random
 
 /**
- * Create a seeded [Random]
+ * Seeded random instance
  */
-internal fun createRandom() = Random(Date().time)
+internal val random = Random(Date().time)
 
 /**
  * Get random value using common app random
  *
  * @return [Int]: random value from range
  */
-fun IntRange.seededRandom(): Int = random(createRandom())
+fun IntRange.seededRandom(): Int = this.random(random)
 
 /**
  * Get random value using common app random
  *
  * @return [Int]: random value from set
  */
-fun Set<Int>.seededRandom(): Int = random(createRandom())
+fun Set<Int>.seededRandom(): Int = this.random(random)

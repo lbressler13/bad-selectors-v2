@@ -9,6 +9,12 @@ import kotlin.random.Random
  */
 fun createRandom() = Random(Date().time)
 
+// TODO use this instead of createRandom
+/**
+ * Seeded random instance
+ */
+internal val random = Random(Date().time)
+
 /**
  * Get random value using common app random
  *

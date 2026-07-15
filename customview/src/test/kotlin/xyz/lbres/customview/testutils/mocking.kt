@@ -3,9 +3,8 @@ package xyz.lbres.customview.testutils
 import io.mockk.every
 import io.mockk.mockk
 import xyz.lbres.customview.data.Position
-import xyz.lbres.customview.utils.createRandom
+import xyz.lbres.customview.utils.random
 import xyz.lbres.customview.utils.seededRandom
-import kotlin.random.Random
 
 /**
  * Run a test with mocked Random.nextDouble with given parent width/height
@@ -21,10 +20,8 @@ internal fun withMockedNextDouble(
     mockPositions: List<Position<Double>>,
     test: () -> Unit,
 ) {
-    every { createRandom() } returns mockk<Random> {
-        every { nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
-        every { nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
-    }
+    every { random.nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
+    every { random.nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
     test()
 }
 
