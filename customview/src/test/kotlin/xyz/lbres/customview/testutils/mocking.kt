@@ -2,6 +2,8 @@ package xyz.lbres.customview.testutils
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.utils.random
 import xyz.lbres.customview.utils.seededRandom
@@ -20,12 +22,15 @@ internal fun withMockedNextDouble(
     mockPositions: List<Position<Double>>,
     test: () -> Unit,
 ) {
+    mockkStatic(::random)
     every { random.nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
     every { random.nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
     test()
+    unmockkStatic(::random)
 }
 
 fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
+    mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
     val setValues = if (mockDegrees.size == 1) {
         mockDegrees
     } else {
@@ -37,4 +42,5 @@ fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
         every { IntRange(0, 360).seededRandom() } returns mockDegrees[0]
         test()
     }
+    unmockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
 }

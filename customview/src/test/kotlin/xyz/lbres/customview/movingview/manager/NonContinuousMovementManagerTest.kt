@@ -1,12 +1,10 @@
 package xyz.lbres.customview.movingview.manager
 
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.withMockedNextDouble
-import xyz.lbres.customview.utils.random
 import xyz.lbres.testutils.mockLog
 import kotlin.math.max
 import kotlin.test.AfterTest
@@ -32,7 +30,6 @@ class NonContinuousMovementManagerTest {
     @BeforeTest
     fun setupTest() {
         mockLog()
-        mockkStatic(::random)
     }
 
     @AfterTest

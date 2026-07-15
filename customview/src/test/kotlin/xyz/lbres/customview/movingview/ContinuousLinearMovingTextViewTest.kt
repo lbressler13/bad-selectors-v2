@@ -6,7 +6,6 @@ import android.view.View
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
-import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.junit.runner.RunWith
@@ -17,11 +16,8 @@ import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
 import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
-import xyz.lbres.customview.utils.random
-import xyz.lbres.customview.utils.seededRandom
 import xyz.lbres.testutils.runWithFailMessage
 import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -33,12 +29,6 @@ class ContinuousLinearMovingTextViewTest {
     private val parentHeight = 200.0
     private val viewWidth = 10
     private val viewHeight = 5
-
-    @BeforeTest
-    fun setupTest() {
-        mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
-        mockkStatic(::random)
-    }
 
     @AfterTest
     fun cleanupMockk() {
