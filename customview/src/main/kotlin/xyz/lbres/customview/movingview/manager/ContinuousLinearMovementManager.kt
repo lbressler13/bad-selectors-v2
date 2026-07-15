@@ -52,6 +52,9 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
         return newPosition
     }
 
+    /**
+     * Set new value for [movementSize]
+     */
     private fun updateMovementSize(newValue: Int) {
         if (newValue >= 0) {
             _movementSize = newValue
@@ -64,6 +67,7 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
     /**
      * Update the angle to a random value that will not take the position off the screen.
      *
+     * @param position [Position]: position of view
      * @param dimensions [Dimensions]: dimensions of allowed positions for child view
      */
     private fun updateAngle(position: Position<Double>, dimensions: Dimensions<Int>) {

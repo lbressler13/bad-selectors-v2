@@ -311,7 +311,7 @@ class NonContinuousMovingButtonTest {
         view.updatePosition(width, height, forceUpdate = forced)
     }
 
-    private fun setViewPosition(view: NonContinuousMovingButton) {
+    private fun setViewPosition(view: View) {
         view.right = 100
         view.left = 100 - viewWidth
         view.bottom = 60

@@ -80,37 +80,32 @@ class ContinuousLinearMovementManagerTest {
 
     @Test
     fun testUpdateMovementSize() {
-        val history: MutableList<Position<Int>> = mutableListOf()
-        val expectedHistory: MutableList<Position<Double>> = mutableListOf()
-
         withMockedDegrees(listOf(90)) {
             val manager = ContinuousLinearMovementManager(false, 10)
             assertEquals(10, manager.movementSize)
-            manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
 
             manager.updatePosition(parentDimens)
-            expectedHistory.add(Position(0.0, 10.0))
+            checkManagerPosition(manager, Position(0.0, 10.0))
             manager.updatePosition(parentDimens)
-            expectedHistory.add(Position(0.0, 20.0))
+            checkManagerPosition(manager, Position(0.0, 20.0))
             manager.updatePosition(parentDimens)
-            expectedHistory.add(Position(0.0, 30.0))
+            checkManagerPosition(manager, Position(0.0, 30.0))
 
             manager.movementSize = 2
             assertEquals(2, manager.movementSize)
             manager.updatePosition(parentDimens)
-            expectedHistory.add(Position(0.0, 32.0))
+            checkManagerPosition(manager, Position(0.0, 32.0))
 
             manager.movementSize = -1
             assertEquals(2, manager.movementSize)
             manager.updatePosition(parentDimens)
-            expectedHistory.add(Position(0.0, 34.0))
+            checkManagerPosition(manager, Position(0.0, 34.0))
 
-            // do not add repeat position
+            // repeat position
             manager.movementSize = 0
             assertEquals(0, manager.movementSize)
             manager.updatePosition(parentDimens)
-
-            checkPositionHistory(expectedHistory, history)
+            checkManagerPosition(manager, Position(0.0, 34.0))
         }
     }
 

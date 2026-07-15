@@ -5,7 +5,7 @@ import xyz.lbres.customview.data.Position
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ContinuousLinearHelpersTest {
+class LinearHelpersTest {
     private val downAngles = (10..170).toSet()
     private val upAngles = (190..350).toSet()
     private val leftAngles = (100..260).toSet()

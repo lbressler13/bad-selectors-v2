@@ -11,6 +11,4 @@ internal fun checkManagerPosition(manager: BaseMovementManager, position: Positi
     assertEquals(shorten(position.y), shorten(manager.y))
 }
 
-private fun shorten(double: Double): Double {
-    return (double * 100).toInt() / 100.0
-}
+private fun shorten(double: Double) = (double * 100).toInt() / 100.0
