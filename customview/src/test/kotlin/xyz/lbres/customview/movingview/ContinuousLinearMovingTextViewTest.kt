@@ -10,15 +10,14 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.junit.runner.RunWith
 import xyz.lbres.customview.R
-import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
-import xyz.lbres.customview.movingview.manager.checkManagerPosition
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
 import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.testutils.runWithFailMessage
+import kotlin.math.max
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -182,7 +181,6 @@ class ContinuousLinearMovingTextViewTest {
 
             // re-paused
             view.paused = true
-            // TODO rounding mode?
             view.updatePosition(width, height)
             validateUpdate(Position(47, 62), false) // 47.07, 62.92
 
@@ -190,7 +188,6 @@ class ContinuousLinearMovingTextViewTest {
             view.paused = false
             view.updatePosition(width, height)
             validateUpdate(Position(50, 59)) // 50.60, 59.39
-
         }
     }
 
@@ -267,7 +264,39 @@ class ContinuousLinearMovingTextViewTest {
 
     @Test
     fun testSetOnMoveListener() {
-        // TODO
+        val width = parentWidth.toInt() + viewWidth
+        val height = parentHeight.toInt() + viewHeight
+        withMockedDegrees(listOf(90)) {
+            val view = ContinuousLinearMovingTextView(createMockContext(false, 1))
+            view.forcePosition(width, height, 0, 0)
+
+            val history: MutableList<Position<Int>> = mutableListOf()
+            view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
+
+            // callback
+            var total = 1 // start at 1 for multiplication
+            view.setOnMoveListener { view, x, y ->
+                total *= (x - y)
+            }
+            repeat(3) { view.updatePosition(width, height) }
+            assertEquals(-6, total)
+
+            // object
+            total = 0
+            view.setOnMoveListener(object : MovingView.OnMoveListener {
+                override fun onMove(view: View, x: Int, y: Int) {
+                    total += max(x, y)
+                }
+            })
+            repeat(3) { view.updatePosition(width, height) }
+            assertEquals(15, total)
+
+            // null
+            total = 0
+            view.setOnMoveListener(null)
+            repeat(3) { view.updatePosition(width, height) }
+            assertEquals(0, total)
+        }
     }
 
     @Test
@@ -302,13 +331,30 @@ class ContinuousLinearMovingTextViewTest {
      */
     private fun createMockContext(paused: Boolean, movementSize: Int): Context {
         val mockArray =
-            createMockTypedArray(setOf(R.styleable.Movement_paused, R.styleable.ContinuousMovement_movementSize))
+            createMockTypedArray(
+                setOf(
+                    R.styleable.Movement_paused,
+                    R.styleable.ContinuousMovement_movementSize,
+                ),
+            )
         every { mockArray.getBoolean(R.styleable.Movement_paused, any()) } returns paused
-        every { mockArray.getInt(R.styleable.ContinuousMovement_movementSize, any()) } returns movementSize
+        every {
+            mockArray.getInt(
+                R.styleable.ContinuousMovement_movementSize,
+                any(),
+            )
+        } returns movementSize
 
         val context: Context = spyk(ApplicationProvider.getApplicationContext())
         listOf(R.styleable.Movement, R.styleable.ContinuousMovement).forEach {
-            every { context.obtainStyledAttributes(any<AttributeSet>(), it, any(), any()) } returns mockArray
+            every {
+                context.obtainStyledAttributes(
+                    any<AttributeSet>(),
+                    it,
+                    any(),
+                    any(),
+                )
+            } returns mockArray
         }
         return context
     }
