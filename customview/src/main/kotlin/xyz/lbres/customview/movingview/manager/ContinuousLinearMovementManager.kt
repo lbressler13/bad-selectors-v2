@@ -46,6 +46,8 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
         val newX = position.x + dx
         val newY = position.y + dy
         val newPosition = Position(newX, newY)
+        println("Old position: $position")
+        println("New position: $newPosition")
         if (!isValidPosition(newPosition, dimensions) || (dx == 0.0 && dy == 0.0)) {
             updateAngle(newPosition, dimensions)
         }
@@ -73,6 +75,7 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
     private fun updateAngle(position: Position<Double>, dimensions: Dimensions<Int>) {
         val degrees: Int = getAllowedAngles(position, dimensions).seededRandom()
         angle = toRadians(degrees.toDouble())
+        println("New angle: $degrees")
         updateDxDy()
     }
 

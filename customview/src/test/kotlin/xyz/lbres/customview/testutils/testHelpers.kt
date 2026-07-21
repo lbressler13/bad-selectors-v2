@@ -26,15 +26,24 @@ fun createMockTypedArray(attributes: Set<Int>): TypedArray {
 /**
  * Check that the position of a view matches the given position
  */
+internal fun checkViewPosition(view: View, position: Position<Int>) {
+    assertEquals(position.x, view.left)
+    assertEquals(position.y, view.top)
+}
+
+@JvmName("checkViewPosition::Double")
 internal fun checkViewPosition(view: View, position: Position<Double>) {
-    assertEquals(position.x.toInt(), view.left)
-    assertEquals(position.y.toInt(), view.top)
+    checkViewPosition(view, position.toIntPosition())
 }
 
 /**
  * Check that the position history matches the list of positions up to the given index
  */
-internal fun checkPositionHistory(positions: List<Position<Double>>, history: List<Position<Int>>) {
-    val expectedHistory = positions.map { Position(it.x.toInt(), it.y.toInt()) }
+internal fun checkPositionHistory(expectedHistory: List<Position<Int>>, history: List<Position<Int>>) {
     assertEquals(expectedHistory, history)
+}
+
+@JvmName("checkViewPosition::Double")
+internal fun checkPositionHistory(expectedHistory: List<Position<Double>>, history: List<Position<Int>>) {
+    checkPositionHistory(expectedHistory.map(Position<Double>::toIntPosition), history)
 }

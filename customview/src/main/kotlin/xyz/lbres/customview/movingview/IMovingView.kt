@@ -7,6 +7,7 @@ import xyz.lbres.customview.movingview.MovingView.OnMoveListener
 import xyz.lbres.customview.movingview.MovingView.OnPausedChangedListener
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
+import kotlin.math.abs
 
 /**
  * Internal partial implementation of [MovingView]
@@ -136,11 +137,9 @@ internal interface IMovingView : MovingView {
      */
     fun getBounds(parentWidth: Int, parentHeight: Int): Dimensions<Int> {
         this as View
-        val width = right - left
-        val height = bottom - top
-
-        val widthBound = parentWidth - width
-        val heightBound = parentHeight - height
+        // TODO fix this, should not be abs
+        val widthBound = parentWidth - abs(width)
+        val heightBound = parentHeight - abs(height)
         return Dimensions(widthBound, heightBound)
     }
 

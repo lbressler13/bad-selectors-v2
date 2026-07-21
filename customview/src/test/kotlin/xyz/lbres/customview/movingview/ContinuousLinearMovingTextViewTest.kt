@@ -10,7 +10,9 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.junit.runner.RunWith
 import xyz.lbres.customview.R
+import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.movingview.manager.checkManagerPosition
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
@@ -127,32 +129,69 @@ class ContinuousLinearMovingTextViewTest {
     @Test
     fun testUpdatePosition() {
         val history: MutableList<Position<Int>> = mutableListOf()
-        val expectedHistory: MutableList<Position<Double>> = mutableListOf()
+        val expectedHistory: MutableList<Position<Int>> = mutableListOf()
 
-        val initialPosition = Position(40.0, 50.0)
+        val initialPosition = Position(40, 50)
         val angles = listOf(90, -45)
 
         withMockedDegrees(angles) {
             val view = ContinuousLinearMovingTextView(createMockContext(true, 5))
             view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
-            setViewPosition(view)
-            val width = parentWidth.toInt() + viewWidth
-            val height = parentHeight.toInt() + viewHeight
+            // checks after position update
+            fun validateUpdate(position: Position<Int>, addToHistory: Boolean = true) {
+                checkViewPosition(view, position)
+                if (addToHistory) {
+                    expectedHistory.add(position)
+                }
+                checkPositionHistory(expectedHistory, history)
+            }
+
+            var width = parentWidth.toInt() + viewWidth
+            var height = parentHeight.toInt() + viewHeight
+
+            // setViewPosition(view, initialPosition)
+            view.forcePosition(width, height, initialPosition.x, initialPosition.y)
+            expectedHistory.add(initialPosition)
 
             // paused
+            view.updatePosition(width, height)
+            validateUpdate(initialPosition, false)
 
             // force update
+            view.updatePosition(width, height, true)
+            validateUpdate(Position(40, 55))
+            view.updatePosition(width, height, true)
+            validateUpdate(Position(40, 60))
 
-            // valid position
+            // not paused
+            view.paused = false
+            view.updatePosition(width, height)
+            validateUpdate(Position(40, 65))
+
+            // reaching edge
+            width = 100 + viewWidth
+            height = 70 + viewHeight
+            view.updatePosition(width, height)
+            validateUpdate(Position(40, 70))
+
+            view.updatePosition(width, height)
+            validateUpdate(Position(43, 66)) // 43.53, 66.46
+            view.updatePosition(width, height)
+            validateUpdate(Position(47, 62)) // 47.07, 62.92
 
             // re-paused
+            view.paused = true
+            // TODO rounding mode?
+            view.updatePosition(width, height)
+            validateUpdate(Position(47, 62), false) // 47.07, 62.92
 
             // unpaused
+            view.paused = false
+            view.updatePosition(width, height)
+            validateUpdate(Position(50, 59)) // 50.60, 59.39
 
-            // repeat value
         }
-        // TODO
     }
 
     @Test
@@ -281,10 +320,10 @@ class ContinuousLinearMovingTextViewTest {
         view.updatePosition(width, height, forceUpdate = forced)
     }
 
-    private fun setViewPosition(view: View) {
-        view.right = 100
-        view.left = 100 - viewWidth
-        view.bottom = 60
-        view.top = 60 - viewHeight
+    private fun setViewPosition(view: View, position: Position<Int> = Position(100, 60)) {
+        view.right = position.x
+        view.left = position.x
+        view.bottom = position.y
+        view.top = position.y - viewHeight
     }
 }
