@@ -14,6 +14,7 @@ import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
+import xyz.lbres.customview.testutils.setViewSize
 import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.testutils.runWithFailMessage
@@ -135,7 +136,7 @@ class ContinuousLinearMovingTextViewTest {
 
         withMockedDegrees(angles) {
             val view = ContinuousLinearMovingTextView(createMockContext(true, 5))
-            setViewPosition(view) // configures width and height
+            setViewSize(view, viewWidth, viewHeight)
             view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
             // checks after position update
@@ -203,7 +204,7 @@ class ContinuousLinearMovingTextViewTest {
             Position(3.14, 15.0),
         )
         val view = ContinuousLinearMovingTextView(createMockContext(false, 5))
-        setViewPosition(view) // configures width and height
+        setViewSize(view, viewWidth, viewHeight)
         val history: MutableList<Position<Int>> = mutableListOf()
         view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
@@ -358,12 +359,5 @@ class ContinuousLinearMovingTextViewTest {
             } returns mockArray
         }
         return context
-    }
-
-    private fun setViewPosition(view: View) {
-        view.right = 100
-        view.left = 100 - viewWidth
-        view.bottom = 60
-        view.top = 60 - viewHeight
     }
 }

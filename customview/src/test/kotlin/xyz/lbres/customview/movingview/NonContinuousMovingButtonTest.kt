@@ -14,6 +14,7 @@ import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
+import xyz.lbres.customview.testutils.setViewSize
 import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.testutils.runWithFailMessage
 import kotlin.math.min
@@ -103,18 +104,17 @@ class NonContinuousMovingButtonTest {
 
     @Test
     fun testUpdatePosition() {
-        // TODO check position w/out setting on each test
         withMockedNextDouble(parentWidth, parentHeight, positions) {
             val view = NonContinuousMovingButton(createMockContext(true))
+            setViewSize(view, viewWidth, viewHeight)
             val history: MutableList<Position<Int>> = mutableListOf()
             view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
-            setViewPosition(view)
             val width = parentWidth.toInt() + viewWidth
             val height = parentHeight.toInt() + viewHeight
 
             val updateAndCheck: (Int) -> Unit = {
-                setPositionAndUpdate(view)
+                view.updatePosition(width, height)
                 checkViewPosition(view, positions[it])
                 checkPositionHistory(positions.subList(0, it + 1), history)
             }
@@ -124,7 +124,7 @@ class NonContinuousMovingButtonTest {
             checkViewPosition(view, Position(0.0, 0.0))
 
             // force update
-            setPositionAndUpdate(view, true)
+            view.updatePosition(width, height, true)
             checkViewPosition(view, positions[0])
             checkPositionHistory(positions.subList(0, 1), history)
 
@@ -150,15 +150,14 @@ class NonContinuousMovingButtonTest {
     @Test
     fun testForcePosition() {
         val view = NonContinuousMovingButton(createMockContext(false))
+        setViewSize(view, viewWidth, viewHeight)
         val history: MutableList<Position<Int>> = mutableListOf()
         view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
-        setViewPosition(view)
         val width = parentWidth.toInt() + viewWidth
         val height = parentHeight.toInt() + viewHeight
 
         val forceAndCheck: (Int) -> Unit = {
-            setViewPosition(view)
             val position = positions[it]
             view.forcePosition(width, height, position.x, position.y)
             checkViewPosition(view, positions[it])
@@ -232,15 +231,15 @@ class NonContinuousMovingButtonTest {
 
         withMockedNextDouble(parentWidth, parentHeight, mockPositions) {
             val view = NonContinuousMovingButton(createMockContext())
+            setViewSize(view, viewWidth, viewHeight)
 
             // callback
             var total = 0
             view.setOnMoveListener { view, x, y -> total += x * y }
-            repeat(3) { setPositionAndUpdate(view) }
+            repeat(3) { view.updatePosition(width, height) }
             assertEquals(8, total)
 
             // repeat value
-            setViewPosition(view)
             view.updatePosition(width, height)
             assertEquals(8, total)
 
@@ -251,13 +250,13 @@ class NonContinuousMovingButtonTest {
                     total += min(x, y)
                 }
             })
-            repeat(3) { setPositionAndUpdate(view) }
+            repeat(3) { view.updatePosition(width, height) }
             assertEquals(6, total)
 
             // null
             total = 0
             view.setOnMoveListener(null)
-            repeat(2) { setPositionAndUpdate(view) }
+            repeat(2) { view.updatePosition(width, height) }
             assertEquals(0, total)
         }
     }
@@ -300,19 +299,5 @@ class NonContinuousMovingButtonTest {
             context.obtainStyledAttributes(any<AttributeSet>(), R.styleable.Movement, any(), any())
         } returns mockArray
         return context
-    }
-
-    private fun setPositionAndUpdate(view: NonContinuousMovingButton, forced: Boolean = false) {
-        val width = parentWidth.toInt() + viewWidth
-        val height = parentHeight.toInt() + viewHeight
-        setViewPosition(view)
-        view.updatePosition(width, height, forceUpdate = forced)
-    }
-
-    private fun setViewPosition(view: View) {
-        view.right = 100
-        view.left = 100 - viewWidth
-        view.bottom = 60
-        view.top = 60 - viewHeight
     }
 }

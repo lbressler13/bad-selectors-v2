@@ -37,6 +37,16 @@ internal fun checkViewPosition(view: View, position: Position<Double>) {
 }
 
 /**
+ * Set width and height of view by configuring left, right, top, and bottom
+ */
+fun setViewSize(view: View, width: Int, height: Int) {
+    view.right = 100
+    view.left = 100 - width
+    view.bottom = 100
+    view.top = 100 - height
+}
+
+/**
  * Check that the position history matches the list of positions up to the given index
  */
 internal fun checkPositionHistory(expectedHistory: List<Position<Int>>, history: List<Position<Int>>) {
