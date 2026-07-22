@@ -144,7 +144,7 @@ class ContinuousLinearMovementManagerTest {
                 validateUpdate(position, addToHistory)
             }
 
-            // forced update
+            // forced position
             fun forcePositionAndCheck(position: Position<Double>, addToHistory: Boolean = true) {
                 manager.updatePosition(dimens, position)
                 validateUpdate(position, addToHistory)

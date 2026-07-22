@@ -82,7 +82,7 @@ class NonContinuousMovementManagerTest {
 
     @Test
     fun testUpdatePosition() {
-        val forcedPositions = listOf(Position(99.99, 0.05), Position(2.0, 65.2))
+        val forcedPositions = listOf(Position(99.99, 0.05), Position(2.0, 65.2), Position(15.0, 14.0))
         val history: MutableList<Position<Int>> = mutableListOf()
         val expectedHistory: MutableList<Position<Double>> = mutableListOf()
 
@@ -107,6 +107,12 @@ class NonContinuousMovementManagerTest {
 
             // forced update
             fun forceAndCheck(index: Int, addToHistory: Boolean = true) {
+                manager.updatePosition(parentDimens, forcedPositions[index])
+                validateUpdate(forcedPositions[index], addToHistory)
+            }
+
+            // forced position
+            fun forcePositionAndCheck(index: Int, addToHistory: Boolean = true) {
                 manager.updatePosition(parentDimens, forcedPositions[index])
                 validateUpdate(forcedPositions[index], addToHistory)
             }
@@ -145,7 +151,11 @@ class NonContinuousMovementManagerTest {
             // forced repeat value
             forceAndCheck(1, addToHistory = false) // don't add because it's repeated
 
-            // TODO add forced position
+            // forced repeat position
+            forcePositionAndCheck(1, addToHistory = false)
+
+            // forced repeat
+            forcePositionAndCheck(2, addToHistory = true)
         }
     }
 
