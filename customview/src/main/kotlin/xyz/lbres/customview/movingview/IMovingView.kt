@@ -7,7 +7,6 @@ import xyz.lbres.customview.movingview.MovingView.OnMoveListener
 import xyz.lbres.customview.movingview.MovingView.OnPausedChangedListener
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
-import kotlin.math.abs
 
 /**
  * Internal partial implementation of [MovingView]
@@ -33,9 +32,7 @@ internal interface IMovingView : MovingView {
         this as View
         val bounds = getBounds(parentWidth, parentHeight)
         baseManager().updatePosition(bounds, forceUpdate = forceUpdate)
-
-        left = baseManager().x.toInt()
-        top = baseManager().y.toInt()
+        setViewPosition()
     }
 
     /**
@@ -48,9 +45,7 @@ internal interface IMovingView : MovingView {
         this as View
         val bounds = getBounds(parentWidth, parentHeight)
         baseManager().updatePosition(bounds, forcedPosition = Position(x, y))
-
-        left = baseManager().x.toInt()
-        top = baseManager().y.toInt()
+        setViewPosition()
     }
 
     /**
@@ -74,9 +69,7 @@ internal interface IMovingView : MovingView {
     override fun setInitialPosition(parentWidth: Int, parentHeight: Int) {
         this as View
         baseManager().setInitialPosition(Dimensions(parentWidth, parentHeight))
-
-        left = baseManager().x.toInt()
-        top = baseManager().y.toInt()
+        setViewPosition()
     }
 
     /**
@@ -137,9 +130,8 @@ internal interface IMovingView : MovingView {
      */
     fun getBounds(parentWidth: Int, parentHeight: Int): Dimensions<Int> {
         this as View
-        // TODO fix this, should not be abs
-        val widthBound = parentWidth - abs(width)
-        val heightBound = parentHeight - abs(height)
+        val widthBound = parentWidth - width
+        val heightBound = parentHeight - height
         return Dimensions(widthBound, heightBound)
     }
 
@@ -147,4 +139,18 @@ internal interface IMovingView : MovingView {
      * Cast manager to BaseMovementManager for convenience
      */
     fun baseManager(): BaseMovementManager = manager as BaseMovementManager
+
+    /**
+     * Set left, right, top, and bottom values for view
+     */
+    fun setViewPosition() {
+        this as View
+        val viewWidth = width
+        val viewHeight = height
+
+        left = baseManager().x.toInt()
+        top = baseManager().y.toInt()
+        right = left + viewWidth
+        bottom = top + viewHeight
+    }
 }
