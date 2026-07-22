@@ -29,14 +29,19 @@ internal fun withMockedNextDouble(
     unmockkStatic(::random)
 }
 
+/**
+ * Run test with mocked angle values, including initial call on IntRange and later calls on set
+ *
+ * @param mockDegrees List<Int>: list of angles, in degrees, to use for mocks
+ * @param test: test block to execute
+ */
 fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
     mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
-    val setValues = if (mockDegrees.size == 1) {
-        mockDegrees
+    if (mockDegrees.size == 1) {
+        every { any<Set<Int>>().seededRandom() } returns mockDegrees[0]
     } else {
-        mockDegrees.subList(1, mockDegrees.size)
+        every { any<Set<Int>>().seededRandom() } returnsMany mockDegrees.subList(1, mockDegrees.size)
     }
-    every { any<Set<Int>>().seededRandom() } returnsMany setValues
 
     with(mockk<IntRange>()) {
         every { IntRange(0, 360).seededRandom() } returns mockDegrees[0]

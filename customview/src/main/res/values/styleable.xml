@@ -24,7 +24,7 @@
         <attr name="paused" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="ContinuousMovement">
+    <declare-styleable name="LinearMovement">
         <attr name="movementSize" format="integer" />
     </declare-styleable>
 

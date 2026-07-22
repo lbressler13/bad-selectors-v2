@@ -33,7 +33,7 @@ internal fun checkViewPosition(view: View, position: Position<Int>) {
 
 @JvmName("checkViewPosition::Double")
 internal fun checkViewPosition(view: View, position: Position<Double>) {
-    checkViewPosition(view, position.toIntPosition())
+    checkViewPosition(view, Position(position.x.toInt(), position.y.toInt()))
 }
 
 /**
@@ -55,5 +55,6 @@ internal fun checkPositionHistory(expectedHistory: List<Position<Int>>, history:
 
 @JvmName("checkViewPosition::Double")
 internal fun checkPositionHistory(expectedHistory: List<Position<Double>>, history: List<Position<Int>>) {
-    checkPositionHistory(expectedHistory.map(Position<Double>::toIntPosition), history)
+    val intExpected = expectedHistory.map { Position(it.x.toInt(), it.y.toInt()) }
+    checkPositionHistory(intExpected, history)
 }

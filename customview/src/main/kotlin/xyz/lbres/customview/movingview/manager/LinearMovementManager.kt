@@ -9,7 +9,13 @@ import java.lang.Math.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
-internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: Int) : BaseMovementManager(paused) {
+/**
+ * Manage and update information about movement for a view whose position updates are continuous and linear
+ *
+ * @param paused [Boolean]: if movement is initially paused
+ * @param movementSize [Int]: size of each movement
+ */
+internal class LinearMovementManager(paused: Boolean, movementSize: Int) : BaseMovementManager(paused) {
 
     /**
      * Size of each movement
@@ -46,7 +52,7 @@ internal class ContinuousLinearMovementManager(paused: Boolean, movementSize: In
         val newX = position.x + dx
         val newY = position.y + dy
         val newPosition = Position(newX, newY)
-        if (!isValidPosition(newPosition, dimensions) || (dx == 0.0 && dy == 0.0)) {
+        if (!isValidPosition(newPosition, dimensions) || (dx == 0.0 && dy == 0.0 && movementSize != 0)) {
             updateAngle(newPosition, dimensions)
         }
         return newPosition

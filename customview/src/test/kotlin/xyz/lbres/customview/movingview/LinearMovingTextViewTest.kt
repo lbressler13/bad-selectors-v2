@@ -1,7 +1,6 @@
 package xyz.lbres.customview.movingview
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.View
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -26,7 +25,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
-class ContinuousLinearMovingTextViewTest {
+class LinearMovingTextViewTest {
     private val parentWidth = 100.0
     private val parentHeight = 200.0
     private val viewWidth = 10
@@ -40,19 +39,19 @@ class ContinuousLinearMovingTextViewTest {
     @Test
     fun testInit() {
         // paused
-        var view = ContinuousLinearMovingTextView(createMockContext(true, 10))
+        var view = LinearMovingTextView(createMockContext(true, 10))
         assertTrue(view.paused)
         assertEquals(10, view.movementSize)
 
         // not paused
-        view = ContinuousLinearMovingTextView(createMockContext(false, -12))
+        view = LinearMovingTextView(createMockContext(false, -12))
         assertFalse(view.paused)
         assertEquals(0, view.movementSize)
     }
 
     @Test
     fun testUpdatePaused() {
-        var view = ContinuousLinearMovingTextView(createMockContext(true, 5))
+        var view = LinearMovingTextView(createMockContext(true, 5))
         val calls: MutableList<Boolean> = mutableListOf()
         view.setOnPauseChangedListener { view, paused ->
             calls.add(paused)
@@ -85,7 +84,7 @@ class ContinuousLinearMovingTextViewTest {
         view.paused = true
 
         // start unpaused
-        view = ContinuousLinearMovingTextView(createMockContext(false, 5))
+        view = LinearMovingTextView(createMockContext(false, 5))
         calls.clear()
         view.setOnPauseChangedListener { view, paused ->
             calls.add(paused)
@@ -100,7 +99,7 @@ class ContinuousLinearMovingTextViewTest {
     @Test
     fun testUpdateMovementSize() {
         withMockedDegrees(listOf(90)) {
-            val view = ContinuousLinearMovingTextView(createMockContext(false, 10))
+            val view = LinearMovingTextView(createMockContext(false, 10))
             assertEquals(10, view.movementSize)
 
             fun updateAndCheck(y: Double) {
@@ -115,11 +114,12 @@ class ContinuousLinearMovingTextViewTest {
             view.movementSize = 2
             updateAndCheck(32.0)
 
+            // negative, no change to movement size
             view.movementSize = -1
             assertEquals(2, view.movementSize)
             updateAndCheck(34.0)
 
-            // repeat position
+            // zero
             view.movementSize = 0
             assertEquals(0, view.movementSize)
             updateAndCheck(34.0)
@@ -135,7 +135,7 @@ class ContinuousLinearMovingTextViewTest {
         val angles = listOf(90, -45)
 
         withMockedDegrees(angles) {
-            val view = ContinuousLinearMovingTextView(createMockContext(true, 5))
+            val view = LinearMovingTextView(createMockContext(true, 5))
             setViewSize(view, viewWidth, viewHeight)
             view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
@@ -203,7 +203,7 @@ class ContinuousLinearMovingTextViewTest {
             Position(0.0, 0.05),
             Position(3.14, 15.0),
         )
-        val view = ContinuousLinearMovingTextView(createMockContext(false, 5))
+        val view = LinearMovingTextView(createMockContext(false, 5))
         setViewSize(view, viewWidth, viewHeight)
         val history: MutableList<Position<Int>> = mutableListOf()
         view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
@@ -252,12 +252,12 @@ class ContinuousLinearMovingTextViewTest {
         withMockedDegrees(listOf(90)) {
             withMockedNextDouble(parentWidth, parentHeight, positions) {
                 // not paused
-                var view = ContinuousLinearMovingTextView(createMockContext(false, 5))
+                var view = LinearMovingTextView(createMockContext(false, 5))
                 view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
                 checkViewPosition(view, positions[0])
 
                 // paused
-                view = ContinuousLinearMovingTextView(createMockContext(false, 5))
+                view = LinearMovingTextView(createMockContext(false, 5))
                 view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
                 checkViewPosition(view, positions[1])
             }
@@ -269,7 +269,7 @@ class ContinuousLinearMovingTextViewTest {
         val width = parentWidth.toInt() + viewWidth
         val height = parentHeight.toInt() + viewHeight
         withMockedDegrees(listOf(90)) {
-            val view = ContinuousLinearMovingTextView(createMockContext(false, 1))
+            val view = LinearMovingTextView(createMockContext(false, 1))
             view.forcePosition(width, height, 0, 0)
 
             val history: MutableList<Position<Int>> = mutableListOf()
@@ -281,7 +281,7 @@ class ContinuousLinearMovingTextViewTest {
                 total *= (x - y)
             }
             repeat(3) { view.updatePosition(width, height) }
-            assertEquals(-6, total)
+            assertEquals(-6, total) // 1, 2, 3
 
             // object
             total = 0
@@ -291,7 +291,7 @@ class ContinuousLinearMovingTextViewTest {
                 }
             })
             repeat(3) { view.updatePosition(width, height) }
-            assertEquals(15, total)
+            assertEquals(15, total) // 4, 5, 6
 
             // null
             total = 0
@@ -303,7 +303,7 @@ class ContinuousLinearMovingTextViewTest {
 
     @Test
     fun testSetOnPauseChangedListener() {
-        val view = ContinuousLinearMovingTextView(createMockContext(false, 10))
+        val view = LinearMovingTextView(createMockContext(false, 10))
 
         // callback
         var counter = 0
@@ -332,31 +332,18 @@ class ContinuousLinearMovingTextViewTest {
      * Create mock context object which returns the given paused value in its attributes
      */
     private fun createMockContext(paused: Boolean, movementSize: Int): Context {
-        val mockArray =
-            createMockTypedArray(
-                setOf(
-                    R.styleable.Movement_paused,
-                    R.styleable.ContinuousMovement_movementSize,
-                ),
-            )
+        val mockArray = createMockTypedArray(
+            setOf(
+                R.styleable.Movement_paused,
+                R.styleable.LinearMovement_movementSize,
+            ),
+        )
         every { mockArray.getBoolean(R.styleable.Movement_paused, any()) } returns paused
-        every {
-            mockArray.getInt(
-                R.styleable.ContinuousMovement_movementSize,
-                any(),
-            )
-        } returns movementSize
+        every { mockArray.getInt(R.styleable.LinearMovement_movementSize, any()) } returns movementSize
 
         val context: Context = spyk(ApplicationProvider.getApplicationContext())
-        listOf(R.styleable.Movement, R.styleable.ContinuousMovement).forEach {
-            every {
-                context.obtainStyledAttributes(
-                    any<AttributeSet>(),
-                    it,
-                    any(),
-                    any(),
-                )
-            } returns mockArray
+        listOf(R.styleable.Movement, R.styleable.LinearMovement).forEach {
+            every { context.obtainStyledAttributes(any(), it, any(), any()) } returns mockArray
         }
         return context
     }

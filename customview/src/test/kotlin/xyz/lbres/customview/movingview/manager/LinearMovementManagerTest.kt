@@ -14,7 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ContinuousLinearMovementManagerTest {
+class LinearMovementManagerTest {
     private val parentWidth = 100.0
     private val parentHeight = 200.0
     private val parentDimens = Dimensions(parentWidth.toInt(), parentHeight.toInt())
@@ -32,12 +32,12 @@ class ContinuousLinearMovementManagerTest {
     @Test
     fun testInit() {
         withMockedDegrees(listOf(90)) {
-            var manager = ContinuousLinearMovementManager(true, 5)
+            var manager = LinearMovementManager(true, 5)
             assertTrue(manager.paused)
             assertEquals(manager.movementSize, 5)
             checkManagerPosition(manager, Position(0.0, 0.0))
 
-            manager = ContinuousLinearMovementManager(true, -12)
+            manager = LinearMovementManager(true, -12)
             assertTrue(manager.paused)
             assertEquals(manager.movementSize, 0)
             checkManagerPosition(manager, Position(0.0, 0.0))
@@ -47,7 +47,7 @@ class ContinuousLinearMovementManagerTest {
     @Test
     fun testUpdatePaused() {
         withMockedDegrees(listOf(90)) {
-            val manager = ContinuousLinearMovementManager(true, 5)
+            val manager = LinearMovementManager(true, 5)
             val calls: MutableList<Boolean> = mutableListOf()
             manager.setOnPauseChangedCallback { calls.add(it) }
 
@@ -81,7 +81,7 @@ class ContinuousLinearMovementManagerTest {
     @Test
     fun testUpdateMovementSize() {
         withMockedDegrees(listOf(90)) {
-            val manager = ContinuousLinearMovementManager(false, 10)
+            val manager = LinearMovementManager(false, 10)
             assertEquals(10, manager.movementSize)
 
             manager.updatePosition(parentDimens)
@@ -96,12 +96,13 @@ class ContinuousLinearMovementManagerTest {
             manager.updatePosition(parentDimens)
             checkManagerPosition(manager, Position(0.0, 32.0))
 
+            // negative, no change to movement size
             manager.movementSize = -1
             assertEquals(2, manager.movementSize)
             manager.updatePosition(parentDimens)
             checkManagerPosition(manager, Position(0.0, 34.0))
 
-            // repeat position
+            // zero
             manager.movementSize = 0
             assertEquals(0, manager.movementSize)
             manager.updatePosition(parentDimens)
@@ -118,7 +119,7 @@ class ContinuousLinearMovementManagerTest {
         val angles = listOf(90, -45)
 
         withMockedDegrees(angles) {
-            val manager = ContinuousLinearMovementManager(true, 5)
+            val manager = LinearMovementManager(true, 5)
             manager.setOnMoveCallback { x, y -> history.add(Position(x, y)) }
 
             var dimens = parentDimens
@@ -191,12 +192,12 @@ class ContinuousLinearMovementManagerTest {
         withMockedDegrees(listOf(100)) {
             withMockedNextDouble(parentWidth, parentHeight, positions) {
                 // not paused
-                var manager = ContinuousLinearMovementManager(false, 10)
+                var manager = LinearMovementManager(false, 10)
                 manager.setInitialPosition(parentDimens)
                 checkManagerPosition(manager, positions[0])
 
                 // paused
-                manager = ContinuousLinearMovementManager(true, 10)
+                manager = LinearMovementManager(true, 10)
                 manager.setInitialPosition(parentDimens)
                 checkManagerPosition(manager, positions[1])
             }
@@ -206,7 +207,7 @@ class ContinuousLinearMovementManagerTest {
     @Test
     fun testSetOnMoveCallback() {
         withMockedDegrees(listOf(90, -45)) {
-            val manager = ContinuousLinearMovementManager(false, 12)
+            val manager = LinearMovementManager(false, 12)
 
             // regular movement
             var total = 0
@@ -236,7 +237,7 @@ class ContinuousLinearMovementManagerTest {
     @Test
     fun testSetOnPauseChangedCallback() {
         withMockedDegrees(listOf(90)) {
-            val manager = ContinuousLinearMovementManager(false, 10)
+            val manager = LinearMovementManager(false, 10)
 
             var counter = 0
             manager.setOnPauseChangedCallback { counter++ }

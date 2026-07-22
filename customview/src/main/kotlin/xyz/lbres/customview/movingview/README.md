@@ -143,3 +143,5 @@ The interface consists of a single onChange method, which takes the following pa
 NonContinuousMovingButton extends the AppCompatButton class and implements the MovingView interface. It inherits all values, methods, and attributes from the class and interface.
 
 See the AppCompatButton documentation for more information about this class: https://developer.android.com/reference/androidx/appcompat/widget/AppCompatButton.
+
+TODO update w/ setInitialPosition + continuous

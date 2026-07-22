@@ -64,7 +64,7 @@ class LinearHelpersTest {
         position = Position(20.0, 10.0)
         assertEquals((190..260).toSet(), getAllowedAngles(position, dimensions))
 
-        // top left
+        // top right
         position = Position(20.0, 0.0)
         assertEquals((100..170).toSet(), getAllowedAngles(position, dimensions))
     }

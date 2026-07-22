@@ -75,7 +75,7 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
     protected abstract fun getNewPosition(dimensions: Dimensions<Int>): Position<Double>
 
     /**
-     * Set initial position to a random position in parent bounds
+     * Set initial position to a random position in given bounds
      *
      * @param dimensions [Dimensions]: maximum allowed dimensions for position
      */
@@ -120,6 +120,12 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
         onPauseChangedCallback = callback
     }
 
+    /**
+     * Check if a position is non-null and within given bounds
+     *
+     * @param position [Position]: position to validate
+     * @param dimensions [Dimensions]: maximum allowed dimensions for position
+     */
     protected fun isValidPosition(position: Position<Double>?, dimensions: Dimensions<Int>): Boolean {
         return position != null &&
             position.x in 0.0..dimensions.width.toDouble() &&

@@ -13,6 +13,8 @@ import xyz.lbres.customview.ext.typedarray.getDimensionPixelSizeOrNull
 import xyz.lbres.customview.ext.typedarray.getFloatOrNull
 import xyz.lbres.customview.ext.typedarray.getRadiansOrNull
 import xyz.lbres.kotlinutils.utils.simpleIf
+import java.lang.Math.toRadians
+import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max
@@ -148,7 +150,7 @@ sealed class AbstractCircleLayout(context: Context, attrs: AttributeSet?, defSty
     private fun setSeparationAngle() {
         if (angleMode == AngleMode.DISTRIBUTED) {
             val nonGoneChildren = children.count { !it.isGone }
-            _separationAngle = (2 * Math.PI) / nonGoneChildren
+            _separationAngle = (2 * PI) / nonGoneChildren
         }
     }
 
@@ -202,7 +204,7 @@ sealed class AbstractCircleLayout(context: Context, attrs: AttributeSet?, defSty
         setSeparationAngle()
 
         // shift by 90 to put first child at top of circle
-        var currentAngle = startAngle - Math.toRadians(90.0)
+        var currentAngle = startAngle - toRadians(90.0)
         val metadata: MutableList<Map<String, Any>> = mutableListOf()
 
         repeat(childCount) { index ->
