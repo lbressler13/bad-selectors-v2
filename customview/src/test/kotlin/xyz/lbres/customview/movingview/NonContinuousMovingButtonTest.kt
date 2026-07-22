@@ -103,6 +103,7 @@ class NonContinuousMovingButtonTest {
 
     @Test
     fun testUpdatePosition() {
+        // TODO check position w/out setting on each test
         withMockedNextDouble(parentWidth, parentHeight, positions) {
             val view = NonContinuousMovingButton(createMockContext(true))
             val history: MutableList<Position<Int>> = mutableListOf()

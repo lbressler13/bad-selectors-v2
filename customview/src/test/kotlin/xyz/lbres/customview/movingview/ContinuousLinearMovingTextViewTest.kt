@@ -203,16 +203,14 @@ class ContinuousLinearMovingTextViewTest {
             Position(3.14, 15.0),
         )
         val view = ContinuousLinearMovingTextView(createMockContext(false, 5))
+        setViewPosition(view) // configures width and height
         val history: MutableList<Position<Int>> = mutableListOf()
         view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
-        // TODO this should be deleted
-        setViewPosition(view)
         val width = parentWidth.toInt() + viewWidth
         val height = parentHeight.toInt() + viewHeight
 
         val forceAndCheck: (Int) -> Unit = {
-            setViewPosition(view)
             val position = positions[it]
             view.forcePosition(width, height, position.x, position.y)
             checkViewPosition(view, positions[it])
@@ -362,10 +360,10 @@ class ContinuousLinearMovingTextViewTest {
         return context
     }
 
-    private fun setViewPosition(view: View, position: Position<Int> = Position(100, 60)) {
-        view.right = position.x
-        view.left = position.x - viewWidth
-        view.bottom = position.y
-        view.top = position.y - viewHeight
+    private fun setViewPosition(view: View) {
+        view.right = 100
+        view.left = 100 - viewWidth
+        view.bottom = 60
+        view.top = 60 - viewHeight
     }
 }
