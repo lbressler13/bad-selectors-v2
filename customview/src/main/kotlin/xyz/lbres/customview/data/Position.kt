@@ -7,6 +7,8 @@ package xyz.lbres.customview.data
  * @param y [T]: position on the y axis
  */
 internal data class Position<T : Number>(val x: T, val y: T) {
-    // TODO test
+    /**
+     * Cast any position to an int position
+     */
     fun toIntPosition(): Position<Int> = Position(x.toInt(), y.toInt())
 }
