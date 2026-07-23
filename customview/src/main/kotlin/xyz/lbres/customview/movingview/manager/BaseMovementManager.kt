@@ -3,6 +3,7 @@ package xyz.lbres.customview.movingview.manager
 import android.util.Log
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.movingview.MovingView
 import xyz.lbres.customview.utils.random
 
 /**
@@ -130,5 +131,35 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
         return position != null &&
             position.x in 0.0..dimensions.width.toDouble() &&
             position.y in 0.0..dimensions.height.toDouble()
+    }
+
+    companion object {
+        fun create(
+            movementType: MovingView.MotionType,
+            paused: Boolean,
+            movementSize: Int? = null,
+            previous: BaseMovementManager? = null,
+        ): BaseMovementManager {
+            val paused = previous?.paused ?: paused
+
+            val manager = when (movementType) {
+                MovingView.MotionType.NONCONTINUOUS -> NonContinuousMovementManager(paused)
+                MovingView.MotionType.LINEAR -> LinearMovementManager(paused, movementSize ?: 0)
+            }
+
+            // update with values from previous manager
+            if (previous != null) {
+                manager.position = previous.position
+                manager.paused = previous.paused
+                manager.onMoveCallback = previous.onMoveCallback
+                manager.onPauseChangedCallback = previous.onPauseChangedCallback
+
+                if (previous is LinearMovementManager && manager is LinearMovementManager) {
+                    manager.movementSize = previous.movementSize
+                }
+            }
+
+            return manager
+        }
     }
 }

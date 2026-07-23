@@ -1,11 +1,13 @@
 package xyz.lbres.customview.movingview
 
+import android.util.Log
 import android.view.View
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.movingview.MovingView.OnMoveListener
 import xyz.lbres.customview.movingview.MovingView.OnPausedChangedListener
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
+import xyz.lbres.customview.movingview.manager.LinearMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
 
 /**
@@ -20,6 +22,10 @@ internal interface IMovingView : MovingView {
     override var paused: Boolean
         get() = baseManager().paused
         set(value) { baseManager().paused = value }
+
+    override var movementSize: Int?
+        get() = (manager as? LinearMovementManager)?.movementSize
+        set(value) = updateMovementSize(value)
 
     /**
      * Update the position of the view
@@ -133,6 +139,14 @@ internal interface IMovingView : MovingView {
         val widthBound = parentWidth - width
         val heightBound = parentHeight - height
         return Dimensions(widthBound, heightBound)
+    }
+
+    fun updateMovementSize(newValue: Int?) {
+        when {
+            manager !is LinearMovementManager -> Log.e(null, "Cannot set movementSize with non-linear motion")
+            newValue == null -> Log.e(null, "Cannot set movementSize to null with linear motion")
+            else -> (manager as LinearMovementManager).movementSize = newValue
+        }
     }
 
     /**

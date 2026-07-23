@@ -13,6 +13,21 @@ sealed interface MovingView {
     var paused: Boolean
 
     /**
+     * Size of each movement, in pixels. Used only for linear motion.
+     */
+    var movementSize: Int?
+
+    val motionType: MotionType
+
+    /**
+     * Update the motion type for the view
+     *
+     * @param newValue [MotionType]: new motion type
+     * @param movementSize [Int]?: movement size, used only for linear movement. Defaults to null
+     */
+    fun updateMotionType(newValue: MotionType, movementSize: Int? = null)
+
+    /**
      * Update the position of the view
      *
      * @param parentWidth [Int]: width of parent view
@@ -102,5 +117,9 @@ sealed interface MovingView {
          * @param paused [Boolean]: new value of paused attribute
          */
         fun onChange(view: View, paused: Boolean)
+    }
+
+    enum class MotionType {
+        NONCONTINUOUS, LINEAR,
     }
 }
