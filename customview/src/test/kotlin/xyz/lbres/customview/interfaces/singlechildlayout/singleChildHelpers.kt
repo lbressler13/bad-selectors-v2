@@ -43,13 +43,15 @@ fun createMockContext(numChildren: Int?, hasChildLayout: Boolean): Context {
 /**
  * Create a mock SingleChildLayout
  *
+ * @param mockContext [Context]: mock context object
  * @return [ViewGroup] mocked layout
  */
-internal fun createMockLayout(): ViewGroup {
+internal fun createMockLayout(mockContext: Context): ViewGroup {
     val layout = mockk<AbstractSingleChildCircleLayout> {
         every { removeAllViews() } returns Unit
         every { addView(any()) } returns Unit
         every { childCount } returns 0
+        every { context } returns mockContext
     }
 
     return layout

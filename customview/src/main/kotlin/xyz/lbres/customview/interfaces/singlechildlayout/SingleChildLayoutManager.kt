@@ -14,15 +14,11 @@ import xyz.lbres.customview.ext.typedarray.getResourceIdOrNull
  * Manager for views in a SingleChildLayout.
  * Required because interfaces cannot have private properties or methods.
  *
- * @param getLayout () -> [ViewGroup]: function to retrieve the layout to manage
  * @param context [Context]: activity context
  * @param attrs [AttributeSet]: attributes for layout, can be `null`
  */
-internal class SingleChildLayoutManager(
-    private val getLayout: () -> ViewGroup,
-    private val context: Context,
-    attrs: AttributeSet?,
-) {
+// values are used in constructor only, not stored for later use
+internal class SingleChildLayoutManager(context: Context, attrs: AttributeSet?) {
 
     private enum class ChildInitializationState { NOT_STARTED, IN_PROGRESS, COMPLETE }
 
@@ -79,19 +75,21 @@ internal class SingleChildLayoutManager(
 
     /**
      * Add children to layout using values from attributes
+     *
+     * @param layout [ViewGroup]: layout to use for initialization
      */
-    fun initializeChildren() {
+    fun initializeChildren(layout: ViewGroup) {
         if (childInitializationState == ChildInitializationState.NOT_STARTED) {
-            if (getLayout().isNotEmpty()) {
+            if (layout.isNotEmpty()) {
                 throw IllegalStateException("SingleChildLayout cannot be created with children")
             }
 
             childInitializationState = ChildInitializationState.IN_PROGRESS
 
-            val layoutInflater = LayoutInflater.from(context)
+            val layoutInflater = LayoutInflater.from(layout.context)
             repeat(numChildren) {
-                val view = layoutInflater.inflate(childLayout, getLayout(), false)
-                getLayout().addView(view)
+                val view = layoutInflater.inflate(childLayout, layout, false)
+                layout.addView(view)
             }
 
             childInitializationState = ChildInitializationState.COMPLETE

@@ -32,7 +32,7 @@ sealed class AbstractSingleChildCircleLayout(context: Context, attrs: AttributeS
         get() = manager.numChildren
 
     init {
-        manager = SingleChildLayoutManager({ this }, context, attrs)
+        manager = SingleChildLayoutManager(context, attrs)
     }
 
     /**
@@ -40,7 +40,7 @@ sealed class AbstractSingleChildCircleLayout(context: Context, attrs: AttributeS
      */
     override fun requestLayout() {
         if (this::manager.isInitialized && !manager.childrenInitialized) {
-            manager.initializeChildren()
+            manager.initializeChildren(this)
         }
 
         super.requestLayout()
