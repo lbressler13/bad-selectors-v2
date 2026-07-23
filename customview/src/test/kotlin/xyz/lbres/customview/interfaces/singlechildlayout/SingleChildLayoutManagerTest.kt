@@ -32,7 +32,7 @@ class SingleChildLayoutManagerTest {
     @Test
     fun testAllAttributesPassed() {
         val mockContext = createMockContext(0, true)
-        val manager = SingleChildLayoutManager({ createMockLayout() }, mockContext, null)
+        val manager = SingleChildLayoutManager(mockContext, null)
         assertFalse(manager.childrenInitialized)
     }
 
@@ -41,7 +41,7 @@ class SingleChildLayoutManagerTest {
         val mockContext = createMockContext(0, false)
         val expectedError = "SingleChildLayout requires numChildren and childLayout"
         assertFailsWithMessage<IllegalStateException>(expectedError) {
-            SingleChildLayoutManager({ createMockLayout() }, mockContext, null)
+            SingleChildLayoutManager(mockContext, null)
         }
     }
 
@@ -50,7 +50,7 @@ class SingleChildLayoutManagerTest {
         val mockContext = createMockContext(null, true)
         val expectedError = "SingleChildLayout requires numChildren and childLayout"
         assertFailsWithMessage<IllegalStateException>(expectedError) {
-            SingleChildLayoutManager({ createMockLayout() }, mockContext, null)
+            SingleChildLayoutManager(mockContext, null)
         }
     }
 
@@ -60,33 +60,34 @@ class SingleChildLayoutManagerTest {
             every { addView(any()) } returns Unit
             every { childCount } returns 1
         }
-        val manager = SingleChildLayoutManager({ layout }, createMockContext(numChildren = 5, true), null)
+        val manager = SingleChildLayoutManager(createMockContext(numChildren = 5, true), null)
 
         val expectedError = "SingleChildLayout cannot be created with children"
-        assertFailsWithMessage<IllegalStateException>(expectedError) { manager.initializeChildren() }
+        assertFailsWithMessage<IllegalStateException>(expectedError) { manager.initializeChildren(layout) }
     }
 
     @Test
     fun testInitializeChildren() {
-        val layout = createMockLayout()
+        val context = createMockContext(numChildren = 5, true)
+        val layout = createMockLayout(context)
         val layoutInflater = createMockLayoutInflater(layout)
 
-        var manager = SingleChildLayoutManager({ layout }, createMockContext(numChildren = 5, true), null)
-        manager.initializeChildren()
+        var manager = SingleChildLayoutManager(context, null)
+        manager.initializeChildren(layout)
         assertTrue(manager.childrenInitialized)
 
         verify(exactly = 5) { layoutInflater.inflate(childResId, layout, false) }
         verify(exactly = 5) { layout.addView(allAny()) }
 
-        manager = SingleChildLayoutManager({ layout }, createMockContext(0, true), null)
-        manager.initializeChildren()
+        manager = SingleChildLayoutManager(createMockContext(0, true), null)
+        manager.initializeChildren(layout)
         assertTrue(manager.childrenInitialized)
 
         verify(exactly = 5) { layoutInflater.inflate(childResId, layout, false) }
         verify(exactly = 5) { layout.addView(allAny()) }
 
-        manager = SingleChildLayoutManager({ layout }, createMockContext(9, true), null)
-        manager.initializeChildren()
+        manager = SingleChildLayoutManager(createMockContext(9, true), null)
+        manager.initializeChildren(layout)
         assertTrue(manager.childrenInitialized)
 
         verify(exactly = 14) { layoutInflater.inflate(childResId, layout, false) }
@@ -95,11 +96,12 @@ class SingleChildLayoutManagerTest {
 
     @Test
     fun testModifyChildrenAfterInit() {
-        val layout = createMockLayout()
+        val context = createMockContext(5, true)
+        val layout = createMockLayout(context)
         createMockLayoutInflater(layout)
 
-        val manager = SingleChildLayoutManager({ layout }, createMockContext(5, true), null)
-        manager.initializeChildren()
+        val manager = SingleChildLayoutManager(context, null)
+        manager.initializeChildren(layout)
         val expectedError = "Cannot modify children of SingleChildLayout"
 
         assertFailsWithMessage<UnsupportedOperationException>(expectedError) {
