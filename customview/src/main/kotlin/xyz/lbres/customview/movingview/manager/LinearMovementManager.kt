@@ -10,7 +10,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Manage and update information about movement for a view whose position updates are continuous and linear
+ * Manage and update information about movement for a view whose position updates are linear
  *
  * @param paused [Boolean]: if movement is initially paused
  * @param movementSize [Int]: size of each movement
@@ -28,8 +28,7 @@ internal class LinearMovementManager(paused: Boolean, movementSize: Int) : BaseM
     /**
      * Angle of movement, in radians
      */
-    var angle: Double = toRadians((0..360).seededRandom().toDouble())
-        private set
+    private var angle: Double = toRadians((0..360).seededRandom().toDouble())
 
     /**
      * Amount to increment position on each update, based on [angle] and [movementSize]
@@ -39,7 +38,6 @@ internal class LinearMovementManager(paused: Boolean, movementSize: Int) : BaseM
 
     init {
         updateMovementSize(movementSize)
-        updateDxDy()
     }
 
     /**

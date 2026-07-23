@@ -9,7 +9,7 @@ import xyz.lbres.customview.movingview.manager.LinearMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
 
 /**
- * TextView with continuous linear movement, to be used as a child of a MotionLayout.
+ * TextView with linear movement, to be used as a child of a MotionLayout.
  * See README for information about customizing view.
  */
 class LinearMovingTextView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :

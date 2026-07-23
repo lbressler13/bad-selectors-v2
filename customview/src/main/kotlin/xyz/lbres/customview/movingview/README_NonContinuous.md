@@ -2,6 +2,7 @@
 
 Noncontinuous motion means that there is no relation between position updates.
 
+
 ## XML Attributes
 
 There are no unique XML attributes associated with noncontinuous motion.
@@ -9,7 +10,7 @@ There are no unique XML attributes associated with noncontinuous motion.
 
 ## Implementations
 
-### NoncontinuousMovingButton
+### NonContinuousMovingButton
 
 [NonContinuousMovingButton](NonContinuousMovingButton.kt) extends the AppCompatButton class and implements the MovingView interface. It inherits all values, methods, and attributes from the class and interface.
 

@@ -1,7 +1,7 @@
 package xyz.lbres.customview.movingview
 
 /**
- * Functionality for a view whose position updates are continuous and linear
+ * Functionality for a view whose position updates are linear
  */
 interface LinearMovingView : MovingView {
     /**
