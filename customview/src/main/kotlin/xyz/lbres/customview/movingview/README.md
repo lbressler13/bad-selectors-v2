@@ -1,7 +1,14 @@
 # MovingView
 
-MovingView is an interface for a view whose position changes.
+[MovingView](MovingView.kt) is an interface for a view whose position changes.
 All children of MotionLayout must implement MovingView.
+
+The following types of motion are supported:
+- [NonContinuous](README_NonContinuous.md)
+- [Linear](README_Linear.md)
+
+All motion types implement MovingView, but they may have additional XML properties as well.
+See the motion type READMEs for further details.
 
 A MovingView can have continuous or noncontinuous motion.
 Continuous motion means that positions updates generate a new position which is adjacent to the current position.
@@ -25,6 +32,21 @@ If the view has an attached OnPauseChangedListener, its callback will be invoked
 
 
 ## Methods
+
+### setInitialPosition
+
+Set initial position based on size of parent layout.
+The position will be set regardless of the value of the paused property.
+
+If the view has an attached OnMoveListener, its callback will **not** be invoked when the initial position is set.
+
+This method takes the following parameters, and returns Unit:
+
+| Parameter    | Summary                                                | Type    | Default |
+|:-------------|:-------------------------------------------------------|:--------|:--------|
+| parentWidth  | Width of parent view                                   | Int     |         |
+| parentHeight | Height of parent view                                  | Int     |         |
+
 
 ### updatePosition
 
@@ -143,5 +165,3 @@ The interface consists of a single onChange method, which takes the following pa
 NonContinuousMovingButton extends the AppCompatButton class and implements the MovingView interface. It inherits all values, methods, and attributes from the class and interface.
 
 See the AppCompatButton documentation for more information about this class: https://developer.android.com/reference/androidx/appcompat/widget/AppCompatButton.
-
-TODO update w/ setInitialPosition + continuous
