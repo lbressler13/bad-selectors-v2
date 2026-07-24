@@ -1,6 +1,6 @@
 package xyz.lbres.customview.movingview
 
-// TODO update tests for linear
+// TODO update tests for switching mode
 
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -20,36 +20,54 @@ class MovingButtonTest {
 
     @Test
     fun testInit() {
-        runInitTests(create)
+        runNonContinuousInitTests(create)
+        runLinearInitTests(create)
+    }
+
+    @Test
+    fun testUpdateMotionType() {
+        // TODO
     }
 
     @Test
     fun testUpdatePaused() {
-        runUpdatePausedTests(create)
+        runNonContinuousUpdatePausedTests(create)
+        runLinearUpdatePausedTests(create)
+    }
+
+    @Test
+    fun testUpdateMovementSize() {
+        // no noncontinuous equivalent
+        runLinearUpdateMovementSizeTests(create)
     }
 
     @Test
     fun testUpdatePosition() {
-        runUpdatePositionTests(create)
+        runNonContinuousUpdatePositionTests(create)
+        runLinearUpdatePositionTests(create)
     }
 
     @Test
     fun testForcePosition() {
-        runForcePositionTests(create)
+        runNonContinuousForcePositionTests(create)
+        runLinearForcePositionTests(create)
     }
 
     @Test
     fun testSetInitialPosition() {
-        runSetInitialPositionTests(create)
+        runNonContinuousForcePositionTests(create)
+        runLinearForcePositionTests(create)
     }
 
     @Test
     fun testSetOnMoveListener() {
-        runSetOnMoveListerTests(create)
+        runNonContinuousSetOnMoveListerTests(create)
+        runLinearSetOnMoveListenerTests(create)
     }
 
     @Test
     fun testSetOnPauseChangedListener() {
-        runSetOnPauseChangedListenerTests(create)
+        runNonContinuousSetOnPauseChangedListenerTests(create)
+        runLinearSetOnPauseChangedListenerTests(create)
     }
 }

@@ -1,14 +1,14 @@
 package xyz.lbres.customview.movingview
 
-import android.content.Context
 import android.view.View
+import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.setViewSize
+import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.testutils.runWithFailMessage
-import kotlin.math.min
-import xyz.lbres.customview.data.Position
+import kotlin.math.max
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -18,30 +18,21 @@ private const val parentHeight = 200.0
 private const val viewWidth = 10
 private const val viewHeight = 5
 
-private val positions = listOf(
-    Position(1.0, 3.0),
-    Position(0.6, 12.0),
-    Position(100.0, 194.00000045),
-    Position(0.0, 0.05),
-    Position(3.14, 15.0),
-)
-
-private typealias CreateFn = (Context) -> MovingView
-
-internal fun runInitTests(createView: CreateFn) {
+internal fun runLinearInitTests(createView: CreateFn) {
     // paused
-    var view = createView(createMockContext(0, true))
+    var view = createView(createMockContext(1, true, 10))
     assertTrue(view.paused)
+    assertEquals(10, view.movementSize)
 
     // not paused
-    view = createView(createMockContext(0, false))
+    view = createView(createMockContext(1, false, -12))
     assertFalse(view.paused)
+    assertEquals(0, view.movementSize)
 }
 
-internal fun runUpdatePausedTests(createView: CreateFn) {
-    var view = createView(createMockContext(0, true))
+internal fun runLinearUpdatePausedTests(createView: CreateFn) {
+    var view = createView(createMockContext(1, true, 5))
     view as View
-
     val calls: MutableList<Boolean> = mutableListOf()
     view.setOnPauseChangedListener { view, paused ->
         calls.add(paused)
@@ -74,9 +65,8 @@ internal fun runUpdatePausedTests(createView: CreateFn) {
     view.paused = true
 
     // start unpaused
-    view = createView(createMockContext(0, false))
+    view = createView(createMockContext(1, false, 5))
     view as View
-
     calls.clear()
     view.setOnPauseChangedListener { view, paused ->
         calls.add(paused)
@@ -88,54 +78,113 @@ internal fun runUpdatePausedTests(createView: CreateFn) {
     assertFalse(view.isClickable)
 }
 
-internal fun runUpdatePositionTests(createView: CreateFn) {
-    withMockedNextDouble(parentWidth, parentHeight, positions) {
-        val view = createView(createMockContext(0, true))
+fun runLinearUpdateMovementSizeTests(createView: CreateFn) {
+    withMockedDegrees(listOf(90)) {
+        val view = createView(createMockContext(1, false, 10))
         view as View
+        assertEquals(10, view.movementSize)
 
-        setViewSize(view, viewWidth, viewHeight)
-        val history: MutableList<Position<Int>> = mutableListOf()
-        view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
-
-        val width = parentWidth.toInt() + viewWidth
-        val height = parentHeight.toInt() + viewHeight
-
-        val updateAndCheck: (Int) -> Unit = {
-            view.updatePosition(width, height)
-            checkViewPosition(view, positions[it])
-            checkPositionHistory(positions.subList(0, it + 1), history)
+        fun updateAndCheck(y: Double) {
+            view.updatePosition(parentWidth.toInt(), parentHeight.toInt())
+            checkViewPosition(view, Position(0.0, y))
         }
 
-        // paused
-        view.updatePosition(width, height)
-        checkViewPosition(view, Position(0.0, 0.0))
+        updateAndCheck(10.0)
+        updateAndCheck(20.0)
+        updateAndCheck(30.0)
 
-        // force update
-        view.updatePosition(width, height, true)
-        checkViewPosition(view, positions[0])
-        checkPositionHistory(positions.subList(0, 1), history)
+        view.movementSize = 2
+        updateAndCheck(32.0)
 
-        // valid position
-        view.paused = false
-        updateAndCheck(1)
-        updateAndCheck(2)
-        updateAndCheck(3)
+        // negative, no change to movement size
+        view.movementSize = -1
+        assertEquals(2, view.movementSize)
+        updateAndCheck(34.0)
 
-        // re-paused
-        view.paused = true
-        updateAndCheck(3)
-
-        // unpaused
-        view.paused = false
-        updateAndCheck(4)
-
-        // repeat value
-        updateAndCheck(4)
+        // zero
+        view.movementSize = 0
+        assertEquals(0, view.movementSize)
+        updateAndCheck(34.0)
     }
 }
 
-internal fun runForcePositionTests(createView: CreateFn) {
-    val view = createView(createMockContext(0, false))
+internal fun runLinearUpdatePositionTests(createView: CreateFn) {
+    val history: MutableList<Position<Int>> = mutableListOf()
+    val expectedHistory: MutableList<Position<Int>> = mutableListOf()
+
+    val initialPosition = Position(40, 50)
+    val angles = listOf(90, -45)
+
+    withMockedDegrees(angles) {
+        val view = createView(createMockContext(1, true, 5))
+        view as View
+        setViewSize(view, viewWidth, viewHeight)
+        view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
+
+        // checks after position update
+        fun validateUpdate(position: Position<Int>, addToHistory: Boolean = true) {
+            checkViewPosition(view, position)
+            if (addToHistory) {
+                expectedHistory.add(position)
+            }
+            checkPositionHistory(expectedHistory, history)
+        }
+
+        var width = parentWidth.toInt() + viewWidth
+        var height = parentHeight.toInt() + viewHeight
+
+        view.forcePosition(width, height, initialPosition.x, initialPosition.y)
+        expectedHistory.add(initialPosition)
+
+        // paused
+        view.updatePosition(width, height)
+        validateUpdate(initialPosition, false)
+
+        // force update
+        view.updatePosition(width, height, true)
+        validateUpdate(Position(40, 55))
+        view.updatePosition(width, height, true)
+        validateUpdate(Position(40, 60))
+
+        // not paused
+        view.paused = false
+        view.updatePosition(width, height)
+        validateUpdate(Position(40, 65))
+
+        // reaching edge
+        width = 100 + viewWidth
+        height = 70 + viewHeight
+        view.updatePosition(width, height)
+        validateUpdate(Position(40, 70))
+        view.updatePosition(width, height)
+        validateUpdate(Position(40, 75))
+
+        view.updatePosition(width, height)
+        validateUpdate(Position(43, 71)) // 43.53, 71.46
+        view.updatePosition(width, height)
+        validateUpdate(Position(47, 67)) // 47.07, 67.92
+
+        // re-paused
+        view.paused = true
+        view.updatePosition(width, height)
+        validateUpdate(Position(47, 67), false) // 47.07, 67.92
+
+        // unpaused
+        view.paused = false
+        view.updatePosition(width, height)
+        validateUpdate(Position(50, 64)) // 50.60, 64.39
+    }
+}
+
+internal fun runLinearForcePositionTests(createView: CreateFn) {
+    val positions = listOf(
+        Position(1.0, 3.0),
+        Position(0.6, 12.0),
+        Position(100.0, 194.00000045),
+        Position(0.0, 0.05),
+        Position(3.14, 15.0),
+    )
+    val view = createView(createMockContext(1, false, 5))
     view as View
     setViewSize(view, viewWidth, viewHeight)
     val history: MutableList<Position<Int>> = mutableListOf()
@@ -179,78 +228,64 @@ internal fun runForcePositionTests(createView: CreateFn) {
     forceAndCheck(2)
 }
 
-fun runSetInitialPositionTests(createView: CreateFn) {
-    withMockedNextDouble(parentWidth, parentHeight, positions) {
-        // not paused
-        var view = createView(createMockContext(0, false))
-        view as View
-        view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
-        checkViewPosition(view, positions[0])
+fun runLinearSetInitialPositionTests(createView: CreateFn) {
+    val positions = listOf(Position(1.0, 3.0), Position(0.6, 12.0))
+    withMockedDegrees(listOf(90)) {
+        withMockedNextDouble(parentWidth, parentHeight, positions) {
+            // not paused
+            var view = createView(createMockContext(1, false, 5))
+            view as View
+            view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
+            checkViewPosition(view, positions[0])
 
-        // paused
-        view = createView(createMockContext(0, false))
-        view as View
-        view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
-        checkViewPosition(view, positions[1])
+            // paused
+            view = createView(createMockContext(1, false, 5))
+            view as View
+            view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
+            checkViewPosition(view, positions[1])
+        }
     }
 }
 
-fun runSetOnMoveListerTests(createView: CreateFn) {
+fun runLinearSetOnMoveListenerTests(createView: CreateFn) {
     val width = parentWidth.toInt() + viewWidth
     val height = parentHeight.toInt() + viewHeight
-
-    val callbackPositions = listOf(
-        Position(1.0, 2.0),
-        Position(3.0, 2.1),
-        Position(0.7, 1.0),
-        Position(0.7, 1.0), // repeat value
-    )
-    val objectPositions = listOf(
-        Position(5.0, 1.2),
-        Position(2.0, 4.5),
-        Position(3.000056, 7.0),
-    )
-    val nullPositions = listOf(
-        Position(3.0, 2.1),
-        Position(0.7, 1.0),
-    )
-    val mockPositions = callbackPositions + objectPositions + nullPositions
-
-    withMockedNextDouble(parentWidth, parentHeight, mockPositions) {
-        val view = createView(createMockContext(0))
+    withMockedDegrees(listOf(90)) {
+        val view = createView(createMockContext(1, false, 1))
         view as View
-        setViewSize(view, viewWidth, viewHeight)
+        view.forcePosition(width, height, 0, 0)
+
+        val history: MutableList<Position<Int>> = mutableListOf()
+        view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
         // callback
-        var total = 0
-        view.setOnMoveListener { view, x, y -> total += x * y }
+        var total = 1 // start at 1 for multiplication
+        view.setOnMoveListener { view, x, y ->
+            total *= (x - y)
+        }
         repeat(3) { view.updatePosition(width, height) }
-        assertEquals(8, total)
-
-        // repeat value
-        view.updatePosition(width, height)
-        assertEquals(8, total)
+        assertEquals(-6, total) // 1, 2, 3
 
         // object
         total = 0
         view.setOnMoveListener(object : MovingView.OnMoveListener {
             override fun onMove(view: View, x: Int, y: Int) {
-                total += min(x, y)
+                total += max(x, y)
             }
         })
         repeat(3) { view.updatePosition(width, height) }
-        assertEquals(6, total)
+        assertEquals(15, total) // 4, 5, 6
 
         // null
         total = 0
         view.setOnMoveListener(null)
-        repeat(2) { view.updatePosition(width, height) }
+        repeat(3) { view.updatePosition(width, height) }
         assertEquals(0, total)
     }
 }
 
-fun runSetOnPauseChangedListenerTests(createView: CreateFn) {
-    val view = createView(createMockContext(0))
+fun runLinearSetOnPauseChangedListenerTests(createView: CreateFn) {
+    val view = createView(createMockContext(1, false, 10))
 
     // callback
     var counter = 0
