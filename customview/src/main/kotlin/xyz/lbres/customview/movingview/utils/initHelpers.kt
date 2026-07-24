@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.core.content.withStyledAttributes
 import xyz.lbres.customview.R
+import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.movingview.MovingView
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
 
@@ -18,8 +19,7 @@ internal fun parseAttributes(context: Context, attrs: AttributeSet?): Pair<Movin
     context.withStyledAttributes(attrs, R.styleable.Movement) {
         attrPaused = getBoolean(R.styleable.Movement_paused, false)
         attrMovementSize = getInt(R.styleable.Movement_movementSize, 0)
-        // TODO getIntOrNull here
-        val motionTypeValue = getInt(R.styleable.Movement_motionType, -1)
+        val motionTypeValue = getIntOrNull(R.styleable.Movement_motionType)
         attrMotionType = when (motionTypeValue) {
             0 -> MovingView.MotionType.NONCONTINUOUS
             1 -> MovingView.MotionType.LINEAR

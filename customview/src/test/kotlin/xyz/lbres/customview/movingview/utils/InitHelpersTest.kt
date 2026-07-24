@@ -1,13 +1,16 @@
 package xyz.lbres.customview.movingview.utils
 
 import android.content.Context
+import android.content.res.TypedArray
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
+import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.junit.runner.RunWith
 import xyz.lbres.customview.R
+import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.movingview.MovingView
 import xyz.lbres.customview.movingview.manager.LinearMovementManager
 import xyz.lbres.customview.movingview.manager.NonContinuousMovementManager
@@ -88,6 +91,7 @@ class InitHelpersTest {
  * Create mock context object which returns the given paused value in its attributes
  */
 private fun createMockContext(paused: Boolean, movementSize: Int, motionType: Int): Context {
+    mockkStatic(TypedArray::getIntOrNull)
     val mockArray = createMockTypedArray(
         setOf(
             R.styleable.Movement_paused,
@@ -97,7 +101,7 @@ private fun createMockContext(paused: Boolean, movementSize: Int, motionType: In
     )
     every { mockArray.getBoolean(R.styleable.Movement_paused, any()) } returns paused
     every { mockArray.getInt(R.styleable.Movement_movementSize, any()) } returns movementSize
-    every { mockArray.getInt(R.styleable.Movement_motionType, any()) } returns motionType
+    every { mockArray.getIntOrNull(R.styleable.Movement_motionType) } returns motionType
 
     val context: Context = spyk(ApplicationProvider.getApplicationContext())
     listOf(R.styleable.Movement, R.styleable.Movement).forEach {
