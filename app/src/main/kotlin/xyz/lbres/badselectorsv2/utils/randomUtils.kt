@@ -5,20 +5,20 @@ import java.util.Date
 import kotlin.random.Random
 
 /**
- * Create a seeded [Random]
+ * Seeded random instance
  */
-fun createRandom() = Random(Date().time)
+internal val random = Random(Date().time)
 
 /**
  * Get random value using common app random
  *
  * @return [Int]: random value from range
  */
-fun IntRange.seededRandom(): Int = random(createRandom())
+fun IntRange.seededRandom(): Int = random(random)
 
 /**
  * Shuffle range using common app random
  *
  * @return [IntList]: shuffled values
  */
-fun IntRange.seededShuffled(): IntList = shuffled(createRandom())
+fun IntRange.seededShuffled(): IntList = shuffled(random)

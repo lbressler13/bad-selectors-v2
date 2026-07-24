@@ -5,8 +5,8 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import xyz.lbres.customview.data.Position
-import xyz.lbres.customview.utils.createRandom
-import kotlin.random.Random
+import xyz.lbres.customview.utils.random
+import xyz.lbres.customview.utils.seededRandom
 
 /**
  * Run a test with mocked Random.nextDouble with given parent width/height
@@ -22,11 +22,30 @@ internal fun withMockedNextDouble(
     mockPositions: List<Position<Double>>,
     test: () -> Unit,
 ) {
-    mockkStatic(::createRandom)
-    every { createRandom() } returns mockk<Random> {
-        every { nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
-        every { nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
-    }
+    mockkStatic(::random)
+    every { random.nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
+    every { random.nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
     test()
-    unmockkStatic(::createRandom)
+    unmockkStatic(::random)
+}
+
+/**
+ * Run test with mocked angle values, including initial call on IntRange and later calls on set
+ *
+ * @param mockDegrees List<Int>: list of angles, in degrees, to use for mocks
+ * @param test: test block to execute
+ */
+fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
+    mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+    if (mockDegrees.size == 1) {
+        every { any<Set<Int>>().seededRandom() } returns mockDegrees[0]
+    } else {
+        every { any<Set<Int>>().seededRandom() } returnsMany mockDegrees.subList(1, mockDegrees.size)
+    }
+
+    with(mockk<IntRange>()) {
+        every { IntRange(0, 360).seededRandom() } returns mockDegrees[0]
+        test()
+    }
+    unmockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
 }

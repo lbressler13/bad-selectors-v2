@@ -1,7 +1,6 @@
 package xyz.lbres.customview.movingview
 
 import android.content.Context
-import android.util.AttributeSet
 import android.view.View
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -15,9 +14,10 @@ import xyz.lbres.customview.testutils.checkPositionHistory
 import xyz.lbres.customview.testutils.checkViewPosition
 import xyz.lbres.customview.testutils.createMockTypedArray
 import xyz.lbres.customview.testutils.setViewSize
+import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
 import xyz.lbres.testutils.runWithFailMessage
-import kotlin.math.min
+import kotlin.math.max
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,39 +25,33 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
-class NonContinuousMovingButtonTest {
+class LinearMovingTextViewTest {
     private val parentWidth = 100.0
     private val parentHeight = 200.0
     private val viewWidth = 10
     private val viewHeight = 5
 
-    private val positions = listOf(
-        Position(1.0, 3.0),
-        Position(0.6, 12.0),
-        Position(100.0, 194.00000045),
-        Position(0.0, 0.05),
-        Position(3.14, 15.0),
-    )
-
     @AfterTest
-    fun cleanupMockk() {
+    fun cleanupTest() {
         unmockkAll()
     }
 
     @Test
     fun testInit() {
         // paused
-        var view = NonContinuousMovingButton(createMockContext(true))
+        var view = LinearMovingTextView(createMockContext(true, 10))
         assertTrue(view.paused)
+        assertEquals(10, view.movementSize)
 
         // not paused
-        view = NonContinuousMovingButton(createMockContext(false))
+        view = LinearMovingTextView(createMockContext(false, -12))
         assertFalse(view.paused)
+        assertEquals(0, view.movementSize)
     }
 
     @Test
     fun testUpdatePaused() {
-        var view = NonContinuousMovingButton(createMockContext(true))
+        var view = LinearMovingTextView(createMockContext(true, 5))
         val calls: MutableList<Boolean> = mutableListOf()
         view.setOnPauseChangedListener { view, paused ->
             calls.add(paused)
@@ -90,7 +84,7 @@ class NonContinuousMovingButtonTest {
         view.paused = true
 
         // start unpaused
-        view = NonContinuousMovingButton(createMockContext(false))
+        view = LinearMovingTextView(createMockContext(false, 5))
         calls.clear()
         view.setOnPauseChangedListener { view, paused ->
             calls.add(paused)
@@ -103,53 +97,113 @@ class NonContinuousMovingButtonTest {
     }
 
     @Test
+    fun testUpdateMovementSize() {
+        withMockedDegrees(listOf(90)) {
+            val view = LinearMovingTextView(createMockContext(false, 10))
+            assertEquals(10, view.movementSize)
+
+            fun updateAndCheck(y: Double) {
+                view.updatePosition(parentWidth.toInt(), parentHeight.toInt())
+                checkViewPosition(view, Position(0.0, y))
+            }
+
+            updateAndCheck(10.0)
+            updateAndCheck(20.0)
+            updateAndCheck(30.0)
+
+            view.movementSize = 2
+            updateAndCheck(32.0)
+
+            // negative, no change to movement size
+            view.movementSize = -1
+            assertEquals(2, view.movementSize)
+            updateAndCheck(34.0)
+
+            // zero
+            view.movementSize = 0
+            assertEquals(0, view.movementSize)
+            updateAndCheck(34.0)
+        }
+    }
+
+    @Test
     fun testUpdatePosition() {
-        withMockedNextDouble(parentWidth, parentHeight, positions) {
-            val view = NonContinuousMovingButton(createMockContext(true))
+        val history: MutableList<Position<Int>> = mutableListOf()
+        val expectedHistory: MutableList<Position<Int>> = mutableListOf()
+
+        val initialPosition = Position(40, 50)
+        val angles = listOf(90, -45)
+
+        withMockedDegrees(angles) {
+            val view = LinearMovingTextView(createMockContext(true, 5))
             setViewSize(view, viewWidth, viewHeight)
-            val history: MutableList<Position<Int>> = mutableListOf()
             view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
-            val width = parentWidth.toInt() + viewWidth
-            val height = parentHeight.toInt() + viewHeight
-
-            val updateAndCheck: (Int) -> Unit = {
-                view.updatePosition(width, height)
-                checkViewPosition(view, positions[it])
-                checkPositionHistory(positions.subList(0, it + 1), history)
+            // checks after position update
+            fun validateUpdate(position: Position<Int>, addToHistory: Boolean = true) {
+                checkViewPosition(view, position)
+                if (addToHistory) {
+                    expectedHistory.add(position)
+                }
+                checkPositionHistory(expectedHistory, history)
             }
+
+            var width = parentWidth.toInt() + viewWidth
+            var height = parentHeight.toInt() + viewHeight
+
+            view.forcePosition(width, height, initialPosition.x, initialPosition.y)
+            expectedHistory.add(initialPosition)
 
             // paused
             view.updatePosition(width, height)
-            checkViewPosition(view, Position(0.0, 0.0))
+            validateUpdate(initialPosition, false)
 
             // force update
             view.updatePosition(width, height, true)
-            checkViewPosition(view, positions[0])
-            checkPositionHistory(positions.subList(0, 1), history)
+            validateUpdate(Position(40, 55))
+            view.updatePosition(width, height, true)
+            validateUpdate(Position(40, 60))
 
-            // valid position
+            // not paused
             view.paused = false
-            updateAndCheck(1)
-            updateAndCheck(2)
-            updateAndCheck(3)
+            view.updatePosition(width, height)
+            validateUpdate(Position(40, 65))
+
+            // reaching edge
+            width = 100 + viewWidth
+            height = 70 + viewHeight
+            view.updatePosition(width, height)
+            validateUpdate(Position(40, 70))
+            view.updatePosition(width, height)
+            validateUpdate(Position(40, 75))
+
+            view.updatePosition(width, height)
+            validateUpdate(Position(43, 71)) // 43.53, 71.46
+            view.updatePosition(width, height)
+            validateUpdate(Position(47, 67)) // 47.07, 67.92
 
             // re-paused
             view.paused = true
-            updateAndCheck(3)
+            view.updatePosition(width, height)
+            validateUpdate(Position(47, 67), false) // 47.07, 67.92
 
             // unpaused
             view.paused = false
-            updateAndCheck(4)
-
-            // repeat value
-            updateAndCheck(4)
+            view.updatePosition(width, height)
+            validateUpdate(Position(50, 64)) // 50.60, 64.39
         }
     }
 
     @Test
     fun testForcePosition() {
-        val view = NonContinuousMovingButton(createMockContext(false))
+        val positions = listOf(
+            Position(1.0, 3.0),
+            Position(0.6, 12.0),
+            Position(100.0, 194.00000045),
+            Position(0.0, 0.05),
+            Position(3.14, 15.0),
+        )
+        val view = LinearMovingTextView(createMockContext(false, 5))
         setViewSize(view, viewWidth, viewHeight)
         val history: MutableList<Position<Int>> = mutableListOf()
         view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
@@ -194,16 +248,19 @@ class NonContinuousMovingButtonTest {
 
     @Test
     fun testSetInitialPosition() {
-        withMockedNextDouble(parentWidth, parentHeight, positions) {
-            // not paused
-            var view = NonContinuousMovingButton(createMockContext(false))
-            view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
-            checkViewPosition(view, positions[0])
+        val positions = listOf(Position(1.0, 3.0), Position(0.6, 12.0))
+        withMockedDegrees(listOf(90)) {
+            withMockedNextDouble(parentWidth, parentHeight, positions) {
+                // not paused
+                var view = LinearMovingTextView(createMockContext(false, 5))
+                view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
+                checkViewPosition(view, positions[0])
 
-            // paused
-            view = NonContinuousMovingButton(createMockContext(false))
-            view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
-            checkViewPosition(view, positions[1])
+                // paused
+                view = LinearMovingTextView(createMockContext(false, 5))
+                view.setInitialPosition(parentWidth.toInt(), parentHeight.toInt())
+                checkViewPosition(view, positions[1])
+            }
         }
     }
 
@@ -211,59 +268,42 @@ class NonContinuousMovingButtonTest {
     fun testSetOnMoveListener() {
         val width = parentWidth.toInt() + viewWidth
         val height = parentHeight.toInt() + viewHeight
+        withMockedDegrees(listOf(90)) {
+            val view = LinearMovingTextView(createMockContext(false, 1))
+            view.forcePosition(width, height, 0, 0)
 
-        val callbackPositions = listOf(
-            Position(1.0, 2.0),
-            Position(3.0, 2.1),
-            Position(0.7, 1.0),
-            Position(0.7, 1.0), // repeat value
-        )
-        val objectPositions = listOf(
-            Position(5.0, 1.2),
-            Position(2.0, 4.5),
-            Position(3.000056, 7.0),
-        )
-        val nullPositions = listOf(
-            Position(3.0, 2.1),
-            Position(0.7, 1.0),
-        )
-        val mockPositions = callbackPositions + objectPositions + nullPositions
-
-        withMockedNextDouble(parentWidth, parentHeight, mockPositions) {
-            val view = NonContinuousMovingButton(createMockContext())
-            setViewSize(view, viewWidth, viewHeight)
+            val history: MutableList<Position<Int>> = mutableListOf()
+            view.setOnMoveListener { _, x, y -> history.add(Position(x, y)) }
 
             // callback
-            var total = 0
-            view.setOnMoveListener { view, x, y -> total += x * y }
+            var total = 1 // start at 1 for multiplication
+            view.setOnMoveListener { view, x, y ->
+                total *= (x - y)
+            }
             repeat(3) { view.updatePosition(width, height) }
-            assertEquals(8, total)
-
-            // repeat value
-            view.updatePosition(width, height)
-            assertEquals(8, total)
+            assertEquals(-6, total) // 1, 2, 3
 
             // object
             total = 0
             view.setOnMoveListener(object : MovingView.OnMoveListener {
                 override fun onMove(view: View, x: Int, y: Int) {
-                    total += min(x, y)
+                    total += max(x, y)
                 }
             })
             repeat(3) { view.updatePosition(width, height) }
-            assertEquals(6, total)
+            assertEquals(15, total) // 4, 5, 6
 
             // null
             total = 0
             view.setOnMoveListener(null)
-            repeat(2) { view.updatePosition(width, height) }
+            repeat(3) { view.updatePosition(width, height) }
             assertEquals(0, total)
         }
     }
 
     @Test
     fun testSetOnPauseChangedListener() {
-        val view = NonContinuousMovingButton(createMockContext())
+        val view = LinearMovingTextView(createMockContext(false, 10))
 
         // callback
         var counter = 0
@@ -291,13 +331,20 @@ class NonContinuousMovingButtonTest {
     /**
      * Create mock context object which returns the given paused value in its attributes
      */
-    private fun createMockContext(paused: Boolean = false): Context {
-        val mockArray = createMockTypedArray(setOf(R.styleable.Movement_paused))
-        every { mockArray.getBoolean(R.styleable.Movement_paused, false) } returns paused
+    private fun createMockContext(paused: Boolean, movementSize: Int): Context {
+        val mockArray = createMockTypedArray(
+            setOf(
+                R.styleable.Movement_paused,
+                R.styleable.LinearMovement_movementSize,
+            ),
+        )
+        every { mockArray.getBoolean(R.styleable.Movement_paused, any()) } returns paused
+        every { mockArray.getInt(R.styleable.LinearMovement_movementSize, any()) } returns movementSize
+
         val context: Context = spyk(ApplicationProvider.getApplicationContext())
-        every {
-            context.obtainStyledAttributes(any<AttributeSet>(), R.styleable.Movement, any(), any())
-        } returns mockArray
+        listOf(R.styleable.Movement, R.styleable.LinearMovement).forEach {
+            every { context.obtainStyledAttributes(any(), it, any(), any()) } returns mockArray
+        }
         return context
     }
 }

@@ -3,6 +3,7 @@ package xyz.lbres.customview.movingview.manager
 import android.util.Log
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.utils.random
 
 /**
  * Base functionality to track information about movement for a moving view
@@ -49,12 +50,8 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
         forcedPosition: Position<Double>? = null,
         forceUpdate: Boolean = false,
     ) {
-        val validForced = forcedPosition != null &&
-            forcedPosition.x in 0.0..dimensions.width.toDouble() &&
-            forcedPosition.y in 0.0..dimensions.height.toDouble()
-
         val newPosition = when {
-            validForced -> forcedPosition
+            isValidPosition(forcedPosition, dimensions) -> forcedPosition!!
             forcedPosition != null -> {
                 Log.w(null, "Invalid forced position $forcedPosition, position not updated")
                 position
@@ -76,6 +73,17 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      * @return Position<Double>: next position
      */
     protected abstract fun getNewPosition(dimensions: Dimensions<Int>): Position<Double>
+
+    /**
+     * Set initial position to a random position in given bounds
+     *
+     * @param dimensions [Dimensions]: maximum allowed dimensions for position
+     */
+    fun setInitialPosition(dimensions: Dimensions<Int>) {
+        val newX = random.nextDouble(0.0, dimensions.width.toDouble())
+        val newY = random.nextDouble(0.0, dimensions.height.toDouble())
+        position = Position(newX, newY)
+    }
 
     /**
      * Invoke onPauseChanged callback, if not null, and set new paused value
@@ -110,5 +118,17 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
      */
     fun setOnPauseChangedCallback(callback: ((Boolean) -> Unit)?) {
         onPauseChangedCallback = callback
+    }
+
+    /**
+     * Check if a position is non-null and within given bounds
+     *
+     * @param position [Position]: position to validate
+     * @param dimensions [Dimensions]: maximum allowed dimensions for position
+     */
+    protected fun isValidPosition(position: Position<Double>?, dimensions: Dimensions<Int>): Boolean {
+        return position != null &&
+            position.x in 0.0..dimensions.width.toDouble() &&
+            position.y in 0.0..dimensions.height.toDouble()
     }
 }

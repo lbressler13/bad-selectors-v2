@@ -32,9 +32,7 @@ internal interface IMovingView : MovingView {
         this as View
         val bounds = getBounds(parentWidth, parentHeight)
         baseManager().updatePosition(bounds, forceUpdate = forceUpdate)
-
-        left = baseManager().x.toInt()
-        top = baseManager().y.toInt()
+        setViewPosition()
     }
 
     /**
@@ -47,9 +45,7 @@ internal interface IMovingView : MovingView {
         this as View
         val bounds = getBounds(parentWidth, parentHeight)
         baseManager().updatePosition(bounds, forcedPosition = Position(x, y))
-
-        left = baseManager().x.toInt()
-        top = baseManager().y.toInt()
+        setViewPosition()
     }
 
     /**
@@ -62,6 +58,18 @@ internal interface IMovingView : MovingView {
      */
     override fun forcePosition(parentWidth: Int, parentHeight: Int, x: Int, y: Int) {
         forcePosition(parentWidth, parentHeight, x.toDouble(), y.toDouble())
+    }
+
+    /**
+     * Set initial position of view
+     *
+     * @param parentWidth [Int]: width of parent view
+     * @param parentHeight [Int]: height of parent view
+     */
+    override fun setInitialPosition(parentWidth: Int, parentHeight: Int) {
+        this as View
+        baseManager().setInitialPosition(Dimensions(parentWidth, parentHeight))
+        setViewPosition()
     }
 
     /**
@@ -122,9 +130,6 @@ internal interface IMovingView : MovingView {
      */
     fun getBounds(parentWidth: Int, parentHeight: Int): Dimensions<Int> {
         this as View
-        val width = right - left
-        val height = bottom - top
-
         val widthBound = parentWidth - width
         val heightBound = parentHeight - height
         return Dimensions(widthBound, heightBound)
@@ -134,4 +139,18 @@ internal interface IMovingView : MovingView {
      * Cast manager to BaseMovementManager for convenience
      */
     fun baseManager(): BaseMovementManager = manager as BaseMovementManager
+
+    /**
+     * Set left, right, top, and bottom values for view
+     */
+    fun setViewPosition() {
+        this as View
+        val viewWidth = width
+        val viewHeight = height
+
+        left = baseManager().x.toInt()
+        top = baseManager().y.toInt()
+        right = left + viewWidth
+        bottom = top + viewHeight
+    }
 }

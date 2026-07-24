@@ -2,7 +2,7 @@ package xyz.lbres.customview.movingview.manager
 
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
-import xyz.lbres.customview.utils.createRandom
+import xyz.lbres.customview.utils.random
 
 /**
  * Manage and update information about movement for a view whose position updates are not continuous
@@ -10,8 +10,6 @@ import xyz.lbres.customview.utils.createRandom
  * @param paused [Boolean]: if movement is initially paused
  */
 internal class NonContinuousMovementManager(paused: Boolean) : BaseMovementManager(paused) {
-    private val random = createRandom()
-
     /**
      * Get the next position value
      *
