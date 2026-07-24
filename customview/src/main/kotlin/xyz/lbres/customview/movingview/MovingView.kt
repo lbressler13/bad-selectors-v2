@@ -17,6 +17,9 @@ sealed interface MovingView {
      */
     var movementSize: Int?
 
+    /**
+     * Type of motion
+     */
     val motionType: MotionType
 
     /**

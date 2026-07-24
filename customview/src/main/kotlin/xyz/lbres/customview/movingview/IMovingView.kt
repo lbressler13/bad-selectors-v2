@@ -23,6 +23,9 @@ internal interface IMovingView : MovingView {
         get() = baseManager().paused
         set(value) { baseManager().paused = value }
 
+    /**
+     * Size of each movement, in pixels. Used only for linear motion.
+     */
     override var movementSize: Int?
         get() = (manager as? LinearMovementManager)?.movementSize
         set(value) = updateMovementSize(value)
@@ -141,6 +144,9 @@ internal interface IMovingView : MovingView {
         return Dimensions(widthBound, heightBound)
     }
 
+    /**
+     * Set new movementSize value if possible, or print warning if not possible
+     */
     fun updateMovementSize(newValue: Int?) {
         when {
             manager !is LinearMovementManager -> Log.e(null, "Cannot set movementSize with non-linear motion")

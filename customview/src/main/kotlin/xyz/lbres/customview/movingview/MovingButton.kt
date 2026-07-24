@@ -9,7 +9,7 @@ import xyz.lbres.customview.movingview.manager.MovementManager
 import xyz.lbres.customview.movingview.utils.parseAttributes
 
 /**
- * Button with non-continuous movement, to be used as a child of a MotionLayout.
+ * Moving button, to be used as a child of a MotionLayout.
  * See README for information about customizing view.
  */
 class MovingButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
