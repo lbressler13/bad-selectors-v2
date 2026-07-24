@@ -23,11 +23,13 @@ internal fun runLinearInitTests(createView: CreateFn) {
     var view = createView(createMockContext(1, true, 10))
     assertTrue(view.paused)
     assertEquals(10, view.movementSize)
+    assertEquals(MovingView.MotionType.LINEAR, view.motionType)
 
     // not paused
     view = createView(createMockContext(1, false, -12))
     assertFalse(view.paused)
     assertEquals(0, view.movementSize)
+    assertEquals(MovingView.MotionType.LINEAR, view.motionType)
 }
 
 internal fun runLinearUpdatePausedTests(createView: CreateFn) {

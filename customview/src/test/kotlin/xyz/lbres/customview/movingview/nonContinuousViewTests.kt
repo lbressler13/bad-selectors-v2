@@ -32,10 +32,12 @@ internal fun runNonContinuousInitTests(createView: CreateFn) {
     // paused
     var view = createView(createMockContext(0, true))
     assertTrue(view.paused)
+    assertEquals(MovingView.MotionType.NONCONTINUOUS, view.motionType)
 
     // not paused
     view = createView(createMockContext(0, false))
     assertFalse(view.paused)
+    assertEquals(MovingView.MotionType.NONCONTINUOUS, view.motionType)
 }
 
 internal fun runNonContinuousUpdatePausedTests(createView: CreateFn) {

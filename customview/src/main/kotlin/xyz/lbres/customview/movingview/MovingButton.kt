@@ -39,7 +39,7 @@ class MovingButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
     override fun updateMotionType(newValue: MovingView.MotionType, movementSize: Int?) {
         if (newValue != motionType) {
-            _manager = BaseMovementManager.create(motionType, paused, movementSize, previous = _manager)
+            _manager = BaseMovementManager.create(newValue, paused, movementSize, previous = _manager)
             _motionType = newValue
         }
     }
