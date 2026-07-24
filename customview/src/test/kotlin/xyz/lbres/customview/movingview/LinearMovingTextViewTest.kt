@@ -32,7 +32,7 @@ class LinearMovingTextViewTest {
     private val viewHeight = 5
 
     @AfterTest
-    fun cleanupMockk() {
+    fun cleanupTest() {
         unmockkAll()
     }
 
