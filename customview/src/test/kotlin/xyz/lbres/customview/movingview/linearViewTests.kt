@@ -18,7 +18,7 @@ private const val parentHeight = 200.0
 private const val viewWidth = 10
 private const val viewHeight = 5
 
-internal fun runLinearInitTests(createView: CreateFn) {
+internal fun runLinearInitTests(createView: CreateMoving) {
     // paused
     var view = createView(createMockContext(1, true, 10))
     assertTrue(view.paused)
@@ -32,7 +32,7 @@ internal fun runLinearInitTests(createView: CreateFn) {
     assertEquals(MovingView.MotionType.LINEAR, view.motionType)
 }
 
-internal fun runLinearUpdatePausedTests(createView: CreateFn) {
+internal fun runLinearUpdatePausedTests(createView: CreateMoving) {
     var view = createView(createMockContext(1, true, 5))
     view as View
     val calls: MutableList<Boolean> = mutableListOf()
@@ -80,7 +80,7 @@ internal fun runLinearUpdatePausedTests(createView: CreateFn) {
     assertFalse(view.isClickable)
 }
 
-fun runLinearUpdateMovementSizeTests(createView: CreateFn) {
+fun runLinearUpdateMovementSizeTests(createView: CreateMoving) {
     withMockedDegrees(listOf(90)) {
         val view = createView(createMockContext(1, false, 10))
         view as View
@@ -110,7 +110,7 @@ fun runLinearUpdateMovementSizeTests(createView: CreateFn) {
     }
 }
 
-internal fun runLinearUpdatePositionTests(createView: CreateFn) {
+internal fun runLinearUpdatePositionTests(createView: CreateMoving) {
     val history: MutableList<Position<Int>> = mutableListOf()
     val expectedHistory: MutableList<Position<Int>> = mutableListOf()
 
@@ -178,7 +178,7 @@ internal fun runLinearUpdatePositionTests(createView: CreateFn) {
     }
 }
 
-internal fun runLinearForcePositionTests(createView: CreateFn) {
+internal fun runLinearForcePositionTests(createView: CreateMoving) {
     val positions = listOf(
         Position(1.0, 3.0),
         Position(0.6, 12.0),
@@ -230,7 +230,7 @@ internal fun runLinearForcePositionTests(createView: CreateFn) {
     forceAndCheck(2)
 }
 
-fun runLinearSetInitialPositionTests(createView: CreateFn) {
+fun runLinearSetInitialPositionTests(createView: CreateMoving) {
     val positions = listOf(Position(1.0, 3.0), Position(0.6, 12.0))
     withMockedDegrees(listOf(90)) {
         withMockedNextDouble(parentWidth, parentHeight, positions) {
@@ -249,7 +249,7 @@ fun runLinearSetInitialPositionTests(createView: CreateFn) {
     }
 }
 
-fun runLinearSetOnMoveListenerTests(createView: CreateFn) {
+fun runLinearSetOnMoveListenerTests(createView: CreateMoving) {
     val width = parentWidth.toInt() + viewWidth
     val height = parentHeight.toInt() + viewHeight
     withMockedDegrees(listOf(90)) {
@@ -286,7 +286,7 @@ fun runLinearSetOnMoveListenerTests(createView: CreateFn) {
     }
 }
 
-fun runLinearSetOnPauseChangedListenerTests(createView: CreateFn) {
+fun runLinearSetOnPauseChangedListenerTests(createView: CreateMoving) {
     val view = createView(createMockContext(1, false, 10))
 
     // callback

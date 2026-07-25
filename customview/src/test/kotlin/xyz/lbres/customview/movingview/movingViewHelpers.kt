@@ -12,6 +12,11 @@ import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.testutils.createMockTypedArray
 
 /**
+ * Typealias for function to create moving view
+ */
+internal typealias CreateMoving = (Context) -> MovingView
+
+/**
  * Create mock context object which returns the given movement values in its attributes
  */
 internal fun createMockContext(motionType: Int?, paused: Boolean = false, movementSize: Int = 0): Context {

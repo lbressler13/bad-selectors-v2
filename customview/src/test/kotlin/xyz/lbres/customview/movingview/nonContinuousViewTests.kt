@@ -1,6 +1,5 @@
 package xyz.lbres.customview.movingview
 
-import android.content.Context
 import android.view.View
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkPositionHistory
@@ -26,9 +25,7 @@ private val positions = listOf(
     Position(3.14, 15.0),
 )
 
-internal typealias CreateFn = (Context) -> MovingView // TODO make private
-
-internal fun runNonContinuousInitTests(createView: CreateFn) {
+internal fun runNonContinuousInitTests(createView: CreateMoving) {
     // paused
     var view = createView(createMockContext(0, true))
     assertTrue(view.paused)
@@ -40,7 +37,7 @@ internal fun runNonContinuousInitTests(createView: CreateFn) {
     assertEquals(MovingView.MotionType.NONCONTINUOUS, view.motionType)
 }
 
-internal fun runNonContinuousUpdatePausedTests(createView: CreateFn) {
+internal fun runNonContinuousUpdatePausedTests(createView: CreateMoving) {
     var view = createView(createMockContext(0, true))
     view as View
 
@@ -90,7 +87,7 @@ internal fun runNonContinuousUpdatePausedTests(createView: CreateFn) {
     assertFalse(view.isClickable)
 }
 
-internal fun runNonContinuousUpdatePositionTests(createView: CreateFn) {
+internal fun runNonContinuousUpdatePositionTests(createView: CreateMoving) {
     withMockedNextDouble(parentWidth, parentHeight, positions) {
         val view = createView(createMockContext(0, true))
         view as View
@@ -136,7 +133,7 @@ internal fun runNonContinuousUpdatePositionTests(createView: CreateFn) {
     }
 }
 
-internal fun runNonContinuousForcePositionTests(createView: CreateFn) {
+internal fun runNonContinuousForcePositionTests(createView: CreateMoving) {
     val view = createView(createMockContext(0, false))
     view as View
     setViewSize(view, viewWidth, viewHeight)
@@ -181,7 +178,7 @@ internal fun runNonContinuousForcePositionTests(createView: CreateFn) {
     forceAndCheck(2)
 }
 
-fun runNonContinuousSetInitialPositionTests(createView: CreateFn) {
+fun runNonContinuousSetInitialPositionTests(createView: CreateMoving) {
     withMockedNextDouble(parentWidth, parentHeight, positions) {
         // not paused
         var view = createView(createMockContext(0, false))
@@ -197,7 +194,7 @@ fun runNonContinuousSetInitialPositionTests(createView: CreateFn) {
     }
 }
 
-fun runNonContinuousSetOnMoveListerTests(createView: CreateFn) {
+fun runNonContinuousSetOnMoveListerTests(createView: CreateMoving) {
     val width = parentWidth.toInt() + viewWidth
     val height = parentHeight.toInt() + viewHeight
 
@@ -251,7 +248,7 @@ fun runNonContinuousSetOnMoveListerTests(createView: CreateFn) {
     }
 }
 
-fun runNonContinuousSetOnPauseChangedListenerTests(createView: CreateFn) {
+fun runNonContinuousSetOnPauseChangedListenerTests(createView: CreateMoving) {
     val view = createView(createMockContext(0))
 
     // callback
