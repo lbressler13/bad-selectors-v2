@@ -6,7 +6,6 @@ import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.movingview.utils.getAllowedAngles
 import xyz.lbres.customview.utils.seededRandom
 import java.lang.Math.toRadians
-import java.lang.Math.toDegrees
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -51,11 +50,9 @@ internal class LinearMovementManager(paused: Boolean, movementSize: Int) : BaseM
         val newX = position.x + dx
         val newY = position.y + dy
         val newPosition = Position(newX, newY)
-        println("Start position: $position, Movement size: $movementSize, Angle: ${toDegrees(angle)}")
         if (!isValidPosition(newPosition, dimensions) || (dx == 0.0 && dy == 0.0 && movementSize != 0)) {
             updateAngle(newPosition, dimensions)
         }
-        println("New position: $newPosition")
         return newPosition
     }
 
@@ -79,7 +76,6 @@ internal class LinearMovementManager(paused: Boolean, movementSize: Int) : BaseM
      */
     private fun updateAngle(position: Position<Double>, dimensions: Dimensions<Int>) {
         val degrees: Int = getAllowedAngles(position, dimensions).seededRandom()
-        println("Angle $degrees")
         angle = toRadians(degrees.toDouble())
         updateDxDy()
     }

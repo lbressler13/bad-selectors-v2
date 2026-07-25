@@ -19,7 +19,6 @@ internal class NonContinuousMovementManager(paused: Boolean) : BaseMovementManag
     override fun getNewPosition(dimensions: Dimensions<Int>): Position<Double> {
         val newX = random.nextDouble(0.0, dimensions.width.toDouble())
         val newY = random.nextDouble(0.0, dimensions.height.toDouble())
-        println("Noncont new: $newX, $newY")
         return Position(newX, newY)
     }
 }

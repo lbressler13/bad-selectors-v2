@@ -33,14 +33,14 @@ abstract class AbstractMovingViewTest<T>(private val createView: (Context) -> T)
 
     @Test
     fun testUpdateMotionType() {
-        // mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
-        // mockkStatic(::random)
+        mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+        mockkStatic(::random)
         val parentWidth = 100
         val parentHeight = 200
 
         val positions = listOf(Position(1.0, 3.0), Position(0.6, 12.0))
-        withMockedDegrees(listOf(90)) {
-            withMockedNextDouble(parentWidth.toDouble(), parentHeight.toDouble(), positions) {
+        withMockedDegrees(listOf(90), mock = false) {
+            withMockedNextDouble(parentWidth.toDouble(), parentHeight.toDouble(), positions, mock = false) {
                 // start non cont
                 var view = createView(createMockContext(0, true))
                 view.forcePosition(parentWidth, parentHeight, 5, 10)
