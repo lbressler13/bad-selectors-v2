@@ -122,7 +122,17 @@ sealed interface MovingView {
         fun onChange(view: View, paused: Boolean)
     }
 
+    /**
+     * Types of motion for a view
+     */
     enum class MotionType {
-        NONCONTINUOUS, LINEAR,
+        /**
+         * Position updates have no relation to each other
+         */
+        NONCONTINUOUS,
+        /**
+         * Position updates occur along a straight line
+         */
+        LINEAR,
     }
 }

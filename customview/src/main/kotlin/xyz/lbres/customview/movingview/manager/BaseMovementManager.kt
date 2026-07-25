@@ -134,15 +134,26 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
     }
 
     companion object {
+        /**
+         * Create a new instance of a movement manager based on motion type and parameters.
+         * Can also apply values from an existing motion type.
+         *
+         * @param motionType [MovingView.MotionType]: type of motion to use
+         * @param paused [Boolean]: if movement is initially paused
+         * @param movementSize [Int]?: size of each movement in linear movement. Defaults to null.
+         * @param previous [BaseMovementManager]?: previous movement manager.
+         * If provided, the position and paused values from this manager will be applied to the new manager.
+         * If the previous and new manager are both linear, the movementSize will be applied as well.
+         */
         fun create(
-            movementType: MovingView.MotionType,
+            motionType: MovingView.MotionType,
             paused: Boolean,
             movementSize: Int? = null,
             previous: BaseMovementManager? = null,
         ): BaseMovementManager {
             val paused = previous?.paused ?: paused
 
-            val manager = when (movementType) {
+            val manager = when (motionType) {
                 MovingView.MotionType.NONCONTINUOUS -> NonContinuousMovementManager(paused)
                 MovingView.MotionType.LINEAR -> LinearMovementManager(paused, movementSize ?: 0)
             }

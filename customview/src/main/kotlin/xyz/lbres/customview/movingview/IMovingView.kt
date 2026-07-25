@@ -1,9 +1,14 @@
 package xyz.lbres.customview.movingview
 
+import android.content.Context
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import androidx.core.content.withStyledAttributes
+import xyz.lbres.customview.R
 import xyz.lbres.customview.data.Dimensions
 import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.ext.typedarray.getIntOrNull
 import xyz.lbres.customview.movingview.MovingView.OnMoveListener
 import xyz.lbres.customview.movingview.MovingView.OnPausedChangedListener
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
@@ -145,7 +150,7 @@ internal interface IMovingView : MovingView {
     }
 
     /**
-     * Set new movementSize value if possible, or print warning if not possible
+     * Set new movementSize if value is valid and movement is linear, or print warning
      */
     fun updateMovementSize(newValue: Int?) {
         when {
@@ -172,5 +177,28 @@ internal interface IMovingView : MovingView {
         top = baseManager().y.toInt()
         right = left + viewWidth
         bottom = top + viewHeight
+    }
+
+    /**
+     * Parse context and attributes set to identify the motion type and create a movement manager
+     */
+    fun parseAttributes(context: Context, attrs: AttributeSet?): Pair<MovingView.MotionType, BaseMovementManager> {
+        var attrPaused = false
+        var attrMovementSize = 0
+        var attrMotionType: MovingView.MotionType? = null
+
+        context.withStyledAttributes(attrs, R.styleable.Movement) {
+            attrPaused = getBoolean(R.styleable.Movement_paused, false)
+            attrMovementSize = getInt(R.styleable.Movement_movementSize, 0)
+            val motionTypeValue = getIntOrNull(R.styleable.Movement_motionType)
+            attrMotionType = when (motionTypeValue) {
+                0 -> MovingView.MotionType.NONCONTINUOUS
+                1 -> MovingView.MotionType.LINEAR
+                else -> throw IllegalStateException("Valid motionType is required to construct a MovingView")
+            }
+        }
+
+        val manager = BaseMovementManager.create(attrMotionType!!, attrPaused, attrMovementSize)
+        return Pair(attrMotionType, manager)
     }
 }

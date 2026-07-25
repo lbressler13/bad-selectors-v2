@@ -69,7 +69,7 @@ internal class LinearMovementManager(paused: Boolean, movementSize: Int) : BaseM
     }
 
     /**
-     * Update the angle to a random value that will not take the position out of the provided bounds.
+     * Update the angle to a random value that will not take the position out of the provided bounds
      *
      * @param position [Position]: position of view
      * @param dimensions [Dimensions]: dimensions of allowed positions for child view

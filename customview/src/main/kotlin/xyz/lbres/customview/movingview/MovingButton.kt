@@ -3,13 +3,11 @@ package xyz.lbres.customview.movingview
 import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatButton
-import xyz.lbres.customview.R
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
-import xyz.lbres.customview.movingview.utils.parseAttributes
 
 /**
- * Moving button, to be used as a child of a MotionLayout.
+ * Moving [AppCompatButton], to be used as a child of a MotionLayout.
  * See README for information about customizing view.
  */
 class MovingButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
@@ -19,6 +17,9 @@ class MovingButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     override val manager: MovementManager
         get() = _manager
 
+    /**
+     * Type of motion
+     */
     private var _motionType: MovingView.MotionType
     override val motionType: MovingView.MotionType
         get() = _motionType
@@ -37,6 +38,12 @@ class MovingButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         this._manager = manager
     }
 
+    /**
+     * Update the motion type for the view
+     *
+     * @param newValue [MotionType]: new motion type
+     * @param movementSize [Int]?: movement size, used only for linear movement. Defaults to null
+     */
     override fun updateMotionType(newValue: MovingView.MotionType, movementSize: Int?) {
         if (newValue != motionType) {
             _manager = BaseMovementManager.create(newValue, paused, movementSize, previous = _manager)

@@ -5,10 +5,9 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
-import xyz.lbres.customview.movingview.utils.parseAttributes
 
 /**
- * Moving TextView, to be used as a child of a MotionLayout.
+ * Moving [AppCompatTextView], to be used as a child of a MotionLayout.
  * See README for information about customizing view.
  */
 class MovingTextView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
@@ -18,6 +17,9 @@ class MovingTextView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) 
     override val manager: MovementManager
         get() = _manager
 
+    /**
+     * Type of motion
+     */
     private var _motionType: MovingView.MotionType
     override val motionType: MovingView.MotionType
         get() = _motionType
@@ -31,6 +33,12 @@ class MovingTextView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) 
         this._manager = manager
     }
 
+    /**
+     * Update the motion type for the view
+     *
+     * @param newValue [MotionType]: new motion type
+     * @param movementSize [Int]?: movement size, used only for linear movement. Defaults to null
+     */
     override fun updateMotionType(newValue: MovingView.MotionType, movementSize: Int?) {
         if (newValue != motionType) {
             _manager = BaseMovementManager.create(newValue, paused, movementSize, previous = _manager)
