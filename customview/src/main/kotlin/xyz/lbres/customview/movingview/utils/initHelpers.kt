@@ -23,6 +23,7 @@ internal fun parseAttributes(context: Context, attrs: AttributeSet?): Pair<Movin
         attrMotionType = when (motionTypeValue) {
             0 -> MovingView.MotionType.NONCONTINUOUS
             1 -> MovingView.MotionType.LINEAR
+            null -> throw IllegalStateException("motionType is required to construct a MovingView")
             else -> throw IllegalStateException("Valid motionType is required to construct a MovingView")
         }
     }

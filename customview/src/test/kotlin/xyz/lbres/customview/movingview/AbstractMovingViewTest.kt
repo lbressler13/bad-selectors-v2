@@ -18,6 +18,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+/**
+ * Tests that are required for every MovingView implementation
+ */
 @RunWith(AndroidJUnit4::class)
 abstract class AbstractMovingViewTest<T>(private val createView: (Context) -> T) where T : MovingView, T : View {
     @AfterTest
@@ -57,6 +60,8 @@ abstract class AbstractMovingViewTest<T>(private val createView: (Context) -> T)
                 assertTrue(view.paused)
                 assertEquals(MovingView.MotionType.LINEAR, view.motionType)
                 assertEquals(0, view.movementSize)
+                view.updatePosition(parentWidth, parentHeight)
+                checkViewPosition(view, Position(5, 10)) // movement size is 0
 
                 // change type with movement size
                 view.updateMotionType(MovingView.MotionType.NONCONTINUOUS)

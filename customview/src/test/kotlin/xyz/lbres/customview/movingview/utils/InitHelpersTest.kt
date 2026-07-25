@@ -66,12 +66,13 @@ class InitHelpersTest {
 
     @Test
     fun testParseInvalidMovementType() {
-        val message = "Valid motionType is required to construct a MovingView"
+        var message = "motionType is required to construct a MovingView"
         assertFailsWithMessage<IllegalStateException>(message) {
             val context = createMockContext(null, false, 0)
             parseAttributes(context, null)
         }
 
+        message = "Valid motionType is required to construct a MovingView"
         assertFailsWithMessage<IllegalStateException>(message) {
             val context = createMockContext(-1, false, 0)
             parseAttributes(context, null)
