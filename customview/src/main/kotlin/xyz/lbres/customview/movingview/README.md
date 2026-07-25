@@ -1,7 +1,7 @@
 # MovingView
 
 [MovingView](MovingView.kt) is an interface for a view whose position changes.
-All children of MotionLayout must implement MovingView.
+All children of [MotionLayout](../motionlayout) must implement MovingView.
 
 
 ## XML Attributes
