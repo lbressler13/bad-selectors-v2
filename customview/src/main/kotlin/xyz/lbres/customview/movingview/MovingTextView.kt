@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
+import xyz.lbres.customview.movingview.utils.parseAttributes
 
 /**
  * Moving [AppCompatTextView], to be used as a child of a MotionLayout.

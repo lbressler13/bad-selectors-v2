@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatButton
 import xyz.lbres.customview.movingview.manager.BaseMovementManager
 import xyz.lbres.customview.movingview.manager.MovementManager
+import xyz.lbres.customview.movingview.utils.parseAttributes
 
 /**
  * Moving [AppCompatButton], to be used as a child of a MotionLayout.
