@@ -33,7 +33,7 @@ class BaseMovementManagerTest {
         // with previous
         var previous: BaseMovementManager = NonContinuousMovementManager(true)
         previous.updatePosition(parentDimens, forcedPosition = initialPosition)
-        val (pausedHistory, positionHistory) = addListeners(manager)
+        val (pausedHistory, positionHistory) = addListeners(previous)
 
         val positions = listOf(Position(1.0, 3.0), Position(0.6, 12.0))
         withMockedNextDouble(parentWidth, parentHeight, positions) {
@@ -86,7 +86,7 @@ class BaseMovementManagerTest {
 
         previous = NonContinuousMovementManager(false)
         previous.updatePosition(parentDimens, forcedPosition = initialPosition)
-        val (pausedHistory, positionHistory) = addListeners(manager)
+        val (pausedHistory, positionHistory) = addListeners(previous)
 
         withMockedDegrees(listOf(90)) {
             manager = BaseMovementManager.create(motionType, true, 5, previous)
