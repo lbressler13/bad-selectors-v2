@@ -12,3 +12,12 @@ internal fun checkManagerPosition(manager: BaseMovementManager, position: Positi
 }
 
 private fun shorten(double: Double) = (double * 100).toInt() / 100.0
+
+/**
+ * Check that position is 0, 0 and paused value is correct
+ */
+internal fun checkDefaultManagerState(manager: BaseMovementManager, paused: Boolean) {
+    assertEquals(paused, manager.paused)
+    assertEquals(0.0, manager.x)
+    assertEquals(0.0, manager.y)
+}

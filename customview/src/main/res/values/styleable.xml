@@ -22,10 +22,11 @@
     <!-- Moving View -->
     <declare-styleable name="Movement">
         <attr name="paused" format="boolean" />
-    </declare-styleable>
-
-    <declare-styleable name="LinearMovement">
         <attr name="movementSize" format="integer" />
+        <attr name="motionType">
+            <enum name="noncontinuous" value="0" />
+            <enum name="linear" value="1" />
+        </attr>
     </declare-styleable>
 
     <!-- Single Child Layout -->

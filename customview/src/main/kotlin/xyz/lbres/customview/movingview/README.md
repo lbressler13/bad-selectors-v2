@@ -3,21 +3,36 @@
 [MovingView](MovingView.kt) is an interface for a view whose position changes.
 All children of MotionLayout must implement MovingView.
 
-The following types of motion are supported:
-- [NonContinuous motion](README_NonContinuous.md): no relation between positions
-- [Linear motion](README_Linear.md): positions exist along a line
-
-All motion types implement MovingView, but they may have additional XML properties as well.
-See the type-specific READMEs for further details.
-
 
 ## XML Attributes
 
 ### Summary
 
-| XML Attribute            | Summary                  | Type    | Required | Default |
-|:-------------------------|:-------------------------|:--------|:---------|:--------|
-| [app:paused](#apppaused) | If view motion is paused | boolean | No       | false   |
+| XML Attribute                        | Summary                                         | Type    | Required | Default |
+|:-------------------------------------|:------------------------------------------------|:--------|:---------|:--------|
+| [app:motionType](#appmotiontype)     | If view motion is paused                        | enum    | Yes      |         |
+| [app:movementSize](#appmovementsize) | Size of each position update with linear motion | integer | No       | 0       |
+| [app:paused](#apppaused)             | If view motion is paused                        | boolean | No       | false   |
+
+
+### app:motionType
+
+The type of motion applied to the view when generating position updates.
+There are two possible values, which correspond to values in the [MotionType](#motion-types) enum class.
+
+| Value         | MotionType Value         |
+|:--------------|:-------------------------|
+| noncontinuous | MotionType.NONCONTINUOUS |
+| linear        | MotionType.LINEAR        |
+
+
+### app:movementSize
+
+Integer value indicating the size of each position update with linear motion.
+This value is assigned to the movementSize property.
+
+If the [motion type](#appmotiontype) is not linear, this value will be ignored.
+
 
 ### app:paused
 
@@ -38,10 +53,10 @@ If the view has an attached OnMoveListener, its callback will **not** be invoked
 
 This method takes the following parameters, and returns Unit:
 
-| Parameter    | Summary                                                | Type    | Default |
-|:-------------|:-------------------------------------------------------|:--------|:--------|
-| parentWidth  | Width of parent view                                   | Int     |         |
-| parentHeight | Height of parent view                                  | Int     |         |
+| Parameter    | Summary               | Type |
+|:-------------|:----------------------|:-----|
+| parentWidth  | Width of parent view  | Int  |
+| parentHeight | Height of parent view | Int  |
 
 
 ### updatePosition
@@ -87,6 +102,19 @@ Signature 2:
 | y            | New y value           | Int  |
 
 
+### updateMotionType
+
+Change the type of the view's motion.
+This affects future position updates, but does not change the current position, paused status, or listeners.
+
+This method takes the following parameters, and returns Unit:
+
+| Parameter    | Summary                                                         | Type       | Default |
+|:-------------|:----------------------------------------------------------------|:-----------|:--------|
+| newValue     | New motion type                                                 | MotionType |         |
+| movementSize | New movement size. Used only if the new movement type is linear | Int?       | null    |
+
+
 ### setOnMoveListener
 
 Set listener to bind to position update events.
@@ -125,6 +153,26 @@ Second signSignature 2:
 | callback  | Callback to invoke when paused state changes. | (View, Boolean) -> Unit |
 
 
+## Motion Types
+
+The following types of motion are supported:
+- NonContinuous
+- Linear
+
+Each motion type corresponds to a value in the [MotionType](MovingView.kt) enum class.
+See below for details of each type of motion.
+
+### NonContinuous
+
+Noncontinuous motion means that there is no relation between position updates.
+
+
+### Linear
+
+Linear motion means that position updates are made along a straight line.
+When the view reaches the edge of its parent, a new line is selected, and movement continues along that line.
+
+
 ## Event Listeners
 
 ### MovingView.OnMoveListener
@@ -152,3 +200,17 @@ The interface consists of a single onChange method, which takes the following pa
 |:----------|:--------------------------------|:--------|
 | view      | View whose paused state changed | View    |
 | paused    | New paused state of view        | Boolean |
+
+
+## Implementations
+
+### MovingButton
+
+[MovingButton](MovingButton.kt) extends the AppCompatButton class and implements the MovingView interface. It inherits all values, methods, and attributes from the class and interface.
+See the AppCompatButton documentation for more information about this class: https://developer.android.com/reference/androidx/appcompat/widget/AppCompatButton.
+
+
+### MovingTextView
+
+[MovingTextView](MovingTextView.kt) extends the TextView class and implements the MovingView interface. It inherits all values, methods, and attributes from the class and interface.
+See the TextView documentation for more information about this class: https://developer.android.com/reference/android/widget/TextView.

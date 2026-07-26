@@ -20,13 +20,18 @@ internal fun withMockedNextDouble(
     parentWidth: Double,
     parentHeight: Double,
     mockPositions: List<Position<Double>>,
+    mock: Boolean = true,
     test: () -> Unit,
 ) {
-    mockkStatic(::random)
+    if (mock) {
+        mockkStatic(::random)
+    }
     every { random.nextDouble(0.0, parentWidth) } returnsMany mockPositions.map { it.x }
     every { random.nextDouble(0.0, parentHeight) } returnsMany mockPositions.map { it.y }
     test()
-    unmockkStatic(::random)
+    if (mock) {
+        unmockkStatic(::random)
+    }
 }
 
 /**
@@ -35,8 +40,10 @@ internal fun withMockedNextDouble(
  * @param mockDegrees List<Int>: list of angles, in degrees, to use for mocks
  * @param test: test block to execute
  */
-fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
-    mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+fun withMockedDegrees(mockDegrees: List<Int>, mock: Boolean = true, test: () -> Unit) {
+    if (mock) {
+        mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+    }
     if (mockDegrees.size == 1) {
         every { any<Set<Int>>().seededRandom() } returns mockDegrees[0]
     } else {
@@ -47,5 +54,8 @@ fun withMockedDegrees(mockDegrees: List<Int>, test: () -> Unit) {
         every { IntRange(0, 360).seededRandom() } returns mockDegrees[0]
         test()
     }
-    unmockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+
+    if (mock) {
+        unmockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+    }
 }
