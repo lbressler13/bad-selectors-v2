@@ -149,8 +149,8 @@ internal interface IMovingView : MovingView {
      */
     fun updateMovementSize(newValue: Int?) {
         when {
-            manager !is LinearMovementManager -> Log.e(null, "Cannot set movementSize with non-linear motion")
-            newValue == null -> Log.e(null, "Cannot set movementSize to null with linear motion")
+            manager !is LinearMovementManager -> Log.w(null, "Cannot set movementSize with non-linear motion")
+            newValue == null -> Log.w(null, "Cannot set movementSize to null with linear motion")
             else -> (manager as LinearMovementManager).movementSize = newValue
         }
     }

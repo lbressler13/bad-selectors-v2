@@ -1,3 +1,7 @@
 package xyz.lbres.customview.movingview
 
-class MovingButtonTest : AbstractMovingViewTest<MovingButton>({ MovingButton(it) })
+import android.content.Context
+
+class MovingButtonTest : AbstractMovingViewTest<MovingButton>() {
+    override val createView: (Context) -> MovingButton = { MovingButton(it) }
+}

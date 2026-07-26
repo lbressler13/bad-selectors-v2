@@ -105,7 +105,7 @@ Signature 2:
 ### updateMotionType
 
 Change the type of the view's motion.
-This affects future position updates, but does not change the current position or paused status.
+This affects future position updates, but does not change the current position, paused status, or listeners.
 
 This method takes the following parameters, and returns Unit:
 

@@ -22,7 +22,9 @@ import kotlin.test.assertTrue
  * Tests that are required for every MovingView implementation
  */
 @RunWith(AndroidJUnit4::class)
-abstract class AbstractMovingViewTest<T>(private val createView: (Context) -> T) where T : MovingView, T : View {
+abstract class AbstractMovingViewTest<T>() where T : MovingView, T : View {
+    abstract val createView: (Context) -> T
+
     @AfterTest
     fun cleanupMockk() {
         unmockkAll()
