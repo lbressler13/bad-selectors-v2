@@ -136,13 +136,13 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
     companion object {
         /**
          * Create a new instance of a movement manager based on motion type and parameters.
-         * Can also apply values from an existing motion type.
+         * Can also apply values from an existing movement manager.
          *
          * @param motionType [MovingView.MotionType]: type of motion to use
          * @param paused [Boolean]: if movement is initially paused
          * @param movementSize [Int]?: size of each movement in linear movement. Defaults to null.
          * @param previous [BaseMovementManager]?: previous movement manager.
-         * If provided, the position and paused values from this manager will be applied to the new manager.
+         * If provided, the position and paused values, as well as callbacks, from this manager will be applied to the new manager.
          * If the previous and new manager are both linear, the movementSize will be applied as well.
          */
         fun create(
@@ -152,22 +152,18 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
             previous: BaseMovementManager? = null,
         ): BaseMovementManager {
             val paused = previous?.paused ?: paused
+            val movementSize = (previous as? LinearMovementManager?)?.movementSize ?: movementSize ?: 0
 
             val manager = when (motionType) {
                 MovingView.MotionType.NONCONTINUOUS -> NonContinuousMovementManager(paused)
-                MovingView.MotionType.LINEAR -> LinearMovementManager(paused, movementSize ?: 0)
+                MovingView.MotionType.LINEAR -> LinearMovementManager(paused, movementSize)
             }
 
             // update with values from previous manager
             if (previous != null) {
                 manager.position = previous.position
-                manager.paused = previous.paused
                 manager.onMoveCallback = previous.onMoveCallback
                 manager.onPauseChangedCallback = previous.onPauseChangedCallback
-
-                if (previous is LinearMovementManager && manager is LinearMovementManager) {
-                    manager.movementSize = previous.movementSize
-                }
             }
 
             return manager
