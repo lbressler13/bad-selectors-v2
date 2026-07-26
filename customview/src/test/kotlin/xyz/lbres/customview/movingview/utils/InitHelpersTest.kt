@@ -9,20 +9,13 @@ import xyz.lbres.customview.movingview.manager.LinearMovementManager
 import xyz.lbres.customview.movingview.manager.NonContinuousMovementManager
 import xyz.lbres.customview.movingview.manager.checkDefaultManagerState
 import xyz.lbres.testutils.assertFailsWithMessage
-import xyz.lbres.testutils.mockLog
 import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
 @RunWith(AndroidJUnit4::class)
 class InitHelpersTest {
-
-    @BeforeTest
-    fun setupTest() {
-        mockLog()
-    }
 
     @AfterTest
     fun cleanupTest() {

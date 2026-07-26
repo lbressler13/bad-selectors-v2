@@ -17,34 +17,36 @@ class BaseMovementManagerTest {
     private val parentHeight = 15.0
     private val parentDimens = Dimensions(parentWidth.toInt(), parentHeight.toInt())
 
+    private val initialPosition = Position(5.0, 4.0)
+
     @Test
     fun testCreateNonContinuous() {
+        val motionType = MovingView.MotionType.NONCONTINUOUS
+        // paused
+        var manager = BaseMovementManager.create(motionType, true)
+        assertIs<NonContinuousMovementManager>(manager)
+        checkDefaultManagerState(manager, true)
+
+        // unpaused
+        manager = BaseMovementManager.create(motionType, false)
+        assertIs<NonContinuousMovementManager>(manager)
+        checkDefaultManagerState(manager, false)
+
+        // with previous
+        val positionHistory: MutableList<Position<Int>> = mutableListOf()
+        val pausedHistory: MutableList<Boolean> = mutableListOf()
+        var previous: BaseMovementManager = NonContinuousMovementManager(true)
+        previous.updatePosition(parentDimens, forcedPosition = initialPosition)
+        previous.setOnMoveCallback { x, y -> positionHistory.add(Position(x, y)) }
+        previous.setOnPauseChangedCallback { pausedHistory.add(it) }
+
         val positions = listOf(Position(1.0, 3.0), Position(0.6, 12.0))
         withMockedNextDouble(parentWidth, parentHeight, positions) {
-            val motionType = MovingView.MotionType.NONCONTINUOUS
-            // paused
-            var manager = BaseMovementManager.create(motionType, true)
-            assertIs<NonContinuousMovementManager>(manager)
-            checkDefaultManagerState(manager, true)
-
-            // unpaused
-            manager = BaseMovementManager.create(motionType, false)
-            assertIs<NonContinuousMovementManager>(manager)
-            checkDefaultManagerState(manager, false)
-
-            // with previous
-            val positionHistory: MutableList<Position<Int>> = mutableListOf()
-            val pausedHistory: MutableList<Boolean> = mutableListOf()
-            var previous: BaseMovementManager = NonContinuousMovementManager(true)
-            previous.updatePosition(parentDimens, forcedPosition = Position(5.0, 4.0))
-            previous.setOnMoveCallback { x, y -> positionHistory.add(Position(x, y)) }
-            previous.setOnPauseChangedCallback { pausedHistory.add(it) }
-
             manager = BaseMovementManager.create(motionType, false, previous = previous)
             assertIs<NonContinuousMovementManager>(manager)
             assertTrue(manager.paused) // overrides paused parameter
-            assertEquals(5.0, manager.x)
-            assertEquals(4.0, manager.y)
+            assertEquals(initialPosition.x, manager.x)
+            assertEquals(initialPosition.y, manager.y)
 
             manager.paused = false
             manager.updatePosition(parentDimens)
@@ -86,19 +88,19 @@ class BaseMovementManagerTest {
 
         // with previous
         var previous: BaseMovementManager = LinearMovementManager(true, 10)
-        previous.updatePosition(parentDimens, forcedPosition = Position(5.0, 4.0))
+        previous.updatePosition(parentDimens, forcedPosition = initialPosition)
         manager = BaseMovementManager.create(motionType, false, 1, previous)
 
         assertIs<LinearMovementManager>(manager)
         assertTrue(manager.paused) // overrides paused parameter
-        assertEquals(5.0, manager.x)
-        assertEquals(4.0, manager.y)
+        assertEquals(initialPosition.x, manager.x)
+        assertEquals(initialPosition.y, manager.y)
         assertEquals(10, manager.movementSize) // overrides movement size parameter
 
         val positionHistory: MutableList<Position<Int>> = mutableListOf()
         val pausedHistory: MutableList<Boolean> = mutableListOf()
         previous = NonContinuousMovementManager(false)
-        previous.updatePosition(parentDimens, forcedPosition = Position(5.0, 4.0))
+        previous.updatePosition(parentDimens, forcedPosition = initialPosition)
         previous.setOnMoveCallback { x, y -> positionHistory.add(Position(x, y)) }
         previous.setOnPauseChangedCallback { pausedHistory.add(it) }
 
@@ -107,13 +109,13 @@ class BaseMovementManagerTest {
 
             assertIs<LinearMovementManager>(manager)
             assertFalse(manager.paused) // overrides paused parameter
-            assertEquals(5.0, manager.x)
-            assertEquals(4.0, manager.y)
+            assertEquals(initialPosition.x, manager.x)
+            assertEquals(initialPosition.y, manager.y)
             assertEquals(5, (manager as LinearMovementManager).movementSize)
 
             manager.paused = true
-            manager.updatePosition(Dimensions(50, 100), forceUpdate = true)
-            manager.updatePosition(Dimensions(50, 100), forceUpdate = true)
+            manager.updatePosition(parentDimens, forceUpdate = true)
+            manager.updatePosition(parentDimens, forceUpdate = true)
             manager.paused = false
             assertEquals(listOf(true, false), pausedHistory)
             checkPositionHistory(listOf(Position(5, 9), Position(5, 14)), positionHistory)
