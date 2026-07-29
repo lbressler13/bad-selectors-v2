@@ -25,7 +25,9 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
     private val loopHandler: Handler
     private val runnable: Runnable
 
-    private var moveAllChildren: Boolean = false // prevents all views from updating if one view requests layout
+    private var intervalCompleted: Boolean = false // prevents all views from updating if one view requests layout
+    private var forceChildUpdates: Boolean = false
+    private var forceUpdate: Boolean = false
 
     /**
      * If the layout is paused, optionally passed in attributes.
@@ -65,7 +67,7 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         loopHandler = Handler(Looper.myLooper()!!)
         runnable = Runnable {
             if (!paused) {
-                moveAllChildren = true
+                intervalCompleted = true
                 requestLayout()
                 // TODO look at postDelayed
                 postRunnableWithDelay()
@@ -113,9 +115,12 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
     /**
      * Immediately move all children, even if layout is paused
      */
-    fun forceUpdate() {
-        moveAllChildren = true
+    fun forceUpdate(forceChildUpdates: Boolean = false) {
+        intervalCompleted = true
+        forceUpdate = true
+        this.forceChildUpdates = forceChildUpdates
         cancelRunnable()
+        postRunnable()
     }
 
     /**
@@ -137,12 +142,14 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
 
         children.forEachIndexed { index, child ->
             child as MovingView
-            child.updatePosition(widthBound, heightBound)
+            child.updatePosition(widthBound, heightBound, forceUpdate = forceChildUpdates)
 
             child.measure(widthSpec, heightSpec)
             child.layout(child.left, child.top, child.left + child.measuredWidth, child.top + child.measuredHeight)
         }
-        moveAllChildren = false
+        intervalCompleted = false
+        forceChildUpdates = false
+        forceUpdate = false
     }
 
     /**
