@@ -69,4 +69,5 @@ internal fun createMockContext(paused: Boolean = false, motionInterval: Int = 0)
  */
 internal fun logViewPositions(views: List<View>) {
     views.forEach { println("(${it.left}, ${it.top})") }
+    println()
 }

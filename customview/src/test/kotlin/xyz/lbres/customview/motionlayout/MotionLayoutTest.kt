@@ -155,15 +155,6 @@ class MotionLayoutTest {
     }
 
     @Test
-    fun testRequestLayout() {
-        // without padding
-
-        // with padding
-
-        // TODO update now
-    }
-
-    @Test
     @Ignore
     fun testOnAttachedToWindow() {
         // TODO with shadow looper
