@@ -51,7 +51,7 @@ class MotionLayoutTest {
         val params = ViewGroup.LayoutParams(100, 200)
 
         // moving view
-        val views = getMovingViews(List(5) { false })
+        val views = List(5) { getMovingView(0, true, 0) as View }
 
         val layout = MotionLayout(createMockContext())
         layout.addView(views[0])
@@ -72,30 +72,17 @@ class MotionLayoutTest {
         // non-moving view
         val message = "Child of MotionLayout must implement MovingView"
         val view = getNonMovingViews(1)[0]
-        assertFailsWithMessage<IllegalStateException>(message) {
-            layout.addView(view)
-            assertEquals(5, layout.childCount)
+        val checkAddFails = { addView: () -> Unit ->
+            assertFailsWithMessage<IllegalStateException>(message) {
+                addView()
+                assertEquals(5, layout.childCount)
+            }
         }
-
-        assertFailsWithMessage<IllegalStateException>(message) {
-            layout.addView(view, params)
-            assertEquals(5, layout.childCount)
-        }
-
-        assertFailsWithMessage<IllegalStateException>(message) {
-            layout.addView(view, 0)
-            assertEquals(5, layout.childCount)
-        }
-
-        assertFailsWithMessage<IllegalStateException>(message) {
-            layout.addView(view, 100, 200)
-            assertEquals(5, layout.childCount)
-        }
-
-        assertFailsWithMessage<IllegalStateException>(message) {
-            layout.addView(view, 0, params)
-            assertEquals(5, layout.childCount)
-        }
+        checkAddFails { layout.addView(view) }
+        checkAddFails { layout.addView(view, params) }
+        checkAddFails { layout.addView(view, 0) }
+        checkAddFails { layout.addView(view, 100, 200) }
+        checkAddFails { layout.addView(view, 0, params) }
     }
 
     @Test
@@ -168,9 +155,12 @@ class MotionLayoutTest {
     }
 
     @Test
-    @Ignore
     fun testRequestLayout() {
-        // TODO with shadow looper
+        // without padding
+
+        // with padding
+
+        // TODO update now
     }
 
     @Test

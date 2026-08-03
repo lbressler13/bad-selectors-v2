@@ -1,6 +1,6 @@
 # MotionLayout
 
-[MotionLayout](MotionLayout.kt) which updates the position of all children at the conclusion of a fixed interval.
+[MotionLayout](MotionLayout.kt) is a layout which updates the position of its children at the conclusion of a fixed interval.
 All children must implement the [MovingView](../movingview) interface, and the updatePosition method is called on all children at the conclusion of each interval.
 
 MotionLayout extends the ViewGroup class and inherits all values, methods, and attributes from that class.
@@ -37,6 +37,6 @@ Call updateChildren on all children.
 
 This method takes the following parameters, and returns Unit:
 
-| Parameter         | Summary                                                              | Type     | Default |
-|:------------------|:---------------------------------------------------------------------|:---------|:--------|
-| forceChildUpdates | : If the forceUpdate flag should be use when invoking updatePosition | Boolean  | false   |
+| Parameter         | Summary                                                                           | Type     | Default |
+|:------------------|:----------------------------------------------------------------------------------|:---------|:--------|
+| forceChildUpdates | If the forceUpdate flag should be use when invoking updatePosition on child views | Boolean  | false   |

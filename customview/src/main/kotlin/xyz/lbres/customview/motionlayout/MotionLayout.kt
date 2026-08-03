@@ -14,6 +14,11 @@ import xyz.lbres.customview.R
 import xyz.lbres.customview.movingview.MovingView
 import kotlin.math.max
 
+/**
+ * Layout that updates the positions of child views at a specified interval.
+ * All children must implement the [MovingView] interface.
+ * See README for information about customizing layout.
+ */
 open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : ViewGroup(
     context,
     attrs,
@@ -26,12 +31,11 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
     private val runnable: Runnable
 
     private var intervalCompleted: Boolean = false // prevents all views from updating if one view requests layout
-    private var forceChildUpdates: Boolean = false
-    private var forceUpdate: Boolean = false
+    private var forceUpdate: Boolean = false // if position update should be forced, even if layout is paused
+    private var forceChildUpdates: Boolean = false // if child positions should be updated even when children are paused
 
     /**
-     * If the layout is paused, optionally passed in attributes.
-     * Defaults to `false`.
+     * If movement of layout is paused
      */
     private var _paused: Boolean
     var paused
@@ -39,8 +43,7 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         set(value) = updatePaused(value)
 
     /**
-     * Interval between movements of children, in milliseconds. Optionally passed in attributes.
-     * Defaults to 0.
+     * Interval between child position updates
      */
     private var _motionInterval: Long
     var motionInterval: Long
@@ -69,8 +72,8 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
             if (forceUpdate || !paused) {
                 intervalCompleted = true
                 requestLayout()
-                // TODO look at postDelayed
                 postRunnableWithDelay()
+                // TODO look at postDelayed
                 // loopHandler.postDelayed(this, motionInterval)
             }
         }
@@ -81,7 +84,7 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     /**
-     * Set new paused value and start or stop runnabled
+     * Set new paused value and start or stop runnable
      */
     private fun updatePaused(newValue: Boolean) {
         val valueUpdated = paused != newValue
@@ -95,7 +98,7 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     /**
-     * Set new motion interval, and restart runnable with new interval if not paused
+     * Set new motion interval and restart runnable with new interval if not paused
      */
     private fun updateMotionInterval(newValue: Long) {
         val valueUpdated = motionInterval != newValue
@@ -163,27 +166,27 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
     }
 
     override fun addView(child: View?) {
-        addView(child) { super.addView(child) }
+        addMovingView(child) { super.addView(child) }
     }
 
     override fun addView(child: View?, params: LayoutParams?) {
-        addView(child) { super.addView(child, params) }
+        addMovingView(child) { super.addView(child, params) }
     }
 
     override fun addView(child: View?, index: Int) {
-        addView(child) { super.addView(child, index) }
+        addMovingView(child) { super.addView(child, index) }
     }
 
     override fun addView(child: View?, width: Int, height: Int) {
-        addView(child) { super.addView(child, width, height) }
+        addMovingView(child) { super.addView(child, width, height) }
     }
 
     override fun addView(child: View?, index: Int, params: LayoutParams?) {
-        addView(child) { super.addView(child, index, params) }
+        addMovingView(child) { super.addView(child, index, params) }
     }
 
     override fun addViewInLayout(child: View?, index: Int, params: LayoutParams?): Boolean {
-        return addView(child) { super.addViewInLayout(child, index, params) }
+        return addMovingView(child) { super.addViewInLayout(child, index, params) }
     }
 
     override fun addViewInLayout(
@@ -192,21 +195,21 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         params: LayoutParams?,
         preventRequestLayout: Boolean,
     ): Boolean {
-        return addView(child) { super.addViewInLayout(child, index, params, preventRequestLayout) }
+        return addMovingView(child) { super.addViewInLayout(child, index, params, preventRequestLayout) }
     }
 
     /**
      * Validate that view implements [MovingView] before adding
      *
      * @param child [View]?: view to add
-     * @param additionFn () -> T: function to add view to layout
-     * @return T: return value from [additionFn]
+     * @param addView () -> T: function to add view to layout
+     * @return T: return value from [addView]
      */
-    private fun <T> addView(child: View?, additionFn: () -> T): T {
+    private fun <T> addMovingView(child: View?, addView: () -> T): T {
         if (child !is MovingView) {
             throw IllegalStateException("Child of MotionLayout must implement MovingView")
         }
-        return additionFn()
+        return addView()
     }
 
     override fun onAttachedToWindow() {
