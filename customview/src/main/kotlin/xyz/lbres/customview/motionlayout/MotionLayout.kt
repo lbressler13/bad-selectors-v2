@@ -66,7 +66,7 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         // start runnable
         loopHandler = Handler(Looper.myLooper()!!)
         runnable = Runnable {
-            if (!paused) {
+            if (forceUpdate || !paused) {
                 intervalCompleted = true
                 requestLayout()
                 // TODO look at postDelayed

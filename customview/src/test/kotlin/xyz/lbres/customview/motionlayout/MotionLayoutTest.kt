@@ -1,26 +1,25 @@
 package xyz.lbres.customview.motionlayout
 
-import android.content.Context
-import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.mockk.every
-import io.mockk.spyk
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import org.junit.runner.RunWith
-import xyz.lbres.customview.R
-import xyz.lbres.customview.movingview.MovingButton
-import xyz.lbres.customview.testutils.createMockTypedArray
-import xyz.lbres.kotlinutils.closedrange.rangeOfInt
+import xyz.lbres.customview.data.Position
+import xyz.lbres.customview.testutils.checkViewPosition
+import xyz.lbres.customview.testutils.setViewSize
+import xyz.lbres.customview.testutils.withMockedDegrees
+import xyz.lbres.customview.testutils.withMockedNextDouble
+import xyz.lbres.customview.utils.random
+import xyz.lbres.customview.utils.seededRandom
 import xyz.lbres.testutils.assertFailsWithMessage
 import kotlin.test.AfterTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import xyz.lbres.customview.movingview.createMockContext as createMovingViewContext
 
 @RunWith(AndroidJUnit4::class)
 class MotionLayoutTest {
@@ -100,61 +99,89 @@ class MotionLayoutTest {
     }
 
     @Test
+    @Ignore
     fun testUpdatePaused() {
-        // TODO
+        // TODO with shadow looper
     }
 
     @Test
+    @Ignore
     fun testUpdateMotionInterval() {
-        // TODO
+        // TODO with shadow looper
     }
 
     @Test
+    @Ignore
     fun testIntervalComplete() {
-        // TODO
+        // TODO with shadow looper
     }
 
     @Test
+    @Ignore
+    fun testForceUpdate() {
+        mockkStatic(::random)
+        mockkStatic(IntRange::seededRandom, Set<Int>::seededRandom)
+
+        val width = 100
+        val height = 200
+        val positions = mutableListOf(Position(20, 50), Position(91, 191), Position(0, 5))
+        val doublePositions = positions.map { Position(it.x.toDouble(), it.y.toDouble()) }
+        val views: MutableList<View> = mutableListOf()
+        withMockedNextDouble(width.toDouble(), height.toDouble(), doublePositions, mock = false) {
+            withMockedDegrees(listOf(90, -90, 180), mock = false) {
+                fun createView(paused: Boolean, motionSize: Int): View {
+                    val view = getMovingView(1, paused, motionSize)
+                    view as View
+                    setViewSize(view, 10, 15)
+                    view.setInitialPosition(width, height)
+                    return view
+                }
+
+                views.add(createView(false, 1))
+                views.add(createView(true, 3))
+                views.add(createView(false, 2))
+            }
+        }
+        logViewPositions(views)
+
+        // paused
+        val layout = createLayout(true, 10)
+        views.forEach { layout.addView(it) }
+        layout.forceUpdate()
+        views.forEachIndexed { index, view -> checkViewPosition(view, positions[index]) }
+
+        // unpaused
+        layout.paused = false
+        layout.forceUpdate()
+        positions[0] = Position(20, 51)
+        positions[2] = Position(0, 7)
+        logViewPositions(views)
+        views.forEachIndexed { index, view -> checkViewPosition(view, positions[index]) }
+
+        // force child updates
+        layout.paused = true
+        layout.forceUpdate(forceChildUpdates = true)
+        positions[0] = Position(20, 52)
+        positions[1] = Position(91, 188)
+        positions[2] = Position(0, 9)
+        views.forEachIndexed { index, view -> checkViewPosition(view, positions[index]) }
+    }
+
+    @Test
+    @Ignore
     fun testRequestLayout() {
-        // TODO
+        // TODO with shadow looper
     }
 
     @Test
+    @Ignore
     fun testOnAttachedToWindow() {
-        // TODO possibly?
+        // TODO with shadow looper
     }
 
     @Test
+    @Ignore
     fun testOnDetachedFromWindow() {
         // TODO possibly?
-    }
-
-    private fun getMovingViews(pausedValues: List<Boolean>): List<View> {
-        return pausedValues.map {
-            val context = createMovingViewContext(0, it, 1)
-            MovingButton(context)
-        }
-    }
-
-    private fun getNonMovingViews(size: Int): List<View> {
-        val context: Context = spyk(ApplicationProvider.getApplicationContext())
-        return rangeOfInt(size).map { View(context) }
-    }
-
-    private fun createMockContext(paused: Boolean = false, motionInterval: Int = 0): Context {
-        val mockArray = createMockTypedArray(
-            setOf(
-                R.styleable.Movement_motionInterval,
-                R.styleable.Movement_paused,
-            ),
-        )
-        every { mockArray.getInt(R.styleable.Movement_motionInterval, any()) } returns motionInterval
-        every { mockArray.getBoolean(R.styleable.Movement_paused, any()) } returns paused
-
-        val context: Context = spyk(ApplicationProvider.getApplicationContext())
-        every {
-            context.obtainStyledAttributes(any<AttributeSet>(), R.styleable.Movement, any(), any())
-        } returns mockArray
-        return context
     }
 }
