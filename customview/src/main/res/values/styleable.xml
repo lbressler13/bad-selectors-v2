@@ -27,6 +27,7 @@
             <enum name="noncontinuous" value="0" />
             <enum name="linear" value="1" />
         </attr>
+        <attr name="motionInterval" format="integer" />
     </declare-styleable>
 
     <!-- Single Child Layout -->
