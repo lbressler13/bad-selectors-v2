@@ -8,6 +8,7 @@ import io.mockk.unmockkAll
 import org.junit.runner.RunWith
 import xyz.lbres.customview.data.Position
 import xyz.lbres.customview.testutils.checkViewPosition
+import xyz.lbres.customview.testutils.logViewPositions
 import xyz.lbres.customview.testutils.setViewSize
 import xyz.lbres.customview.testutils.withMockedDegrees
 import xyz.lbres.customview.testutils.withMockedNextDouble
@@ -163,6 +164,6 @@ class MotionLayoutTest {
     @Test
     @Ignore
     fun testOnDetachedFromWindow() {
-        // TODO possibly?
+        // TODO with shadow looper
     }
 }

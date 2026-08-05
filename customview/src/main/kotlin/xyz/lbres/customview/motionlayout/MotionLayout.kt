@@ -117,6 +117,8 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
 
     /**
      * Immediately move all children, even if layout is paused
+     *
+     * @param forceChildUpdates [Boolean]: if child updates should be forced even when children are paused
      */
     fun forceUpdate(forceChildUpdates: Boolean = false) {
         intervalCompleted = true
@@ -138,8 +140,8 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         val horizontalPadding = paddingRight + paddingLeft
         val verticalPadding = paddingTop + paddingBottom
-        val widthBound = right - left - horizontalPadding
-        val heightBound = bottom - top - verticalPadding
+        val widthBound = width - horizontalPadding
+        val heightBound = height - verticalPadding
         val widthSpec = MeasureSpec.makeMeasureSpec(widthBound, MeasureSpec.AT_MOST)
         val heightSpec = MeasureSpec.makeMeasureSpec(heightBound, MeasureSpec.AT_MOST)
 
