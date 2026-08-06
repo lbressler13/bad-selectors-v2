@@ -6,6 +6,7 @@ These values can be customized using [XML attributes](#xml-attributes).
 
 CircleLayout extends the ViewGroup class.
 
+
 ## XML Attributes
 
 ### Summary
@@ -19,6 +20,7 @@ CircleLayout extends the ViewGroup class.
 | [app:separationAngle](#appseparationangle) | Fixed angle between children                                                 | int       | No       |
 | [app:startAngle](#appstartangle)           | Angle where first child is positioned                                        | int       | No       |
 
+
 ### app:angleMode
 
 The mode to determine how the spacing between children is calculated.
@@ -30,6 +32,7 @@ There are two possible values, which correspond to values in the AngleMode enum 
 | fixed       | AngleMode.FIXED       | [app:separationAngle](#appseparationangle) must be set |
 
 Spacing is calculated using AngleMode.DISTRIBUTED if no value is specified, or if the requirements for the other mode are not met.
+
 
 ### app:radiusMode
 
@@ -44,30 +47,36 @@ There are three possible values, which correspond to values in the RadiusMode en
 
 Radius is calculated using RadiusMode.FIT_CHILDREN if no value is specified, or if the requirements for the other modes are not met.
 
+
 ### app:radiusPercent
 
 Percentage of layout size that is used to calculate the radius size.
 Radius size is calculated using the minimum dimension of the layout.
 Used only if [app:radiusMode](#appradiusmode) is set to percent.
 
+
 ### app:radiusSize
 
 Fixed size for the radius of the circle. Does not consider layout size or children.
 Used only if [app:radiusMode](#appradiusmode) is set to fixed.
+
 
 ### app:separationAngle
 
 Fixed number of degrees between children. Does not consider circumference or number of children.
 Used only if [app:angleMode](#appanglemode) is set to fixed.
 
+
 ### app:startAngle
 
 Offset of the first child, in degrees. If no value is specified, the first child is positioned at the top of the circle (0 degrees).
+
 
 ## Inherited Values and Methods
 
 CircleLayout inherits all values, methods, and attributes from the ViewGroup class.
 See the [ViewGroup documentation](https://developer.android.com/reference/android/view/ViewGroup) for details.
+
 
 # SingleChildCircleLayout
 
