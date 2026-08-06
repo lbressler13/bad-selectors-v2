@@ -40,3 +40,11 @@ This method takes the following parameters, and returns Unit:
 | Parameter         | Summary                                                                           | Type     | Default |
 |:------------------|:----------------------------------------------------------------------------------|:---------|:--------|
 | forceChildUpdates | If the forceUpdate flag should be use when invoking updatePosition on child views | Boolean  | false   |
+
+
+# SingleChildMotionLayout
+
+SingleChildMotionLayout extends the MotionLayout class and implements the SingleChildLayout interface.
+It inherits all values, methods, and attributes from the class and interface.
+
+See [here](../interfaces/singlechildlayout/README.md) for more information about SingleChildLayout.
