@@ -37,6 +37,10 @@ fun View.gone() {
     visibility = View.GONE
 }
 
+fun View.visibleIf(visible: Boolean, defaultVisibility: Int = View.GONE) {
+    visibility = if (visible) View.VISIBLE else defaultVisibility
+}
+
 /**
  * Set view opacity to 50%.
  */

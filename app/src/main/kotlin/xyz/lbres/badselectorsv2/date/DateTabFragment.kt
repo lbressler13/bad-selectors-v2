@@ -9,6 +9,7 @@ import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.abstracts.TabFragment
 import xyz.lbres.badselectorsv2.databinding.TabFragmentBinding
 import xyz.lbres.badselectorsv2.date.nestedcircles.NestedCirclesFragment
+import xyz.lbres.badselectorsv2.date.randomdots.RandomDotsFragment
 
 class DateTabFragment : TabFragment() {
     override var metadata = DateTabFragment.metadata
@@ -22,6 +23,7 @@ class DateTabFragment : TabFragment() {
     override lateinit var binding: TabFragmentBinding
 
     private val nestedCirclesFragment: NestedCirclesFragment by lazy { NestedCirclesFragment() }
+    private val randomDotsFragment: RandomDotsFragment by lazy { RandomDotsFragment() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = TabFragmentBinding.inflate(layoutInflater)
@@ -39,6 +41,7 @@ class DateTabFragment : TabFragment() {
     override fun getFragmentFromPosition(position: Int): Fragment {
         return when (position) {
             0 -> nestedCirclesFragment
+            1 -> randomDotsFragment
             else -> nestedCirclesFragment
         }
     }
@@ -46,7 +49,7 @@ class DateTabFragment : TabFragment() {
     companion object {
         val metadata = Metadata(
             R.string.title_date,
-            listOf(R.string.title_nested_circles),
+            listOf(R.string.title_nested_circles, R.string.title_random_dots),
             R.id.navigateHomeToDate,
         )
     }

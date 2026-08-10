@@ -6,6 +6,8 @@
     <integer name="monthsCircleNumChildren">12</integer>
     <integer name="yearsCircleNumChildren">60</integer>
 
+    <integer name="randomDotsNumChildren">100</integer>
+
 
     <!-- Phone -->
     <!-- Random Circle -->

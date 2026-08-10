@@ -19,7 +19,7 @@
             style="@style/ConstrainHorizontalCenter"
             android:layout_width="wrap_content"
             android:paddingTop="30dp"
-            android:text="@string/tap_to_select"
+            android:text="@string/tap_digits_to_select"
             android:textSize="25sp"
             app:layout_constraintTop_toBottomOf="@id/digitsLayout"
             tools:ignore="MissingConstraints" />

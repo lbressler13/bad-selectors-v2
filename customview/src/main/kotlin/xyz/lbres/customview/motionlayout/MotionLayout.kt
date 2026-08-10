@@ -33,6 +33,7 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
     private var intervalCompleted: Boolean = false // prevents all views from updating if one view requests layout
     private var forceUpdate: Boolean = false // if position update should be forced, even if layout is paused
     private var forceChildUpdates: Boolean = false // if child positions should be updated even when children are paused
+    private var initializeChildren: Boolean = false // if update should call initializePosition on children
 
     /**
      * If movement of layout is paused
@@ -128,6 +129,12 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         postRunnable()
     }
 
+    // TODO add to readme
+    fun setInitialChildPositions() {
+        initializeChildren = true
+        forceUpdate()
+    }
+
     /**
      * Display children on screen.
      *
@@ -147,7 +154,11 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
 
         children.forEachIndexed { index, child ->
             child as MovingView
-            child.updatePosition(widthBound, heightBound, forceUpdate = forceChildUpdates)
+            if (initializeChildren) {
+                child.setInitialPosition(widthBound, heightBound)
+            } else {
+                child.updatePosition(widthBound, heightBound, forceUpdate = forceChildUpdates)
+            }
 
             child.measure(widthSpec, heightSpec)
             child.layout(child.left, child.top, child.left + child.measuredWidth, child.top + child.measuredHeight)
@@ -155,6 +166,7 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         intervalCompleted = false
         forceChildUpdates = false
         forceUpdate = false
+        initializeChildren = false
     }
 
     /**

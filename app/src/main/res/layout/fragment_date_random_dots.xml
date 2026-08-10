@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/tab_activity_top_padding">
+
+    <include
+        android:id="@+id/dateNumbersLayout"
+        layout="@layout/component_date_numbers" />
+
+    :<androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainBody"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateNumbersLayout"
+        app:layout_constraintVertical_bias="0">
+
+        <TextView
+            android:id="@+id/selectNumberMessage"
+            style="@style/ConstrainHorizontalCenter"
+            android:paddingTop="10dp"
+            android:textAlignment="center"
+            android:textColor="?colorOnBackground"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/selectionLayout"
+            style="@style/FullWidthLinearLayout"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp"
+            app:layout_constraintTop_toBottomOf="@id/selectNumberMessage"
+            tools:ignore="MissingConstraints">
+
+            <TextView
+                android:id="@+id/generatedNumber"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/border_square"
+                android:gravity="center"
+                android:textColor="?colorOnBackground"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageButton
+                android:id="@+id/clearButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="-10dp"
+                android:layout_marginBottom="-10dp"
+                android:background="@drawable/calc_x_button"
+                android:contentDescription="@string/clear_cd"
+                android:src="@drawable/ic_x"
+                app:layout_constraintBottom_toTopOf="@+id/generatedNumber"
+                app:layout_constraintStart_toEndOf="@+id/generatedNumber"
+                app:tint="?backgroundColor" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <xyz.lbres.customview.motionlayout.SingleChildMotionLayout
+            android:id="@+id/dotsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:childLayout="@layout/component_date_random_dot"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectionLayout"
+            app:layout_constraintVertical_bias="0"
+            app:numChildren="@integer/randomDotsNumChildren"
+            app:paused="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/restartButton"
+        layout="@layout/component_restart_button" />
+</androidx.constraintlayout.widget.ConstraintLayout>
