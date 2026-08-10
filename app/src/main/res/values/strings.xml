@@ -34,7 +34,7 @@
     <string name="title_choose_digits">Choose Digits</string>
     <string name="title_choose_digits_dialog">Select Digit Value</string>
 
-    <string name="tap_to_select">Tap digits to set values</string>
+    <string name="tap_digits_to_select">Tap digits to set values</string>
 
 
     <!-- Date -->

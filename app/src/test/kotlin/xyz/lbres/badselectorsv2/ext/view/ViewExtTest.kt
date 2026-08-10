@@ -71,6 +71,35 @@ class ViewExtTest {
     }
 
     @Test
+    fun visibleIf() {
+        val context: Context = ApplicationProvider.getApplicationContext()
+        val view = View(context)
+
+        // set visible
+        view.visibility = View.INVISIBLE
+        view.visibleIf(true)
+        assertEquals(View.VISIBLE, view.visibility)
+
+        view.visibility = View.GONE
+        view.visibleIf(true, View.INVISIBLE)
+        assertEquals(View.VISIBLE, view.visibility)
+
+        // set gone
+        view.visibility = View.INVISIBLE
+        view.visibleIf(false)
+        assertEquals(View.GONE, view.visibility)
+
+        view.visibility = View.VISIBLE
+        view.visibleIf(false)
+        assertEquals(View.GONE, view.visibility)
+
+        // set different default
+        view.visibility = View.VISIBLE
+        view.visibleIf(false, View.INVISIBLE)
+        assertEquals(View.INVISIBLE, view.visibility)
+    }
+
+    @Test
     fun enable() {
         val context: Context = ApplicationProvider.getApplicationContext()
         var view = View(context)
