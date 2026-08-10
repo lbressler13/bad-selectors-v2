@@ -14,6 +14,7 @@ import xyz.lbres.badselectorsv2.date.BaseDateViewModel
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.ext.view.visibleIf
+import xyz.lbres.badselectorsv2.ext.viewgroup.setChildOnClickListener
 import xyz.lbres.customview.movingview.MovingView
 
 class RandomDotsFragment : BaseDateFragment() {
@@ -93,7 +94,7 @@ class RandomDotsFragment : BaseDateFragment() {
     }
 
     private fun initializeDotsLayout() {
-        binding.dotsLayout.children.forEachIndexed { index, view ->
+        binding.dotsLayout.setChildOnClickListener { view, index ->
             view as MovingView
             val storedPosition = viewModel.getDotPosition(index)
             if (storedPosition != null) {
