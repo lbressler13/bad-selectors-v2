@@ -5,6 +5,7 @@ import xyz.lbres.badselectorsv2.date.BaseDateViewModel
 import xyz.lbres.badselectorsv2.date.utils.DateComponent
 import xyz.lbres.badselectorsv2.date.utils.daysPerMonth
 import xyz.lbres.badselectorsv2.date.utils.maxMonth
+import xyz.lbres.badselectorsv2.date.utils.monthRange
 import java.time.LocalDate
 
 class RandomDotsViewModel : BaseDateViewModel() {
@@ -34,7 +35,7 @@ class RandomDotsViewModel : BaseDateViewModel() {
      * Information about all dots
      */
     private val dotPositions: Array<Pair<Int, Int>?> = Array(maxDots) { null }
-    private val _visibleIndices: MutableSet<Int> = (0 until numDots).toMutableSet()
+    private val _visibleIndices: MutableSet<Int> = (0 until maxMonth).toMutableSet()
     val visibleIndices: Set<Int>
         get() = _visibleIndices
 
@@ -44,6 +45,8 @@ class RandomDotsViewModel : BaseDateViewModel() {
 
     private fun updateNumDots(newValue: Int) {
         numDots = newValue
+        _visibleIndices.clear()
+        _visibleIndices.addAll(0 until numDots)
     }
 
     fun getDotPosition(index: Int): Pair<Int, Int>? {
@@ -55,7 +58,11 @@ class RandomDotsViewModel : BaseDateViewModel() {
     }
 
     fun showDot(index: Int) {
-        _visibleIndices.add(index)
+        if (validIndex(index)) {
+            _visibleIndices.add(index)
+        } else {
+            Log.w(null, "Dot index $index is out of bounds, not showing dot")
+        }
     }
 
     fun hideDot(index: Int) {
@@ -101,7 +108,7 @@ class RandomDotsViewModel : BaseDateViewModel() {
             }
             DateComponent.DAY -> {
                 dateComponent = DateComponent.FIRST_HALF_YEAR
-                updateNumDots(LocalDate.now().year / 100 + 1)
+                updateNumDots(LocalDate.now().year / 100 + 1) // 00-20
             }
             DateComponent.FIRST_HALF_YEAR -> {
                 dateComponent = DateComponent.SECOND_HALF_YEAR
@@ -131,7 +138,7 @@ class RandomDotsViewModel : BaseDateViewModel() {
     private fun validIndex(index: Int) = 0 <= index && index <= dotPositions.lastIndex
 
     fun resetDots() {
-        _visibleIndices.addAll(0..numDots)
+        _visibleIndices.addAll(0 until numDots)
     }
 
     /**
@@ -140,11 +147,14 @@ class RandomDotsViewModel : BaseDateViewModel() {
     override fun resetData() {
         super.resetData()
         // TODO reset positions/hidden
+        super.month = null // TODO do I need super here?
+        super.day = null
+        super.year = null
         selectedNumber = null
         firstHalfYear = null
         secondHalfYear = null
 
         dateComponent = DateComponent.MONTH
-        numDots = initialNumDots
+        updateNumDots(initialNumDots)
     }
 }

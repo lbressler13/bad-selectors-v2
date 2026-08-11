@@ -84,6 +84,7 @@ internal abstract class BaseMovementManager(paused: Boolean) : MovementManager {
         val newX = random.nextDouble(0.0, dimensions.width.toDouble())
         val newY = random.nextDouble(0.0, dimensions.height.toDouble())
         position = Position(newX, newY)
+        callOnMove()
     }
 
     /**

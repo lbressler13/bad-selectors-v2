@@ -49,7 +49,7 @@ If the view has an attached OnPauseChangedListener, its callback will be invoked
 Set initial position based on size of parent layout.
 The position will be set regardless of the value of the paused property.
 
-If the view has an attached OnMoveListener, its callback will **not** be invoked when the initial position is set.
+If the view has an attached OnMoveListener, its callback will be invoked when the initial position is set.
 
 This method takes the following parameters, and returns Unit:
 
