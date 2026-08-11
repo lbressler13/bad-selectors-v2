@@ -5,7 +5,6 @@ import xyz.lbres.badselectorsv2.date.BaseDateViewModel
 import xyz.lbres.badselectorsv2.date.utils.DateComponent
 import xyz.lbres.badselectorsv2.date.utils.daysPerMonth
 import xyz.lbres.badselectorsv2.date.utils.maxMonth
-import xyz.lbres.badselectorsv2.date.utils.monthRange
 import java.time.LocalDate
 
 class RandomDotsViewModel : BaseDateViewModel() {

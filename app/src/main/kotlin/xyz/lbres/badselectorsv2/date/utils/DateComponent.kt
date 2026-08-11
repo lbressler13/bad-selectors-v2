@@ -16,7 +16,7 @@ enum class DateComponent(val label: String) {
     },
     SECOND_HALF_YEAR("last 2 digits of the year") {
         override fun next(): DateComponent? = null
-    };
+    }, ;
 
     abstract fun next(): DateComponent?
 }

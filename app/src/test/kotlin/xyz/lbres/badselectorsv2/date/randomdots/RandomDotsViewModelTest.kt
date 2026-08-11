@@ -4,7 +4,6 @@ import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import xyz.lbres.badselectorsv2.date.utils.DateComponent
-import xyz.lbres.badselectorsv2.date.utils.monthRange
 import xyz.lbres.testutils.mockLog
 import java.time.LocalDate
 import kotlin.test.AfterTest
@@ -31,17 +30,17 @@ class RandomDotsViewModelTest {
 
     @Test
     fun testInit() {
-        val viewModel = RandomDotsViewModel()
-        assertNull(viewModel.month)
-        assertNull(viewModel.day)
-        assertNull(viewModel.year)
-        assertNull(viewModel.firstHalfYear)
-        assertNull(viewModel.secondHalfYear)
+        val vm = RandomDotsViewModel()
+        assertNull(vm.month)
+        assertNull(vm.day)
+        assertNull(vm.year)
+        assertNull(vm.firstHalfYear)
+        assertNull(vm.secondHalfYear)
 
-        assertNull(viewModel.selectedNumber)
-        assertEquals(DateComponent.MONTH, viewModel.dateComponent)
-        assertEquals(setTo(12), viewModel.visibleIndices)
-        repeat(maxDots) { assertNull(viewModel.getDotPosition(it)) }
+        assertNull(vm.selectedNumber)
+        assertEquals(DateComponent.MONTH, vm.dateComponent)
+        assertEquals(setTo(12), vm.visibleIndices)
+        repeat(maxDots) { assertNull(vm.getDotPosition(it)) }
     }
 
     @Test
@@ -81,49 +80,40 @@ class RandomDotsViewModelTest {
 
     @Test
     fun testResetDots() {
-        val viewModel = RandomDotsViewModel()
+        val vm = RandomDotsViewModel()
 
         // month
-        listOf(0, 3, 5, 9, 11).forEach { viewModel.hideDot(it) }
-        viewModel.resetDots()
-        assertEquals(setTo(12), viewModel.visibleIndices)
+        listOf(0, 3, 5, 9, 11).forEach { vm.hideDot(it) }
+        vm.resetDots()
+        assertEquals(setTo(12), vm.visibleIndices)
 
         // day
-        viewModel.selectedNumber = 0
-        viewModel.useSelectedNumber()
-
-        listOf(4, 5, 6, 19, 22, 26).forEach { viewModel.hideDot(it) }
-        viewModel.resetDots()
-        assertEquals(setTo(31), viewModel.visibleIndices)
+        selectNumber(vm, 0) // jan
+        listOf(4, 5, 6, 19, 22, 26).forEach { vm.hideDot(it) }
+        vm.resetDots()
+        assertEquals(setTo(31), vm.visibleIndices)
 
         // first half year
-        viewModel.selectedNumber = 19
-        viewModel.useSelectedNumber()
-
-        listOf(2, 4, 9, 14, 18).forEach { viewModel.hideDot(it) }
-        viewModel.resetDots()
-        assertEquals(setTo(21), viewModel.visibleIndices)
+        selectNumber(vm, 19)
+        listOf(2, 4, 9, 14, 18).forEach { vm.hideDot(it) }
+        vm.resetDots()
+        assertEquals(setTo(21), vm.visibleIndices)
 
         // second half year
-        viewModel.selectedNumber = 17
-        viewModel.useSelectedNumber()
-
-        listOf(2, 4, 9, 14, 18).forEach { viewModel.hideDot(it) }
-        viewModel.resetDots()
-        assertEquals(setTo(100), viewModel.visibleIndices)
+        selectNumber(vm, 17)
+        listOf(2, 4, 9, 14, 18).forEach { vm.hideDot(it) }
+        vm.resetDots()
+        assertEquals(setTo(100), vm.visibleIndices)
 
         // second half w/ limited dots
-        viewModel.resetData()
-        viewModel.selectedNumber = 5
-        viewModel.useSelectedNumber()
-        viewModel.selectedNumber = 6
-        viewModel.useSelectedNumber()
-        viewModel.selectedNumber = 20
-        viewModel.useSelectedNumber()
+        vm.resetData()
+        selectNumber(vm, 5) // month
+        selectNumber(vm, 6) // day
+        selectNumber(vm, 20) // first half
 
-        listOf(2, 4, 9, 14, 18).forEach { viewModel.hideDot(it) }
-        viewModel.resetDots()
-        assertEquals(setTo(26), viewModel.visibleIndices)
+        listOf(2, 4, 9, 14, 18).forEach { vm.hideDot(it) }
+        vm.resetDots()
+        assertEquals(setTo(26), vm.visibleIndices)
     }
 
     @Test
@@ -132,4 +122,9 @@ class RandomDotsViewModelTest {
     }
 
     private fun setTo(max: Int) = (0 until max).toSet()
+
+    private fun selectNumber(vm: RandomDotsViewModel, number: Int) {
+        vm.selectedNumber = number
+        vm.useSelectedNumber()
+    }
 }
