@@ -56,14 +56,6 @@ class RandomDotsViewModel : BaseDateViewModel() {
         }
     }
 
-    fun showDot(index: Int) {
-        if (validIndex(index)) {
-            _visibleIndices.add(index)
-        } else {
-            Log.w(null, "Dot index $index is out of bounds, not showing dot")
-        }
-    }
-
     fun hideDot(index: Int) {
         _visibleIndices.remove(index)
     }
@@ -100,24 +92,18 @@ class RandomDotsViewModel : BaseDateViewModel() {
      * Increment the date component, update the number of dots, and reset the selected number
      */
     private fun incrementDateComponent() {
-        when (dateComponent) {
-            DateComponent.MONTH -> {
-                dateComponent = DateComponent.DAY
-                updateNumDots(daysPerMonth[month!! - 1])
-            }
-            DateComponent.DAY -> {
-                dateComponent = DateComponent.FIRST_HALF_YEAR
-                updateNumDots(LocalDate.now().year / 100 + 1) // 00-20
-            }
-            DateComponent.FIRST_HALF_YEAR -> {
-                dateComponent = DateComponent.SECOND_HALF_YEAR
-                updateNumDots(getSecondHalfYears())
-            }
-            else -> {
-                dateComponent = null
-                updateNumDots(initialNumDots)
-            }
+        dateComponent = when (dateComponent?.next()) {
+            DateComponent.YEAR -> DateComponent.FIRST_HALF_YEAR
+            else -> dateComponent?.next()
         }
+
+        val newNumDots = when (dateComponent) {
+            DateComponent.DAY -> daysPerMonth[month!! - 1]
+            DateComponent.FIRST_HALF_YEAR -> LocalDate.now().year / 100 + 1 // 00-20
+            DateComponent.SECOND_HALF_YEAR -> getSecondHalfYears()
+            else -> initialNumDots
+        }
+        updateNumDots(newNumDots)
     }
 
     /**
@@ -145,10 +131,9 @@ class RandomDotsViewModel : BaseDateViewModel() {
      */
     override fun resetData() {
         super.resetData()
-        // TODO reset positions/hidden
-        super.month = null // TODO do I need super here?
-        super.day = null
-        super.year = null
+        month = null
+        day = null
+        year = null
         selectedNumber = null
         firstHalfYear = null
         secondHalfYear = null
