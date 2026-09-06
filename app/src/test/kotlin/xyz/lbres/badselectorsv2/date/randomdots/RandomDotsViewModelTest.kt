@@ -11,6 +11,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import xyz.lbres.badselectorsv2.date.checkDate as checkStandardDate
 
 class RandomDotsViewModelTest {
     private val mockDate = LocalDate.of(2025, 1, 1)
@@ -60,6 +61,10 @@ class RandomDotsViewModelTest {
             dotPositions[it] = Pair(it / 2, it * 2)
             repeat(maxDots) { assertEquals(dotPositions[it], vm.getDotPosition(it)) }
         }
+
+        // invalid index
+        assertNull(vm.getDotPosition(-1))
+        assertNull(vm.getDotPosition(100))
     }
 
     @Test
@@ -152,6 +157,13 @@ class RandomDotsViewModelTest {
         checkPostSelection(null, 0)
         checkDate(vm, 5, 13, 15, 13, 1513)
 
+        // after full date
+        repeat(4) { selectNumber(vm, 5) }
+        vm.selectedNumber = 6
+        vm.useSelectedNumber()
+        checkPostSelection(null, 0)
+        checkDate(vm, 5, 13, 15, 13, 1513)
+
         // month with different num days
         vm.resetData()
         vm.selectedNumber = 3
@@ -237,13 +249,16 @@ class RandomDotsViewModelTest {
         checkStateWithDotPositions()
     }
 
+    // create a set containing values between 0 and the provided max
     private fun setTo(max: Int) = (0 until max).toSet()
 
+    // set selectedNumber and call useSelected
     private fun selectNumber(vm: RandomDotsViewModel, number: Int) {
         vm.selectedNumber = number
         vm.useSelectedNumber()
     }
 
+    // check that the vm matches its initial state. may skip checking dot positions
     private fun checkInitialState(vm: RandomDotsViewModel, checkDotPositions: Boolean = true) {
         checkDate(vm)
 
@@ -255,6 +270,7 @@ class RandomDotsViewModelTest {
         }
     }
 
+    // check all components of a date
     private fun checkDate(
         vm: RandomDotsViewModel,
         month: Int? = null,
@@ -263,10 +279,8 @@ class RandomDotsViewModelTest {
         secondHalfYear: Int? = null,
         year: Int? = null,
     ) {
-        assertEquals(month, vm.month)
-        assertEquals(day, vm.day)
+        checkStandardDate(vm, month, day, year)
         assertEquals(firstHalfYear, vm.firstHalfYear)
         assertEquals(secondHalfYear, vm.secondHalfYear)
-        assertEquals(year, vm.year)
     }
 }

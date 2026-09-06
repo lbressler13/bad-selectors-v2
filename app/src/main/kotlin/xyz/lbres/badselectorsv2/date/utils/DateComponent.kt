@@ -1,5 +1,8 @@
 package xyz.lbres.badselectorsv2.date.utils
 
+/**
+ * Components of a date
+ */
 enum class DateComponent(val label: String) {
     MONTH("month") {
         override fun next(): DateComponent? = DAY
@@ -15,7 +18,10 @@ enum class DateComponent(val label: String) {
     },
     SECOND_HALF_YEAR("last 2 digits of the year") {
         override fun next(): DateComponent? = null
-    }, ;
+    };
 
+    /**
+     * Get the date component following the current one. Can be null if there is no following component
+     */
     abstract fun next(): DateComponent?
 }

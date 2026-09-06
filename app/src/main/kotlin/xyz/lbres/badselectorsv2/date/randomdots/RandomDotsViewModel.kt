@@ -7,12 +7,21 @@ import xyz.lbres.badselectorsv2.date.utils.daysPerMonth
 import xyz.lbres.badselectorsv2.date.utils.maxMonth
 import java.time.LocalDate
 
+/**
+ * ViewModel containing values that are specific to the random dots date selector
+ */
 class RandomDotsViewModel : BaseDateViewModel() {
     private val maxDots = 100
     private val initialNumDots = maxMonth
 
+    /**
+     * Most recently clicked number
+     */
     var selectedNumber: Int? = null
 
+    /**
+     * Current date component being selected, or null if full date is complete
+     */
     var dateComponent: DateComponent? = DateComponent.MONTH
         private set
 
@@ -42,26 +51,48 @@ class RandomDotsViewModel : BaseDateViewModel() {
         updateNumDots(initialNumDots)
     }
 
+    /**
+     * Update dot data when number of dots changes
+     */
     private fun updateNumDots(newValue: Int) {
         numDots = newValue
         _visibleIndices.clear()
         _visibleIndices.addAll(0 until numDots)
     }
 
+    /**
+     * Get the position of a dot
+     *
+     * @param index [Int]: index of dot
+     * @return [Pair]<Int, Int>?: position of dot, or null if index is invalid
+     */
     fun getDotPosition(index: Int): Pair<Int, Int>? {
-        return if (validIndex(index)) {
+        return if (index in dotPositions.indices) {
             dotPositions[index]
         } else {
+            Log.w(null, "Dot index $index is out of bounds, unable to get dot position")
             null
         }
     }
 
+    /**
+     * Hide a dot
+     *
+     * @param index [Int]: index of dot to hide
+     */
     fun hideDot(index: Int) {
         _visibleIndices.remove(index)
     }
 
+    /**
+     * Update the position of a dot
+     *
+     * @param index [Int]: index of dot to update
+     * @param x [Int]: new x position
+     * @param y [Int]: new y position
+     */
     fun updateDotPosition(index: Int, x: Int, y: Int) {
-        if (validIndex(index)) {
+        if (index in dotPositions.indices) {
             dotPositions[index] = Pair(x, y)
         } else {
             Log.w(null, "Dot index $index is out of bounds, not updating dot position")
@@ -75,14 +106,15 @@ class RandomDotsViewModel : BaseDateViewModel() {
         if (selectedNumber != null) {
             val number = selectedNumber!!
 
-            when {
-                month == null -> month = number + 1
-                day == null -> day = number + 1
-                firstHalfYear == null -> firstHalfYear = number
-                secondHalfYear == null -> {
+            when (dateComponent) {
+                DateComponent.MONTH  -> month = number + 1
+                DateComponent.DAY -> day = number + 1
+                DateComponent.FIRST_HALF_YEAR -> firstHalfYear = number
+                DateComponent.SECOND_HALF_YEAR -> {
                     secondHalfYear = number
                     year = firstHalfYear!! * 100 + secondHalfYear!!
                 }
+                else -> {}
             }
 
             incrementDateComponent()
@@ -125,21 +157,20 @@ class RandomDotsViewModel : BaseDateViewModel() {
         }
     }
 
-    private fun validIndex(index: Int) = 0 <= index && index <= dotPositions.lastIndex
-
+    /**
+     * Make all dots for the current component visible
+     */
     fun resetDots() {
         _visibleIndices.addAll(0 until numDots)
     }
 
     /**
-     * Reset all data and move dots
+     * Reset all data
      */
     override fun resetData() {
         super.resetData()
-        month = null
-        day = null
-        year = null
         selectedNumber = null
+        // month, day, and year reset in parent class
         firstHalfYear = null
         secondHalfYear = null
 
