@@ -89,19 +89,63 @@ class RandomDotsViewModelTest {
     fun testUseSelectedNumber() {
         val vm = RandomDotsViewModel()
 
-        // TODO
-        // check visible dots, date, and date component
-
-        // null
+        // call useSelectedNumber and perform all checks, except checking current date
+        // can be used after selecting null or a valid value
+        fun checkPostSelection(newDateComponent: DateComponent?, newMaxValue: Int) {
+            vm.useSelectedNumber()
+            assertNull(vm.selectedNumber)
+            assertEquals(newDateComponent, vm.dateComponent)
+            assertEquals((0 until newMaxValue).toSet(), vm.visibleIndices)
+        }
 
         // month
+        checkPostSelection(DateComponent.MONTH, 12)
+        checkDate(vm)
+
+        vm.selectedNumber = 0
+        vm.selectedNumber = 4
+        checkPostSelection(DateComponent.DAY, 31)
+        checkDate(vm, 5)
 
         // day
-        // check correct number of days per
+        checkPostSelection(DateComponent.DAY, 31)
+        checkDate(vm, 5)
+
+        vm.selectedNumber = 18
+        vm.selectedNumber = 12
+        checkPostSelection(DateComponent.FIRST_HALF_YEAR, 21)
+        checkDate(vm, 5, 13)
 
         // first half year
+        checkPostSelection(DateComponent.FIRST_HALF_YEAR, 21)
+        checkDate(vm, 5, 13)
+
+        vm.selectedNumber = 15
+        checkPostSelection(DateComponent.SECOND_HALF_YEAR, 100)
+        checkDate(vm, 5, 13, 15)
 
         // second half year
+        checkPostSelection(DateComponent.SECOND_HALF_YEAR, 100)
+        checkDate(vm, 5, 13, 15)
+
+        vm.selectedNumber = 19
+        vm.selectedNumber = 13
+        checkPostSelection(null, 0)
+        checkDate(vm, 5, 13, 15, 13, 1513)
+
+        // month with different num days
+        vm.resetData()
+        vm.selectedNumber = 3
+        vm.useSelectedNumber()
+        checkPostSelection(DateComponent.DAY, 30)
+
+        vm.selectedNumber = 5
+        vm.useSelectedNumber()
+
+        // current first half
+        vm.selectedNumber = 20
+        vm.useSelectedNumber()
+        checkPostSelection(DateComponent.SECOND_HALF_YEAR, 26)
     }
 
     @Test
@@ -173,15 +217,26 @@ class RandomDotsViewModelTest {
     }
 
     private fun checkInitialState(vm: RandomDotsViewModel) {
-        assertNull(vm.month)
-        assertNull(vm.day)
-        assertNull(vm.year)
-        assertNull(vm.firstHalfYear)
-        assertNull(vm.secondHalfYear)
+        checkDate(vm)
 
         assertNull(vm.selectedNumber)
         assertEquals(DateComponent.MONTH, vm.dateComponent)
         assertEquals(setTo(12), vm.visibleIndices)
         repeat(maxDots) { assertNull(vm.getDotPosition(it)) }
+    }
+
+    private fun checkDate(
+        vm: RandomDotsViewModel,
+        month: Int? = null,
+        day: Int? = null,
+        firstHalfYear: Int? = null,
+        secondHalfYear: Int? = null,
+        year: Int? = null,
+    ) {
+        assertEquals(month, vm.month)
+        assertEquals(day, vm.day)
+        assertEquals(firstHalfYear, vm.firstHalfYear)
+        assertEquals(secondHalfYear, vm.secondHalfYear)
+        assertEquals(year, vm.year)
     }
 }

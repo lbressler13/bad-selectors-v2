@@ -72,20 +72,24 @@ class RandomDotsViewModel : BaseDateViewModel() {
      * Assign the [selectedNumber] to the current date component
      */
     fun useSelectedNumber() {
-        val number = selectedNumber!!
+        if (selectedNumber != null) {
+            val number = selectedNumber!!
 
-        when {
-            month == null -> month = number + 1
-            day == null -> day = number + 1
-            firstHalfYear == null -> firstHalfYear = number
-            secondHalfYear == null -> {
-                secondHalfYear = number
-                year = firstHalfYear!! * 100 + secondHalfYear!!
+            when {
+                month == null -> month = number + 1
+                day == null -> day = number + 1
+                firstHalfYear == null -> firstHalfYear = number
+                secondHalfYear == null -> {
+                    secondHalfYear = number
+                    year = firstHalfYear!! * 100 + secondHalfYear!!
+                }
             }
-        }
 
-        incrementDateComponent()
-        selectedNumber = null
+            incrementDateComponent()
+            selectedNumber = null
+        } else {
+            Log.w(null, "Unable to use selected number, selected number is null")
+        }
     }
 
     /**
@@ -101,6 +105,7 @@ class RandomDotsViewModel : BaseDateViewModel() {
             DateComponent.DAY -> daysPerMonth[month!! - 1]
             DateComponent.FIRST_HALF_YEAR -> LocalDate.now().year / 100 + 1 // 00-20
             DateComponent.SECOND_HALF_YEAR -> getSecondHalfYears()
+            null -> 0
             else -> initialNumDots
         }
         updateNumDots(newNumDots)
