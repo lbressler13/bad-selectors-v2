@@ -107,7 +107,7 @@ class RandomDotsViewModel : BaseDateViewModel() {
             val number = selectedNumber!!
 
             when (dateComponent) {
-                DateComponent.MONTH  -> month = number + 1
+                DateComponent.MONTH -> month = number + 1
                 DateComponent.DAY -> day = number + 1
                 DateComponent.FIRST_HALF_YEAR -> firstHalfYear = number
                 DateComponent.SECOND_HALF_YEAR -> {
