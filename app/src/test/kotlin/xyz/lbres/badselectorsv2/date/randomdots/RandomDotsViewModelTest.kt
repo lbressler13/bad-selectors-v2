@@ -30,8 +30,7 @@ class RandomDotsViewModelTest {
 
     @Test
     fun testInit() {
-        val vm = RandomDotsViewModel()
-        checkInitialState(vm)
+        checkInitialState(RandomDotsViewModel())
     }
 
     @Test
@@ -40,8 +39,10 @@ class RandomDotsViewModelTest {
         val vm = RandomDotsViewModel()
         val dotPositions: Array<Pair<Int, Int>?> = Array(maxDots) { null }
 
+        // get initial positions
         repeat(maxDots) { assertEquals(dotPositions[it], vm.getDotPosition(it)) }
 
+        // set some positions
         (15..85).forEach {
             vm.updateDotPosition(it, it / 2, it * 2)
             dotPositions[it] = Pair(it / 2, it * 2)
@@ -78,10 +79,7 @@ class RandomDotsViewModelTest {
         // duplicate
         vm.resetDots()
         expected = setTo(12).toMutableSet()
-        hideAndRemove(expected, 6)
-        hideAndRemove(expected, 4)
-        hideAndRemove(expected, 4)
-        hideAndRemove(expected, 6)
+        listOf(6, 4, 4, 6).forEach { hideAndRemove(expected, it) }
 
         // out of bounds
         vm.hideDot(-6)
@@ -116,7 +114,7 @@ class RandomDotsViewModelTest {
             vm.useSelectedNumber()
             assertNull(vm.selectedNumber)
             assertEquals(newDateComponent, vm.dateComponent)
-            assertEquals((0 until newMaxValue).toSet(), vm.visibleIndices)
+            assertEquals(setTo(newMaxValue), vm.visibleIndices)
         }
 
         // month
@@ -207,6 +205,14 @@ class RandomDotsViewModelTest {
     fun testResetData() {
         val vm = RandomDotsViewModel()
 
+        val checkStateWithDotPositions = {
+            checkInitialState(vm, checkDotPositions = false)
+            repeat(maxDots) {
+                val expected = if (it < 15) Pair(it, it) else null
+                assertEquals(expected, vm.getDotPosition(it))
+            }
+        }
+
         // no date
         listOf(10, 3, 7, 8).forEach { vm.hideDot(it) }
         vm.resetData()
@@ -215,19 +221,20 @@ class RandomDotsViewModelTest {
         // partial date
         listOf(4, 7).forEach { selectNumber(vm, it) }
         listOf(5, 20).forEach { vm.hideDot(it) }
+        repeat(15) { vm.updateDotPosition(it, it, it) }
         vm.resetData()
-        checkInitialState(vm)
+        checkStateWithDotPositions()
 
         // partial year
         listOf(4, 7, 19).forEach { selectNumber(vm, it) }
         listOf(5, 20).forEach { vm.hideDot(it) }
         vm.resetData()
-        checkInitialState(vm)
+        checkStateWithDotPositions()
 
         // complete date
         repeat(4) { selectNumber(vm, 10) }
         vm.resetData()
-        checkInitialState(vm)
+        checkStateWithDotPositions()
     }
 
     private fun setTo(max: Int) = (0 until max).toSet()
@@ -237,13 +244,15 @@ class RandomDotsViewModelTest {
         vm.useSelectedNumber()
     }
 
-    private fun checkInitialState(vm: RandomDotsViewModel) {
+    private fun checkInitialState(vm: RandomDotsViewModel, checkDotPositions: Boolean = true) {
         checkDate(vm)
 
         assertNull(vm.selectedNumber)
         assertEquals(DateComponent.MONTH, vm.dateComponent)
         assertEquals(setTo(12), vm.visibleIndices)
-        repeat(maxDots) { assertNull(vm.getDotPosition(it)) }
+        if (checkDotPositions) {
+            repeat(maxDots) { assertNull(vm.getDotPosition(it)) }
+        }
     }
 
     private fun checkDate(
