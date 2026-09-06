@@ -37,7 +37,28 @@ class RandomDotsViewModelTest {
     @Test
     fun testGetAndUpdateDotPosition() {
         // combined test for getDotPosition and updateDotPosition
-        // TODO
+        val vm = RandomDotsViewModel()
+        val dotPositions: Array<Pair<Int, Int>?> = Array(maxDots) { null }
+
+        repeat(maxDots) { assertEquals(dotPositions[it], vm.getDotPosition(it)) }
+
+        (15..85).forEach {
+            vm.updateDotPosition(it, it / 2, it * 2)
+            dotPositions[it] = Pair(it / 2, it * 2)
+            repeat(maxDots) { assertEquals(dotPositions[it], vm.getDotPosition(it)) }
+        }
+
+        // change existing position
+        vm.updateDotPosition(19, 99, 1)
+        dotPositions[19] = Pair(99, 1)
+
+        // set remaining positions
+        val remaining = (0 until 14).toList() + (86 until maxDots).toList()
+        remaining.forEach {
+            vm.updateDotPosition(it, it / 2, it * 2)
+            dotPositions[it] = Pair(it / 2, it * 2)
+            repeat(maxDots) { assertEquals(dotPositions[it], vm.getDotPosition(it)) }
+        }
     }
 
     @Test

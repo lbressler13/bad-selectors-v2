@@ -1,6 +1,5 @@
 package xyz.lbres.badselectorsv2.date.utils
 
-@Suppress("Unused")
 enum class DateComponent(val label: String) {
     MONTH("month") {
         override fun next(): DateComponent? = DAY
