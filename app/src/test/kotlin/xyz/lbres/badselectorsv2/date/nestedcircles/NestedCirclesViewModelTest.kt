@@ -3,6 +3,7 @@ package xyz.lbres.badselectorsv2.date.nestedcircles
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import xyz.lbres.badselectorsv2.date.checkDate
 import xyz.lbres.kotlinutils.collection.list.IntList
 import xyz.lbres.testutils.mockLog
 import xyz.lbres.testutils.runWithFailMessage
@@ -252,13 +253,6 @@ class NestedCirclesViewModelTest {
         assertEquals(disabledMonths.sorted(), actualMonths.sorted())
         assertEquals(disabledDays.sorted(), actualDays.sorted())
         assertEquals(disabledYears.sorted(), actualYears.sorted())
-    }
-
-    // check the current date set in the vm
-    private fun checkDate(vm: NestedCirclesViewModel, month: Int? = null, day: Int? = null, year: Int? = null) {
-        assertEquals(month, vm.month)
-        assertEquals(day, vm.day)
-        assertEquals(year, vm.year)
     }
 
     // check the enabled years range
