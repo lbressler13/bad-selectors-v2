@@ -37,8 +37,14 @@ fun View.gone() {
     visibility = View.GONE
 }
 
-fun View.visibleIf(visible: Boolean, defaultVisibility: Int = View.GONE) {
-    visibility = if (visible) View.VISIBLE else defaultVisibility
+/**
+ * Make a view visible if a specific condition is met
+ *
+ * @param visible [Boolean]
+ * @param hiddenVisibility: visibility to use if [visible] is false, defaults to [View.GONE]
+ */
+fun View.visibleIf(visible: Boolean, hiddenVisibility: Int = View.GONE) {
+    visibility = if (visible) View.VISIBLE else hiddenVisibility
 }
 
 /**

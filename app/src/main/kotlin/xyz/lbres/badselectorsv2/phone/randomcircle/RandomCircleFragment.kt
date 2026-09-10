@@ -83,7 +83,7 @@ class RandomCircleFragment : BasePhoneFragment() {
         }
 
         // get digit based on index of button, and update ui
-        binding.circleLayout.setChildOnClickListener { _, index ->
+        binding.circleLayout.setChildOnClickListener { index, _ ->
             val digit = viewModel.getGeneratedAtIndex(index)
 
             if (digit == null) {

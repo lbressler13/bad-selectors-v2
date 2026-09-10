@@ -38,7 +38,7 @@ class ViewGroupExtTest {
 
         checkValues()
 
-        viewGroup.setChildOnClickListener { view, index ->
+        viewGroup.setChildOnClickListener { index, view ->
             view as TextView
             view.text = simpleIf(index < 2, 9 - index, index - 2).toString()
         }
@@ -52,7 +52,7 @@ class ViewGroupExtTest {
         checkValues()
 
         var total = 0
-        viewGroup.setChildOnClickListener { _, index -> total += index }
+        viewGroup.setChildOnClickListener { index, _ -> total += index }
         clickAt(1)
         assertEquals(1, total)
         clickAt(3)

@@ -7,12 +7,21 @@ import xyz.lbres.badselectorsv2.date.utils.daysPerMonth
 import xyz.lbres.badselectorsv2.date.utils.maxMonth
 import java.time.LocalDate
 
+/**
+ * ViewModel containing values that are specific to the random dots date selector
+ */
 class RandomDotsViewModel : BaseDateViewModel() {
     private val maxDots = 100
     private val initialNumDots = maxMonth
 
+    /**
+     * Most recently clicked number
+     */
     var selectedNumber: Int? = null
 
+    /**
+     * Current date component being selected
+     */
     var dateComponent: DateComponent? = DateComponent.MONTH
         private set
 
@@ -34,7 +43,7 @@ class RandomDotsViewModel : BaseDateViewModel() {
      * Information about all dots
      */
     private val dotPositions: Array<Pair<Int, Int>?> = Array(maxDots) { null }
-    private val _visibleIndices: MutableSet<Int> = (0 until numDots).toMutableSet()
+    private val _visibleIndices: MutableSet<Int> = (0 until maxMonth).toMutableSet()
     val visibleIndices: Set<Int>
         get() = _visibleIndices
 
@@ -42,28 +51,48 @@ class RandomDotsViewModel : BaseDateViewModel() {
         updateNumDots(initialNumDots)
     }
 
+    /**
+     * Update dot data when number of dots changes
+     */
     private fun updateNumDots(newValue: Int) {
         numDots = newValue
+        _visibleIndices.clear()
+        _visibleIndices.addAll(0 until numDots)
     }
 
+    /**
+     * Get the position of a dot
+     *
+     * @param index [Int]: index of dot
+     * @return [Pair]<Int, Int>?: position of dot, or null if index is invalid
+     */
     fun getDotPosition(index: Int): Pair<Int, Int>? {
-        return if (validIndex(index)) {
+        return if (index in dotPositions.indices) {
             dotPositions[index]
         } else {
+            Log.w(null, "Dot index $index is out of bounds, unable to get dot position")
             null
         }
     }
 
-    fun showDot(index: Int) {
-        _visibleIndices.add(index)
-    }
-
+    /**
+     * Hide a dot
+     *
+     * @param index [Int]: index of dot to hide
+     */
     fun hideDot(index: Int) {
         _visibleIndices.remove(index)
     }
 
+    /**
+     * Update the position of a dot
+     *
+     * @param index [Int]: index of dot to update
+     * @param x [Int]: new x position
+     * @param y [Int]: new y position
+     */
     fun updateDotPosition(index: Int, x: Int, y: Int) {
-        if (validIndex(index)) {
+        if (index in dotPositions.indices) {
             dotPositions[index] = Pair(x, y)
         } else {
             Log.w(null, "Dot index $index is out of bounds, not updating dot position")
@@ -74,44 +103,44 @@ class RandomDotsViewModel : BaseDateViewModel() {
      * Assign the [selectedNumber] to the current date component
      */
     fun useSelectedNumber() {
-        val number = selectedNumber!!
+        if (selectedNumber != null) {
+            val number = selectedNumber!!
 
-        when {
-            month == null -> month = number + 1
-            day == null -> day = number + 1
-            firstHalfYear == null -> firstHalfYear = number
-            secondHalfYear == null -> {
-                secondHalfYear = number
-                year = firstHalfYear!! * 100 + secondHalfYear!!
+            when (dateComponent) {
+                DateComponent.MONTH -> month = number + 1
+                DateComponent.DAY -> day = number + 1
+                DateComponent.FIRST_HALF_YEAR -> firstHalfYear = number
+                DateComponent.SECOND_HALF_YEAR -> {
+                    secondHalfYear = number
+                    year = firstHalfYear!! * 100 + secondHalfYear!!
+                }
+                else -> {}
             }
-        }
 
-        incrementDateComponent()
-        selectedNumber = null
+            incrementDateComponent()
+            selectedNumber = null
+        } else {
+            Log.w(null, "Unable to use selected number, selected number is null")
+        }
     }
 
     /**
      * Increment the date component, update the number of dots, and reset the selected number
      */
     private fun incrementDateComponent() {
-        when (dateComponent) {
-            DateComponent.MONTH -> {
-                dateComponent = DateComponent.DAY
-                updateNumDots(daysPerMonth[month!! - 1])
-            }
-            DateComponent.DAY -> {
-                dateComponent = DateComponent.FIRST_HALF_YEAR
-                updateNumDots(LocalDate.now().year / 100 + 1)
-            }
-            DateComponent.FIRST_HALF_YEAR -> {
-                dateComponent = DateComponent.SECOND_HALF_YEAR
-                updateNumDots(getSecondHalfYears())
-            }
-            else -> {
-                dateComponent = null
-                updateNumDots(initialNumDots)
-            }
+        dateComponent = when (dateComponent?.next()) {
+            DateComponent.YEAR -> DateComponent.FIRST_HALF_YEAR
+            else -> dateComponent?.next()
         }
+
+        val newNumDots = when (dateComponent) {
+            DateComponent.DAY -> daysPerMonth[month!! - 1]
+            DateComponent.FIRST_HALF_YEAR -> LocalDate.now().year / 100 + 1 // 00-20
+            DateComponent.SECOND_HALF_YEAR -> getSecondHalfYears()
+            null -> 0
+            else -> initialNumDots
+        }
+        updateNumDots(newNumDots)
     }
 
     /**
@@ -128,23 +157,24 @@ class RandomDotsViewModel : BaseDateViewModel() {
         }
     }
 
-    private fun validIndex(index: Int) = 0 <= index && index <= dotPositions.lastIndex
-
+    /**
+     * Make all dots for the current component visible
+     */
     fun resetDots() {
-        _visibleIndices.addAll(0..numDots)
+        _visibleIndices.addAll(0 until numDots)
     }
 
     /**
-     * Reset all data and move dots
+     * Reset all data
      */
     override fun resetData() {
         super.resetData()
-        // TODO reset positions/hidden
         selectedNumber = null
+        // month, day, and year reset in parent class
         firstHalfYear = null
         secondHalfYear = null
 
         dateComponent = DateComponent.MONTH
-        numDots = initialNumDots
+        updateNumDots(initialNumDots)
     }
 }

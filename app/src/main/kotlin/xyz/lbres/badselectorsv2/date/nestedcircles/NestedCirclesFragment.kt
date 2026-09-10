@@ -87,17 +87,17 @@ class NestedCirclesFragment : BaseDateFragment() {
      * Populate circle layouts for month, day, and year
      */
     private fun populateCircleLayouts() {
-        binding.monthsLayout.setChildOnClickListener { _, index ->
+        binding.monthsLayout.setChildOnClickListener { index, _ ->
             viewModel.month = index
             displayMonth()
         }
 
-        binding.daysLayout.setChildOnClickListener { _, index ->
+        binding.daysLayout.setChildOnClickListener { index, _ ->
             viewModel.day = index
             displayDay()
         }
 
-        binding.yearsLayout.setChildOnClickListener { _, index ->
+        binding.yearsLayout.setChildOnClickListener { index, _ ->
             viewModel.setYearAt(index)
             displayYear()
         }

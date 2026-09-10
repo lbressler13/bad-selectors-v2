@@ -94,7 +94,7 @@ class RandomDotsFragment : BaseDateFragment() {
     }
 
     private fun initializeDotsLayout() {
-        binding.dotsLayout.setChildOnClickListener { view, index ->
+        binding.dotsLayout.setChildOnClickListener { index, view ->
             view as MovingView
             val storedPosition = viewModel.getDotPosition(index)
             if (storedPosition != null) {
