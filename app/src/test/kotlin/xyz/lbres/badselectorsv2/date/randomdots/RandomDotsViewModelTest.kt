@@ -128,7 +128,7 @@ class RandomDotsViewModelTest {
         checkDate(vm)
 
         vm.selectedNumber = 0
-        vm.selectedNumber = 4
+        vm.selectedNumber = 5
         checkPostSelection(DateComponent.DAY, 31)
         checkDate(vm, 5)
 
@@ -160,7 +160,7 @@ class RandomDotsViewModelTest {
 
         // after full date
         repeat(4) { selectNumber(vm, 5) }
-        vm.selectedNumber = 6
+        vm.selectedNumber = 5
         vm.useSelectedNumber()
         checkPostSelection(null, 0)
         checkDate(vm, 5, 13, 15, 13, 1513)

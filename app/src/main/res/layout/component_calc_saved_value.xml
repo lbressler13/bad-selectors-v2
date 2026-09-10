@@ -27,7 +27,7 @@
         android:background="@drawable/calc_x_button"
         android:src="@drawable/ic_x"
         android:scaleType="fitCenter"
-        app:tint="?attr/calcClearStoredColor"
+        app:tint="?attr/clearStoredColor"
         android:contentDescription="@string/clear_cd"
         app:layout_constraintBottom_toTopOf="@+id/valueText"
         app:layout_constraintStart_toEndOf="@+id/valueText" />

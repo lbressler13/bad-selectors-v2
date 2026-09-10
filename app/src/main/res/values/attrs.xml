@@ -6,5 +6,5 @@
     <attr name="disabledForeground" format="reference" />
 
     <!-- Calculator -->
-    <attr name="calcClearStoredColor" format="reference" />
+    <attr name="clearStoredColor" format="reference" />
 </resources>

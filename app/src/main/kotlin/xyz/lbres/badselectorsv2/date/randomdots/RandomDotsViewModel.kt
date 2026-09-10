@@ -107,8 +107,8 @@ class RandomDotsViewModel : BaseDateViewModel() {
             val number = selectedNumber!!
 
             when (dateComponent) {
-                DateComponent.MONTH -> month = number + 1
-                DateComponent.DAY -> day = number + 1
+                DateComponent.MONTH -> month = number
+                DateComponent.DAY -> day = number
                 DateComponent.FIRST_HALF_YEAR -> firstHalfYear = number
                 DateComponent.SECOND_HALF_YEAR -> {
                     secondHalfYear = number
@@ -134,12 +134,13 @@ class RandomDotsViewModel : BaseDateViewModel() {
         }
 
         val newNumDots = when (dateComponent) {
-            DateComponent.DAY -> daysPerMonth[month!! - 1]
+            DateComponent.DAY -> daysPerMonth[month!!]
             DateComponent.FIRST_HALF_YEAR -> LocalDate.now().year / 100 + 1 // 00-20
             DateComponent.SECOND_HALF_YEAR -> getSecondHalfYears()
             null -> 0
             else -> initialNumDots
         }
+        println("$dateComponent: $newNumDots ($month, $day, $firstHalfYear $secondHalfYear)")
         updateNumDots(newNumDots)
     }
 

@@ -11,11 +11,13 @@ import xyz.lbres.badselectorsv2.databinding.ComponentDateNumbersBinding
 import xyz.lbres.badselectorsv2.databinding.FragmentDateRandomDotsBinding
 import xyz.lbres.badselectorsv2.date.BaseDateFragment
 import xyz.lbres.badselectorsv2.date.BaseDateViewModel
+import xyz.lbres.badselectorsv2.date.utils.DateComponent
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.ext.view.visibleIf
 import xyz.lbres.badselectorsv2.ext.viewgroup.setChildOnClickListener
 import xyz.lbres.customview.movingview.MovingView
+import xyz.lbres.kotlinutils.generic.ifNotNull
 
 class RandomDotsFragment : BaseDateFragment() {
     private lateinit var viewModel: RandomDotsViewModel
@@ -54,7 +56,12 @@ class RandomDotsFragment : BaseDateFragment() {
             binding.mainBody.gone()
         } else {
             // selected number
-            binding.generatedNumber.text = viewModel.selectedNumber?.toString() ?: ""
+            val displayNumber = when (viewModel.dateComponent) {
+                DateComponent.DAY, DateComponent.MONTH -> viewModel.selectedNumber.ifNotNull { it + 1 }
+                null -> null
+                else -> viewModel.selectedNumber
+            }
+            binding.generatedNumber.text = displayNumber?.toString() ?: ""
             binding.clearButton.visibleIf(viewModel.visibleIndices.isEmpty())
             binding.selectNumberMessage.text = if (viewModel.dateComponent == null) {
                 ""
@@ -74,15 +81,12 @@ class RandomDotsFragment : BaseDateFragment() {
         // display date
         displayDate()
         // override year components
+        val dateLayout = binding.dateNumbersLayout
         if (viewModel.firstHalfYear != null) {
-            val number = viewModel.firstHalfYear!!.toString().padStart(2, '0')
-            binding.dateNumbersLayout.year0.text = number[0].toString()
-            binding.dateNumbersLayout.year1.text = number[1].toString()
+            addNumberToViews(viewModel.firstHalfYear!!, listOf(dateLayout.year0, dateLayout.year1))
         }
         if (viewModel.secondHalfYear != null) {
-            val number = viewModel.secondHalfYear!!.toString().padStart(2, '0')
-            binding.dateNumbersLayout.year2.text = number[0].toString()
-            binding.dateNumbersLayout.year1.text = number[1].toString()
+            addNumberToViews(viewModel.secondHalfYear!!, listOf(dateLayout.year2, dateLayout.year3))
         }
     }
 
@@ -104,7 +108,7 @@ class RandomDotsFragment : BaseDateFragment() {
 
             view.setOnClickListener {
                 viewModel.hideDot(index)
-                viewModel.selectedNumber = index // TODO should this be index + 1?
+                viewModel.selectedNumber = index
                 updateUi()
             }
 

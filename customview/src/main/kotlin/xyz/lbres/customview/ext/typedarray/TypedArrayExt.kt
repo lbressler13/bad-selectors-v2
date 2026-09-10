@@ -6,6 +6,7 @@ import androidx.core.content.res.getDimensionPixelSizeOrThrow
 import androidx.core.content.res.getFloatOrThrow
 import androidx.core.content.res.getIntOrThrow
 import androidx.core.content.res.getResourceIdOrThrow
+import xyz.lbres.kotlinutils.generic.ifNotNull
 import xyz.lbres.kotlinutils.utils.tryOrDefault
 
 /**
@@ -42,12 +43,7 @@ internal fun TypedArray.getFloatOrNull(@StyleableRes index: Int): Float? = getVa
  * @return [Double]?: the angle at [index] parsed into radians, or `null` if the attribute could not be retrieved
  */
 internal fun TypedArray.getRadiansOrNull(@StyleableRes index: Int): Double? {
-    val degrees = getIntOrNull(index)
-    if (degrees == null) {
-        return degrees
-    }
-
-    return Math.toRadians(degrees.toDouble())
+    return getIntOrNull(index).ifNotNull { Math.toRadians(it.toDouble()) }
 }
 
 /**

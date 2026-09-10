@@ -8,6 +8,7 @@ import xyz.lbres.badselectorsv2.date.utils.maxMonth
 import xyz.lbres.kotlinutils.array.booleanArrayOfValue
 import xyz.lbres.kotlinutils.closedrange.get
 import xyz.lbres.kotlinutils.collection.list.IntList
+import xyz.lbres.kotlinutils.generic.ifNotNull
 import xyz.lbres.kotlinutils.utils.simpleIf
 import java.time.LocalDate
 
@@ -109,7 +110,7 @@ class NestedCirclesViewModel : BaseDateViewModel() {
      * @param index [Int]?: index into [availableYears], or null if the year should be null
      */
     fun setYearAt(index: Int?) {
-        _year = simpleIf(index == null, { null }, { availableYears.get(index!!) })
+        _year = index.ifNotNull { availableYears.get(it) }
     }
 
     /**

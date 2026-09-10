@@ -56,12 +56,14 @@
                 android:layout_height="20dp"
                 android:layout_marginStart="-10dp"
                 android:layout_marginBottom="-10dp"
+                android:padding="3dp"
                 android:background="@drawable/calc_x_button"
-                android:contentDescription="@string/clear_cd"
                 android:src="@drawable/ic_x"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/clear_cd"
                 app:layout_constraintBottom_toTopOf="@+id/generatedNumber"
                 app:layout_constraintStart_toEndOf="@+id/generatedNumber"
-                app:tint="?backgroundColor" />
+                app:tint="?attr/clearStoredColor" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
