@@ -20,7 +20,7 @@ class RandomDotsViewModel : BaseDateViewModel() {
     var selectedNumber: Int? = null
 
     /**
-     * Current date component being selected, or null if full date is complete
+     * Current date component being selected
      */
     var dateComponent: DateComponent? = DateComponent.MONTH
         private set

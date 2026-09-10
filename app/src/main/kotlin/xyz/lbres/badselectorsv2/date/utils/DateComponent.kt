@@ -21,7 +21,7 @@ enum class DateComponent(val label: String) {
     }, ;
 
     /**
-     * Get the date component following the current one. Can be null if there is no following component
+     * Get the date component following the current one, or null if there is no following component
      */
     abstract fun next(): DateComponent?
 }

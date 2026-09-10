@@ -53,6 +53,7 @@ class RandomDotsViewModelTest {
         // change existing position
         vm.updateDotPosition(19, 99, 1)
         dotPositions[19] = Pair(99, 1)
+        assertEquals(dotPositions[19], vm.getDotPosition(19))
 
         // set remaining positions
         val remaining = (0 until 14).toList() + (86 until maxDots).toList()
@@ -258,7 +259,7 @@ class RandomDotsViewModelTest {
         vm.useSelectedNumber()
     }
 
-    // check that the vm matches its initial state. may skip checking dot positions
+    // check that the vm matches its initial state, optionally skip checking dot positions
     private fun checkInitialState(vm: RandomDotsViewModel, checkDotPositions: Boolean = true) {
         checkDate(vm)
 
