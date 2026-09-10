@@ -128,42 +128,42 @@ class RandomDotsViewModelTest {
         checkDate(vm)
 
         vm.selectedNumber = 0
-        vm.selectedNumber = 5
+        vm.selectedNumber = 4
         checkPostSelection(DateComponent.DAY, 31)
-        checkDate(vm, 5)
+        checkDate(vm, 4)
 
         // day
         checkPostSelection(DateComponent.DAY, 31)
-        checkDate(vm, 5)
+        checkDate(vm, 4)
 
         vm.selectedNumber = 18
-        vm.selectedNumber = 12
+        vm.selectedNumber = 13
         checkPostSelection(DateComponent.FIRST_HALF_YEAR, 21)
-        checkDate(vm, 5, 13)
+        checkDate(vm, 4, 13)
 
         // first half year
         checkPostSelection(DateComponent.FIRST_HALF_YEAR, 21)
-        checkDate(vm, 5, 13)
+        checkDate(vm, 4, 13)
 
         vm.selectedNumber = 15
         checkPostSelection(DateComponent.SECOND_HALF_YEAR, 100)
-        checkDate(vm, 5, 13, 15)
+        checkDate(vm, 4, 13, 15)
 
         // second half year
         checkPostSelection(DateComponent.SECOND_HALF_YEAR, 100)
-        checkDate(vm, 5, 13, 15)
+        checkDate(vm, 4, 13, 15)
 
         vm.selectedNumber = 19
         vm.selectedNumber = 13
         checkPostSelection(null, 0)
-        checkDate(vm, 5, 13, 15, 13, 1513)
+        checkDate(vm, 4, 13, 15, 13, 1513)
 
         // after full date
         repeat(4) { selectNumber(vm, 5) }
         vm.selectedNumber = 5
         vm.useSelectedNumber()
         checkPostSelection(null, 0)
-        checkDate(vm, 5, 13, 15, 13, 1513)
+        checkDate(vm, 4, 13, 15, 13, 1513)
 
         // month with different num days
         vm.resetData()

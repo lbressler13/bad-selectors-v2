@@ -141,6 +141,7 @@ class RandomDotsViewModel : BaseDateViewModel() {
             else -> initialNumDots
         }
         println("$dateComponent: $newNumDots ($month, $day, $firstHalfYear $secondHalfYear)")
+        Log.e(null, "$dateComponent: $newNumDots ($month, $day, $firstHalfYear $secondHalfYear)")
         updateNumDots(newNumDots)
     }
 

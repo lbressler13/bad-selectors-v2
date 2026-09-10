@@ -9,7 +9,6 @@ import xyz.lbres.kotlinutils.array.booleanArrayOfValue
 import xyz.lbres.kotlinutils.closedrange.get
 import xyz.lbres.kotlinutils.collection.list.IntList
 import xyz.lbres.kotlinutils.generic.ifNotNull
-import xyz.lbres.kotlinutils.utils.simpleIf
 import java.time.LocalDate
 
 // TODO leap year
