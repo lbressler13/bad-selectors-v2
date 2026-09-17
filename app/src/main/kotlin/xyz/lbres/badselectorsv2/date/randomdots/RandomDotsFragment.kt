@@ -1,6 +1,7 @@
 package xyz.lbres.badselectorsv2.date.randomdots
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,10 @@ import xyz.lbres.badselectorsv2.ext.viewgroup.setChildOnClickListener
 import xyz.lbres.customview.movingview.MovingView
 import xyz.lbres.kotlinutils.generic.ifNotNull
 
+/**
+ * Fragment that displays randomly positioned dots, corresponding to month, day, and year.
+ * The date component can be advanced by selecting a value for the current component.
+ */
 class RandomDotsFragment : BaseDateFragment() {
     private lateinit var viewModel: RandomDotsViewModel
     override val dateViewModel: BaseDateViewModel
@@ -44,7 +49,7 @@ class RandomDotsFragment : BaseDateFragment() {
         initializeSelectedNumber()
         binding.restartButton.root.setOnClickListener { reset() }
 
-        updateUi()
+        updateUi(updateDotPositions = false)
 
         return binding.root
     }
@@ -71,6 +76,8 @@ class RandomDotsFragment : BaseDateFragment() {
 
             // dots
             if (updateDotPositions) {
+                Log.e(null, "Updating dot positions")
+                // TODO store in viewmodel
                 binding.dotsLayout.forceUpdate(forceChildUpdates = true)
             }
             binding.dotsLayout.children.forEachIndexed { index, view ->
@@ -98,11 +105,11 @@ class RandomDotsFragment : BaseDateFragment() {
     }
 
     private fun initializeDotsLayout() {
-        binding.dotsLayout.setChildOnClickListener { index, view ->
+        binding.dotsLayout.children.forEachIndexed { index, view ->
             view as MovingView
             val storedPosition = viewModel.getDotPosition(index)
             if (storedPosition != null) {
-                // TODO add force position to motion layout
+                binding.dotsLayout.forceChildPosition(view, storedPosition.first, storedPosition.second)
             }
             view.visibleIf(index in viewModel.visibleIndices)
 
@@ -113,11 +120,16 @@ class RandomDotsFragment : BaseDateFragment() {
             }
 
             view.setOnMoveListener { _, x, y ->
-                viewModel.updateDotPosition(index, x, y)
+                if (index < 12) {
+                    Log.e(null, "onMove: $index, $x, $y")
+                    viewModel.updateDotPosition(index, x, y)
+                }
             }
         }
-
-        binding.dotsLayout.setInitialChildPositions()
+        if (viewModel.hasUnsetPositions()) {
+            Log.e(null, "initializing positions")
+            binding.dotsLayout.setInitialChildPositions()
+        }
     }
 
     private fun initializeSelectedNumber() {

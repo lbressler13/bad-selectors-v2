@@ -51,6 +51,11 @@ class RandomDotsViewModel : BaseDateViewModel() {
         updateNumDots(initialNumDots)
     }
 
+    fun hasUnsetPositions(): Boolean {
+        Log.e(null, visibleIndices.map { dotPositions[it] }.toString())
+        return visibleIndices.any { dotPositions[it] == null }
+    }
+
     /**
      * Update dot data when number of dots changes
      */
@@ -140,8 +145,6 @@ class RandomDotsViewModel : BaseDateViewModel() {
             null -> 0
             else -> initialNumDots
         }
-        println("$dateComponent: $newNumDots ($month, $day, $firstHalfYear $secondHalfYear)")
-        Log.e(null, "$dateComponent: $newNumDots ($month, $day, $firstHalfYear $secondHalfYear)")
         updateNumDots(newNumDots)
     }
 

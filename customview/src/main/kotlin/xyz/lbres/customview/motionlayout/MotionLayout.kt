@@ -129,8 +129,25 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         postRunnable()
     }
 
+    fun forceChildPosition(child: View, x: Int, y: Int) {
+        val (widthBound, heightBound) = getBounds()
+        val widthSpec = MeasureSpec.makeMeasureSpec(widthBound, MeasureSpec.AT_MOST)
+        val heightSpec = MeasureSpec.makeMeasureSpec(heightBound, MeasureSpec.AT_MOST)
+        Log.e(null, "forceChildPosition")
+
+        if (child in children) {
+            child as MovingView
+            child.forcePosition(width, heightBound, x, y)
+            child.measure(widthSpec, heightSpec)
+            child.layout(child.left, child.top, child.left + child.measuredWidth, child.top + child.measuredHeight)
+        } else {
+            Log.w(null, "Provided view is not a child of the layout")
+        }
+    }
+
     // TODO add to readme
     fun setInitialChildPositions() {
+        Log.e(null, "setInitialChildPositions")
         initializeChildren = true
         forceUpdate()
     }
@@ -145,18 +162,17 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
      * @param bottom [Int] bottom position, relative to parent
      */
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        val horizontalPadding = paddingRight + paddingLeft
-        val verticalPadding = paddingTop + paddingBottom
-        val widthBound = width - horizontalPadding
-        val heightBound = height - verticalPadding
+        val (widthBound, heightBound) = getBounds()
         val widthSpec = MeasureSpec.makeMeasureSpec(widthBound, MeasureSpec.AT_MOST)
         val heightSpec = MeasureSpec.makeMeasureSpec(heightBound, MeasureSpec.AT_MOST)
 
         children.forEachIndexed { index, child ->
             child as MovingView
             if (initializeChildren) {
+                Log.e(null, "onLayout, initializeChildren")
                 child.setInitialPosition(widthBound, heightBound)
             } else {
+                Log.e(null, "onLayout, forceChildUpdates: $forceChildUpdates")
                 child.updatePosition(widthBound, heightBound, forceUpdate = forceChildUpdates)
             }
 
@@ -263,5 +279,13 @@ open class MotionLayout(context: Context, attrs: AttributeSet?, defStyleAttr: In
         if (loopHandler.hasCallbacks(runnable)) {
             loopHandler.removeCallbacks(runnable)
         }
+    }
+
+    private fun getBounds(): Pair<Int, Int> {
+        val horizontalPadding = paddingRight + paddingLeft
+        val verticalPadding = paddingTop + paddingBottom
+        val widthBound = width - horizontalPadding
+        val heightBound = height - verticalPadding
+        return Pair(widthBound, heightBound)
     }
 }
