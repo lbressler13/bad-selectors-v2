@@ -2,6 +2,7 @@ package xyz.lbres.badselectorsv2.ui.date.randomdots
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -20,8 +21,10 @@ import org.robolectric.Robolectric
 import xyz.lbres.badselectorsv2.BaseActivity
 import xyz.lbres.badselectorsv2.R
 import xyz.lbres.badselectorsv2.ui.date.checkDate
+import xyz.lbres.badselectorsv2.ui.testutils.matchers.atIndex
 import xyz.lbres.badselectorsv2.ui.testutils.navigateToSelector
 import xyz.lbres.badselectorsv2.ui.testutils.viewassertions.isNotPresented
+import xyz.lbres.kotlinutils.utils.simpleIf
 import java.time.LocalDate
 
 @Category(Robolectric::class)
@@ -31,6 +34,8 @@ class RandomDotsFragmentTest {
 
     private val generatedText = onView(withId(R.id.generatedNumber))
     private val clearButton = onView(withId(R.id.clearButton))
+    private val layoutId = R.id.dotsLayout
+    private val maxButtons = 100
 
     private var scenario: ActivityScenario<BaseActivity>? = null
 
@@ -53,6 +58,7 @@ class RandomDotsFragmentTest {
         generatedText.check(matches(allOf(isDisplayed(), withText(""))))
         clearButton.check(isNotPresented())
         onView(withText("Tap to select the month")).check(matches(isDisplayed()))
+        checkButtonsDisplayed(setTo(12))
         checkDate()
     }
 
@@ -75,4 +81,18 @@ class RandomDotsFragmentTest {
     fun recreate() {
         // TODO
     }
+
+    private fun clickButton(index: Int) {
+        onView(atIndex(withId(layoutId), index)).perform(click())
+    }
+
+    private fun checkButtonsDisplayed(indices: Set<Int>) {
+        repeat(maxButtons) {
+            val matcher = simpleIf(it in indices, matches(isDisplayed()), isNotPresented())
+            onView(atIndex(withId(layoutId), it)).check(matcher)
+        }
+    }
+
+    // create a set containing values between 0 and the provided max
+    private fun setTo(max: Int) = (0 until max).toSet()
 }

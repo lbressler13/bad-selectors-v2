@@ -175,7 +175,10 @@ class RandomDotsViewModel : BaseDateViewModel() {
     override fun resetData() {
         super.resetData()
         selectedNumber = null
-        // month, day, and year reset in parent class
+
+        day = null
+        month = null
+        year = null
         firstHalfYear = null
         secondHalfYear = null
 

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 abstract class BaseDateViewModel : ViewModel() {
     /**
      * Components that make up a date.
-     * Child classes can override values to use public setters.
+     * Implementing classes can override values to use public setters.
      */
     open var day: Int? = null
         protected set
