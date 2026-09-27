@@ -16,7 +16,6 @@ import xyz.lbres.badselectorsv2.date.utils.DateComponent
 import xyz.lbres.badselectorsv2.ext.view.gone
 import xyz.lbres.badselectorsv2.ext.view.visible
 import xyz.lbres.badselectorsv2.ext.view.visibleIf
-import xyz.lbres.badselectorsv2.ext.viewgroup.setChildOnClickListener
 import xyz.lbres.customview.movingview.MovingView
 import xyz.lbres.kotlinutils.generic.ifNotNull
 
